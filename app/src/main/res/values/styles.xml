@@ -15,4 +15,16 @@
     <style name="CardViewDefault" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cardCornerRadius">20dp</item>
     </style>
+
+    <style name="SearchTextInputDefault" >
+        <item name="endIconMode">custom</item>
+        <item name="endIconDrawable">@drawable/ic_baseline_search_20</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="android:hint">@string/string_search</item>
+        <item name="boxBackgroundColor">@color/colorPrimary</item>
+        <item name="endIconTint">@color/colorAccent</item>
+        <item name="boxStrokeColor">@color/colorAccent</item>
+    </style>
 </resources>
