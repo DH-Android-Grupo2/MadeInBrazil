@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
@@ -12,4 +12,7 @@
         <item name="itemTextColor">@drawable/icons_nav_bar_selector</item>
     </style>
 
+    <style name="CardViewDefault" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cardCornerRadius">20dp</item>
+    </style>
 </resources>
