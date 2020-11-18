@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MadeInBrasil</string>
+    <string name="string_home">Home</string>
+    <string name="string_films">Filmes</string>
+    <string name="string_lists">Listas</string>
+    <string name="string_series">Séries</string>
 </resources>
