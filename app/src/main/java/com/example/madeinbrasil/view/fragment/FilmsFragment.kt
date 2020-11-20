@@ -5,12 +5,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.databinding.ActivityMenuBinding
+import com.example.madeinbrasil.databinding.FragmentFilmsBinding
+import com.example.madeinbrasil.model.home.FilmRepository
+import com.example.madeinbrasil.view.adapter.MainAdapterFilm
 
 class FilmsFragment : Fragment() {
+    private var binding: FragmentFilmsBinding? = null
+    private val filmsRepository = FilmRepository().setFilms()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        activity?.findViewById<RecyclerView>(R.id.rvCardsListFilms)?.apply {
+            layoutManager = GridLayoutManager(activity, 2)
+            adapter = MainAdapterFilm(filmsRepository) /*{position ->
+                val bundle = Bundle()
+                bundle.putParcelable("Film", filmsList[position])
+            }*/
+        }
     }
 
     override fun onCreateView(
@@ -18,7 +34,8 @@ class FilmsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_films, container, false)
+        binding = FragmentFilmsBinding.inflate(layoutInflater, container, false)
+        return binding?.root
     }
 
 }
