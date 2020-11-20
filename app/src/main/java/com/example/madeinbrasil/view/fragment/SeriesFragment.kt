@@ -21,7 +21,10 @@ class SeriesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.findViewById<RecyclerView>(R.id.rvCardsListSeries)?.apply {
             layoutManager = GridLayoutManager(activity, 2)
-            adapter = MainAdapterSeries(seriesRepository)
+            adapter = MainAdapterSeries(seriesRepository) {position ->
+                val bundle = Bundle()
+                bundle.putParcelable("Film", seriesRepository[position])
+            }
         }
     }
 

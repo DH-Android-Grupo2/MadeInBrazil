@@ -8,7 +8,8 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.model.`class`.Series
 
 class MainAdapterSeries(
-    private val seriesList: List<Series>
+    private val seriesList: List<Series>,
+    private val seriePosition: (Int) -> Unit
 ): RecyclerView.Adapter<ViewHolderSeries>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSeries {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.main_cards, parent, false)
@@ -20,6 +21,6 @@ class MainAdapterSeries(
     }
 
     override fun onBindViewHolder(holder: ViewHolderSeries, position: Int) {
-        holder.bind(seriesList[position])
+        holder.bind(seriesList[position], seriePosition)
     }
 }

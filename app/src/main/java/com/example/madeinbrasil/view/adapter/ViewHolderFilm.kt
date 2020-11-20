@@ -8,7 +8,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.model.`class`.Films
 
 class ViewHolderFilm (viewItem: View): RecyclerView.ViewHolder(viewItem) {
-    fun bind(film: Films /*position: (Int) -> Unit*/) = with(itemView) {
+    fun bind(film: Films, position: (Int) -> Unit) = with(itemView) {
         val imageCardView = findViewById<ImageView>(R.id.cvImage)
 
         Glide.with(itemView.context).load(film.img).into(imageCardView)

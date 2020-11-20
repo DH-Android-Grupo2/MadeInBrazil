@@ -22,10 +22,10 @@ class FilmsFragment : Fragment() {
 
         activity?.findViewById<RecyclerView>(R.id.rvCardsListFilms)?.apply {
             layoutManager = GridLayoutManager(activity, 2)
-            adapter = MainAdapterFilm(filmsRepository) /*{position ->
+            adapter = MainAdapterFilm(filmsRepository) {position ->
                 val bundle = Bundle()
-                bundle.putParcelable("Film", filmsList[position])
-            }*/
+                bundle.putParcelable("Film", filmsRepository[position])
+            }
         }
     }
 

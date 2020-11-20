@@ -8,8 +8,8 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.model.`class`.Films
 
 class MainAdapterFilm(
-    private var filmsList: List<Films>
-    /*private var filmPosition: (Int) -> Unit*/): RecyclerView.Adapter<ViewHolderFilm>()
+    private var filmsList: List<Films>,
+    private var filmPosition: (Int) -> Unit): RecyclerView.Adapter<ViewHolderFilm>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderFilm {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.main_cards, parent, false)
@@ -21,7 +21,7 @@ class MainAdapterFilm(
     }
 
     override fun onBindViewHolder(holder: ViewHolderFilm, position: Int) {
-        holder.bind(filmsList[position]) /*filmPosition*/
+        holder.bind(filmsList[position], filmPosition)
     }
 
 }
