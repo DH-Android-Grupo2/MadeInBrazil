@@ -13,5 +13,9 @@ class ViewHolderSeries(view: View): RecyclerView.ViewHolder(view) {
         val image = findViewById<ImageView>(R.id.cvImage)
 
         Glide.with(itemView.context).load(serie.img).into(image)
+
+        vgMainCard.setOnClickListener {
+            position(this@ViewHolderSeries.adapterPosition)
+        }
     }
 }

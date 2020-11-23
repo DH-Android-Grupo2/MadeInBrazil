@@ -193,8 +193,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListActors"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             tools:listitem="@layout/main_cast_recyclerview"
             tools:itemCount="1"
@@ -208,7 +208,7 @@
             style="@style/CommentTextInputDefault"
             android:id="@+id/tilCommentFilmsSeries"
             android:hint="@string/string_comment_input"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
             app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/rvCardsListActors">
