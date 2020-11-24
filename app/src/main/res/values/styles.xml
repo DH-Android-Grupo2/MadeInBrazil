@@ -1,10 +1,11 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/main_black</item>
     </style>
 
     <style name="menuIcons">
@@ -14,5 +15,42 @@
 
     <style name="CardViewDefault" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cardCornerRadius">20dp</item>
+    </style>
+
+    <style name="FormTextInput">
+        <item name="android:layout_margin">30dp</item>
+        <item name="hintTextColor">@color/light_green</item>
+        <item name="android:textColorHint">@color/light_green</item>
+        <item name="boxBackgroundColor">@color/ocean_blue</item>
+        <item name="boxStrokeColor">@color/light_green</item>
+    </style>
+
+    <style name="FormTextEdit">
+        <item name="android:textColor">@color/white_76</item>
+    </style>
+
+    <style name="backButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:src">@drawable/ic_baseline_keyboard_arrow_left_24</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:layout_margin">16dp</item>
+    </style>
+
+    <style name="pageTitle">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/light_green</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="searchField">
+        <item name="android:layout_margin">20dp</item>
+        <item name="boxBackgroundColor">@color/main_black</item>
+        <item name="hintTextColor">@color/light_green</item>
+        <item name="android:textColorHint">@color/light_green</item>
+        <item name="boxStrokeColor">@color/light_green</item>
+        <item name="startIconDrawable">@drawable/ic_baseline_search_24</item>
+        <item name="startIconTint">@color/light_green</item>
     </style>
 </resources>
