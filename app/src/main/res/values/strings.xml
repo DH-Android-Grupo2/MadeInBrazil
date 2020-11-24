@@ -14,4 +14,8 @@
     <string name="string_comment">Comentários</string>
     <string name="string_comment_input">Adicione um comentário</string>
     <string name="string_post_comment">Postar</string>
+    <string name="string_my_lists">Minhas Listas</string>
+    <string name="string_watched">Assistidos</string>
+    <string name="string_favorites">Favoritos</string>
+    <string name="string_new_list">Nova Lista</string>
 </resources>

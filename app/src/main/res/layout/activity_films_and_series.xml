@@ -94,7 +94,7 @@
             />
 
         <Button
-            style="@style/ButtonWatched"
+            style="@style/ButtonWatchedActivity"
             android:id="@+id/btWatchedFilmsSeries"
             android:text="@string/string_button_watched"
             android:drawableStart="@drawable/ic_baseline_check_circle_16"
@@ -147,7 +147,7 @@
             app:layout_constraintBottom_toBottomOf="@id/ivAgeRatingFilmsSeries"/>
 
         <Button
-            style="@style/ButtonWatched"
+            style="@style/ButtonWatchedActivity"
             android:id="@+id/btTrailerFilmsSeries"
             android:text="@string/string_trailer"
             android:drawableStart="@drawable/ic_baseline_play_circle_filled_20"
@@ -221,7 +221,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            style="@style/ButtonWatched"
+            style="@style/ButtonWatchedActivity"
             android:id="@+id/btAddCommentFilmsSeries"
             android:text="@string/string_post_comment"
             android:layout_marginTop="5dp"
