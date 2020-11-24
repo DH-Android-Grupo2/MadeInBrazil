@@ -27,4 +27,15 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <TextView
+        android:id="@+id/filmNameRecyclerView"
+        style="@style/TextViewFilmsSeriesDefault"
+        tools:text="O auto da Compadecida"
+        android:layout_margin="10dp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="@id/cardView"
+        app:layout_constraintEnd_toEndOf="@id/cardView"
+        app:layout_constraintTop_toBottomOf="@id/cardView"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
