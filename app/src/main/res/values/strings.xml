@@ -13,6 +13,7 @@
     <string name="create_list_button">Criar lista</string>
     <string name="favoritos_page_title">Favoritos</string>
     <string name="search_field_label">Buscar</string>
+    <string name="achievement_title">Conquistas</string>
 
     <string-array name="spinner_options">
         <item>Todos</item>
