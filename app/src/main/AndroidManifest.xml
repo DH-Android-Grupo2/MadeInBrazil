@@ -13,10 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.activity.SelectActivity"></activity>
+        <activity android:name=".view.activity.SplashActivity">
 
         <activity android:name=".view.activity.ListDetailActivity">
 
         <activity android:name=".view.activity.AchievementActivity">
+
 
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -26,6 +29,12 @@
         </activity>
         <activity android:name=".view.activity.FavoriteActivity">
         </activity>
+< feature/layoutVanessa
+        <activity android:name=".view.activity.RegisterActivity" />
+        <activity android:name=".view.activity.LogInActivity" />
+        <activity android:name=".view.activity.InitialActivity" />
+        <activity android:name=".view.activity.MenuActivity"></activity>
+
 
         <activity android:name=".view.activity.testeActivity">
 
@@ -34,6 +43,7 @@
 
         <activity android:name=".view.activity.CreateListActivity"></activity>
         <activity android:name=".view.activity.MenuActivity" />
+
 
     </application>
 

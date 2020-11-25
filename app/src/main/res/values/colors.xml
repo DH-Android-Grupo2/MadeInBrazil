@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#1D1D1D</color>
+    <color name="colorPrimaryOpaque">#801D1D1D</color>
     <color name="colorButtons">#274657</color>
     <color name="colorAccent">#90A600</color>
-    <color name="colorAccentOpaque">#8090A600</color>
+    <color name="colorAccentOpaque">#9090A600</color>
     <color name="colorNotes">#FFC800</color>
+    <color name="colorShadows">#2A5904</color>
+
 
     <color name="pretofundo">#1D1D1D</color>
     <color name="verdeletra">#90A600</color>
@@ -20,5 +23,6 @@
     <color name="light_blue">#A67399AE</color>
     <color name="sky_blue">#569AC4</color>
     <color name="gray">#9294A1</color>
+
 
 </resources>

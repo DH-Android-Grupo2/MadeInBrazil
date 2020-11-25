@@ -17,6 +17,19 @@
         <item name="cardCornerRadius">20dp</item>
     </style>
 
+
+    <style name="Chip1" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="rippleColor">#10FFFFFF</item>
+        <item name="chipBackgroundColor">@color/color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+    </style>
+
+
+</resources>
+
+
+
+
     <style name="FormTextInput">
         <item name="android:layout_margin">30dp</item>
         <item name="hintTextColor">@color/light_green</item>
