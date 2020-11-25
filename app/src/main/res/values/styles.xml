@@ -27,6 +27,7 @@
 
     <style name="FormTextEdit">
         <item name="android:textColor">@color/white_76</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="backButton">
@@ -48,6 +49,7 @@
         <item name="android:layout_margin">20dp</item>
         <item name="boxBackgroundColor">@color/main_black</item>
         <item name="hintTextColor">@color/light_green</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textColorHint">@color/light_green</item>
         <item name="boxStrokeColor">@color/light_green</item>
         <item name="startIconDrawable">@drawable/ic_baseline_search_24</item>

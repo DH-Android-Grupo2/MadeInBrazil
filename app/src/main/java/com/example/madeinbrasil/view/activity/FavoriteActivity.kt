@@ -23,19 +23,16 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private fun initSpinner() {
-        val spinner: Spinner = findViewById(R.id.spinner)
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-                this,
-                R.array.spinner_options,
-                android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinner.apply {
 
-            spinner.adapter = adapter
+            adapter = ArrayAdapter.createFromResource(this@FavoriteActivity,
+                    R.array.spinner_options,
+                    R.layout.custom_spinner).apply {
+                setDropDownViewResource(R.layout.custom_spinner_dropdown)
+            }
+
+           // setBackgroundResource(R.drawable.custom_spinner)
         }
-
     }
 
     private fun initRecyclerView() {
