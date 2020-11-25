@@ -7,15 +7,44 @@
     tools:context=".view.fragment.FavoritesFragment"
     android:background="@color/colorPrimary">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/searchField"
+        android:hint="@string/search_field_label"
+        app:layout_constraintEnd_toStartOf="@+id/spinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            style="@style/FormTextEdit"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tilSearch"
+        app:layout_constraintTop_toTopOf="@id/tilSearch"
+        app:layout_constraintBottom_toBottomOf="@id/tilSearch"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCardsListFavorites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/main_cards"
         tools:itemCount="5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tilSearch"
+        app:layout_constraintEnd_toEndOf="@+id/spinner"
+        app:layout_constraintTop_toBottomOf="@+id/tilSearch"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
