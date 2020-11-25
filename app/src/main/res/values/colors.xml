@@ -5,4 +5,15 @@
     <color name="colorAccent">#90A600</color>
     <color name="colorAccentOpaque">#8090A600</color>
     <color name="colorNotes">#FFC800</color>
+
+    <color name="main_black">#1D1D1D</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_76">#C3FFFFFF</color>
+
+    <color name="light_green">#90A600</color>
+    <color name="ocean_blue">#233742</color>
+    <color name="ocean_blue2">#274657</color>
+    <color name="light_blue">#A67399AE</color>
+    <color name="sky_blue">#569AC4</color>
+    <color name="gray">#9294A1</color>
 </resources>
