@@ -1,34 +1,23 @@
 package com.example.madeinbrasil.view.fragment
 
+
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.databinding.FragmentListDetailsBinding
+import com.example.madeinbrasil.databinding.FragmentListsBinding
+import com.example.madeinbrasil.view.activity.testeActivity
+import com.example.madeinbrasil.view.classes.Lista
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ListDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ListDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentListDetailsBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +27,25 @@ class ListDetailsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_list_details, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        super.onViewCreated(view, savedInstanceState)
+
+
+
+        val listas = mutableListOf<Lista>()
+
+        binding.rvListDetails.apply { layoutManager = GridLayoutManager(view.context,2)
+        adapter = ListAdapter(listas) { position ->
+            val intent = Intent(view.context, testeActivity::class.java)
+            intent.putExtra(ListsFragment.KEY_INTENT_LISTA, listas[position])
+            startActivity(intent)
+
+        }
+        }
+        }
     }
-}
+
+
+
