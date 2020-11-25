@@ -5,11 +5,10 @@
     android:layout_height="match_parent"
     android:fillViewport="true" >
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".view.activity.FilmsAndSeriesActivity"
         android:background="@color/colorPrimary">
 
@@ -94,7 +93,7 @@
             />
 
         <Button
-            style="@style/ButtonWatched"
+            style="@style/ButtonWatchedActivity"
             android:id="@+id/btWatchedFilmsSeries"
             android:text="@string/string_button_watched"
             android:drawableStart="@drawable/ic_baseline_check_circle_16"
@@ -147,7 +146,7 @@
             app:layout_constraintBottom_toBottomOf="@id/ivAgeRatingFilmsSeries"/>
 
         <Button
-            style="@style/ButtonWatched"
+            style="@style/ButtonWatchedActivity"
             android:id="@+id/btTrailerFilmsSeries"
             android:text="@string/string_trailer"
             android:drawableStart="@drawable/ic_baseline_play_circle_filled_20"
@@ -214,6 +213,8 @@
             app:layout_constraintTop_toBottomOf="@id/rvCardsListActors">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietCommentFilmsSeries"
+                android:textColor="@color/colorAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
@@ -221,7 +222,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            style="@style/ButtonWatched"
+            style="@style/ButtonWatchedActivity"
             android:id="@+id/btAddCommentFilmsSeries"
             android:text="@string/string_post_comment"
             android:layout_marginTop="5dp"
