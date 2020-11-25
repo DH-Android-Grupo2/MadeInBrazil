@@ -1,13 +1,11 @@
-package com.example.projetointegrador
+package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
 import android.content.Intent
 import android.os.Handler
-import androidx.core.os.postDelayed
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.InitialActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

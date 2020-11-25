@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
@@ -15,4 +15,17 @@
     <style name="CardViewDefault" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cardCornerRadius">20dp</item>
     </style>
+
+
+    <style name="Chip1" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="rippleColor">#10FFFFFF</item>
+        <item name="chipBackgroundColor">@color/color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+    </style>
+
+
 </resources>
+
+
+
+
