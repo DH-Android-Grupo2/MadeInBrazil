@@ -5,4 +5,6 @@
     <color name="colorAccent">#90A600</color>
     <color name="colorAccentOpaque">#8090A600</color>
     <color name="colorNotes">#FFC800</color>
+    <color name="pretofundo">#1D1D1D</color>
+    <color name="verdeletra">#90A600</color>
 </resources>
