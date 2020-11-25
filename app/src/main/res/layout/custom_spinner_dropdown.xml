@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/spinner_text"
+    android:layout_width="match_parent"
+    android:singleLine="true"
+    android:layout_height="?attr/listPreferredItemHeight"
+    tools:text="Filmes"
+    android:textSize="20sp"
+    android:gravity="center"
+    android:ellipsize="marquee"
+    android:textColor="@color/light_green"
+    android:background="@color/main_black" />
