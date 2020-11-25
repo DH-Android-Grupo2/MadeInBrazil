@@ -17,8 +17,7 @@ import com.example.madeinbrasil.view.classes.Lista
 
 class ListDetailsFragment : Fragment() {
     private lateinit var binding: FragmentListDetailsBinding
-
-
+  
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +45,5 @@ class ListDetailsFragment : Fragment() {
         }
         }
     }
-
-
+}
 

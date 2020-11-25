@@ -14,9 +14,8 @@ import com.example.madeinbrasil.view.activity.testeActivity
 import com.example.madeinbrasil.view.classes.Item
 import com.example.madeinbrasil.view.classes.Lista
 
-
 class ListsFragment : Fragment() {
-   private lateinit var binding: FragmentListsBinding
+    private lateinit var binding: FragmentListsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +66,5 @@ class ListsFragment : Fragment() {
     }
 }
 
-
-
+}
 

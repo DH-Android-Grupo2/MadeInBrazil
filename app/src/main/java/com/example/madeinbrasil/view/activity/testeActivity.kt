@@ -10,6 +10,7 @@ import com.example.madeinbrasil.view.classes.Item
 import com.example.madeinbrasil.view.classes.Lista
 import com.example.madeinbrasil.view.fragment.ListAdapter
 import com.example.madeinbrasil.view.fragment.ListDetailsFragment
+import com.example.madeinbrasil.R
 
 class testeActivity : AppCompatActivity() {
 
