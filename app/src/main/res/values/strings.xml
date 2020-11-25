@@ -32,4 +32,19 @@
     <string name="history">História</string>
     <string name="crime">Crime</string>
     <string name="thriller">Thriller</string>
+
+    <string name="name_hint">Nome</string>
+    <string name="create_list_page_title">Crie sua lista</string>
+    <string name="description_hint">Descrição</string>
+    <string name="create_list_button">Criar lista</string>
+    <string name="favoritos_page_title">Favoritos</string>
+    <string name="search_field_label">Buscar</string>
+    <string name="achievement_title">Conquistas</string>
+
+    <string-array name="spinner_options">
+        <item>Todos</item>
+        <item>Filmes</item>
+        <item>Séries</item>
+    </string-array>
+
 </resources>
