@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".AchievementActivity">
+    tools:context=".view.activity.AchievementActivity">
 
 
     <ImageButton
@@ -36,16 +35,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPagetitle" />
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Filmes"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="#FFC800"
+        app:layout_constraintTop_toBottomOf="@id/imMovie"
+        app:layout_constraintStart_toStartOf="@id/imMovie"
+        app:layout_constraintEnd_toEndOf="@id/imMovie"/>
+
     <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarMovie"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         app:layout_constraintStart_toEndOf="@id/imMovie"
         app:layout_constraintTop_toTopOf="@id/imMovie"
         app:layout_constraintEnd_toEndOf="parent"
-        android:progressDrawable="@drawable/progressbar2"
-        />
+        android:progressDrawable="@drawable/progressbar" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="50/50 assistidos"
+        android:textColor="#FFC800"
+        android:textSize="20sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/progressBarMovie"
+        app:layout_constraintStart_toStartOf="@id/progressBarMovie"
+        app:layout_constraintEnd_toEndOf="@id/progressBarMovie"
+        app:layout_constraintBottom_toBottomOf="@id/imMovie"/>
 
     <ImageView
         android:id="@+id/imSerie"
@@ -58,6 +80,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imMovie" />
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Séries"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="#FFC800"
+        app:layout_constraintTop_toBottomOf="@id/imSerie"
+        app:layout_constraintStart_toStartOf="@id/imSerie"
+        app:layout_constraintEnd_toEndOf="@id/imSerie"/>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progressBarSerie"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        app:layout_constraintStart_toEndOf="@id/imSerie"
+        app:layout_constraintTop_toTopOf="@id/imSerie"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:progressDrawable="@drawable/progressbar"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="30/30 assistidas"
+        android:textColor="#FFC800"
+        android:textSize="20sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/progressBarSerie"
+        app:layout_constraintStart_toStartOf="@id/progressBarSerie"
+        app:layout_constraintEnd_toEndOf="@id/progressBarMovie"
+        app:layout_constraintBottom_toBottomOf="@id/imSerie"/>
+
+
     <ImageView
         android:id="@+id/imFavorite"
         android:layout_width="90dp"
@@ -68,4 +125,38 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imSerie" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Itens"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#FFC800"
+        app:layout_constraintTop_toBottomOf="@id/imFavorite"
+        app:layout_constraintStart_toStartOf="@id/imFavorite"
+        app:layout_constraintEnd_toEndOf="@id/imFavorite"/>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progressBarFavorite"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        app:layout_constraintStart_toEndOf="@id/imFavorite"
+        app:layout_constraintTop_toTopOf="@id/imFavorite"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:progressDrawable="@drawable/progressbar"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="100/100 favoritados"
+        android:textColor="#FFC800"
+        android:textSize="20sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/progressBarFavorite"
+        app:layout_constraintStart_toStartOf="@id/progressBarFavorite"
+        app:layout_constraintEnd_toEndOf="@id/progressBarMovie"
+        app:layout_constraintBottom_toBottomOf="@id/imFavorite"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
