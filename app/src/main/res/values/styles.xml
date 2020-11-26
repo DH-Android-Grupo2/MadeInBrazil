@@ -17,8 +17,13 @@
         <item name="cardCornerRadius">20dp</item>
     </style>
 
-    <style name="Chip1" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="rippleColor">#10FFFFFF</item>
+    <style name="ChipDefault" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipStrokeColor">@color/colorAccent</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">15dp</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="chipBackgroundColor">@color/color</item>
         <item name="android:textColor">@color/chip_text_color</item>
     </style>

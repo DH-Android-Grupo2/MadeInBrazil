@@ -5,9 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:textAlignment="center"
-    android:background="@color/colorPrimary"
     tools:context=".view.activity.SelectActivity">
 
     <TextView
@@ -16,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="@string/string_select_gender"
         android:textColor="@color/colorAccent"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_marginTop="40sp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -30,9 +28,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        app:chipSpacingVertical="5dp"
-        app:chipSpacingHorizontal="5dp"
-        android:textAlignment="center"
+        android:paddingStart="30dp"
+        android:paddingEnd="10dp"
+        app:chipSpacingVertical="10dp"
+        app:chipSpacingHorizontal="10dp"
         app:layout_constraintStart_toStartOf="@+id/tvSelectGender"
         app:layout_constraintEnd_toEndOf="@+id/tvSelectGender"
         app:layout_constraintTop_toBottomOf="@+id/tvSelectGender">
@@ -40,212 +39,115 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ChipDefault"
             android:text="@string/string_drama"
-            android:textColor="@color/colorAccent"
-            android:layout_marginStart="20dp"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:checked="true"
-            android:layout_marginTop="60dp"
-            app:chipBackgroundColor="@color/colorPrimaryOpaque"
-            app:chipCornerRadius="20dp"
-            app:chipStrokeColor="@color/colorAccent"/>
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
             android:id="@+id/chip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ChipDefault"
             android:text="@string/string_action"
-            android:textColor="@color/colorAccent"
-            android:layout_marginStart="20dp"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:checked="true"
-            android:layout_marginTop="60dp"
-            app:chipBackgroundColor="@color/colorPrimaryOpaque"
-            app:chipCornerRadius="20dp"
-            app:chipStrokeColor="@color/colorAccent"/>
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_horror"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip3"
+            style="@style/ChipDefault"
+            android:text="@string/string_horror"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_family"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip4"
+            style="@style/ChipDefault"
+            android:text="@string/string_family"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_animation"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip5"
+            style="@style/ChipDefault"
+            android:text="@string/string_animation"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_doc"
-        android:textColor="#FFFFFF"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="#FFC800"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip6"
+            style="@style/ChipDefault"
+            android:text="@string/string_doc"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_comedy"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip7"
+            style="@style/ChipDefault"
+            android:text="@string/string_comedy"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_crime"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip8"
+            style="@style/ChipDefault"
+            android:text="@string/string_crime"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_fantasy"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip9"
+            style="@style/ChipDefault"
+            android:text="@string/string_fantasy"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_mistery"
-        android:textColor="#FFFFFF"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="#569AC4"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip10"
+            style="@style/ChipDefault"
+            android:text="@string/string_mistery"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_war"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip11"
+            style="@style/ChipDefault"
+            android:text="@string/string_war"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_syfi"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip12"
+            style="@style/ChipDefault"
+            android:text="@string/string_syfi"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_thriller"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip13"
+            style="@style/ChipDefault"
+            android:text="@string/string_thriller"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_mistery"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip14"
+            style="@style/ChipDefault"
+            android:text="@string/string_mistery"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_suspense"
-        android:textColor="#FFFFFF"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="#569AC4"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip15"
+            style="@style/ChipDefault"
+            android:text="@string/string_suspense"
+            android:checked="false"
+            />
+
         <com.google.android.material.chip.Chip
-        android:id="@+id/chip16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_tvmovies"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="20dp"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
-        android:checked="true"
-        android:layout_marginTop="60dp"
-        app:chipBackgroundColor="@color/colorPrimaryOpaque"
-        app:chipCornerRadius="20dp"
-        app:chipStrokeColor="@color/colorAccent"/>
+            android:id="@+id/chip16"
+            style="@style/ChipDefault"
+            android:text="@string/string_tvmovies"
+            android:checked="false"
+            />
     </com.google.android.material.chip.ChipGroup>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -257,6 +159,5 @@
         app:layout_constraintTop_toBottomOf="@+id/chipGroupGender"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/string_continue_gender" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
