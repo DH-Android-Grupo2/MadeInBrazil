@@ -2,58 +2,85 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/listaContainer"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/ivItem"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="24dp"
-        android:src="@drawable/auto_da_compadecida_capa"
+        android:id="@+id/ivFirstImageListItem"
+        android:layout_width="28dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        tools:src = "@drawable/auto_da_compadecida_capa"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivSecondImageListItem"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        />
+    <ImageView
+        android:id="@+id/ivSecondImageListItem"
+        android:layout_width="28dp"
+        android:layout_height="56dp"
+        tools:src = "@drawable/auto_da_compadecida_capa"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toEndOf="@id/ivFirstImageListItem"
+        app:layout_constraintTop_toTopOf="@id/ivFirstImageListItem"
+        app:layout_constraintEnd_toStartOf="@id/ivThirdImageListItem"/>
+
+    <ImageView
+        android:id="@+id/ivThirdImageListItem"
+        android:layout_width="28dp"
+        android:layout_height="56dp"
+        tools:src = "@drawable/auto_da_compadecida_capa"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toEndOf="@id/ivSecondImageListItem"
+        app:layout_constraintEnd_toStartOf="@id/ivFourthImageListItem"
+        app:layout_constraintTop_toTopOf="@id/ivFirstImageListItem"/>
+
+    <ImageView
+        android:id="@+id/ivFourthImageListItem"
+        android:layout_width="28dp"
+        android:layout_height="56dp"
+        tools:src = "@drawable/auto_da_compadecida_capa"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toEndOf="@id/ivThirdImageListItem"
+        app:layout_constraintTop_toTopOf="@id/ivFirstImageListItem"/>
 
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvItemTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="32dp"
         android:layout_marginStart="12dp"
-        android:textColor="@color/verdeletra"
-        android:layout_marginTop="36dp"
+        android:textColor="@color/colorAccent"
         android:text="Filmes do babu"
-        app:layout_constraintStart_toEndOf="@+id/ivItem"
-
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/ivFourthImageListItem"
+        app:layout_constraintBottom_toTopOf="@+id/tvItemCriador"
+        app:layout_constraintTop_toTopOf="@+id/ivFourthImageListItem" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:textColor="@color/verdeletra"
+        android:textColor="@color/colorAccent"
         android:id="@+id/tvItemCriador"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/ivItem"
         android:text="Criada por Vinicius Trapiá"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/tvItemTitle"
-
+        app:layout_constraintStart_toEndOf="@id/ivFourthImageListItem"
+        app:layout_constraintBottom_toBottomOf="@id/ivFourthImageListItem"
         />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="36dp"
-        android:src="@drawable/ic_hearth_like"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_favorite_20"
+        android:background="@color/colorPrimary"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@null"
-
-        />
+        app:layout_constraintTop_toTopOf="@+id/ivFourthImageListItem"
+        app:layout_constraintBottom_toBottomOf="@+id/ivFourthImageListItem"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

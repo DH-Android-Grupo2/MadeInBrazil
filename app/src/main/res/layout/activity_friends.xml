@@ -10,7 +10,7 @@
         android:id="@+id/tvAmigosRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Amigos"
+        android:text="@string/string_friends"
         android:textColor="@color/colorAccent"
         android:layout_marginStart="10dp"
         android:textSize="40sp"
@@ -27,11 +27,10 @@
         android:layout_marginTop="39dp"
         android:layout_marginStart="20sp"
         android:layout_marginEnd="20sp"
-        android:hint="Pesquisar algum Amigo"
+        android:hint="@string/string_ask_friend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/rvCardsListAmigos"
->
+        app:layout_constraintBottom_toTopOf="@+id/rvCardsListAmigos">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tietEmail"

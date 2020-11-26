@@ -1,180 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activity.UserActivity">
+    android:fillViewport="true" >
 
-
-    <ImageView
-        android:id="@+id/ivBGProfile"
-        android:layout_width="match_parent"
-        android:layout_height="320sp"
-        android:contentDescription="Imagem Profile"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="120sp"
-        android:layout_height="120sp"
-        android:layout_marginTop="30dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/auto_da_compadecida_capa"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvNomeProfile"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="José Cleber"
-        android:textAlignment="center"
-        android:textColor="#fff"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
-
-    <TextView
-        android:id="@+id/tvNumListas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="3"
-        android:textSize="30sp"
-        android:textColor="#FFF"
-        android:layout_marginTop="20dp"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tvNumConquistas"
-        app:layout_constraintTop_toBottomOf="@id/tvNomeProfile"/>
-
-    <TextView
-        android:id="@+id/tvNumConquistas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="0"
-        android:textSize="30sp"
-        android:textColor="#FFF"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toEndOf="@+id/tvNumListas"
-        app:layout_constraintEnd_toStartOf="@+id/tvNumAmigos"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintTop_toBottomOf="@id/tvNomeProfile"
-        />
-
-    <TextView
-        android:id="@+id/tvNumAmigos"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="2"
-        android:textSize="30sp"
-        android:textColor="#FFF"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toEndOf="@+id/tvNumConquistas"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNomeProfile"/>
-
-    <TextView
-        android:id="@+id/tvListas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Listas"
-        android:textColor="#FFF"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tvConquistas"
-        app:layout_constraintTop_toBottomOf="@id/tvNumListas"/>
-
-    <TextView
-        android:id="@+id/tvConquistas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Conquistas"
-        android:textColor="#FFF"
-        app:layout_constraintStart_toEndOf="@+id/tvListas"
-        app:layout_constraintEnd_toStartOf="@+id/tvAmigos"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintTop_toBottomOf="@id/tvNumConquistas"
-        />
-
-    <TextView
-        android:id="@+id/tvAmigos"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Amigos"
-        android:textColor="#FFF"
-        app:layout_constraintStart_toEndOf="@+id/tvConquistas"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNumAmigos"/>
-
-    <TextView
-        android:id="@+id/tvFavoritesRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Favoritos"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="10dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivBGProfile"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCardsListFavorites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        tools:listitem="@layout/user_favorites_recyclerview"
-        tools:itemCount="1"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintTop_toBottomOf="@id/tvFavoritesRecycler"/>
-
-    <TextView
-        android:id="@+id/tvListasRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Listas"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="10dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvCardsListFavorites"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCardsListLists"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        tools:listitem="@layout/user_lists_recyclerview"
-        tools:itemCount="1"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintTop_toBottomOf="@id/tvListasRecycler"/>
+        tools:context=".view.activity.UserActivity">
 
 
+        <ImageView
+            android:id="@+id/ivBGProfile"
+            android:layout_width="match_parent"
+            android:layout_height="320sp"
+            android:contentDescription="Imagem Profile"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="30dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/auto_da_compadecida_capa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNomeProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="José Cleber"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+
+        <TextView
+            android:id="@+id/tvNumListas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="3"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvNumConquistas"
+            app:layout_constraintTop_toBottomOf="@id/tvNomeProfile"/>
+
+        <TextView
+            android:id="@+id/tvNumConquistas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="0"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toEndOf="@+id/tvNumListas"
+            app:layout_constraintEnd_toStartOf="@+id/tvNumAmigos"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/tvNomeProfile"
+            />
+
+        <TextView
+            android:id="@+id/tvNumAmigos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="2"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toEndOf="@+id/tvNumConquistas"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNomeProfile"/>
+
+        <TextView
+            android:id="@+id/tvListas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/string_lists"
+            android:textColor="@color/white"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvConquistas"
+            app:layout_constraintTop_toBottomOf="@id/tvNumListas"/>
+
+        <TextView
+            android:id="@+id/tvConquistas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/string_conquers"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/tvListas"
+            app:layout_constraintEnd_toStartOf="@+id/tvAmigos"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/tvNumConquistas"
+            />
+
+        <TextView
+            android:id="@+id/tvAmigos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/string_friends"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/tvConquistas"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNumAmigos"/>
+
+        <TextView
+            android:id="@+id/tvFavoritesRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/string_favorites"
+            android:textColor="@color/colorAccent"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivBGProfile"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListFavorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/user_favorites_recyclerview"
+            tools:itemCount="1"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
+            app:layout_constraintTop_toBottomOf="@id/tvFavoritesRecycler"/>
+
+        <TextView
+            android:id="@+id/tvListasRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/string_lists"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListFavorites"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListLists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/user_lists_recyclerview"
+            tools:itemCount="1"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
+            app:layout_constraintTop_toBottomOf="@id/tvListasRecycler"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

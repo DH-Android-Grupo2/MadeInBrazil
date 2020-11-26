@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".view.fragment.FilmsFragment"
-        android:background="@color/colorPrimary">
+        tools:context=".view.fragment.FilmsFragment">
 
         <ImageView
             android:id="@+id/ivArrowBackSeries"

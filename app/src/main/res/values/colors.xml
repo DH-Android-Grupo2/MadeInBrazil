@@ -7,17 +7,8 @@
     <color name="colorAccentOpaque">#9090A600</color>
     <color name="colorNotes">#FFC800</color>
     <color name="colorShadows">#2A5904</color>
-
-
-    <color name="pretofundo">#1D1D1D</color>
-    <color name="verdeletra">#90A600</color>
-
-
-    <color name="main_black">#1D1D1D</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white_76">#C3FFFFFF</color>
-
-    <color name="light_green">#90A600</color>
     <color name="ocean_blue">#233742</color>
     <color name="ocean_blue2">#274657</color>
     <color name="light_blue">#A67399AE</color>
