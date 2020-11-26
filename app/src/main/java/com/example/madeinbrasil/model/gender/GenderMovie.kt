@@ -1,7 +1,8 @@
 package com.example.madeinbrasil.model.gender
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-import com.example.madeinbrasil.model.gender.Genre
-
+@Parcelize
 data class GenderMovie(
     val genres: List<Genre>
-)
+): Parcelable

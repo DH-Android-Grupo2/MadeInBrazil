@@ -1,10 +1,15 @@
 package com.example.madeinbrasil.model.search
 
-import com.example.madeinbrasil.model.search.ResultSearchMulti
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class SearchMulti(
     val page: Int,
-    val results: List<ResultSearchMulti>,
-    val total_pages: Int,
-    val total_results: Int
-)
+    val results: List<Result>,
+    @SerializedName("total_pages")
+    val totalPages: Int,
+    @SerializedName("total_results")
+    val totalResults: Int
+): Parcelable
