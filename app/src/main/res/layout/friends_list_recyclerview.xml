@@ -40,12 +40,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:text="@string/string_anam"
-        android:alpha="0.2"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorAccentOpaque"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivProfile"
-        app:layout_constraintTop_toBottomOf="@id/profileName"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toBottomOf="@id/profileName"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

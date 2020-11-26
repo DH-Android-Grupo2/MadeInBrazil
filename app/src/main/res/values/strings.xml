@@ -5,12 +5,11 @@
     <string name="string_films">Filmes</string>
     <string name="string_lists">Listas</string>
     <string name="string_series">Séries</string>
-    <string name="senha">Senha</string>
-    <string name="e_mail">E-mail</string>
+    <string name="string_password">Senha</string>
     <string name="string_register">Cadastar</string>
     <string name="string_name">Nome</string>
-    <string name="email">Email</string>
-    <string name="confirmar_senha">Confirmar Senha</string>
+    <string name="string_email">Email</string>
+    <string name="string_confirmar_senha">Confirmar Senha</string>
     <string name="string_select_gender">Selecione seus gêneros preferidos</string>
     <string name="string_drama">Drama</string>
     <string name="string_comedy">Comédia</string>

@@ -14,8 +14,8 @@ class InitialActivity : AppCompatActivity() {
         setContentView(R.layout.activity_initial)
 
 
-        findViewById<AppCompatButton>(R.id.btLogin).setOnClickListener(openActivity(LogInActivity::class.java))
-        findViewById<AppCompatButton>(R.id.btRegister).setOnClickListener(openActivity(RegisterActivity::class.java))
+        findViewById<AppCompatButton>(R.id.btLoginInitial).setOnClickListener(openActivity(LogInActivity::class.java))
+        findViewById<AppCompatButton>(R.id.btRegisterInitial).setOnClickListener(openActivity(RegisterActivity::class.java))
     }
 
     private fun openActivity(activity: Class<out Activity>): View.OnClickListener?{

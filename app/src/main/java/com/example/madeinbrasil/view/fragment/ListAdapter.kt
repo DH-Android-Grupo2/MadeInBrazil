@@ -1,7 +1,5 @@
 package com.example.madeinbrasil.view.fragment
 
-
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,6 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.view.classes.Lista
 import kotlinx.android.synthetic.main.rvprojeto_listitem.view.*
 import kotlin.collections.List
-
 
 class ListAdapter(
     private val itensList: List<Lista>,
@@ -39,11 +36,7 @@ class ListAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(lista: Lista, onItemClicked: (Int) -> Unit) = with(itemView) {
-
-            Glide.with(itemView.context).load(lista.imagem).into(ivItem)
-
-
-
+            //Glide.with(itemView.context).load(lista.imagem).into(ivItem)
 
             tvItemTitle.text = lista.nome
             tvItemCriador.text = lista.criador

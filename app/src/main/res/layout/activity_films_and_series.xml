@@ -108,7 +108,7 @@
             style="@style/ButtonFavoriteAndLists"
             android:id="@+id/btFavoriteFilmsSeries"
             android:layout_marginStart="10dp"
-            android:drawableStart="@drawable/ic_baseline_favorite_16"
+            android:drawableStart="@drawable/ic_baseline_favorite_20"
             android:padding="5dp"
             app:layout_constraintStart_toEndOf="@id/btWatchedFilmsSeries"
             app:layout_constraintTop_toTopOf="@id/btWatchedFilmsSeries"

@@ -1,55 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pretofundo"
-    android:id="@+id/listDetailContainer"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:fillViewport="true" >
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvListDetailsTitle"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Filmes do babu"
-        android:layout_marginStart="115dp"
-        android:textAlignment="center"
-        android:textSize="26sp"
-        android:textColor="@color/verdeletra"
+        android:id="@+id/listDetailContainer"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
-        />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvListDetailsTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Filmes do babu"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:textSize="26sp"
+            android:textColor="@color/colorAccent"
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvListDetailsCriador"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tvListDetailsTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Criada por @ViniciusTrapia"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textColor="@color/verdeletra"
-        android:layout_marginStart="75sp"
-        />
+            />
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="30dp"
-        android:id="@+id/rvListDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvListDetailsCriador"
-        tools:listitem="@layout/rvprojeto_listdetails_item"
-        tools:itemCount="10"
-        app:spanCount="2"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvListDetailsCreator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tvListDetailsTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Criada por @ViniciusTrapia"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="5dp"
+            />
 
-        />
 
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="30dp"
+            android:id="@+id/rvListDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvListDetailsCreator"
+            tools:listitem="@layout/main_cards"
+            tools:itemCount="12"
+            app:spanCount="2"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

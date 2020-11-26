@@ -20,7 +20,7 @@ class RegisterActivity : AppCompatActivity() {
         findViewById<AppCompatButton>(R.id.btSaveRegister).setOnClickListener(openActivity(SelectActivity::class.java))
         findViewById<AppCompatButton>(R.id.btFaceRegister).setOnClickListener(openActivity(SelectActivity::class.java))
         findViewById<AppCompatButton>(R.id.btGoogleRegister).setOnClickListener(openActivity(SelectActivity::class.java))
-        findViewById<ImageView>(R.id.ivArrowBackInicial).setOnClickListener(openActivity(InitialActivity::class.java))
+        findViewById<ImageView>(R.id.ivArrowBackRegister).setOnClickListener(openActivity(InitialActivity::class.java))
     }
 
     private fun openActivity(activity: Class<out Activity>): View.OnClickListener? {

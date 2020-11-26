@@ -17,7 +17,7 @@ class LogInActivity : AppCompatActivity() {
         findViewById<AppCompatButton>(R.id.btFaceLogin).setOnClickListener(openActivity(SelectActivity::class.java))
         findViewById<AppCompatButton>(R.id.btGoogleLogin).setOnClickListener(openActivity(SelectActivity::class.java))
         findViewById<AppCompatButton>(R.id.btSaveLogin).setOnClickListener(openActivity(SelectActivity::class.java))
-        findViewById<ImageView>(R.id.ivArrowBack).setOnClickListener(openActivity(InitialActivity::class.java))
+        findViewById<ImageView>(R.id.ivArrowBackRegister).setOnClickListener(openActivity(InitialActivity::class.java))
     }
 
     private fun openActivity(activity: Class<out Activity>): View.OnClickListener? {
