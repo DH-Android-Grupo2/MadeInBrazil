@@ -9,8 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".view.activity.FilmsAndSeriesActivity"
-        android:background="@color/colorPrimary">
+        tools:context=".view.activity.FilmsAndSeriesActivity">
 
         <ImageView
             android:id="@+id/ivArrowBackFilmsSeries"
@@ -109,7 +108,7 @@
             android:id="@+id/btFavoriteFilmsSeries"
             android:layout_marginStart="10dp"
             android:drawableStart="@drawable/ic_baseline_favorite_20"
-            android:padding="5dp"
+            android:padding="3dp"
             app:layout_constraintStart_toEndOf="@id/btWatchedFilmsSeries"
             app:layout_constraintTop_toTopOf="@id/btWatchedFilmsSeries"
             app:layout_constraintEnd_toStartOf="@id/btListFilmsSeries"/>
