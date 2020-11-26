@@ -6,6 +6,47 @@
     <string name="string_series">Séries</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="senha">Senha</string>
+    <string name="e_mail">E-mail</string>
+    <string name="entrar">Entrar</string>
+    <string name="cadastar">Cadastar</string>
+    <string name="nome">Nome</string>
+    <string name="email">Email</string>
+    <string name="confirmar_senha">Confirmar Senha</string>
+    <string name="selecione">Selecione seus gêneros preferidos</string>
+    <string name="drama">Drama</string>
+    <string name="comedia">Comédia</string>
+    <string name="acao">Ação</string>
+    <string name="documentario">Documentário</string>
+    <string name="ficcao">Ficção</string>
+    <string name="terror">Terror</string>
+    <string name="suspense">Suspense</string>
+    <string name="aventura">Aventura</string>
+    <string name="animacao">Animação</string>
+    <string name="familia">Família</string>
+    <string name="music">Música</string>
+    <string name="fantasia">Fantasia</string>
+    <string name="war">Guerra</string>
+    <string name="mistery">Mistério</string>
+    <string name="tvmovies">Cinema TV</string>
+    <string name="history">História</string>
+    <string name="crime">Crime</string>
+    <string name="thriller">Thriller</string>
+
+    <string name="name_hint">Nome</string>
+    <string name="create_list_page_title">Crie sua lista</string>
+    <string name="description_hint">Descrição</string>
+    <string name="create_list_button">Criar lista</string>
+    <string name="favoritos_page_title">Favoritos</string>
+    <string name="search_field_label">Buscar</string>
+    <string name="achievement_title">Conquistas</string>
+
+    <string-array name="spinner_options">
+        <item>Todos</item>
+        <item>Filmes</item>
+        <item>Séries</item>
+    </string-array>
+
     <string name="string_search">Buscar</string>
     <string name="string_button_watched">Assistido</string>
     <string name="string_trailer">Trailer</string>
@@ -18,4 +59,5 @@
     <string name="string_watched">Assistidos</string>
     <string name="string_favorites">Favoritos</string>
     <string name="string_new_list">Nova Lista</string>
+    <string name="anam">\@AnaMartins</string>
 </resources>

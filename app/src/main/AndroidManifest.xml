@@ -11,6 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.activity.SelectActivity"></activity>
+        <activity android:name=".view.activity.SplashActivity"/>
+
+        <activity android:name=".view.activity.ListDetailActivity"/>
+
+        <activity android:name=".view.activity.AchievementActivity"/>
+
+
         <activity android:name=".view.activity.MyProfileOptionsActivity">
         </activity>
         <activity android:name=".view.activity.FilmsAndSeriesActivity"/>
@@ -20,6 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.FavoriteActivity">
+        </activity>
+        <activity android:name=".view.activity.RegisterActivity" />
+        <activity android:name=".view.activity.LogInActivity" />
+        <activity android:name=".view.activity.InitialActivity" />
+
+
+
+        <activity android:name=".view.activity.CreateListActivity"></activity>
+
     </application>
 
 </manifest>
