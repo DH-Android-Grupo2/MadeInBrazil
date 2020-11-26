@@ -4,5 +4,6 @@ import retrofit2.http.GET
 
 interface TmdbAPI {
 
-    @GET("users")
+    //@GET("users")
+
 }
