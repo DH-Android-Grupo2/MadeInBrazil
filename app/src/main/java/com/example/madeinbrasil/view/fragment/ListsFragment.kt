@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.FragmentListsBinding
-import com.example.madeinbrasil.view.activity.testeActivity
 import com.example.madeinbrasil.view.classes.Item
 import com.example.madeinbrasil.view.classes.Lista
 

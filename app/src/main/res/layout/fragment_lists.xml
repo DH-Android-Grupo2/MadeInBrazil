@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/rvListas"
-        android:src="@drawable/ic_baseline_search_24"
+        android:src="@drawable/ic_baseline_search_20"
         android:layout_marginBottom="75dp"
         android:layout_marginStart="250dp"
         app:tint="@color/verdeletra"

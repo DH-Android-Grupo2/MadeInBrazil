@@ -17,18 +17,11 @@
         <item name="cardCornerRadius">20dp</item>
     </style>
 
-
     <style name="Chip1" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="rippleColor">#10FFFFFF</item>
         <item name="chipBackgroundColor">@color/color</item>
         <item name="android:textColor">@color/chip_text_color</item>
     </style>
-
-
-</resources>
-
-
-
 
     <style name="FormTextInput">
         <item name="android:layout_margin">30dp</item>
@@ -65,14 +58,8 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColorHint">@color/light_green</item>
         <item name="boxStrokeColor">@color/light_green</item>
-        <item name="startIconDrawable">@drawable/ic_baseline_search_24</item>
+        <item name="startIconDrawable">@drawable/ic_baseline_search_20</item>
         <item name="startIconTint">@color/light_green</item>
-    </style>
-
-    <style name="TextViewFilmsSeriesDefault">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
     <style name="SearchTextInputDefault" >

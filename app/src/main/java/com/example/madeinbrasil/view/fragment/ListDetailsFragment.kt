@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.FragmentListDetailsBinding
 import com.example.madeinbrasil.databinding.FragmentListsBinding
-import com.example.madeinbrasil.view.activity.testeActivity
 import com.example.madeinbrasil.view.classes.Lista
 
 class ListDetailsFragment : Fragment() {
@@ -38,9 +37,9 @@ class ListDetailsFragment : Fragment() {
 
         binding.rvListDetails.apply { layoutManager = GridLayoutManager(view.context,2)
         adapter = ListAdapter(listas) { position ->
-            val intent = Intent(view.context, testeActivity::class.java)
-            intent.putExtra(ListsFragment.KEY_INTENT_LISTA, listas[position])
-            startActivity(intent)
+//            val intent = Intent(view.context, testeActivity::class.java)
+//            intent.putExtra(ListsFragment.KEY_INTENT_LISTA, listas[position])
+//            startActivity(intent)
 
         }
         }
