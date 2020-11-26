@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/button_home"
+        android:id="@+id/buttonHome"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_20"
         android:title="@string/string_home" />
     <item
-        android:id="@+id/button_films"
+        android:id="@+id/buttonFilms"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_local_movies_20"
         android:title="@string/string_films"/>
     <item
-        android:id="@+id/button_lists"
+        android:id="@+id/buttonLists"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_list_20"
         android:title="@string/string_lists"/>
     <item
-        android:id="@+id/button_series"
+        android:id="@+id/buttonSeries"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_tv_20"
         android:title="@string/string_series"/>

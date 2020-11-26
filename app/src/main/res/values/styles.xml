@@ -17,6 +17,12 @@
         <item name="cardCornerRadius">20dp</item>
     </style>
 
+    <style name="Chip1" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="rippleColor">#10FFFFFF</item>
+        <item name="chipBackgroundColor">@color/color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+    </style>
+
     <style name="FormTextInput">
         <item name="android:layout_margin">30dp</item>
         <item name="hintTextColor">@color/light_green</item>
@@ -52,13 +58,75 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColorHint">@color/light_green</item>
         <item name="boxStrokeColor">@color/light_green</item>
-        <item name="startIconDrawable">@drawable/ic_baseline_search_24</item>
+        <item name="startIconDrawable">@drawable/ic_baseline_search_20</item>
         <item name="startIconTint">@color/light_green</item>
+    </style>
+
+    <style name="SearchTextInputDefault" >
+        <item name="endIconMode">custom</item>
+        <item name="endIconDrawable">@drawable/ic_baseline_search_20</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="android:hint">@string/string_search</item>
+        <item name="boxBackgroundColor">@color/colorPrimary</item>
+        <item name="endIconTint">@color/colorAccent</item>
+        <item name="boxStrokeColor">@color/colorAccent</item>
+    </style>
+
+    <style name="CommentTextInputDefault" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:textColorHint">@color/colorAccentOpaque</item>
+        <item name="android:hint">@string/string_search</item>
+        <item name="boxBackgroundColor">@color/colorButtons</item>
+        <item name="boxStrokeColor">@color/colorAccent</item>
+    </style>
+
+    <style name="ArrowBackDefault">
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="TextViewFilmsSeriesDefault">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="RatingDefault" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating_bar</item>
+        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">20dp</item>
+    </style>
+
+    <style name="ButtonWatchedActivity">
+        <item name="android:background">@drawable/buttons_shape</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_width">0dp</item>
+    </style>
+
+    <style name="ButtonFavoriteAndLists">
+        <item name="android:background">@drawable/buttons_shape</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_width">25dp</item>
+    </style>
+
+    <style name="TabTextDefault" >
+        <item name="tabTextColor">@drawable/tab_layout_selector</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="ButtonWatchedFragment" >
+        <item name="android:background">@drawable/buttons_shape</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_margin">20dp</item>
     </style>
 </resources>
