@@ -38,7 +38,7 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Filmes"
+        android:text="@string/string_films"
         android:textStyle="bold"
         android:textSize="20sp"
         android:gravity="center"

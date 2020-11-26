@@ -25,10 +25,10 @@
 
     <style name="FormTextInput">
         <item name="android:layout_margin">30dp</item>
-        <item name="hintTextColor">@color/light_green</item>
-        <item name="android:textColorHint">@color/light_green</item>
+        <item name="hintTextColor">@color/colorAccent</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
         <item name="boxBackgroundColor">@color/ocean_blue</item>
-        <item name="boxStrokeColor">@color/light_green</item>
+        <item name="boxStrokeColor">@color/colorAccent</item>
     </style>
 
     <style name="FormTextEdit">
@@ -47,19 +47,19 @@
     <style name="pageTitle">
         <item name="android:layout_margin">10dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/light_green</item>
+        <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">28sp</item>
     </style>
 
     <style name="searchField">
         <item name="android:layout_margin">20dp</item>
         <item name="boxBackgroundColor">@color/main_black</item>
-        <item name="hintTextColor">@color/light_green</item>
+        <item name="hintTextColor">@color/colorAccent</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColorHint">@color/light_green</item>
-        <item name="boxStrokeColor">@color/light_green</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="boxStrokeColor">@color/colorAccent</item>
         <item name="startIconDrawable">@drawable/ic_baseline_search_20</item>
-        <item name="startIconTint">@color/light_green</item>
+        <item name="startIconTint">@color/colorAccent</item>
     </style>
 
     <style name="SearchTextInputDefault" >
@@ -126,6 +126,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:layout_margin">20dp</item>
     </style>
