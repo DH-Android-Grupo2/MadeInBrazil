@@ -38,6 +38,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         if(positionFragment == 1) {
             Glide.with(this).load(films?.img).into(binding.ivBannerFilmsSeries)
             binding.tvDescriptionTextFilmsSeries.text = films?.description
+            binding.tvNameFilmsSeries.text = films?.name
 
             findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
