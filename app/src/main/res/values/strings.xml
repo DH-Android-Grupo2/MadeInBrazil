@@ -63,4 +63,8 @@
     <string name="string_button_register">Não tem conta? Cadastro</string>
     <string name="string_continue_gender">Continuar</string>
     <string name="string_conquers">Conquistas</string>
+    <string name="lancamentos">Lançamentos</string>
+    <string name="filmes_para_voce">Filmes para Você</string>
+    <string name="series_para_voce">Séries para Você</string>
+    <string name="desc_logo_madeinbrasil">Logo MadeInBrasil</string>
 </resources>
