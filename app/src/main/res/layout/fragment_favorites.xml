@@ -12,16 +12,43 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".view.fragment.FavoritesFragment">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSearchFavorite"
+            style="@style/SearchTextInputDefault"
+            android:layout_margin="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/spinnerFavorite"
+            app:layout_constraintBottom_toTopOf="@id/rvCardsListFavorites"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietSearchFavorites"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/spinnerFavorite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tilSearchFavorite"
+            app:layout_constraintTop_toTopOf="@+id/tilSearchFavorite"
+            app:layout_constraintBottom_toBottomOf="@id/tilSearchFavorite"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListFavorites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintEnd_toEndOf="@+id/spinnerFavorite"
+            app:layout_constraintStart_toStartOf="@+id/tilSearchFavorite"
+            app:layout_constraintTop_toBottomOf="@+id/tilSearchFavorite"
             tools:itemCount="5"
             tools:listitem="@layout/main_cards" />
 

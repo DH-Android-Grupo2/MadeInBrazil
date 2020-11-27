@@ -1,145 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activity.RegisterActivity"
-    android:background="@color/colorPrimary">
+    android:fillViewport="true" >
 
-
-    <ImageView
-        android:id="@+id/ivArrowBackRegister"
-        style="@style/ArrowBackDefault"
-        android:src="@drawable/ic_baseline_arrow_back_ios_20"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/tvRegisterTitle"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
-        app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
-        app:layout_constraintTop_toBottomOf="@+id/ivArrowBackRegister"
-        android:text="@string/string_register"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/colorAccent"
-        android:textSize="25sp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegisterName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:hint="@string/string_name"
-        android:textColorHint="@color/colorAccent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tietRegisterName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        tools:context=".view.activity.RegisterActivity"
+        android:background="@color/colorPrimary">
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegisterEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
-        app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/tilRegisterName"
-        android:hint="@string/string_email"
-        android:textColorHint="@color/colorAccent">
+        <ImageView
+            android:id="@+id/ivArrowBackRegister"
+            style="@style/ArrowBackDefault"
+            android:src="@drawable/ic_baseline_arrow_back_ios_20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tietRegisterEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvRegisterTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
+            app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
+            app:layout_constraintTop_toBottomOf="@+id/ivArrowBackRegister"
+            android:text="@string/string_register"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
+            android:textSize="25sp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegisterName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/string_name"
+            android:textColorHint="@color/colorAccent">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietRegisterName"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegisterPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
-        app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
-        app:layout_constraintTop_toBottomOf="@+id/tilRegisterEmail"
-        android:layout_marginTop="20dp"
-        android:hint="@string/string_password"
-        android:background="@color/colorPrimary"
-        android:textColorHint="@color/colorAccent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tietRegisterPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegisterConfirmPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
-        app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
-        app:layout_constraintTop_toBottomOf="@+id/tilRegisterPassword"
-        android:layout_marginTop="20dp"
-        android:hint="@string/string_confirmar_senha"
-        android:background="@color/colorPrimary"
-        android:textColorHint="@color/colorAccent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tietRegisterConfirmPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegisterEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
+            app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/tilRegisterName"
+            android:hint="@string/string_email"
+            android:textColorHint="@color/colorAccent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietRegisterEmail"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btFaceRegister"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintEnd_toStartOf="@+id/btGoogleRegister"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btSaveRegister"
-        android:layout_marginStart="60dp"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/facebook"
-        />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegisterPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
+            app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
+            app:layout_constraintTop_toBottomOf="@+id/tilRegisterEmail"
+            android:layout_marginTop="20dp"
+            android:hint="@string/string_password"
+            android:background="@color/colorPrimary"
+            android:textColorHint="@color/colorAccent">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btGoogleRegister"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintTop_toTopOf="@+id/btFaceRegister"
-        app:layout_constraintStart_toEndOf="@id/btFaceRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="60dp"
-        android:background="@drawable/google"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btSaveRegister"
-        style="@style/ButtonWatchedFragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btGoogleRegister"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="110dp"
-        android:text="@string/string_logIn" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietRegisterPassword"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegisterConfirmPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/ivArrowBackRegister"
+            app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
+            app:layout_constraintTop_toBottomOf="@+id/tilRegisterPassword"
+            android:layout_marginTop="20dp"
+            android:hint="@string/string_confirmar_senha"
+            android:background="@color/colorPrimary"
+            android:textColorHint="@color/colorAccent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietRegisterConfirmPassword"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btFaceRegister"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintEnd_toStartOf="@+id/btGoogleRegister"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btSaveRegister"
+            app:layout_constraintTop_toBottomOf="@+id/tilRegisterConfirmPassword"
+            android:layout_marginStart="60dp"
+            android:background="@drawable/facebook"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btGoogleRegister"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="@+id/btFaceRegister"
+            app:layout_constraintStart_toEndOf="@id/btFaceRegister"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="60dp"
+            android:background="@drawable/google"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btSaveRegister"
+            style="@style/ButtonWatchedFragment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btGoogleRegister"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/string_logIn" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

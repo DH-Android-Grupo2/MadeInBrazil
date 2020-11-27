@@ -1,11 +1,10 @@
-package com.example.madeinbrasil.view.fragment
+package com.example.madeinbrasil.view.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.view.classes.Lista
 import kotlinx.android.synthetic.main.rvprojeto_listitem.view.*
@@ -17,14 +16,14 @@ class ListAdapter(
 ) : RecyclerView.Adapter<ListAdapter.ViewHolder>()  {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.i("RecyclerView", "onCreateViewHolder")
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.rvprojeto_listitem, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.i("RecyclerView", "onBindViewHolder - $position")
         holder.bind(itensList[position], onItemClicked)
     }

@@ -1,4 +1,4 @@
-package com.example.madeinbrasil.view.fragment
+package com.example.madeinbrasil.view.adapter
 
 import android.util.Log
 import android.view.LayoutInflater

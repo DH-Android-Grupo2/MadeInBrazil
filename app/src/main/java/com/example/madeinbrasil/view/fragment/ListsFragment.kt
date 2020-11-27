@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.madeinbrasil.R
-import com.example.madeinbrasil.databinding.FragmentFilmsBinding
 import com.example.madeinbrasil.databinding.FragmentListsBinding
 import com.example.madeinbrasil.view.activity.ListDetailActivity
+import com.example.madeinbrasil.view.adapter.ListAdapter
 import com.example.madeinbrasil.view.classes.Item
 import com.example.madeinbrasil.view.classes.Lista
 
@@ -57,7 +55,8 @@ class ListsFragment : Fragment() {
                 val intent = Intent(view.context, ListDetailActivity::class.java)
                 intent.putExtra(KEY_INTENT_LISTA, listas[position])
                 startActivity(intent)
-            } }
+            }
+        }
 
 
 
