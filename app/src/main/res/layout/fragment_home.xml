@@ -63,7 +63,7 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCardsListFavorites"
+            android:id="@+id/rvCardsListMovies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -75,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvSugestoesRecycler"/>
 
         <TextView
-            android:id="@+id/tvCardList"
+            android:id="@+id/tvCardListSeries"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Séries para Você"
@@ -84,7 +84,7 @@
             android:textStyle="bold"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListFavorites"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListMovies"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -95,8 +95,8 @@
             tools:listitem="@layout/user_favorites_recyclerview"
             tools:itemCount="1"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvCardList"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCardListSeries"/>
 
 
 
