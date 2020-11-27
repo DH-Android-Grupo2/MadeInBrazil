@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvLancamentosRecycler"/>
 
         <TextView
-            android:id="@+id/tvSugestõesRecycler"
+            android:id="@+id/tvSugestoesRecycler"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Filmes para Você"
@@ -72,7 +72,7 @@
             tools:orientation="horizontal"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSugestõesRecycler"/>
+            app:layout_constraintTop_toBottomOf="@id/tvSugestoesRecycler"/>
 
         <TextView
             android:id="@+id/tvCardList"

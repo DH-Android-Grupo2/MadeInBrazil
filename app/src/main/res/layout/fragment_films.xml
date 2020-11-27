@@ -45,6 +45,7 @@
                 android:id="@+id/tietSearchFilms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>

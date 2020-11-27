@@ -29,6 +29,10 @@
         </activity>
         <activity android:name=".view.activity.FilmsAndSeriesActivity"/>
         <activity android:name=".view.activity.MenuActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".view.activity.FavoriteActivity">
         </activity>
@@ -37,10 +41,6 @@
         <activity android:name=".view.activity.InitialActivity" >
         </activity>
         <activity android:name=".view.activity.CreateListActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".view.activity.FriendsActivity">
         </activity>
