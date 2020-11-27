@@ -1,4 +1,4 @@
-package com.example.madeinbrasil.API
+package com.example.madeinbrasil.api
 
 sealed class ResponseAPI {
     class Success(val data: Any?): ResponseAPI()
