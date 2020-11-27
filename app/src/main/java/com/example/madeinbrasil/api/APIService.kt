@@ -6,6 +6,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object APIService {
 
+    val tmdbApi = getTMDbApiClient().create(TmdbAPI::class.java)
+
     fun getTMDbApiClient(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL_v3)
