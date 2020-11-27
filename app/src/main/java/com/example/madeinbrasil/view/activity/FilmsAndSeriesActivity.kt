@@ -2,13 +2,11 @@ package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
-import com.example.madeinbrasil.model.`class`.Actors
 import com.example.madeinbrasil.model.`class`.Films
 import com.example.madeinbrasil.model.`class`.Series
 import com.example.madeinbrasil.model.home.ActorsRepository
@@ -35,10 +33,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         series = intent.getParcelableExtra(Constants.ConstantsFilms.BASE_SERIE_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
 
+        binding.ratingBarFilmsSeries.rating = 5.0f
+
         if(positionFragment == 1) {
             Glide.with(this).load(films?.img).into(binding.ivBannerFilmsSeries)
             binding.tvDescriptionTextFilmsSeries.text = films?.description
             binding.tvNameFilmsSeries.text = films?.name
+
 
             findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -49,6 +50,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
                 adapter = MainAdapterComments(comments)
             }
+
         }else {
             Glide.with(this).load(series?.img).into(binding.ivBannerFilmsSeries)
 
