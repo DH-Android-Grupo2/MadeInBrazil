@@ -1,11 +1,22 @@
 package com.example.madeinbrasil.api
 
+import com.example.madeinbrasil.model.upcoming.Result
+import com.example.madeinbrasil.model.upcoming.Upcoming
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface TmdbAPI {
 
-    //@GET("users")
-    //suspend fun movies(): Response<Films>
+    @GET("movie/upcoming")
+    suspend fun upcoming(
+        @Query("page") pageNumber: Int
+    ): Response<Upcoming>
+
+    @GET("movie/{movie_id}")
+    suspend fun movieDetails(
+        @Path("movie_id") movieId: Int
+    ): Response<Any>
 
 }

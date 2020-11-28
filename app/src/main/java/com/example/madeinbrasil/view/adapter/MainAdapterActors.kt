@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.model.`class`.Actors
-import java.util.zip.Inflater
+import com.example.madeinbrasil.model.classe.Actors
 
 class MainAdapterActors(
     private val actorsList: List<Actors>

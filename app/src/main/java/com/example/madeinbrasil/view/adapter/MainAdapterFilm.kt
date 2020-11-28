@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.model.`class`.Films
+import com.example.madeinbrasil.model.classe.Films
 
 class MainAdapterFilm(
     private var filmsList: List<Films>,

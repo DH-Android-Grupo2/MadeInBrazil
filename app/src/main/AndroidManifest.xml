@@ -17,10 +17,7 @@
         <activity android:name=".view.activity.SelectActivity">
         </activity>
         <activity android:name=".view.activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".view.activity.ListDetailActivity"/>
         <activity android:name=".view.activity.AchievementActivity">

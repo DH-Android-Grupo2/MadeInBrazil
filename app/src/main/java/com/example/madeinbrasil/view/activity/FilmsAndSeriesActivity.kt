@@ -2,15 +2,13 @@ package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
-import com.example.madeinbrasil.model.`class`.Actors
-import com.example.madeinbrasil.model.`class`.Films
-import com.example.madeinbrasil.model.`class`.Series
+import com.example.madeinbrasil.model.classe.Films
+import com.example.madeinbrasil.model.classe.Series
 import com.example.madeinbrasil.model.home.ActorsRepository
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.utils.Constants
