@@ -11,6 +11,29 @@
         android:layout_height="wrap_content"
         tools:context=".view.activity.FilmsAndSeriesActivity">
 
+
+        <com.github.florent37.shapeofview.shapes.ArcView
+            android:layout_width="match_parent"
+            android:layout_height="220sp"
+            app:shape_arc_cropDirection="outside"
+            app:shape_arc_height="20dp"
+            app:shape_arc_position="bottom"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/ivBackDropFilmSeries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:alpha="0.2"
+                android:contentDescription="BackDrop"
+                android:src="@drawable/auto_da_compadecida_capa"/>
+
+        </com.github.florent37.shapeofview.shapes.ArcView>
+
         <ImageView
             android:id="@+id/ivArrowBackFilmsSeries"
             style="@style/ArrowBackDefault"
@@ -39,6 +62,8 @@
 
         <TextView
             android:id="@+id/tvNameFilmsSeries"
+            android:layout_width="210sp"
+            android:layout_height="wrap_content"
             style="@style/TextViewFilmsSeriesDefault"
             android:text="O Auto da Compadecida"
             android:textSize="16sp"
@@ -69,12 +94,13 @@
 
         <RatingBar
             android:id="@+id/ratingBarFilmsSeries"
-            style="@style/RatingDefault"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_marginTop="10dp"
+            style="@style/RatingDefault"
             android:isIndicator="true"
-            android:stepSize="0.01"
+            android:stepSize="0.5"
+            android:rating="5"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvGenderFilmsSeries"
             app:layout_constraintEnd_toStartOf="@id/tvNoteFilmsSeries"

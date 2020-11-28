@@ -25,8 +25,13 @@ class TmdbPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when(val response = repository.getUpcoming(FIRST_PAGE)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as Upcoming
-                    data.results.forEach {
-                        it.posterPath = it.posterPath?.getFullImagePath()
+                    data.results.forEach {result->
+                        result.posterPath = result.posterPath?.getFullImagePath()
+                        result.backdropPath?.let{ string->
+                            result.backdropPath = string.getFullImagePath()
+                        }.also {
+                            result.backdropPath = result.posterPath
+                        }
                     }
                     callback.onResult(data.results, null, FIRST_PAGE + 1)
                 }
@@ -47,8 +52,13 @@ class TmdbPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when(val response = repository.getUpcoming(page)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as Upcoming
-                    data.results.forEach {
-                        it.posterPath = it.posterPath?.getFullImagePath()
+                    data.results.forEach { result->
+                        result.posterPath = result.posterPath?.getFullImagePath()
+                        result.backdropPath?.let{ string->
+                            result.backdropPath = string.getFullImagePath()
+                        }.also {
+                            result.backdropPath = result.posterPath
+                        }
                     }
                     callback.onResult(data.results, page + 1)
                 }
@@ -69,10 +79,15 @@ class TmdbPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when(val response = repository.getUpcoming(page)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as Upcoming
-                    data.results.forEach {
-                        it.posterPath?.let{ string->
-                            it.posterPath = string.getFullImagePath()
+                    data.results.forEach {result->
+                        result.posterPath?.let{ string->
+                            result.posterPath = string.getFullImagePath()
                     }
+                        result.backdropPath?.let{ string->
+                            result.backdropPath = string.getFullImagePath()
+                        }.also {
+                            result.backdropPath = result.posterPath
+                        }
                     }
                     callback.onResult(data.results, page - 1)
                 }

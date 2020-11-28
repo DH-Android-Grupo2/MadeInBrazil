@@ -19,4 +19,9 @@ interface TmdbAPI {
         @Path("movie_id") movieId: Int
     ): Response<Any>
 
+    @GET("movie/now_playing")
+    suspend fun movieNowPlaying(
+        @Query("page") pageNumber: Int
+    ): Response<Upcoming>
+
 }
