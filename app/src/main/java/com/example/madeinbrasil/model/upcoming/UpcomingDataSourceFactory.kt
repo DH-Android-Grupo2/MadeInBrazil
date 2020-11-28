@@ -1,18 +1,17 @@
-package com.example.madeinbrasil.paging
+package com.example.madeinbrasil.model.upcoming
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
-import com.example.madeinbrasil.model.upcoming.Result
 
-class TmdbDataSourceFactory: DataSource.Factory<Int, Result>() {
+class UpcomingDataSourceFactory: DataSource.Factory<Int, Result>() {
 
     //creating the mutable live data
     private val tmdbLiveDataSource = MutableLiveData<PageKeyedDataSource<Int, Result>>()
 
     override fun create(): DataSource<Int, Result> {
         //getting our data source object
-        val tmdbDataSource = TmdbPageKeyedDataSource()
+        val tmdbDataSource = UpcomingPageKeyedDataSource()
 
         //posting the datasource to get the values
         tmdbLiveDataSource.postValue(tmdbDataSource)

@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.api
 
+import com.example.madeinbrasil.model.nowPlaying.NowPlaying
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.model.upcoming.Upcoming
 import retrofit2.Response
@@ -22,6 +23,6 @@ interface TmdbAPI {
     @GET("movie/now_playing")
     suspend fun movieNowPlaying(
         @Query("page") pageNumber: Int
-    ): Response<Upcoming>
+    ): Response<NowPlaying>
 
 }

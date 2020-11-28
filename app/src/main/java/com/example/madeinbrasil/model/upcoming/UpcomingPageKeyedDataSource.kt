@@ -1,17 +1,15 @@
-package com.example.madeinbrasil.paging
+package com.example.madeinbrasil.model.upcoming
 
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
-import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.model.upcoming.Upcoming
 import com.example.madeinbrasil.repository.HomeRepository
 import com.example.madeinbrasil.utils.Constants.Paging.FIRST_PAGE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
-class TmdbPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
+class UpcomingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
 
     private val repository by lazy {
         HomeRepository()
@@ -79,6 +77,7 @@ class TmdbPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when(val response = repository.getUpcoming(page)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as Upcoming
+
                     data.results.forEach {result->
                         result.posterPath?.let{ string->
                             result.posterPath = string.getFullImagePath()

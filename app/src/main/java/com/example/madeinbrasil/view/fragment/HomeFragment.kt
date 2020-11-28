@@ -7,10 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
+import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewmodel.HomeViewModel
@@ -24,8 +27,7 @@ class HomeFragment : Fragment() {
             val movieClicked = it
             movieClicked?.let{result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                Log.i("Resultado","$result")
-                Log.i("Resultado","${result.id}")
+
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
                 startActivity(intent)
@@ -37,10 +39,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let{
+            viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
-            loadContent()
         }
-        Log.i("$homeAdapter","Adapter")
 
     }
 
@@ -53,31 +54,35 @@ class HomeFragment : Fragment() {
         return binding?.root
     }
 
-    private fun loadContent() {
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.moviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+    private fun loadContentUpcoming() {
+
+        viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
             homeAdapter.submitList(pagedList)
+        })
+    }
+
+    private fun loadContentNowPlaying() {
+
+        viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+            homeAdapter.submitList(pagedList)
+
         })
     }
 
     private fun setupRecyclerView() {
         binding?.rvCardsListLancamentos?.apply {
                layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
-               adapter = homeAdapter
-
-        }
-
-        binding?.rvCardListSeries?.apply {
-            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
-            adapter = homeAdapter
-
+                adapter = homeAdapter
         }
 
         binding?.rvCardsListMovies?.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
             adapter = homeAdapter
+        }
 
+        binding?.rvCardListSeries?.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            adapter = homeAdapter
         }
     }
-
 }
