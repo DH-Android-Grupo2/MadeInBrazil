@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.model.upcoming
 
+import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
@@ -23,6 +24,7 @@ class UpcomingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when(val response = repository.getUpcoming(FIRST_PAGE)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as Upcoming
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
                     data.results.forEach {result->
                         result.posterPath = result.posterPath?.getFullImagePath()
                         result.backdropPath?.let{ string->
@@ -50,6 +52,7 @@ class UpcomingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when(val response = repository.getUpcoming(page)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as Upcoming
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
                     data.results.forEach { result->
                         result.posterPath = result.posterPath?.getFullImagePath()
                         result.backdropPath?.let{ string->
@@ -77,7 +80,7 @@ class UpcomingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when(val response = repository.getUpcoming(page)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as Upcoming
-
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
                     data.results.forEach {result->
                         result.posterPath?.let{ string->
                             result.posterPath = string.getFullImagePath()

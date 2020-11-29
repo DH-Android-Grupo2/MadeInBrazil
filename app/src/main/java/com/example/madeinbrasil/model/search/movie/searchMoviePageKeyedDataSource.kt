@@ -26,7 +26,11 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
                     val data = response?.let{
                         it.data as SearchMovie
                     }
+<<<<<<< HEAD
                     data.results = data.results.filter { it.originalLanguage == "pt" }
+=======
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
+>>>>>>> 43aedfac5808257d3f13b0692cca9510b202bd9d
                     data.results.forEach { result ->
                         result.posterPath = result.posterPath?.getFullImagePath()
                         result.backdropPath?.let { string ->
@@ -56,6 +60,7 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
                     val data = response?.let{
                         it.data as SearchMovie
                     }
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
                     data.results.forEach { result ->
                         result.posterPath = result.posterPath?.getFullImagePath()
                         result.backdropPath?.let { string ->
@@ -84,10 +89,8 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
                 is ResponseAPI.Success -> {
                     val data = response?.let{
                         it.data as SearchMovie
-                    }.also {
-
                     }
-
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
                     data.results.forEach { result ->
                         result.posterPath?.let { string ->
                             result.posterPath = string.getFullImagePath()
