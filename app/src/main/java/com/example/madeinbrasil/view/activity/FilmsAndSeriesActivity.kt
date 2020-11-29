@@ -45,6 +45,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         series = intent.getParcelableExtra(Constants.ConstantsFilms.BASE_SERIE_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
 
+        binding.ivArrowBackFilmsSeries.setOnClickListener {
+            finish()
+        }
+
         if(positionFragment == 1) {
             viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
             viewModel.getGenres()

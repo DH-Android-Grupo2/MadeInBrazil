@@ -13,15 +13,6 @@
         tools:context=".view.fragment.FilmsFragment">
 
         <ImageView
-            android:id="@+id/ivArrowBackFilms"
-            style="@style/ArrowBackDefault"
-            android:src="@drawable/ic_baseline_arrow_back_ios_20"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/ivProfileFilms"
-            />
-
-        <ImageView
             android:id="@+id/ivProfileFilms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,14 +23,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.appcompat.widget.SearchView
+        <SearchView
             android:id="@+id/tilSearchFilms"
-            style="@style/AppSearchView"
-            android:layout_width="wrap_content"
-            android:icon="@drawable/ic_baseline_search_20"
+            android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toStartOf="@id/ivProfileFilms"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,9 +39,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+
             tools:listitem="@layout/main_cards"
             tools:itemCount="5"
-            app:layout_constraintStart_toStartOf="@id/ivArrowBackFilms"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/ivProfileFilms"
             app:layout_constraintTop_toBottomOf="@id/tilSearchFilms"/>
 

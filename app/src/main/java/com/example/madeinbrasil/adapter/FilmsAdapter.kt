@@ -5,22 +5,20 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.PopupMenu
-import android.widget.Toast
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.databinding.ActivityUserBinding
-import com.example.madeinbrasil.databinding.FilmsseriesPopupBinding
 import com.example.madeinbrasil.databinding.UserFavoritesRecyclerviewBinding
+import com.example.madeinbrasil.model.search.movie.SearchMovie
 import com.example.madeinbrasil.model.upcoming.Result
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 
-
-class HomeAdapter(
+class FilmsAdapter(
     private val onMovieClicked: (Result?) -> Unit
-) : PagedListAdapter<Result, HomeAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
+) : PagedListAdapter<Result, FilmsAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -67,4 +65,5 @@ class HomeAdapter(
         }
 
     }
+
 }
