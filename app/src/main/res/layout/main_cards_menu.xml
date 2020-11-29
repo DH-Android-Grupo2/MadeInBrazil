@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/vgMainCard"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
@@ -8,12 +8,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardViewFavoritesProfile"
+        android:id="@+id/cardViewMenu"
         style="@style/CardViewDefault"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorAccentOpaque"
         android:layout_margin="10dp"
-        app:cardBackgroundColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,30 +24,30 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/cvImageFavoritesProfile"
-                android:layout_width="70dp"
-                android:layout_height="120dp"
+                android:id="@+id/cvImageCardMenu"
+                android:layout_width="139dp"
+                android:layout_height="162dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/auto_da_compadecida_capa"
-                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/auto_da_compadecida_capa"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/tvNameFavoritesProfile"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvNameRecyclerViewMenu"/>
 
             <TextView
-                android:id="@+id/tvNameFavoritesProfile"
+                android:id="@+id/tvNameRecyclerViewMenu"
                 style="@style/TextViewFilmsSeriesDefault"
-                tools:text="O Auto da Compadecida"
+                tools:text="O auto da Compadecida"
                 android:layout_margin="10dp"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
-                android:textSize="12sp"
-                android:singleLine="true"
+                android:textSize="15sp"
+                android:lines="2"
                 android:ellipsize="end"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cvImageFavoritesProfile"
+                app:layout_constraintTop_toBottomOf="@id/cvImageCardMenu"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

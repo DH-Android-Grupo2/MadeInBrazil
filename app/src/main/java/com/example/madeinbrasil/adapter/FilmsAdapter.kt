@@ -10,7 +10,10 @@ import android.widget.Filterable
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.TransitionOptions
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.databinding.MainCardsBinding
 import com.example.madeinbrasil.databinding.UserFavoritesRecyclerviewBinding
 import com.example.madeinbrasil.model.search.movie.SearchMovie
 import com.example.madeinbrasil.model.upcoming.Result
@@ -22,7 +25,7 @@ class FilmsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = UserFavoritesRecyclerviewBinding.inflate(layoutInflater, parent, false)
+        val binding = MainCardsBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
@@ -31,17 +34,17 @@ class FilmsAdapter(
     }
 
     class ViewHolder(
-        private val binding: UserFavoritesRecyclerviewBinding
+        private val binding: MainCardsBinding
     ): RecyclerView.ViewHolder(
         binding.root
     ) {
-
         fun bind(movie: Result?, onMovieClicked: (Result?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                 .load(movie?.posterPath)
                 .placeholder(R.drawable.made_in_brasil_logo)
-                .into(cvImageFavoritesProfile)
-            tvNameFavoritesProfile.text = movie?.title
+                .into(cvImageCard)
+
+            tvNameRecyclerView.text = movie?.title
 
             itemView.setOnClickListener {
                 onMovieClicked(movie)

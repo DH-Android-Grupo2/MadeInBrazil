@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.adapter.FilmsAdapter
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
@@ -68,7 +69,7 @@ class FilmsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding?.rvCardsListFilms?.apply {
-            layoutManager = GridLayoutManager(this@FilmsFragment.context,4)
+            layoutManager = GridLayoutManager(this@FilmsFragment.context,2)
             adapter = filmsAdapter
         }
 

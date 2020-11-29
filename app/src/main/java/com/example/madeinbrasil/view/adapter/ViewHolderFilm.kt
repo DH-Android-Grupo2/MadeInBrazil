@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.main_cards.view.*
 
 class ViewHolderFilm (viewItem: View): RecyclerView.ViewHolder(viewItem) {
     fun bind(film: Films, position: (Int) -> Unit) = with(itemView) {
-        val imageCardView = findViewById<ImageView>(R.id.cvImage)
-        val nameFilmCardView = findViewById<TextView>(R.id.filmNameRecyclerView)
+        val imageCardView = findViewById<ImageView>(R.id.cvImageCard)
+        val nameFilmCardView = findViewById<TextView>(R.id.tvNameRecyclerView)
 
         Glide
             .with(itemView.context)

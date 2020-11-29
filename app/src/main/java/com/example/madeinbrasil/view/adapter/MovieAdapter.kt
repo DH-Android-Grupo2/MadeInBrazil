@@ -28,8 +28,8 @@ class MovieAdapter(val list: List<Movie>) : RecyclerView.Adapter<MovieAdapter.Vi
         private val binding: MainCardsBinding
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
-            Glide.with(binding.root.context).load(movie.coverPhotoAddress).into(binding.cvImage)
-            binding.root.findViewById<TextView>(R.id.filmNameRecyclerView).text = movie.name
+            Glide.with(binding.root.context).load(movie.coverPhotoAddress).into(binding.cvImageCard)
+            binding.root.findViewById<TextView>(R.id.tvNameRecyclerView).text = movie.name
         }
     }
 }

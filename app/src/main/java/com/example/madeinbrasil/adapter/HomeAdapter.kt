@@ -11,9 +11,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.databinding.ActivityUserBinding
-import com.example.madeinbrasil.databinding.FilmsseriesPopupBinding
-import com.example.madeinbrasil.databinding.UserFavoritesRecyclerviewBinding
+import com.example.madeinbrasil.databinding.*
 import com.example.madeinbrasil.model.upcoming.Result
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 
@@ -24,7 +22,7 @@ class HomeAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = UserFavoritesRecyclerviewBinding.inflate(layoutInflater, parent, false)
+        val binding = MainCardsMenuBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
@@ -33,7 +31,7 @@ class HomeAdapter(
     }
 
     class ViewHolder(
-        private val binding: UserFavoritesRecyclerviewBinding
+        private val binding: MainCardsMenuBinding
     ): RecyclerView.ViewHolder(
         binding.root
     ) {
@@ -42,8 +40,8 @@ class HomeAdapter(
             Glide.with(itemView.context)
                 .load(movie?.posterPath)
                 .placeholder(R.drawable.made_in_brasil_logo)
-                .into(cvImageFavoritesProfile)
-            tvNameFavoritesProfile.text = movie?.title
+                .into(cvImageCardMenu)
+            tvNameRecyclerViewMenu.text = movie?.title
 
             itemView.setOnClickListener {
                 onMovieClicked(movie)
