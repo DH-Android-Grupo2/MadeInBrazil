@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.api
 
+import com.example.madeinbrasil.model.gender.GenderMovie
 import com.example.madeinbrasil.model.nowPlaying.NowPlaying
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.model.upcoming.Upcoming
@@ -24,5 +25,9 @@ interface TmdbAPI {
     suspend fun movieNowPlaying(
         @Query("page") pageNumber: Int
     ): Response<NowPlaying>
+
+
+    @GET("genre/movie/list")
+    suspend fun movieGenres(): Response<GenderMovie>
 
 }

@@ -35,13 +35,17 @@ class HomeFragment : Fragment() {
 
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let{
             viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
+            loadContentNowPlaying()
         }
+
+
 
     }
 
@@ -55,24 +59,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadContentUpcoming() {
-
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
             homeAdapter.submitList(pagedList)
+            Log.i("R","->>$pagedList")
         })
     }
 
     private fun loadContentNowPlaying() {
-
         viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
             homeAdapter.submitList(pagedList)
-
+            Log.i("U","->>$pagedList")
         })
     }
 
     private fun setupRecyclerView() {
         binding?.rvCardsListLancamentos?.apply {
                layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
-                adapter = homeAdapter
+            adapter = homeAdapter
         }
 
         binding?.rvCardsListMovies?.apply {

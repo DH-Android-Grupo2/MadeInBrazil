@@ -65,6 +65,17 @@
         <item name="boxStrokeColor">@color/colorAccent</item>
         <item name="startIconDrawable">@drawable/ic_baseline_search_20</item>
         <item name="startIconTint">@color/colorAccent</item>
+
+    </style>
+
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+        <!-- Query Text Color -->
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:icon">@drawable/ic_baseline_search_20</item>
+        <!-- Hint Color -->
+        <item name="android:textColorHint">@color/colorPrimary</item>
+        <!-- Icon Color -->
+        <item name="android:tint">@color/colorPrimary</item>
     </style>
 
     <style name="SearchTextInputDefault" >

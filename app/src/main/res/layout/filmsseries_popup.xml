@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popupFilmsSeries"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:layout_gravity="center">
+
+    <com.vipulasri.ticketview.TicketView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:ticketBackgroundColor="@color/colorPrimary"
+        app:ticketDividerColor="@color/colorAccent"
+        app:ticketBorderColor="@color/colorAccent"
+        app:ticketCornerType="scallop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:id="@+id/ticketView"
+        app:ticketOrientation="horizontal"
+        app:ticketScallopRadius="10dp"
+        app:ticketShowBorder="true"
+        app:ticketShowDivider="true"
+        app:ticketDividerType="dash"
+        app:ticketScallopPositionPercent="39"
+        app:ticketDividerPadding="0dp"
+        app:ticketElevation="14dp"/>
+
+    <ImageView
+        android:id="@+id/ivDialogPoster"
+        android:layout_width="140dp"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/auto_da_compadecida_capa"
+        app:layout_constraintEnd_toEndOf="@id/ticketView"
+        app:layout_constraintStart_toStartOf="@id/ticketView"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvDialogName"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="@+id/ticketView"
+        app:layout_constraintEnd_toEndOf="@id/ticketView"
+        app:layout_constraintTop_toBottomOf="@id/ivDialogPoster"
+        android:layout_margin="10dp"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:layout_height="wrap_content"
+        android:text="O Auto da Compadecida"
+        android:textColor="@color/colorAccent"/>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
