@@ -53,7 +53,7 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
         CoroutineScope(Dispatchers.IO).launch {
             when (val response = repository.searchMovies(page,query)) {
                 is ResponseAPI.Success -> {
-                    val data = response?.let{
+                    val data = response.let{
                         it.data as SearchMovie
                     }
                     data.results = data.results.filter { it.originalLanguage.equals("pt") }

@@ -62,9 +62,9 @@ class FilmsFragment : Fragment() {
     }
 
     private fun loadContentSearchMovie() {
-        viewModel.searchMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+        viewModel.searchMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
             filmsAdapter.submitList(pagedList)
-        })
+        }
     }
 
     private fun setupRecyclerView() {
@@ -75,7 +75,7 @@ class FilmsFragment : Fragment() {
 
     }
 
-    fun SetupSearchView() {
+    private fun SetupSearchView() {
 
         val searchView:SearchView? = binding?.tilSearchFilms
 

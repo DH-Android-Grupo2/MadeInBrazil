@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.model.search
 
 import android.os.Parcelable
+import androidx.recyclerview.widget.DiffUtil
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -8,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 data class Result(
     val adult: Boolean,
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    var backdropPath: String,
     @SerializedName("first_air_date")
     val firstAirDate: String,
     @SerializedName("genre_ids")
@@ -28,7 +29,7 @@ data class Result(
     val overview: String,
     val popularity: Double,
     @SerializedName("poster_path")
-    val posterPath: String,
+    var posterPath: String?,
     @SerializedName("release_date")
     val releaseDate: String,
     val title: String,
@@ -37,4 +38,17 @@ data class Result(
     val voteAverage: Double,
     @SerializedName("vote_count")
     val voteCount: Int
-): Parcelable
+): Parcelable {
+
+    companion object {
+        var DIFF_CALLBACK_SERIE: DiffUtil.ItemCallback<Result> = object : DiffUtil.ItemCallback<Result>() {
+            override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
+    }
+}

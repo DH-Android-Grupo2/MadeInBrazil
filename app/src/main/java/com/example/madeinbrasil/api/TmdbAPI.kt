@@ -3,6 +3,7 @@ package com.example.madeinbrasil.api
 import com.example.madeinbrasil.model.gender.GenderMovie
 import com.example.madeinbrasil.model.nowPlaying.NowPlaying
 import com.example.madeinbrasil.model.search.movie.SearchMovie
+import com.example.madeinbrasil.model.search.serie.SearchSeries
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.model.upcoming.Upcoming
 import retrofit2.Response
@@ -32,6 +33,12 @@ interface TmdbAPI {
         @Query("page") pageNumber: Int,
         @Query("query") query: String
     ): Response<SearchMovie>
+
+    @GET("search/tv")
+    suspend fun searchSerie(
+        @Query("page") pageNumber: Int,
+        @Query("query") query: String
+    ): Response<SearchSeries>
 
     @GET("genre/movie/list")
     suspend fun movieGenres(): Response<GenderMovie>

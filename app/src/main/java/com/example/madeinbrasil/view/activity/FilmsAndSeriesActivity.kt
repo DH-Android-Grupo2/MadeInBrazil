@@ -30,7 +30,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var viewModel: GenderMovieViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
     private var films: Result? = null
-    private var series: Series? = null
+    private var series: com.example.madeinbrasil.model.search.Result? = null
     private var actors = ActorsRepository().setActors()
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
@@ -83,7 +83,28 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 adapter = MainAdapterComments(comments)
             }
         }else {
-            Glide.with(this).load(series?.img).into(binding.ivBannerFilmsSeries)
+            viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
+            viewModel.getGenres()
+            //setupObservables()
+
+            Glide.with(this)
+                .load(series?.posterPath)
+                .into(binding.ivBannerFilmsSeries)
+            series?.backdropPath?.let{
+                Glide.with(this)
+                    .load(series?.backdropPath)
+                    .into(binding.ivBackDropFilmSeries)
+            }
+
+            binding.tvDescriptionTextFilmsSeries.text = series?.overview
+            binding.tvNameFilmsSeries.text = series?.title
+            binding.tvNoteFilmsSeries.text = "${series?.voteAverage}"
+            series?.voteAverage?.let {
+                binding.ratingBarFilmsSeries.rating = (it/2.0f).toFloat()
+                binding.ratingBarFilmsSeries.stepSize = .5f
+            }
+
+            binding.tvYearFilmsSeries.text = "${series?.releaseDate?.getFirst4Chars()}"
 
             findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
