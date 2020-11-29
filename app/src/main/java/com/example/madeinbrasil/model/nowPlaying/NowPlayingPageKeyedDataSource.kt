@@ -25,6 +25,7 @@ class NowPlayingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when (val response = repository.getNowPlaying(Constants.Paging.FIRST_PAGE)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as NowPlaying
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
                     data.results.forEach { result ->
                         result.posterPath = result.posterPath?.getFullImagePath()
                         result.backdropPath?.let { string ->
@@ -52,6 +53,7 @@ class NowPlayingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when (val response = repository.getNowPlaying(page)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as NowPlaying
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
                     data.results.forEach { result ->
                         result.posterPath = result.posterPath?.getFullImagePath()
                         result.backdropPath?.let { string ->
@@ -79,7 +81,7 @@ class NowPlayingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             when (val response = repository.getNowPlaying(page)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as NowPlaying
-
+                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
                     data.results.forEach { result ->
                         result.posterPath?.let { string ->
                             result.posterPath = string.getFullImagePath()
