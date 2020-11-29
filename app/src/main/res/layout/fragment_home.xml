@@ -51,6 +51,31 @@
             app:layout_constraintTop_toBottomOf="@id/tvLancamentosRecycler"/>
 
         <TextView
+            android:id="@+id/tvFuturosLancamentosRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Futuros Lançamentos"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListLancamentos"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListFuturosLancamentos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/user_favorites_recyclerview"
+            tools:itemCount="1"
+            tools:orientation="horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFuturosLancamentosRecycler"/>
+
+        <TextView
             android:id="@+id/tvSugestoesRecycler"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -60,7 +85,7 @@
             android:textStyle="bold"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListLancamentos"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListFuturosLancamentos"
             />
 
         <androidx.recyclerview.widget.RecyclerView
