@@ -21,11 +21,12 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
         callback: LoadInitialCallback<Int, Result>
     ) {
         CoroutineScope(Dispatchers.IO).launch {
-            when (val response = repository.searchMovies(Constants.Paging.FIRST_PAGE,query)) {
+            when (val response = repository.searchMovies(Constants.Paging.FIRST_PAGE, query)) {
                 is ResponseAPI.Success -> {
                     val data = response?.let{
                         it.data as SearchMovie
                     }
+                    data.results = data.results.filter { it.originalLanguage == "pt" }
                     data.results.forEach { result ->
                         result.posterPath = result.posterPath?.getFullImagePath()
                         result.backdropPath?.let { string ->

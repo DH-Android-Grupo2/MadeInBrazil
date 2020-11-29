@@ -50,38 +50,38 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
 
         if(positionFragment == 1) {
-            viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
-            viewModel.getGenres()
-            setupObservables()
+                viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
+                viewModel.getGenres()
+                //setupObservables()
 
-            Glide.with(this)
-                .load(films?.posterPath)
-                .into(binding.ivBannerFilmsSeries)
-            films?.backdropPath?.let{
                 Glide.with(this)
-                    .load(films?.backdropPath)
-                    .into(binding.ivBackDropFilmSeries)
-            }
+                        .load(films?.posterPath)
+                        .into(binding.ivBannerFilmsSeries)
+                films?.backdropPath?.let{
+                    Glide.with(this)
+                            .load(films?.backdropPath)
+                            .into(binding.ivBackDropFilmSeries)
+                }
 
-            binding.tvDescriptionTextFilmsSeries.text = films?.overview
-            binding.tvNameFilmsSeries.text = films?.title
-            binding.tvNoteFilmsSeries.text = "${films?.voteAverage}"
-            films?.voteAverage?.let {
-                binding.ratingBarFilmsSeries.rating = it/2.0f
-                binding.ratingBarFilmsSeries.stepSize = .5f
-            }
+                binding.tvDescriptionTextFilmsSeries.text = films?.overview
+                binding.tvNameFilmsSeries.text = films?.title
+                binding.tvNoteFilmsSeries.text = "${films?.voteAverage}"
+                films?.voteAverage?.let {
+                    binding.ratingBarFilmsSeries.rating = it/2.0f
+                    binding.ratingBarFilmsSeries.stepSize = .5f
+                }
 
-            binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
+                binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
 
-            findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
-                layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                adapter = MainAdapterActors(actors)
-            }
+                findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
+                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                    adapter = MainAdapterActors(actors)
+                }
 
-            findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
-                layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
-                adapter = MainAdapterComments(comments)
-            }
+                findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
+                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+                    adapter = MainAdapterComments(comments)
+                }
         }else {
             Glide.with(this).load(series?.img).into(binding.ivBannerFilmsSeries)
 
@@ -97,21 +97,21 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupObservables() {
-        var generosText:String = ""
-        viewModel.onResultGenres.observe(this, {
-            it?.let { generos ->
-                films?.genreIds?.forEach { genreFilm ->
-                    generos.genres.forEach { genre->
-                        if(genre.id == genreFilm){
-                            generosText+="${genre.name}  "
-                        }
-                    }
-                }
-
-            }
-            binding.tvGenderFilmsSeries.text= generosText
-        })
-    }
+//    private fun setupObservables() {
+//        var generosText:String = ""
+//        viewModel.onResultGenres.observe(this, {
+//            it?.let { generos ->
+//                films?.genreIds?.forEach { genreFilm ->
+//                    generos.genres.forEach { genre->
+//                        if(genre.id == genreFilm){
+//                            generosText+="${genre.name}  "
+//                        }
+//                    }
+//                }
+//
+//            }
+//            binding.tvGenderFilmsSeries.text= generosText
+//        })
+//    }
 
 }
