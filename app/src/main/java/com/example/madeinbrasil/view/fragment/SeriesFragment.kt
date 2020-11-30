@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import com.example.madeinbrasil.model.home.SeriesRepository
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.example.madeinbrasil.view.activity.UserActivity
 import com.example.madeinbrasil.view.adapter.MainAdapterSeries
 
 class SeriesFragment : Fragment() {
@@ -22,7 +24,9 @@ class SeriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding?.ivProfileFilms?.setOnClickListener {
+            this.context?.let { it1 -> startUserActivity(it1) }
+        }
         activity?.findViewById<RecyclerView>(R.id.rvCardsListSeries)?.apply {
             layoutManager = GridLayoutManager(activity, 2)
             adapter = MainAdapterSeries(seriesRepository) {position ->
@@ -42,5 +46,8 @@ class SeriesFragment : Fragment() {
         binding = FragmentSeriesBinding.inflate(layoutInflater, container, false)
         return binding?.root
     }
-
+    fun startUserActivity(context: Context) {
+        val intent = Intent(context, UserActivity::class.java)
+        startActivity(intent)
+    }
 }
