@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class Result(
     val adult: Boolean,
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    var backdropPath: String?,
     @SerializedName("first_air_date")
     val firstAirDate: String,
     @SerializedName("genre_ids")
@@ -28,7 +28,7 @@ data class Result(
     val overview: String,
     val popularity: Double,
     @SerializedName("poster_path")
-    val posterPath: String,
+    var posterPath: String,
     @SerializedName("release_date")
     val releaseDate: String,
     val title: String,

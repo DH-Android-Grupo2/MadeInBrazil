@@ -30,7 +30,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var viewModel: GenderMovieViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
     private var films: Result? = null
-    private var series: Series? = null
+    private var series: Result? = null
     private var actors = ActorsRepository().setActors()
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
@@ -83,7 +83,26 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 adapter = MainAdapterComments(comments)
             }
         }else {
-            Glide.with(this).load(series?.img).into(binding.ivBannerFilmsSeries)
+
+            Glide.with(this)
+                .load(series?.posterPath)
+                .into(binding.ivBannerFilmsSeries)
+            series?.backdropPath?.let{
+                Glide.with(this)
+                    .load(series?.backdropPath)
+                    .into(binding.ivBackDropFilmSeries)
+            }
+
+
+            binding.tvDescriptionTextFilmsSeries.text = series?.overview
+            binding.tvNameFilmsSeries.text = series?.name
+            binding.tvNoteFilmsSeries.text = "${series?.voteAverage}"
+            series?.voteAverage?.let {
+                binding.ratingBarFilmsSeries.rating = it/2.0f
+                binding.ratingBarFilmsSeries.stepSize = .5f
+            }
+
+            binding.tvYearFilmsSeries.text = "${series?.releaseDate?.getFirst4Chars()}"
 
             findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -94,24 +113,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
                 adapter = MainAdapterComments(comments)
             }
+
         }
     }
 
-//    private fun setupObservables() {
-//        var generosText:String = ""
-//        viewModel.onResultGenres.observe(this, {
-//            it?.let { generos ->
-//                films?.genreIds?.forEach { genreFilm ->
-//                    generos.genres.forEach { genre->
-//                        if(genre.id == genreFilm){
-//                            generosText+="${genre.name}  "
-//                        }
-//                    }
-//                }
-//
-//            }
-//            binding.tvGenderFilmsSeries.text= generosText
-//        })
-//    }
 
 }

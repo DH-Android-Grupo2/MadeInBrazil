@@ -37,16 +37,27 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private val homeAdapter2 : HomeAdapter by lazy {
+        HomeAdapter {
+            val movieClicked = it
+            movieClicked?.let{result->
+                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
+                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                startActivity(intent)
+            }
+
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let{
             viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
-            loadContentNowPlaying()
         }
-
-
 
     }
 
@@ -61,32 +72,42 @@ class HomeFragment : Fragment() {
 
     private fun loadContentUpcoming() {
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
-            homeAdapter.submitList(pagedList)
-            Log.i("R","->>$pagedList")
+            homeAdapter.currentList?.clear()
+            homeAdapter.submitList(pagedList,null)
+            homeAdapter.notifyDataSetChanged()
         })
     }
 
     private fun loadContentNowPlaying() {
         viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
-            homeAdapter.submitList(pagedList)
-            Log.i("U","->>$pagedList")
-        })
+            homeAdapter.currentList?.clear()
+            homeAdapter.submitList(pagedList,null)
+            homeAdapter.notifyDataSetChanged()
+       })
     }
 
     private fun setupRecyclerView() {
         binding?.rvCardsListLancamentos?.apply {
-               layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            loadContentNowPlaying()
+            adapter = homeAdapter
+        }
+
+        binding?.rvCardsListFuturosLancamentos?.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            loadContentUpcoming()
+
             adapter = homeAdapter
         }
 
         binding?.rvCardsListMovies?.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
-            adapter = homeAdapter
+            //adapter = homeAdapter
         }
 
         binding?.rvCardListSeries?.apply {
-            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
-            adapter = homeAdapter
+           layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+         //   adapter = homeAdapter
         }
     }
 }
