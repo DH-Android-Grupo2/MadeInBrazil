@@ -13,6 +13,10 @@ data class Result(
     @SerializedName("genre_ids")
     val genreIds: List<Int>,
     val id: Int,
+    @SerializedName("first_air_date")
+    var firstAirDate: String?,
+    @SerializedName("origin_country")
+    var originalCountry:List<String>?,
     @SerializedName("original_language")
     val originalLanguage: String?,
     @SerializedName("original_title")

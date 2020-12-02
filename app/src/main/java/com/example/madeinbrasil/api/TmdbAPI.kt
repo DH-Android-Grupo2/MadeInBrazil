@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.api
 
 import com.example.madeinbrasil.model.gender.GenderMovie
+import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.example.madeinbrasil.model.nowPlaying.NowPlaying
 import com.example.madeinbrasil.model.search.movie.SearchMovie
 import com.example.madeinbrasil.model.search.serie.SearchSeries
@@ -22,6 +23,12 @@ interface TmdbAPI {
     suspend fun movieDetails(
         @Path("movie_id") movieId: Int
     ): Response<Any>
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun movieCredits(
+        @Path("movie_id") movieId: Int
+    ): Response<MovieCredits>
+
 
     @GET("movie/now_playing")
     suspend fun movieNowPlaying(

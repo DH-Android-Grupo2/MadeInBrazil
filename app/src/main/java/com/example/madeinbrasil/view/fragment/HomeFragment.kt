@@ -72,9 +72,9 @@ class HomeFragment : Fragment() {
 
     private fun loadContentUpcoming() {
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
-            homeAdapter.currentList?.clear()
-            homeAdapter.submitList(pagedList,null)
-            homeAdapter.notifyDataSetChanged()
+            homeAdapter2.currentList?.clear()
+            homeAdapter2.submitList(pagedList,null)
+            homeAdapter2.notifyDataSetChanged()
         })
     }
 
@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
             loadContentUpcoming()
 
-            adapter = homeAdapter
+            adapter = homeAdapter2
         }
 
         binding?.rvCardsListMovies?.apply {
