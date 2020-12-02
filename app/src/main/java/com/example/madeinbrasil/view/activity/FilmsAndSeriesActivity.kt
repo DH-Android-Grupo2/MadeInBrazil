@@ -1,8 +1,5 @@
 package com.example.madeinbrasil.view.activity
 
-import android.content.Intent
-import android.content.ActivityNotFoundException
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,25 +9,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.adapter.MovieCreditsAdapter
-import com.example.madeinbrasil.business.MovieCreditsBusiness
+import com.example.madeinbrasil.adapter.SerieCastAdapter
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
-import com.example.madeinbrasil.model.home.ActorsRepository
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.utils.Constants.Api.BASE_URL_YOUTUBE_APP
-import com.example.madeinbrasil.utils.Constants.Api.BASE_URL_YOUTUBE_BROWSER
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
-import com.example.madeinbrasil.repository.MovieCreditsRepository
-import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
-import com.example.madeinbrasil.view.adapter.MainAdapterActors
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
+import com.example.madeinbrasil.viewModel.SerieCreditsViewModel
 import com.example.madeinbrasil.viewModel.TrailerViewModel
 import com.example.madeinbrasil.viewmodel.GenderMovieViewModel
 import com.example.madeinbrasil.viewmodel.MovieCreditsViewModel
@@ -39,14 +30,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GenderMovieViewModel
     private lateinit var viewModelTrailer: TrailerViewModel
+    private lateinit var viewModelCastSerie: SerieCreditsViewModel
+    private lateinit var viewModelCast: MovieCreditsViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
     private var films: Result? = null
     private var series: ResultSearch? = null
-    private var actors: List<Cast> = listOf()
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
-    private lateinit var viewModelCast: MovieCreditsViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,6 +115,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
             2 -> {
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
+                viewModelCastSerie = ViewModelProvider(this).get(SerieCreditsViewModel::class.java)
+                viewModelCastSerie.getCreditsSerie(series?.id)
                 viewModel.getGenres()
                 //setupObservables()
 
@@ -148,9 +141,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.tvYearFilmsSeries.text = "${series?.firstAirDate?.getFirst4Chars()}"
                 }
 
-                findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
-                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                    adapter = MainAdapterActors(actors)
+                viewModelCastSerie.creditsSucess?.observe(this) {
+                    it?.cast.let { castSerie ->
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = castSerie?.let { it1 -> SerieCastAdapter(it1) }
+                        }
+                    }
                 }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {

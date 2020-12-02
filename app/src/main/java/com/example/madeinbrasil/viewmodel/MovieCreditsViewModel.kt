@@ -12,7 +12,7 @@ import retrofit2.http.Query
 class MovieCreditsViewModel() : ViewModel() {
 
     val onResultCredits: MutableLiveData<MovieCredits> = MutableLiveData()
-  val onResultFailure: MutableLiveData<String>  = MutableLiveData()
+    val onResultFailure: MutableLiveData<String>  = MutableLiveData()
 
     private val business by lazy {
         MovieCreditsBusiness()
