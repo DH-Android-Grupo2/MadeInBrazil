@@ -42,7 +42,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
     private var films: Result? = null
-    private var series: Result? = null
+    private var series: ResultSearch? = null
     private var actors: List<Cast> = listOf()
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
@@ -107,14 +107,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
 
-            viewModelCast.onResultCredits?.observe(this, {
+            viewModelCast.onResultCredits?.observe(this) {
                 it?.cast.let { cast ->
                     binding.rvCardsListActors.apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                         adapter = cast?.let { it1 -> MovieCreditsAdapter(it1) }
                     }
                 }
-            })
+            }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
