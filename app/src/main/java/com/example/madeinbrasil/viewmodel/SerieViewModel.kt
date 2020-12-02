@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PageKeyedDataSource
 import androidx.paging.PagedList
-import com.example.madeinbrasil.model.search.Result
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.search.serie.SearchSerieDataSourceFactory
 import com.example.madeinbrasil.utils.Constants.Paging.PAGE_SIZE
 
-class SerieViewModel(): ViewModel() {
-    var searchSeriePagedList: LiveData<PagedList<Result>>? = null
-    private var searchSerieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
-    private var query = ""
+class SerieViewModel: ViewModel() {
+    var searchSeriePagedList: LiveData<PagedList<ResultSearch>>? = null
+    private var searchSerieLiveDataSource: LiveData<PageKeyedDataSource<Int, ResultSearch>>? = null
+    var query = " "
 
     init {
         searchSerieData()
@@ -29,6 +29,7 @@ class SerieViewModel(): ViewModel() {
     }
 
     private fun searchSerieData() {
+
         val tmdbSourceFactory = SearchSerieDataSourceFactory(query)
         searchSerieLiveDataSource = tmdbSourceFactory.getSearchSerieLiveDataSource()
 

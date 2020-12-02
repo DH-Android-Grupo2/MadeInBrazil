@@ -7,17 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
-import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
-import com.example.madeinbrasil.viewmodel.HomeViewModel
+import com.example.madeinbrasil.viewModel.HomeViewModel
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
@@ -46,8 +43,6 @@ class HomeFragment : Fragment() {
             loadContentNowPlaying()
         }
 
-
-
     }
 
     override fun onCreateView(
@@ -60,22 +55,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadContentUpcoming() {
-        viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+        viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
             homeAdapter.submitList(pagedList)
             Log.i("R","->>$pagedList")
-        })
+        }
     }
 
     private fun loadContentNowPlaying() {
-        viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+        viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
             homeAdapter.submitList(pagedList)
             Log.i("U","->>$pagedList")
-        })
+        }
     }
 
     private fun setupRecyclerView() {
         binding?.rvCardsListLancamentos?.apply {
-               layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
             adapter = homeAdapter
         }
 

@@ -1,17 +1,14 @@
 package com.example.madeinbrasil.repository
 
-import android.util.Log
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
-import java.lang.Exception
 
-class SerieRepository {
-    suspend fun searchSerie(
-        pageNumber: Int,
-        search: String = "Os"
-    ): ResponseAPI {
+class TrailerRepository{
+
+    suspend fun getTrailer(movieId: Int): ResponseAPI {
         return try {
-            val response = APIService.tmdbApiSearch.searchSerie(pageNumber, search)
+            val response = APIService.tmdbApiSearch.trailerMoviesAndSeries(movieId)
+
             if (response.isSuccessful) {
                 ResponseAPI.Success(response.body())
             } else {

@@ -23,11 +23,10 @@ class SeriesFragment : Fragment() {
     private lateinit var viewModel: SerieViewModel
 
     private val seriesAdapter: SerieAdapter by lazy {
-        SerieAdapter {
-            val serieClicked = it
-            serieClicked?.let {result ->
+        SerieAdapter {result ->
+            result?.let {
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(BASE_SERIE_KEY, result)
+                intent.putExtra(BASE_SERIE_KEY, it)
                 intent.putExtra(ID_FRAGMENTS, 2)
                 startActivity(intent)
             }
