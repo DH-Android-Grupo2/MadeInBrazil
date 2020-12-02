@@ -12,6 +12,7 @@ import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
+import com.airbnb.lottie.LottieAnimationView
 import com.example.madeinbrasil.adapter.FilmsAdapter
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
 import com.example.madeinbrasil.model.home.FilmRepository
@@ -19,6 +20,7 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewmodel.FilmsViewModel
+import kotlinx.android.synthetic.main.fragment_films.*
 import java.util.*
 
 

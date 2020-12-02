@@ -1,42 +1,53 @@
 package com.example.madeinbrasil.view.activity
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.ActivityNotFoundException
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.adapter.HomeAdapter
+import com.example.madeinbrasil.adapter.MovieCreditsAdapter
+import com.example.madeinbrasil.business.MovieCreditsBusiness
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.model.home.ActorsRepository
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.search.ResultSearch
+import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.Api.BASE_URL_YOUTUBE_APP
 import com.example.madeinbrasil.utils.Constants.Api.BASE_URL_YOUTUBE_BROWSER
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
+import com.example.madeinbrasil.repository.MovieCreditsRepository
+import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.adapter.MainAdapterActors
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
 import com.example.madeinbrasil.viewModel.TrailerViewModel
 import com.example.madeinbrasil.viewmodel.GenderMovieViewModel
+import com.example.madeinbrasil.viewmodel.MovieCreditsViewModel
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GenderMovieViewModel
     private lateinit var viewModelTrailer: TrailerViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
+
     private var films: Result? = null
-    private var series: ResultSearch? = null
-    private var actors = ActorsRepository().setActors()
+    private var series: Result? = null
+    private var actors: List<Cast> = listOf()
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
+    private lateinit var viewModelCast: MovieCreditsViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +65,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
         when(positionFragment) {
             1 -> {
+                viewModelCast = ViewModelProvider(this).get(MovieCreditsViewModel::class.java)
+                viewModelCast.getCredits(films?.id)
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModelTrailer = ViewModelProvider(this).get(TrailerViewModel::class.java)
 
@@ -94,10 +107,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
 
-                findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
-                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                    adapter = MainAdapterActors(actors)
+            viewModelCast.onResultCredits?.observe(this, {
+                it?.cast.let { cast ->
+                    binding.rvCardsListActors.apply {
+                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                        adapter = cast?.let { it1 -> MovieCreditsAdapter(it1) }
+                    }
                 }
+            })
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
@@ -141,24 +158,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     adapter = MainAdapterComments(comments)
                 }
             }
+
         }
     }
 
-//    private fun setupObservables() {
-//        var generosText:String = ""
-//        viewModel.onResultGenres.observe(this, {
-//            it?.let { generos ->
-//                films?.genreIds?.forEach { genreFilm ->
-//                    generos.genres.forEach { genre->
-//                        if(genre.id == genreFilm){
-//                            generosText+="${genre.name}  "
-//                        }
-//                    }
-//                }
-//
-//            }
-//            binding.tvGenderFilmsSeries.text= generosText
-//        })
-//    }
+
 
 }
