@@ -21,6 +21,7 @@ import com.example.madeinbrasil.model.home.ActorsRepository
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.movieCredits.Cast
+import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.Api.BASE_URL_YOUTUBE_APP
 import com.example.madeinbrasil.utils.Constants.Api.BASE_URL_YOUTUBE_BROWSER
@@ -28,20 +29,25 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.repository.MovieCreditsRepository
 import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.adapter.MainAdapterActors
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
 import com.example.madeinbrasil.viewModel.TrailerViewModel
 import com.example.madeinbrasil.viewmodel.GenderMovieViewModel
 import com.example.madeinbrasil.viewmodel.MovieCreditsViewModel
+import com.example.madeinbrasil.viewmodel.MovieDetailedViewModel
+import java.time.Duration
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GenderMovieViewModel
     private lateinit var viewModelTrailer: TrailerViewModel
+    private lateinit var viewModelMovie: MovieDetailedViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
     private var films: Result? = null
+    private var filmDetailed: MovieDetailed?  = null
     private var series: ResultSearch? = null
     private var actors: List<Cast> = listOf()
     private var comments = CommentRepository().setComments()
@@ -51,14 +57,18 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         binding = ActivityFilmsAndSeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        filmDetailed = intent.getParcelableExtra(BASE_FILM_DETAILED_KEY)
+        Log.i("LOGGGGGG","${filmDetailed?.runtime}")
         films = intent.getParcelableExtra(BASE_FILM_KEY)
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
+        Log.i("positionxx", "$filmDetailed")
 
-        Log.i("position", positionFragment.toString())
+
         binding.ivArrowBackFilmsSeries.setOnClickListener {
             finish()
         }
@@ -67,11 +77,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             1 -> {
                 viewModelCast = ViewModelProvider(this).get(MovieCreditsViewModel::class.java)
                 viewModelCast.getCredits(films?.id)
+
+                viewModelMovie = ViewModelProvider(this).get(MovieDetailedViewModel::class.java)
+                viewModelMovie.getMovie(films?.id)
+
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModelTrailer = ViewModelProvider(this).get(TrailerViewModel::class.java)
 
+
                 viewModel.getGenres()
-                //setupObservables()
+                setupObservables()
                 Glide.with(this)
                         .load(films?.posterPath)
                         .into(binding.ivBannerFilmsSeries)
@@ -88,6 +103,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.ratingBarFilmsSeries.rating = it/2.0f
                     binding.ratingBarFilmsSeries.stepSize = .5f
                 }
+
+
+
+                viewModelMovie.movieSucess.observe(this, {
+                    it?.let { movie ->
+                        val horas = movie.runtime?.div(60)
+                        val minutos = movie.runtime?.rem(60)
+                        binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                    }
+                })
 
                 binding.btTrailerFilmsSeries.setOnClickListener {
                     val test = films?.id?.let { viewModelTrailer.getTrailer(it) }
@@ -162,6 +187,22 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupObservables() {
+        var generosText = ""
+        viewModel.onResultGenres.observe(this, {
+            it?.let { generos ->
+                films?.genreIds?.forEach { genreFilm ->
+                    generos.genres.forEach { genre->
+                        if(genre.id == genreFilm){
+                            generosText+="${genre.name}  "
+                        }
+                    }
+                }
+
+            }
+            binding.tvGenderFilmsSeries.text= generosText
+        })
+    }
 
 
 }

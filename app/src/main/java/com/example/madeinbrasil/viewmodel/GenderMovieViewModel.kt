@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,6 +33,7 @@ class GenderMovieViewModel : ViewModel() {
                     onResultGenres.postValue(
                         response.data as GenderMovie
                     )
+                    Log.i("Generos","${response.data}")
                 }
                 is ResponseAPI.Error -> {
                     onResultFailure.postValue(response.message)

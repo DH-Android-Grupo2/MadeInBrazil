@@ -12,20 +12,24 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
+import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewModel.HomeViewModel
+import com.example.madeinbrasil.viewmodel.MovieDetailedViewModel
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private var binding: FragmentHomeBinding? = null
-
+    var movieComplete:MovieDetailed? = null
     private val homeAdapter : HomeAdapter by lazy {
         HomeAdapter {
             val movieClicked = it
             movieClicked?.let{result->
-                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
 
+                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                Log.i("LOGGA","${movieComplete}")
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
                 startActivity(intent)
@@ -38,8 +42,9 @@ class HomeFragment : Fragment() {
         HomeAdapter {
             val movieClicked = it
             movieClicked?.let{result->
-                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
 
+                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
                 startActivity(intent)
