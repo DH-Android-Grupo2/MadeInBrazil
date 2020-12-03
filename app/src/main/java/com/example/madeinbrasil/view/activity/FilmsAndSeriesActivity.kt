@@ -1,35 +1,25 @@
 package com.example.madeinbrasil.view.activity
 
 import android.content.Intent
-import android.content.ActivityNotFoundException
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.adapter.MovieCreditsAdapter
-import com.example.madeinbrasil.business.MovieCreditsBusiness
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
-import com.example.madeinbrasil.model.home.ActorsRepository
 import com.example.madeinbrasil.model.home.CommentRepository
-import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.utils.Constants.Api.BASE_URL_YOUTUBE_APP
-import com.example.madeinbrasil.utils.Constants.Api.BASE_URL_YOUTUBE_BROWSER
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
-import com.example.madeinbrasil.repository.MovieCreditsRepository
-import com.example.madeinbrasil.utils.Constants
-import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.adapter.MainAdapterActors
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
@@ -37,7 +27,6 @@ import com.example.madeinbrasil.viewModel.TrailerViewModel
 import com.example.madeinbrasil.viewmodel.GenderMovieViewModel
 import com.example.madeinbrasil.viewmodel.MovieCreditsViewModel
 import com.example.madeinbrasil.viewmodel.MovieDetailedViewModel
-import java.time.Duration
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -61,8 +50,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
         binding = ActivityFilmsAndSeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        filmDetailed = intent.getParcelableExtra(BASE_FILM_DETAILED_KEY)
-        Log.i("LOGGGGGG","${filmDetailed?.runtime}")
+        Log.i("LOGGGGGG", "${filmDetailed?.runtime}")
         films = intent.getParcelableExtra(BASE_FILM_KEY)
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
@@ -82,15 +70,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModelMovie.getMovie(films?.id)
 
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
-                viewModelTrailer = ViewModelProvider(this).get(TrailerViewModel::class.java)
 
+                viewModelTrailer = ViewModelProvider(this).get(TrailerViewModel::class.java)
+                films?.let { viewModelTrailer.getTrailer(it.id) }
 
                 viewModel.getGenres()
                 setupObservables()
                 Glide.with(this)
                         .load(films?.posterPath)
                         .into(binding.ivBannerFilmsSeries)
-                films?.backdropPath?.let{
+                films?.backdropPath?.let {
                     Glide.with(this)
                             .load(films?.backdropPath)
                             .into(binding.ivBackDropFilmSeries)
@@ -100,46 +89,44 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 binding.tvNameFilmsSeries.text = films?.title
                 binding.tvNoteFilmsSeries.text = "${films?.voteAverage?.div(2)}"
                 films?.voteAverage?.let {
-                    binding.ratingBarFilmsSeries.rating = it/2.0f
+                    binding.ratingBarFilmsSeries.rating = it / 2.0f
                     binding.ratingBarFilmsSeries.stepSize = .5f
                 }
-
-
 
                 viewModelMovie.movieSucess.observe(this, {
                     it?.let { movie ->
                         val horas = movie.runtime?.div(60)
                         val minutos = movie.runtime?.rem(60)
                         binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                        filmDetailed = movie
                     }
                 })
 
-                binding.btTrailerFilmsSeries.setOnClickListener {
-                    val test = films?.id?.let { viewModelTrailer.getTrailer(it) }
-                    Log.i("test", test.toString())
-                    Log.i("test", "cliquei")
+                binding.btWebSiteFilmsSeries.setOnClickListener {
+                    Log.i("HOMEPAGE", "${filmDetailed?.homepage}")
+                    val uri = Uri.parse("${filmDetailed?.homepage}")
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
 
-//                    fun openYoutubeLink (youtubeID: String) {
-//                        val intentApp = Intent(Intent.ACTION_VIEW, Uri.parse("$BASE_URL_YOUTUBE_APP$youtubeID"))
-//                        val intentBrowser = Intent(Intent.ACTION_VIEW, Uri.parse("$BASE_URL_YOUTUBE_BROWSER$youtubeID"))
-//                        try {
-//                            this.startActivity(intentApp)
-//                        } catch (ex: ActivityNotFoundException) {
-//                            this.startActivity(intentBrowser)
-//                        }
-//                    }
+                binding.btTrailerFilmsSeries.setOnClickListener {
+                    viewModelTrailer.trailerSucess.observe(this, {
+                        it?.let { trailer ->
+                            Log.i("TRAILER", trailer.key)
+                        }
+                    })
                 }
 
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
 
-            viewModelCast.onResultCredits?.observe(this) {
-                it?.cast.let { cast ->
-                    binding.rvCardsListActors.apply {
-                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        adapter = cast?.let { it1 -> MovieCreditsAdapter(it1) }
+                viewModelCast.onResultCredits?.observe(this) {
+                    it?.cast.let { cast ->
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = cast?.let { it1 -> MovieCreditsAdapter(it1) }
+                        }
                     }
                 }
-            }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
@@ -156,7 +143,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     Glide.with(binding.root.context)
                             .load(series?.posterPath)
                             .into(binding.ivBannerFilmsSeries)
-                    series?.backdropPath?.let{
+                    series?.backdropPath?.let {
                         Glide.with(binding.root.context)
                                 .load(series?.backdropPath)
                                 .into(binding.ivBackDropFilmSeries)
@@ -166,7 +153,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.tvNameFilmsSeries.text = series?.name
                     binding.tvNoteFilmsSeries.text = "${(series?.voteAverage)?.div(2)}"
                     series?.voteAverage?.let {
-                        binding.ratingBarFilmsSeries.rating = (it/2.0f).toFloat()
+                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
                         binding.ratingBarFilmsSeries.stepSize = .5f
                     }
 
@@ -192,15 +179,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         viewModel.onResultGenres.observe(this, {
             it?.let { generos ->
                 films?.genreIds?.forEach { genreFilm ->
-                    generos.genres.forEach { genre->
-                        if(genre.id == genreFilm){
-                            generosText+="${genre.name}  "
+                    generos.genres.forEach { genre ->
+                        if (genre.id == genreFilm) {
+                            generosText += "${genre.name}  "
                         }
                     }
                 }
 
             }
-            binding.tvGenderFilmsSeries.text= generosText
+            binding.tvGenderFilmsSeries.text = generosText
         })
     }
 
