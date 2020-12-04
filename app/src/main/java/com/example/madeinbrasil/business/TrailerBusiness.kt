@@ -13,9 +13,6 @@ class TrailerBusiness {
         val response = repository.getTrailer(movieId)
         return if(response is ResponseAPI.Success) {
             val data = response.data as Trailer
-//            data.results?.forEach { result ->
-//                result.key  = result.key.getYoutubePath()
-//            }
             ResponseAPI.Success(data)
         }else {
             response

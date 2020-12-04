@@ -27,10 +27,7 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
-import com.example.madeinbrasil.viewModel.GenderMovieViewModel
-import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
-import com.example.madeinbrasil.viewModel.SerieCreditsViewModel
-import com.example.madeinbrasil.viewModel.TrailerViewModel
+import com.example.madeinbrasil.viewModel.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
@@ -41,6 +38,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GenderMovieViewModel
     private lateinit var viewModelTrailer: TrailerViewModel
+    private lateinit var viewModelTrailerSeries: TrailerSeriesViewModel
     private lateinit var viewModelCastSerie: SerieCreditsViewModel
     private lateinit var viewModelCast: MovieCreditsViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
@@ -71,7 +69,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModelTrailer = ViewModelProvider(this).get(TrailerViewModel::class.java)
                 viewModelCast.getCredits(films?.id)
-
+                viewModelTrailer.getTrailer(films?.id)
 
                 viewModel.getGenres()
 
@@ -93,8 +91,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
 
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
-
-                viewModelTrailer.getTrailer(films?.id)
 
                 viewModelTrailer.trailerSucess?.observe(this) {trailer ->
                     trailer.results?.forEach {
@@ -124,7 +120,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             2 -> {
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModelCastSerie = ViewModelProvider(this).get(SerieCreditsViewModel::class.java)
+                viewModelTrailerSeries = ViewModelProvider(this).get(TrailerSeriesViewModel::class.java)
                 viewModelCastSerie.getCreditsSerie(series?.id)
+                viewModelTrailerSeries.getTrailerSerie(series?.id)
                 viewModel.getGenres()
 
                 series?.let {
@@ -146,6 +144,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     binding.tvYearFilmsSeries.text = "${series?.firstAirDate?.getFirst4Chars()}"
+                }
+
+                viewModelTrailerSeries.trailerSucessSerie?.observe(this) {trailer ->
+                    trailer.results?.forEach {
+                        binding.btTrailerFilmsSeries.isVisible = it.key != ""
+                    }
+
+                    binding.btTrailerFilmsSeries.setOnClickListener {
+                        youtubeSeries(it)
+                    }
                 }
 
                 viewModelCastSerie.creditsSucess?.observe(this) {
@@ -186,4 +194,23 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun youtubeSeries(click: View) {
+        val dialog = Dialog(click.context)
+        dialog.setContentView(R.layout.youtube_popup)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val iFramePlayerOptions = IFramePlayerOptions.Builder().controls(1).build()
+        var key = ""
+        viewModelTrailerSeries.trailerSucessSerie.observe(this) { trailer ->
+            trailer.results.forEach { key = it.key }
+        }
+        lifecycle.addObserver(dialog.youtubePlayerDialog)
+        dialog.youtubePlayerDialog.initialize(object: AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.loadOrCueVideo(lifecycle, key, 0.0f)
+            }
+        }, true, iFramePlayerOptions)
+
+        dialog.show()
+    }
 }
