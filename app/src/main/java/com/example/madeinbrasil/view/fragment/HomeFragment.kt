@@ -16,7 +16,6 @@ import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewModel.HomeViewModel
-import com.example.madeinbrasil.viewmodel.MovieDetailedViewModel
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel

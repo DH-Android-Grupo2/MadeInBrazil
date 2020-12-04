@@ -1,13 +1,10 @@
-package com.example.madeinbrasil.viewmodel
+package com.example.madeinbrasil.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.business.MovieCreditsBusiness
 import com.example.madeinbrasil.business.MovieDetailedBusiness
-import com.example.madeinbrasil.business.TrailerBusiness
-import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.example.madeinbrasil.model.result.MovieDetailed
 import kotlinx.coroutines.launch
 

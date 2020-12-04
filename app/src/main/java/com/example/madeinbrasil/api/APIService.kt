@@ -124,7 +124,6 @@ object APIService {
                     .addQueryParameter(QUERY_PARAM_LANGUAGE_LABEL, QUERY_PARAM_LANGUAGE_VALUE)
                     .addQueryParameter(QUERY_PARAM_APPEND_LABEL, QUERY_PARAM_APPEND_VALUE)
                     .addQueryParameter(QUERY_PARAM_REGION_LABEL, QUERY_PARAM_REGION_VALUE)
-
                     .build()
                 val newRequest = chain.request().newBuilder().url(url).build()
                 chain.proceed(newRequest)

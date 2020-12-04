@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
@@ -37,7 +36,7 @@ import kotlinx.android.synthetic.main.youtube_popup.*
 import com.example.madeinbrasil.viewModel.TrailerViewModel
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
-import com.example.madeinbrasil.viewmodel.MovieDetailedViewModel
+import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -103,7 +102,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.ratingBarFilmsSeries.stepSize = .5f
                 }
 
-                viewModelMovie.movieSucess.observe(this, {
+                viewModelMovie.movieSucess.observe(this) {
                     it?.let { movie ->
                         val horas = movie.runtime?.div(60)
                         val minutos = movie.runtime?.rem(60)
@@ -111,29 +110,31 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = MovieCreditsAdapter(movie?.credits.cast){
-                                    val castClicked = it
-                                    castClicked?.let{result->
-                                        val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
-                                        intent.putExtra(BASE_ACTOR_KEY, result)
-                                        startActivity(intent)
-                                    }
+                                val castClicked = it
+                                castClicked?.let{result->
+                                    val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                    intent.putExtra(BASE_ACTOR_KEY, result)
+                                    startActivity(intent)
+                                }
                             }
                         }
                         filmDetailed = movie
                     }
-                })
+                }
+
                 binding.btWebSiteFilmsSeries.setOnClickListener {
-                    val uri = Uri.parse("${filmDetailed?.homepage}")
+                    val uri = Uri.parse(filmDetailed?.homepage)
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     startActivity(intent)
                 }
 
+
                 binding.btTrailerFilmsSeries.setOnClickListener {
-                    viewModelTrailer.trailerSucess.observe(this, {
+                    viewModelTrailer.trailerSucess.observe(this) {
                         it?.let { trailer ->
 
                         }
-                    })
+                    }
                 }
 
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
