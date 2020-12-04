@@ -102,7 +102,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.ratingBarFilmsSeries.stepSize = .5f
                 }
 
-                viewModelMovie.movieSucess.observe(this, {
+                viewModelMovie.movieSucess.observe(this) {
                     it?.let { movie ->
                         val horas = movie.runtime?.div(60)
                         val minutos = movie.runtime?.rem(60)
@@ -110,17 +110,17 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = MovieCreditsAdapter(movie?.credits.cast){
-                                    val castClicked = it
-                                    castClicked?.let{result->
-                                        val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
-                                        intent.putExtra(BASE_ACTOR_KEY, result)
-                                        startActivity(intent)
-                                    }
+                                val castClicked = it
+                                castClicked?.let{result->
+                                    val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                    intent.putExtra(BASE_ACTOR_KEY, result)
+                                    startActivity(intent)
+                                }
                             }
                         }
                         filmDetailed = movie
                     }
-                })
+                }
                 binding.btWebSiteFilmsSeries.setOnClickListener {
                     val uri = Uri.parse("${filmDetailed?.homepage}")
                     val intent = Intent(Intent.ACTION_VIEW, uri)
