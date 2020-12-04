@@ -24,7 +24,7 @@ class SearchSeriePageKeyedDataSource(var query: String): PageKeyedDataSource<Int
                 is ResponseAPI.Success -> {
                     val data = response.data as SearchSeries
 
-                    data.results = data.results.filter { it.originalLanguage.equals("pt") }
+                    data.results = data.results.filter { it.originCountry.contains("BR") }
                     data.results.forEach {result ->
                         result.originCountry.forEach {string ->
                             string.filter { it.equals("BR") }
@@ -54,7 +54,7 @@ class SearchSeriePageKeyedDataSource(var query: String): PageKeyedDataSource<Int
                 is ResponseAPI.Success -> {
                     val data = response.data as SearchSeries
 //                    var safe: List<Result>
-                    data.results = data.results.filter { it.originalLanguage.equals("pt")}
+                    data.results = data.results.filter  { it.originCountry.contains("BR") }
                     data.results.forEach {result ->
                         result.originCountry.forEach {string ->
                             string.filter { it.equals("BR") }
@@ -86,7 +86,7 @@ class SearchSeriePageKeyedDataSource(var query: String): PageKeyedDataSource<Int
                 is ResponseAPI.Success -> {
                     val data = response.data as SearchSeries
 
-                    data.results = data.results.filter { it.originalLanguage.equals("pt")}
+                    data.results = data.results.filter  { it.originCountry.contains("BR") }
                     data.results.forEach {result ->
                         result.originCountry.forEach {string ->
                             string.filter { it.equals("BR") }

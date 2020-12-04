@@ -1,5 +1,9 @@
 package com.example.madeinbrasil.model.movieCredits
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Crew(
     val adult: Boolean,
     val credit_id: String,
@@ -12,4 +16,4 @@ data class Crew(
     val original_name: String,
     val popularity: Double,
     val profile_path: String
-)
+):Parcelable

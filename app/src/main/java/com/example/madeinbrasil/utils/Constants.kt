@@ -21,13 +21,16 @@ class Constants {
         const val QUERY_PARAM_REGION_LABEL = "region"
         const val QUERY_PARAM_REGION_VALUE = "BR"
         const val QUERY_PARAM_APPEND_LABEL = "append_to_response"
-        const val QUERY_PARAM_APPEND_VALUE = "videos"
+        const val QUERY_PARAM_APPEND_VALUE = "videos,credits,recommendations,similar,watch/providers"
     }
 
     object ConstantsFilms {
         const val BASE_FILM_KEY = "Film"
+        const val BASE_FILM_DETAILED_KEY = "MovieDetailed"
         const val BASE_SERIE_KEY = "Serie"
         const val ID_FRAGMENTS = "idFragment"
+        const val BASE_ACTOR_KEY = "Actor"
+
     }
 
     object Paging {

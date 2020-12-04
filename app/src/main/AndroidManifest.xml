@@ -3,7 +3,7 @@
     package="com.example.madeinbrasil">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,50 +12,46 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.activity.PeopleActivity"></activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.madeinbrasil.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".view.activity.SelectActivity">
-        </activity>
-        <activity android:name=".view.activity.SplashActivity">
-
-        </activity>
-        <activity android:name=".view.activity.ListDetailActivity"/>
-        <activity android:name=".view.activity.AchievementActivity">
-        </activity>
-        <activity android:name=".view.activity.MyProfileOptionsActivity">
-        </activity>
-        <activity android:name=".view.activity.FilmsAndSeriesActivity"/>
+        <activity android:name=".view.activity.SelectActivity"></activity>
+        <activity android:name=".view.activity.SplashActivity"></activity>
+        <activity android:name=".view.activity.ListDetailActivity" />
+        <activity android:name=".view.activity.AchievementActivity"></activity>
+        <activity android:name=".view.activity.MyProfileOptionsActivity"></activity>
+        <activity android:name=".view.activity.FilmsAndSeriesActivity" />
         <activity android:name=".view.activity.MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.intent.action.PICK"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.OPENABLE"/>
-                <data android:mimeType="text/plain"/>
-                <data android:mimeType="image/*"/>
+
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.FavoriteActivity">
-        </activity>
+        <activity android:name=".view.activity.FavoriteActivity"></activity>
         <activity android:name=".view.activity.RegisterActivity" />
         <activity android:name=".view.activity.LogInActivity" />
-        <activity android:name=".view.activity.InitialActivity" >
-        </activity>
-        <activity android:name=".view.activity.CreateListActivity">
-        </activity>
-        <activity android:name=".view.activity.FriendsActivity">
-        </activity>
-        <activity android:name=".view.activity.UserActivity">
-        </activity>
+        <activity android:name=".view.activity.InitialActivity"></activity>
+        <activity android:name=".view.activity.CreateListActivity"></activity>
+        <activity android:name=".view.activity.FriendsActivity"></activity>
+        <activity android:name=".view.activity.UserActivity"></activity>
     </application>
 
 </manifest>

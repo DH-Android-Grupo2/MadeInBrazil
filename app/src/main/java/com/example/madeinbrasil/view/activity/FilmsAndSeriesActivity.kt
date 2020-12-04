@@ -5,13 +5,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,8 +20,10 @@ import com.example.madeinbrasil.adapter.SerieCastAdapter
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.model.home.CommentRepository
+import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
@@ -33,6 +34,10 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrCueVideo
 import kotlinx.android.synthetic.main.youtube_popup.*
+import com.example.madeinbrasil.viewModel.TrailerViewModel
+import com.example.madeinbrasil.viewModel.GenderMovieViewModel
+import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
+import com.example.madeinbrasil.viewmodel.MovieDetailedViewModel
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -41,24 +46,24 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var viewModelTrailerSeries: TrailerSeriesViewModel
     private lateinit var viewModelCastSerie: SerieCreditsViewModel
     private lateinit var viewModelCast: MovieCreditsViewModel
+    private lateinit var viewModelMovie: MovieDetailedViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
     private var films: Result? = null
+    private var filmDetailed: MovieDetailed?  = null
     private var series: ResultSearch? = null
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityFilmsAndSeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         films = intent.getParcelableExtra(BASE_FILM_KEY)
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
 
-        Log.i("position", positionFragment.toString())
         binding.ivArrowBackFilmsSeries.setOnClickListener {
             finish()
         }
@@ -66,17 +71,25 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         when(positionFragment) {
             1 -> {
                 viewModelCast = ViewModelProvider(this).get(MovieCreditsViewModel::class.java)
+                viewModelCast.getCredits(films?.id)
+
+                viewModelMovie = ViewModelProvider(this).get(MovieDetailedViewModel::class.java)
+                viewModelMovie.getMovie(films?.id)
+
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
+
                 viewModelTrailer = ViewModelProvider(this).get(TrailerViewModel::class.java)
                 viewModelCast.getCredits(films?.id)
                 viewModelTrailer.getTrailer(films?.id)
+                films?.let { viewModelTrailer.getTrailer(it.id) }
 
                 viewModel.getGenres()
 
+                setupObservables()
                 Glide.with(this)
                         .load(films?.posterPath)
                         .into(binding.ivBannerFilmsSeries)
-                films?.backdropPath?.let{
+                films?.backdropPath?.let {
                     Glide.with(this)
                             .load(films?.backdropPath)
                             .into(binding.ivBackDropFilmSeries)
@@ -88,6 +101,39 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 films?.voteAverage?.let {
                     binding.ratingBarFilmsSeries.rating = it/2.0f
                     binding.ratingBarFilmsSeries.stepSize = .5f
+                }
+
+                viewModelMovie.movieSucess.observe(this, {
+                    it?.let { movie ->
+                        val horas = movie.runtime?.div(60)
+                        val minutos = movie.runtime?.rem(60)
+                        binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = MovieCreditsAdapter(movie?.credits.cast){
+                                    val castClicked = it
+                                    castClicked?.let{result->
+                                        val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                        intent.putExtra(BASE_ACTOR_KEY, result)
+                                        startActivity(intent)
+                                    }
+                            }
+                        }
+                        filmDetailed = movie
+                    }
+                })
+                binding.btWebSiteFilmsSeries.setOnClickListener {
+                    val uri = Uri.parse("${filmDetailed?.homepage}")
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+
+                binding.btTrailerFilmsSeries.setOnClickListener {
+                    viewModelTrailer.trailerSucess.observe(this, {
+                        it?.let { trailer ->
+
+                        }
+                    })
                 }
 
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
@@ -110,6 +156,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                     }
                 }
+                viewModelCast.onResultCredits?.observe(this) {
+
+                }
 
                     findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
@@ -129,7 +178,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     Glide.with(binding.root.context)
                             .load(series?.posterPath)
                             .into(binding.ivBannerFilmsSeries)
-                    series?.backdropPath?.let{
+                    series?.backdropPath?.let {
                         Glide.with(binding.root.context)
                                 .load(series?.backdropPath)
                                 .into(binding.ivBackDropFilmSeries)
@@ -139,7 +188,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.tvNameFilmsSeries.text = series?.name
                     binding.tvNoteFilmsSeries.text = "${(series?.voteAverage)?.div(2)}"
                     series?.voteAverage?.let {
-                        binding.ratingBarFilmsSeries.rating = (it/2.0f).toFloat()
+                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
                         binding.ratingBarFilmsSeries.stepSize = .5f
                     }
 
@@ -174,6 +223,22 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupObservables() {
+        var generosText = ""
+        viewModel.onResultGenres.observe(this, {
+            it?.let { generos ->
+                films?.genreIds?.forEach { genreFilm ->
+                    generos.genres.forEach { genre ->
+                        if (genre.id == genreFilm) {
+                            generosText += "${genre.name}  "
+                        }
+                    }
+                }
+
+            }
+            binding.tvGenderFilmsSeries.text = generosText
+        })
+    }
     private fun youtubeMovies(click: View) {
         val dialog = Dialog(click.context)
         dialog.setContentView(R.layout.youtube_popup)
