@@ -25,7 +25,6 @@ object APIService {
             .client(getInterceptorClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        
     }
 
     private fun getInterceptorClient(): OkHttpClient {
