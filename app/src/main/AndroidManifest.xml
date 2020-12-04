@@ -45,7 +45,6 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.FavoriteActivity"></activity>
         <activity android:name=".view.activity.RegisterActivity" />
         <activity android:name=".view.activity.LogInActivity" />
         <activity android:name=".view.activity.InitialActivity"></activity>

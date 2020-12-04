@@ -107,63 +107,54 @@
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvGenderFilmsSeries"
             app:layout_constraintEnd_toStartOf="@id/tvNoteFilmsSeries"
-            app:layout_constraintBottom_toTopOf="@id/cbWatchedFilmsSeries"/>
+            app:layout_constraintBottom_toTopOf="@id/cbWatchedFilmsSeries"
+            />
 
-                <TextView
-                    android:id="@+id/tvNoteFilmsSeries"
-                    style="@style/TextViewFilmsSeriesDefault"
-                    android:text="4,5"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorNotes"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintStart_toEndOf="@id/ratingBarFilmsSeries"
-                    app:layout_constraintTop_toTopOf="@id/ratingBarFilmsSeries"
-                    />
+        <TextView
+            android:id="@+id/tvNoteFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text="4,5"
+            android:textSize="18sp"
+            android:textColor="@color/colorNotes"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/ratingBarFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/ratingBarFilmsSeries"
+            />
 
-                <CheckBox
-                    android:id="@+id/cbWatchedFilmsSeries"
-                    style="@style/ButtonWatchedActivity"
-                    android:text="@string/string_button_watched"
-                    android:button="@drawable/checkbox_watched_selector"
-                    android:layout_marginTop="20dp"
-                    android:textAlignment="center"
-                    app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-                    app:layout_constraintTop_toBottomOf="@id/ratingBarFilmsSeries"
-                    app:layout_constraintEnd_toStartOf="@id/cbFavoriteFilmsSeries"
-                    app:layout_constraintBottom_toTopOf="@id/ivAgeRatingFilmsSeries"/>
+        <CheckBox
+            android:id="@+id/cbWatchedFilmsSeries"
+            style="@style/ButtonWatchedActivity"
+            android:text="@string/string_button_watched"
+            android:button="@drawable/checkbox_watched_selector"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/ratingBarFilmsSeries"
+            app:layout_constraintEnd_toStartOf="@id/cbFavoriteFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/ivAgeRatingFilmsSeries"/>
 
-                <CheckBox
-                    android:id="@+id/cbFavoriteFilmsSeries"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:button="@drawable/checkbox_favorite_selector"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintStart_toEndOf="@id/cbWatchedFilmsSeries"
-                    app:layout_constraintTop_toTopOf="@id/cbWatchedFilmsSeries"
-                    app:layout_constraintEnd_toStartOf="@id/cbListFilmsSeries"
-                    />
-                <CheckBox
-                    android:id="@+id/cbListFilmsSeries"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:button="@drawable/ic_baseline_playlist_add_20"
-                    android:layout_marginEnd="40dp"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintStart_toEndOf="@id/cbFavoriteFilmsSeries"
-                    app:layout_constraintTop_toTopOf="@id/cbWatchedFilmsSeries"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
+        <CheckBox
+            android:id="@+id/cbFavoriteFilmsSeries"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:button="@drawable/checkbox_favorite_selector"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/cbWatchedFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/cbWatchedFilmsSeries"
+            app:layout_constraintEnd_toStartOf="@id/cbListFilmsSeries"
+            />
 
-        <Button
-            style="@style/ButtonFavoriteAndLists"
-            android:id="@+id/btListFilmsSeries"
+        <CheckBox
+            android:id="@+id/cbListFilmsSeries"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:button="@drawable/ic_baseline_playlist_add_20"
             android:layout_marginEnd="40dp"
             android:layout_marginStart="10dp"
-            android:drawableStart="@drawable/ic_baseline_playlist_add_20"
-            android:padding="5dp"
             app:layout_constraintStart_toEndOf="@id/cbFavoriteFilmsSeries"
             app:layout_constraintTop_toTopOf="@id/cbWatchedFilmsSeries"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
         <ImageView
             android:id="@+id/ivAgeRatingFilmsSeries"
@@ -172,7 +163,7 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/class_livre"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/btListFilmsSeries" />
+            app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries" />
 
         <TextView
             android:id="@+id/tvTimeFilmsSeries"
