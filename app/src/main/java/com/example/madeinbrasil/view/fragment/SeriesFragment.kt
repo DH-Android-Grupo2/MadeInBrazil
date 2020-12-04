@@ -74,6 +74,7 @@ class SeriesFragment : Fragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.setQuerySerie(query)
                 binding?.tvMessageSeries?.isVisible = query != ""
+                binding?.animationSeries?.isVisible = query != ""
                 setUpRecyclerView()
                 loadContentSerie()
                 return true
@@ -82,6 +83,7 @@ class SeriesFragment : Fragment() {
             override fun onQueryTextChange(newText: String): Boolean {
                 viewModel.setQuerySerie(newText)
                 binding?.tvMessageSeries?.isVisible = newText == ""
+                binding?.animationSeries?.isVisible = newText == ""
                 setUpRecyclerView()
                 loadContentSerie()
                 return true

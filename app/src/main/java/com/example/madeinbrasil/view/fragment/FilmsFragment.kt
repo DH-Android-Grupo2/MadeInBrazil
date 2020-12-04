@@ -85,6 +85,7 @@ class FilmsFragment : Fragment() {
                 viewModel.setQuery(query)
                 Log.i("Query","${viewModel.getQuery()}")
                 binding?.tvMessageFilms?.isVisible = query != ""
+                binding?.animationFilms?.isVisible = query != ""
                 setupRecyclerView()
                 loadContentSearchMovie()
                 return true
@@ -93,6 +94,7 @@ class FilmsFragment : Fragment() {
                 viewModel.setQuery(newText)
                 Log.i("Query","${viewModel.getQuery()}")
                 binding?.tvMessageFilms?.isVisible = newText == ""
+                binding?.animationFilms?.isVisible = newText == ""
                 setupRecyclerView()
                 loadContentSearchMovie()
                 return true

@@ -42,11 +42,23 @@
             android:text="Pesquise uma Série"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
-            android:textSize="50sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toTopOf="@+id/animationSeries"
             app:layout_constraintEnd_toEndOf="@id/ivProfileSeries"
             app:layout_constraintStart_toStartOf="@id/tilSearchSeries"
             app:layout_constraintTop_toBottomOf="@id/tilSearchSeries" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationSeries"
+            android:layout_width="200dp"
+            android:layout_height="240dp"
+            app:lottie_rawRes="@raw/claqueteaction"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:layout_constraintStart_toStartOf="@id/tilSearchSeries"
+            app:layout_constraintEnd_toEndOf="@id/ivProfileSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvMessageSeries"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListSeries"

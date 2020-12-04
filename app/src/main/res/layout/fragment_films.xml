@@ -39,12 +39,24 @@
             android:layout_height="wrap_content"
             android:text="Pesquise um Filme"
             android:textColor="@color/colorAccent"
-            android:textSize="50sp"
+            android:textSize="40sp"
             android:layout_marginTop="20dp"
             android:textAlignment="center"
             app:layout_constraintStart_toStartOf="@id/tilSearchFilms"
             app:layout_constraintEnd_toEndOf="@id/ivProfileFilms"
             app:layout_constraintTop_toBottomOf="@id/tilSearchFilms"
+            app:layout_constraintBottom_toTopOf="@+id/animationFilms"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationFilms"
+            android:layout_width="200dp"
+            android:layout_height="240dp"
+            app:lottie_rawRes="@raw/claqueteaction"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:layout_constraintStart_toStartOf="@id/tilSearchFilms"
+            app:layout_constraintEnd_toEndOf="@id/ivProfileFilms"
+            app:layout_constraintTop_toBottomOf="@id/tvMessageFilms"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
