@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         tools:context=".view.activity.FilmsAndSeriesActivity">
 
-
         <com.github.florent37.shapeofview.shapes.ArcView
             android:layout_width="match_parent"
             android:layout_height="220dp"
@@ -93,19 +92,22 @@
             app:layout_constraintTop_toBottomOf="@id/tvYearFilmsSeries"
             app:layout_constraintBottom_toTopOf="@+id/ratingBarFilmsSeries"/>
 
-        <RatingBar
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/ratingBarFilmsSeries"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_marginTop="10dp"
-            style="@style/RatingDefault"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:numStars="5"
             android:isIndicator="true"
+            app:mrb_fillBackgroundStars="false"
             android:stepSize="0.5"
-            android:rating="5"
+            android:rating="4.5"
+            app:mrb_progressTint="@color/colorNotes"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvGenderFilmsSeries"
             app:layout_constraintEnd_toStartOf="@id/tvNoteFilmsSeries"
-            app:layout_constraintBottom_toTopOf="@id/btWatchedFilmsSeries"/>
+            app:layout_constraintBottom_toTopOf="@id/cbWatchedFilmsSeries"/>
 
                 <TextView
                     android:id="@+id/tvNoteFilmsSeries"
@@ -159,8 +161,8 @@
             android:layout_marginStart="10dp"
             android:drawableStart="@drawable/ic_baseline_playlist_add_20"
             android:padding="5dp"
-            app:layout_constraintStart_toEndOf="@id/btFavoriteFilmsSeries"
-            app:layout_constraintTop_toTopOf="@id/btWatchedFilmsSeries"
+            app:layout_constraintStart_toEndOf="@id/cbFavoriteFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/cbWatchedFilmsSeries"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageView

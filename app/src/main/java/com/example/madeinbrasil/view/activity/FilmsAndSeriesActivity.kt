@@ -148,7 +148,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                viewModelCast.onResultCredits?.observe(this) {
+                /*viewModelCast.onResultCredits?.observe(this) {
                     it?.cast.let { cast ->
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -158,7 +158,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
                 viewModelCast.onResultCredits?.observe(this) {
 
-                }
+                }*/
 
                     findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)

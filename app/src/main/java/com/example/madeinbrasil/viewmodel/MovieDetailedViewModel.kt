@@ -9,7 +9,6 @@ import com.example.madeinbrasil.business.MovieDetailedBusiness
 import com.example.madeinbrasil.business.TrailerBusiness
 import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.example.madeinbrasil.model.result.MovieDetailed
-import com.example.madeinbrasil.model.trailer.ResultTrailer
 import kotlinx.coroutines.launch
 
 class MovieDetailedViewModel: ViewModel() {
