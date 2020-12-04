@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true" >
@@ -10,6 +11,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".view.activity.FilmsAndSeriesActivity">
+
+
+        <com.github.florent37.shapeofview.shapes.ArcView
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            app:shape_arc_cropDirection="outside"
+            app:shape_arc_height="20dp"
+            app:shape_arc_position="bottom"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/ivBackDropFilmSeries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:alpha="0.2"
+                android:contentDescription="BackDrop"
+                android:src="@drawable/auto_da_compadecida_capa"/>
+
+        </com.github.florent37.shapeofview.shapes.ArcView>
 
         <ImageView
             android:id="@+id/ivArrowBackFilmsSeries"
@@ -39,6 +63,8 @@
 
         <TextView
             android:id="@+id/tvNameFilmsSeries"
+            android:layout_width="210sp"
+            android:layout_height="wrap_content"
             style="@style/TextViewFilmsSeriesDefault"
             android:text="O Auto da Compadecida"
             android:textSize="16sp"
@@ -60,28 +86,26 @@
         <TextView
             android:id="@+id/tvGenderFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="Aventura, Comédia"
+            android:text=""
             android:textSize="14sp"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvYearFilmsSeries"
             app:layout_constraintBottom_toTopOf="@+id/ratingBarFilmsSeries"/>
 
-            <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                android:id="@+id/ratingBarFilmsSeries"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.RatingBar.Small"
-                android:numStars="5"
-                android:layout_marginTop="10dp"
-                app:mrb_fillBackgroundStars="false"
-                android:rating="4.5"
-                android:stepSize="0.5"
-                app:mrb_progressTint="@color/colorNotes"
-                app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-                app:layout_constraintTop_toBottomOf="@id/tvGenderFilmsSeries"
-                app:layout_constraintEnd_toStartOf="@id/tvNoteFilmsSeries"
-                app:layout_constraintBottom_toTopOf="@id/cbWatchedFilmsSeries"/>
+        <RatingBar
+            android:id="@+id/ratingBarFilmsSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            style="@style/RatingDefault"
+            android:isIndicator="true"
+            android:stepSize="0.5"
+            android:rating="5"
+            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvGenderFilmsSeries"
+            app:layout_constraintEnd_toStartOf="@id/tvNoteFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/btWatchedFilmsSeries"/>
 
                 <TextView
                     android:id="@+id/tvNoteFilmsSeries"
@@ -128,37 +152,64 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     />
 
-                <ImageView
-                    android:id="@+id/ivAgeRatingFilmsSeries"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/class_livre"
-                    app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-                    app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries" />
+        <Button
+            style="@style/ButtonFavoriteAndLists"
+            android:id="@+id/btListFilmsSeries"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="10dp"
+            android:drawableStart="@drawable/ic_baseline_playlist_add_20"
+            android:padding="5dp"
+            app:layout_constraintStart_toEndOf="@id/btFavoriteFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/btWatchedFilmsSeries"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-                <TextView
-                    android:id="@+id/tvTimeFilmsSeries"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"
-                    android:text="1h40min"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintStart_toEndOf="@id/ivAgeRatingFilmsSeries"
-                    app:layout_constraintTop_toTopOf="@id/ivAgeRatingFilmsSeries"
-                    app:layout_constraintBottom_toBottomOf="@id/ivAgeRatingFilmsSeries"/>
+        <ImageView
+            android:id="@+id/ivAgeRatingFilmsSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/class_livre"
+            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/btListFilmsSeries" />
 
-                <Button
-                    style="@style/ButtonWatchedActivity"
-                    android:id="@+id/btTrailerFilmsSeries"
-                    android:text="@string/string_trailer"
-                    android:drawableStart="@drawable/ic_baseline_play_circle_filled_20"
-                    android:layout_marginTop="5dp"
-                    android:padding="3dp"
-                    app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
-                    app:layout_constraintTop_toBottomOf="@id/cvFilmsSeries"
-                    app:layout_constraintEnd_toEndOf="@id/cvFilmsSeries"
-                    />
+        <TextView
+            android:id="@+id/tvTimeFilmsSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:text=""
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/ivAgeRatingFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/ivAgeRatingFilmsSeries"
+            app:layout_constraintBottom_toBottomOf="@id/ivAgeRatingFilmsSeries"/>
+
+        <Button
+            style="@style/ButtonWatchedActivity"
+            android:id="@+id/btTrailerFilmsSeries"
+            android:text="@string/string_trailer"
+            android:visibility="gone"
+            android:drawableStart="@drawable/ic_baseline_play_circle_filled_20"
+            android:layout_marginTop="5dp"
+            android:padding="3dp"
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/cvFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/cvFilmsSeries"
+            android:layout_marginEnd="2dp"
+            />
+
+
+        <Button
+            style="@style/ButtonWatchedActivity"
+            android:id="@+id/btWebSiteFilmsSeries"
+            android:text=""
+            android:drawableStart="@drawable/ic_baseline_play_circle_filled_20"
+            android:padding="3dp"
+            android:layout_width="25dp"
+            app:layout_constraintStart_toEndOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/cvFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/cvFilmsSeries"
+            android:layout_marginEnd="2dp"
+            />
 
                 <TextView
                     android:id="@+id/tvDescriptionTitleFilmsSeries"
@@ -256,5 +307,6 @@
                     app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
                     app:layout_constraintTop_toBottomOf="@id/tvCommentTitleFilmsSeries"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+

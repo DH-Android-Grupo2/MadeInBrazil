@@ -1,6 +1,6 @@
 package com.example.madeinbrasil.model.home
 
-import com.example.madeinbrasil.model.`class`.Comments
+import com.example.madeinbrasil.model.classe.Comments
 
 class CommentRepository {
 

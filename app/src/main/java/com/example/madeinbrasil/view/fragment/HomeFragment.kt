@@ -1,18 +1,65 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
+import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.example.madeinbrasil.viewModel.HomeViewModel
+import com.example.madeinbrasil.viewmodel.MovieDetailedViewModel
 
 class HomeFragment : Fragment() {
+    private lateinit var viewModel: HomeViewModel
     private var binding: FragmentHomeBinding? = null
+    var movieComplete:MovieDetailed? = null
+    private val homeAdapter : HomeAdapter by lazy {
+        HomeAdapter {
+            val movieClicked = it
+            movieClicked?.let{result->
+
+                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                Log.i("LOGGA","${movieComplete}")
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
+                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                startActivity(intent)
+            }
+
+        }
+    }
+
+    private val homeAdapter2 : HomeAdapter by lazy {
+        HomeAdapter {
+            val movieClicked = it
+            movieClicked?.let{result->
+
+                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
+                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                startActivity(intent)
+            }
+
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.let{
+            viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+            setupRecyclerView()
+        }
 
     }
 
@@ -25,5 +72,44 @@ class HomeFragment : Fragment() {
         return binding?.root
     }
 
+    private fun loadContentUpcoming() {
+        viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+            homeAdapter2.currentList?.clear()
+            homeAdapter2.submitList(pagedList,null)
+            homeAdapter2.notifyDataSetChanged()
+        })
+    }
 
+    private fun loadContentNowPlaying() {
+        viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+            homeAdapter.currentList?.clear()
+            homeAdapter.submitList(pagedList,null)
+            homeAdapter.notifyDataSetChanged()
+       })
+    }
+
+    private fun setupRecyclerView() {
+        binding?.rvCardsListLancamentos?.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            loadContentNowPlaying()
+            adapter = homeAdapter
+        }
+
+        binding?.rvCardsListFuturosLancamentos?.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            loadContentUpcoming()
+
+            adapter = homeAdapter2
+        }
+
+        binding?.rvCardsListMovies?.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            //adapter = homeAdapter
+        }
+
+        binding?.rvCardListSeries?.apply {
+           layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+         //   adapter = homeAdapter
+        }
+    }
 }
