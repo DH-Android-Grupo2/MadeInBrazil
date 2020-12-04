@@ -9,7 +9,7 @@
     <string name="string_register">Cadastar</string>
     <string name="string_name">Nome</string>
     <string name="string_email">Email</string>
-    <string name="string_confirmar_senha">Confirmar Senha</string>
+    <string name="string_confirm_password">Confirmar Senha</string>
     <string name="string_select_gender">Selecione seus gêneros preferidos</string>
     <string name="string_drama">Drama</string>
     <string name="string_comedy">Comédia</string>
@@ -29,6 +29,11 @@
     <string name="string_history">História</string>
     <string name="string_crime">Crime</string>
     <string name="string_thriller">Thriller</string>
+
+    <string name="errorMessage">O campo %1$s é obrigatório</string>
+    <string name="validationEmail">O email deve ser válido</string>
+    <string name="validationPassword">A senha deve ter ao menos 5 caracteres</string>
+    <string name="validationName">O nome deve ter ao menos 2 caracteres</string>
 
     <string name="name_hint">Nome</string>
     <string name="achievement_title">Conquistas</string>
