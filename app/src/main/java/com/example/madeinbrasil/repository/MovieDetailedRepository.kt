@@ -7,7 +7,7 @@ class MovieDetailedRepository{
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
         return try {
-            val response = APIService.tmdbApi.movieDetails(movieId)
+            val response = APIService.tmdbApiMovieDetailed.movieDetails(movieId)
 
             if (response.isSuccessful) {
                 ResponseAPI.Success(response.body())

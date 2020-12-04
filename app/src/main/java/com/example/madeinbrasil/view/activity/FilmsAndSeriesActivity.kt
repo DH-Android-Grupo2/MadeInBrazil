@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.adapter.MovieCreditsAdapter
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
@@ -18,6 +19,8 @@ import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
+import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
@@ -43,19 +46,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private var positionFragment = 0
     private lateinit var viewModelCast: MovieCreditsViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = ActivityFilmsAndSeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Log.i("LOGGGGGG", "${filmDetailed?.runtime}")
         films = intent.getParcelableExtra(BASE_FILM_KEY)
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
-        Log.i("positionxx", "$filmDetailed")
-
 
         binding.ivArrowBackFilmsSeries.setOnClickListener {
             finish()
@@ -98,12 +96,21 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val horas = movie.runtime?.div(60)
                         val minutos = movie.runtime?.rem(60)
                         binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = MovieCreditsAdapter(movie?.credits.cast){
+                                    val castClicked = it
+                                    castClicked?.let{result->
+                                        val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                        intent.putExtra(BASE_ACTOR_KEY, result)
+                                        startActivity(intent)
+                                    }
+                            }
+                        }
                         filmDetailed = movie
                     }
                 })
-
                 binding.btWebSiteFilmsSeries.setOnClickListener {
-                    Log.i("HOMEPAGE", "${filmDetailed?.homepage}")
                     val uri = Uri.parse("${filmDetailed?.homepage}")
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     startActivity(intent)
@@ -120,12 +127,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
 
                 viewModelCast.onResultCredits?.observe(this) {
-                    it?.cast.let { cast ->
-                        binding.rvCardsListActors.apply {
-                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = cast?.let { it1 -> MovieCreditsAdapter(it1) }
-                        }
-                    }
+
                 }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {

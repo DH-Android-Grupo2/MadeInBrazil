@@ -17,13 +17,15 @@ import com.example.madeinbrasil.databinding.MainCardsMenuBinding
 import com.example.madeinbrasil.databinding.MainCastRecyclerviewBinding
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.movieCredits.Cast
+import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.view.adapter.ViewHolderActors
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 import kotlinx.android.synthetic.main.main_cast_recyclerview.view.*
 
 class MovieCreditsAdapter(
-    private val castList: List<Cast>
+    private var castList: List<Cast> = listOf(),
+    private val onMovieClicked: (Cast?) -> Unit
 ): RecyclerView.Adapter<MovieCreditsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -35,7 +37,7 @@ class MovieCreditsAdapter(
         return castList.size
     }
     override fun onBindViewHolder(holder: MovieCreditsAdapter.ViewHolder, position: Int) {
-        holder.bind(castList[position],{})
+        holder.bind(castList[position],onMovieClicked)
     }
 
     class ViewHolder(
@@ -44,8 +46,8 @@ class MovieCreditsAdapter(
         binding.root
     ) {
 
-        fun bind(cast: Cast?, onMovieClicked: (Result?) -> Unit) = with(binding) {
-            Log.i("casts","${cast?.profile_path}")
+        fun bind(cast: Cast?, onMovieClicked: (Cast?) -> Unit) = with(binding) {
+            cast?.profile_path = cast?.profile_path?.getFullImagePath()
             Glide.with(itemView.context)
                 .load(cast?.profile_path)
                 .placeholder(R.drawable.made_in_brasil_logo)
@@ -54,7 +56,7 @@ class MovieCreditsAdapter(
             tvActorsCharacter.text = cast?.character
 
             itemView.setOnClickListener {
-                //onMovieClicked(movie)
+                onMovieClicked(cast)
             }
 
         }
