@@ -12,29 +12,45 @@
         style="@style/CardViewDefault"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorAccentOpaque"
         android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageView
-            android:id="@+id/cvImage"
-            android:layout_width="139dp"
-            android:layout_height="162dp"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/auto_da_compadecida_capa"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/cvImageCard"
+                android:layout_width="139dp"
+                android:layout_height="162dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/auto_da_compadecida_capa"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvNameRecyclerView"/>
+
+            <TextView
+                android:id="@+id/tvNameRecyclerView"
+                style="@style/TextViewFilmsSeriesDefault"
+                tools:text="O auto da Compadecida"
+                android:layout_margin="10dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:lines="2"
+                android:ellipsize="end"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cvImageCard"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/filmNameRecyclerView"
-        style="@style/TextViewFilmsSeriesDefault"
-        tools:text="O auto da Compadecida"
-        android:layout_margin="10dp"
-        android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="@id/cardView"
-        app:layout_constraintEnd_toEndOf="@id/cardView"
-        app:layout_constraintTop_toBottomOf="@id/cardView"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

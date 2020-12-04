@@ -1,7 +1,6 @@
 package com.example.madeinbrasil.model.home
 
-import com.example.madeinbrasil.model.`class`.Films
-import com.example.madeinbrasil.model.`class`.Series
+import com.example.madeinbrasil.model.classe.Series
 
 class SeriesRepository {
     fun setSeries(): List<Series> {

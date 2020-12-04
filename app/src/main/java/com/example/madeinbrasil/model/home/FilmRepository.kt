@@ -1,6 +1,6 @@
 package com.example.madeinbrasil.model.home
 
-import com.example.madeinbrasil.model.`class`.Films
+import com.example.madeinbrasil.model.classe.Films
 
 class FilmRepository {
 

@@ -1,4 +1,4 @@
-package com.example.madeinbrasil.model.`class`
+package com.example.madeinbrasil.model.classe
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

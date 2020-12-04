@@ -1,6 +1,6 @@
 package com.example.madeinbrasil.model.home
 
-import com.example.madeinbrasil.model.`class`.Actors
+import com.example.madeinbrasil.model.classe.Actors
 
 class ActorsRepository {
 

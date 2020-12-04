@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.model.`class`.Films
+import com.example.madeinbrasil.model.classe.Films
 import kotlinx.android.synthetic.main.main_cards.view.*
 
 class ViewHolderFilm (viewItem: View): RecyclerView.ViewHolder(viewItem) {
     fun bind(film: Films, position: (Int) -> Unit) = with(itemView) {
-        val imageCardView = findViewById<ImageView>(R.id.cvImage)
-        val nameFilmCardView = findViewById<TextView>(R.id.filmNameRecyclerView)
+        val imageCardView = findViewById<ImageView>(R.id.cvImageCard)
+        val nameFilmCardView = findViewById<TextView>(R.id.tvNameRecyclerView)
 
         Glide
             .with(itemView.context)
