@@ -37,7 +37,6 @@ class MovieCreditsAdapter(
     ) {
 
         fun bind(cast: Cast?, onMovieClicked: (Cast?) -> Unit) = with(binding) {
-            cast?.profile_path = cast?.profile_path?.getFullImagePath()
             Glide.with(itemView.context)
                 .load(cast?.profile_path)
                 .placeholder(R.drawable.made_in_brasil_logo)
