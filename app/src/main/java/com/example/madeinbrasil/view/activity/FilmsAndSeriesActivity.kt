@@ -219,7 +219,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     adapter = MainAdapterComments(comments)
                 }
             }
-
         }
     }
 

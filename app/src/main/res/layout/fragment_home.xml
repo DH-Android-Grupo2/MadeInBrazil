@@ -123,8 +123,5 @@
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvCardListSeries"/>
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
