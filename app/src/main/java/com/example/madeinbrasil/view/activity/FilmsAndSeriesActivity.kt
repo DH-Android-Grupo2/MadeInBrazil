@@ -6,9 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-<<<<<<<<< Temporary merge branch 1
-=========
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
@@ -20,10 +17,6 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.MovieCreditsAdapter
 import com.example.madeinbrasil.adapter.SerieCastAdapter
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
-<<<<<<<<< Temporary merge branch 1
-import com.example.madeinbrasil.model.`class`.Films
-import com.example.madeinbrasil.model.`class`.Series
-=========
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.result.MovieDetailed
