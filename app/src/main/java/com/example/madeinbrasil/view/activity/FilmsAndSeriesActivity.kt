@@ -49,6 +49,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.ratingBarFilmsSeries.rating = 5.0f
+
         if(positionFragment == 1) {
             viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
             viewModel.getGenres()
@@ -73,6 +75,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
             binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
 
+
             findViewById<RecyclerView>(R.id.rvCardsListActors).apply {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                 adapter = MainAdapterActors(actors)
@@ -82,6 +85,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
                 adapter = MainAdapterComments(comments)
             }
+
         }else {
 
             Glide.with(this)
