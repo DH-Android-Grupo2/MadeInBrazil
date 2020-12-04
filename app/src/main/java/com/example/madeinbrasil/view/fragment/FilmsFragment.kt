@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -79,11 +80,11 @@ class FilmsFragment : Fragment() {
     private fun SetupSearchView() {
 
         val searchView:SearchView? = binding?.tilSearchFilms
-
         searchView?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query:String):Boolean {
                 viewModel.setQuery(query)
                 Log.i("Query","${viewModel.getQuery()}")
+                binding?.tvMessageFilms?.isVisible = query != ""
                 setupRecyclerView()
                 loadContentSearchMovie()
                 return true
@@ -91,9 +92,10 @@ class FilmsFragment : Fragment() {
             override fun onQueryTextChange(newText: String):Boolean{
                 viewModel.setQuery(newText)
                 Log.i("Query","${viewModel.getQuery()}")
+                binding?.tvMessageFilms?.isVisible = newText == ""
                 setupRecyclerView()
                 loadContentSearchMovie()
-               return true
+                return true
             }
         })
     }
