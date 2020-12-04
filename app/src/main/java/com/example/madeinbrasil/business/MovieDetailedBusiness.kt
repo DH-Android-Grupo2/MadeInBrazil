@@ -19,6 +19,9 @@ class MovieDetailedBusiness  {
         val response = repository.getMovie(movieId)
         return if (response is ResponseAPI.Success) {
             val movie = response.data as MovieDetailed
+            movie.credits.cast.forEach {
+                it.profile_path = it.profile_path?.getFullImagePath()
+            }
             ResponseAPI.Success(movie)
         } else {
             response
