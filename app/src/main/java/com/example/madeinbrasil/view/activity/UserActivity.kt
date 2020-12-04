@@ -1,12 +1,16 @@
 package com.example.madeinbrasil.view.activity
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityUserBinding
+import org.w3c.dom.Text
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
@@ -18,7 +22,38 @@ class UserActivity : AppCompatActivity() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val btAchiev = findViewById<TextView>(R.id.tvNumConquistas)
+        val btFriends = findViewById<TextView>(R.id.tvNumAmigos)
+        val btLists = findViewById<TextView>(R.id.tvNumListas)
+
+        btLists.setOnClickListener {
+            startListsActivity(this@UserActivity)
+        }
+
+        btAchiev.setOnClickListener {
+            startAchievmentActivity(this@UserActivity)
+        }
+
+        btFriends.setOnClickListener {
+            startFriendsActivity(this@UserActivity)
+        }
+
         setupUser()
+    }
+
+    fun startListsActivity(context: Context) {
+        val intent = Intent(context, MyProfileOptionsActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun startAchievmentActivity(context: Context) {
+        val intent = Intent(context, AchievementActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun startFriendsActivity(context: Context) {
+        val intent = Intent(context, FriendsActivity::class.java)
+        startActivity(intent)
     }
 
     fun setupUser(){
