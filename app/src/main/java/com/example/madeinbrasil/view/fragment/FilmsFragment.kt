@@ -12,14 +12,14 @@ import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
-import com.airbnb.lottie.LottieAnimationView
+//import com.airbnb.lottie.LottieAnimationView
 import com.example.madeinbrasil.adapter.FilmsAdapter
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
 import com.example.madeinbrasil.model.home.FilmRepository
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
-import com.example.madeinbrasil.viewmodel.FilmsViewModel
+import com.example.madeinbrasil.viewModel.FilmsViewModel
 import kotlinx.android.synthetic.main.fragment_films.*
 import java.util.*
 
@@ -33,7 +33,6 @@ class FilmsFragment : Fragment() {
             val movieClicked = it
             movieClicked?.let{result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-
                 intent.putExtra(BASE_FILM_KEY, result)
                 intent.putExtra(ID_FRAGMENTS, 1)
                 startActivity(intent)

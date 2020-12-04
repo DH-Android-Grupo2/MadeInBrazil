@@ -1,4 +1,4 @@
-package com.example.madeinbrasil.viewmodel
+package com.example.madeinbrasil.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData

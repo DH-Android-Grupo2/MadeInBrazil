@@ -1,8 +1,15 @@
 package com.example.madeinbrasil.view.activity
 
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,16 +22,20 @@ import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.search.ResultSearch
-import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
+import com.example.madeinbrasil.viewModel.GenderMovieViewModel
+import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
 import com.example.madeinbrasil.viewModel.SerieCreditsViewModel
 import com.example.madeinbrasil.viewModel.TrailerViewModel
-import com.example.madeinbrasil.viewmodel.GenderMovieViewModel
-import com.example.madeinbrasil.viewmodel.MovieCreditsViewModel
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrCueVideo
+import kotlinx.android.synthetic.main.youtube_popup.*
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -57,12 +68,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         when(positionFragment) {
             1 -> {
                 viewModelCast = ViewModelProvider(this).get(MovieCreditsViewModel::class.java)
-                viewModelCast.getCredits(films?.id)
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModelTrailer = ViewModelProvider(this).get(TrailerViewModel::class.java)
+                viewModelCast.getCredits(films?.id)
+
 
                 viewModel.getGenres()
-                //setupObservables()
+
                 Glide.with(this)
                         .load(films?.posterPath)
                         .into(binding.ivBannerFilmsSeries)
@@ -80,45 +92,40 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.ratingBarFilmsSeries.stepSize = .5f
                 }
 
-                binding.btTrailerFilmsSeries.setOnClickListener {
-                    val test = films?.id?.let { viewModelTrailer.getTrailer(it) }
-                    Log.i("test", test.toString())
-                    Log.i("test", "cliquei")
-
-//                    fun openYoutubeLink (youtubeID: String) {
-//                        val intentApp = Intent(Intent.ACTION_VIEW, Uri.parse("$BASE_URL_YOUTUBE_APP$youtubeID"))
-//                        val intentBrowser = Intent(Intent.ACTION_VIEW, Uri.parse("$BASE_URL_YOUTUBE_BROWSER$youtubeID"))
-//                        try {
-//                            this.startActivity(intentApp)
-//                        } catch (ex: ActivityNotFoundException) {
-//                            this.startActivity(intentBrowser)
-//                        }
-//                    }
-                }
-
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
 
-            viewModelCast.onResultCredits?.observe(this) {
-                it?.cast.let { cast ->
-                    binding.rvCardsListActors.apply {
-                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        adapter = cast?.let { it1 -> MovieCreditsAdapter(it1) }
+                viewModelTrailer.getTrailer(films?.id)
+
+                viewModelTrailer.trailerSucess?.observe(this) {trailer ->
+                    trailer.results?.forEach {
+                        binding.btTrailerFilmsSeries.isVisible = it.key != ""
+                    }
+
+                    binding.btTrailerFilmsSeries.setOnClickListener {
+                        youtubeMovies(it)
                     }
                 }
-            }
 
-                findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
-                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
-                    adapter = MainAdapterComments(comments)
+                viewModelCast.onResultCredits?.observe(this) {
+                    it?.cast.let { cast ->
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = cast?.let { it1 -> MovieCreditsAdapter(it1) }
+                        }
+                    }
                 }
-            }
+
+                    findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
+                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+                        adapter = MainAdapterComments(comments)
+                    }
+                }
 
             2 -> {
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModelCastSerie = ViewModelProvider(this).get(SerieCreditsViewModel::class.java)
                 viewModelCastSerie.getCreditsSerie(series?.id)
                 viewModel.getGenres()
-                //setupObservables()
 
                 series?.let {
                     Glide.with(binding.root.context)
@@ -159,6 +166,24 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
     }
 
+    private fun youtubeMovies(click: View) {
+        val dialog = Dialog(click.context)
+        dialog.setContentView(R.layout.youtube_popup)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        val iFramePlayerOptions = IFramePlayerOptions.Builder().controls(1).build()
+        var key = ""
+        viewModelTrailer.trailerSucess.observe(this) { trailer ->
+            trailer.results.forEach { key = it.key }
+        }
+        lifecycle.addObserver(dialog.youtubePlayerDialog)
+        dialog.youtubePlayerDialog.initialize(object: AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.loadOrCueVideo(lifecycle, key, 0.0f)
+            }
+        }, true, iFramePlayerOptions)
+
+        dialog.show()
+    }
 
 }

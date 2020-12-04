@@ -5,9 +5,9 @@ import com.example.madeinbrasil.api.ResponseAPI
 
 class TrailerRepository{
 
-    suspend fun getTrailer(movieId: Int): ResponseAPI {
+    suspend fun getTrailer(movieId: Int?): ResponseAPI {
         return try {
-            val response = APIService.tmdbApiSearch.trailerMoviesAndSeries(movieId)
+            val response = APIService.tmdbApi.trailerMovies(movieId?:0)
 
             if (response.isSuccessful) {
                 ResponseAPI.Success(response.body())
