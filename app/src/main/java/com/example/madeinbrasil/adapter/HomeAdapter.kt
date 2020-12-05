@@ -1,13 +1,18 @@
 package com.example.madeinbrasil.adapter
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.paging.PagedListAdapter
@@ -16,7 +21,9 @@ import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.*
 import com.example.madeinbrasil.model.upcoming.Result
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.filmsseries_popup.*
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -63,14 +70,17 @@ class HomeAdapter(
 
                 dialog.tvDialogName.text = movie?.title
                 dialog.cbShare.setOnClickListener {
+                    val image: Bitmap? =getBitmapFromView(binding.cvImageCardMenu)
+
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
 
-                        putExtra(Intent.EXTRA_TEXT, "Filme: ${movie?.title} by MadeInBrasil")
                         type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, "Filme: ${movie?.title} by MadeInBrasil")
 
-                        putExtra(Intent.EXTRA_STREAM, Uri.parse(movie?.title))
                         type = "image/*"
+                        putExtra(Intent.EXTRA_STREAM, image?.let { it1 -> getImageUri(it.context, it1) })
+
 
                         putExtra(
                             Intent.EXTRA_TITLE,
@@ -89,5 +99,21 @@ class HomeAdapter(
             }
         }
 
+        fun getBitmapFromView(view:ImageView): Bitmap? {
+            val bitmap = Bitmap.createBitmap(view.width,view.height,Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            view.draw(canvas)
+            return bitmap
+        }
+
+        fun getImageUri(inContext: Context,inImage:Bitmap):Uri?{
+            val bytes = ByteArrayOutputStream()
+            inImage.compress(Bitmap.CompressFormat.JPEG,100,bytes)
+            val path = MediaStore.Images.Media.insertImage(inContext.contentResolver,inImage,"${binding.tvNameRecyclerViewMenu.text}","Imagem gerado pelo MadeInBrasil")
+            return Uri.parse(path)
+
+        }
+
     }
+
 }

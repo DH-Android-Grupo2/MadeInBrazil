@@ -28,7 +28,6 @@ class HomeFragment : Fragment() {
             movieClicked?.let{result->
 
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                Log.i("LOGGA","${movieComplete}")
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
