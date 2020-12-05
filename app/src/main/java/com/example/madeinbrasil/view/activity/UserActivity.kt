@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,13 @@ class UserActivity : AppCompatActivity() {
         val btFriends = findViewById<TextView>(R.id.tvNumAmigos)
         val btLists = findViewById<TextView>(R.id.tvNumListas)
         val backButton = findViewById<ImageView>(R.id.imBackButton)
+        val btLogOut = findViewById<Button>(R.id.btLogOut)
+
+
+
+        btLogOut.setOnClickListener {
+            startLoginActivity(this@UserActivity)
+        }
 
         backButton.setOnClickListener {
             super.onBackPressed()
@@ -59,6 +67,11 @@ class UserActivity : AppCompatActivity() {
 
     fun startFriendsActivity(context: Context) {
         val intent = Intent(context, FriendsActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun startLoginActivity(context: Context) {
+        val intent = Intent(context, LogInActivity::class.java)
         startActivity(intent)
     }
 
