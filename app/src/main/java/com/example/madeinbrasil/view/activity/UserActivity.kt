@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -25,6 +26,11 @@ class UserActivity : AppCompatActivity() {
         val btAchiev = findViewById<TextView>(R.id.tvNumConquistas)
         val btFriends = findViewById<TextView>(R.id.tvNumAmigos)
         val btLists = findViewById<TextView>(R.id.tvNumListas)
+        val backButton = findViewById<ImageView>(R.id.imBackButton)
+
+        backButton.setOnClickListener {
+            super.onBackPressed()
+        }
 
         btLists.setOnClickListener {
             startListsActivity(this@UserActivity)

@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,6 +26,11 @@ import com.example.madeinbrasil.view.activity.UserActivity
 import com.example.madeinbrasil.view.adapter.MainAdapterSeries
 
 class SeriesFragment : Fragment() {
+
+
+    private var binding: FragmentSeriesBinding? = null
+    private lateinit var viewModel: SerieViewModel
+
     private val seriesAdapter: SerieAdapter by lazy {
         SerieAdapter {result ->
             result?.let {
@@ -35,13 +42,12 @@ class SeriesFragment : Fragment() {
         }
     }
 
-    private var binding: FragmentSeriesBinding? = null
-    private lateinit var viewModel: SerieViewModel
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding?.ivProfileFilms?.setOnClickListener {
+            this.context?.let { it1 -> startUserActivity(it1) }
+        }
         setUpSearchView()
         activity?.let {
             viewModel = ViewModelProvider(this).get(SerieViewModel::class.java)
@@ -58,10 +64,7 @@ class SeriesFragment : Fragment() {
         binding = FragmentSeriesBinding.inflate(layoutInflater, container, false)
         return binding?.root
     }
-    fun startUserActivity(context: Context) {
-        val intent = Intent(context, UserActivity::class.java)
-        startActivity(intent)
-    }
+
 
     private fun setUpRecyclerView() {
         binding?.rvCardsListSeries?.apply {
@@ -96,5 +99,11 @@ class SeriesFragment : Fragment() {
 
         })
     }
+    fun startUserActivity(context: Context) {
+        val intent2 = Intent(context, UserActivity::class.java)
+        startActivity(intent2)
+    }
+    }
 
-}
+
+
