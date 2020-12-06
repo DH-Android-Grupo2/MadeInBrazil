@@ -15,13 +15,15 @@ import com.example.madeinbrasil.databinding.FragmentHomeBinding
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.example.madeinbrasil.view.adapter.DiscoverMovieAdapter
 import com.example.madeinbrasil.viewModel.HomeViewModel
-import com.example.madeinbrasil.viewmodel.MovieDetailedViewModel
+
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private var binding: FragmentHomeBinding? = null
     var movieComplete:MovieDetailed? = null
+
     private val homeAdapter : HomeAdapter by lazy {
         HomeAdapter {
             val movieClicked = it
@@ -40,6 +42,21 @@ class HomeFragment : Fragment() {
 
     private val homeAdapter2 : HomeAdapter by lazy {
         HomeAdapter {
+            val movieClicked = it
+            movieClicked?.let{result->
+
+                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
+                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                startActivity(intent)
+            }
+
+        }
+    }
+
+    private val homeAdapter3 : DiscoverMovieAdapter by lazy {
+        DiscoverMovieAdapter {
             val movieClicked = it
             movieClicked?.let{result->
 
@@ -88,6 +105,15 @@ class HomeFragment : Fragment() {
        })
     }
 
+
+    private fun loadContentDiscoverMovie() {
+        viewModel.discoverMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+            homeAdapter3.currentList?.clear()
+            homeAdapter3.submitList(pagedList, null)
+            homeAdapter3.notifyDataSetChanged()
+        })
+    }
+
     private fun setupRecyclerView() {
         binding?.rvCardsListLancamentos?.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
@@ -102,14 +128,15 @@ class HomeFragment : Fragment() {
             adapter = homeAdapter2
         }
 
-        binding?.rvCardsListMovies?.apply {
-            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
-            //adapter = homeAdapter
-        }
+       binding?.rvCardsListMovies?.apply {
+         layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+           loadContentDiscoverMovie()
+           adapter = homeAdapter3
+         }
 
-        binding?.rvCardListSeries?.apply {
-           layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+       // binding?.rvCardListSeries?.apply {
+         //  layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
          //   adapter = homeAdapter
-        }
+        //}
     }
 }
