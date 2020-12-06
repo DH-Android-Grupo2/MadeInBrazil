@@ -70,7 +70,7 @@ class HomeAdapter(
 
                 dialog.tvDialogName.text = movie?.title
                 dialog.cbShare.setOnClickListener {
-                    val image: Bitmap? =saveToGallery()
+                    val image: Bitmap? = getBitmapFromView(binding.cvImageCardMenu)
 
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
@@ -108,39 +108,6 @@ class HomeAdapter(
             val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             view.draw(canvas)
-            return bitmap
-        }
-
-        private fun saveToGallery():Bitmap? {
-            val bitmapDrawable = binding.cvImageCardMenu.getDrawable() as BitmapDrawable
-            val bitmap = bitmapDrawable.bitmap
-            var outputStream: FileOutputStream? = null
-            val file = Environment.getExternalStorageDirectory()
-            val dir = File(file.absolutePath + "/MyPics")
-            dir.mkdirs()
-            val filename = String.format("%d.png", System.currentTimeMillis())
-            val outFile = File(dir, filename)
-            try {
-                outputStream = FileOutputStream(outFile)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-
-            try {
-                if (outputStream != null) {
-                    outputStream.flush()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            try {
-                if (outputStream != null) {
-                    outputStream.close()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
             return bitmap
         }
 
