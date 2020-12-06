@@ -33,7 +33,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrCueVideo
 import kotlinx.android.synthetic.main.youtube_popup.*
-import com.example.madeinbrasil.viewModel.TrailerViewModel
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
@@ -41,24 +40,25 @@ import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GenderMovieViewModel
-    private lateinit var viewModelTrailer: TrailerViewModel
     private lateinit var viewModelTrailerSeries: TrailerSeriesViewModel
     private lateinit var viewModelCastSerie: SerieCreditsViewModel
     private lateinit var viewModelCast: MovieCreditsViewModel
     private lateinit var viewModelMovie: MovieDetailedViewModel
+//    private lateinit var viewModelSerie: SerieDetailedViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
     private var films: Result? = null
     private var filmDetailed: MovieDetailed?  = null
+//    private var serieDetailed: SerieDetailed? = null
     private var series: ResultSearch? = null
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityFilmsAndSeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         films = intent.getParcelableExtra(BASE_FILM_KEY)
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
@@ -76,13 +76,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModelMovie.getMovie(films?.id)
 
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
-
-                viewModelTrailer = ViewModelProvider(this).get(TrailerViewModel::class.java)
-                viewModelCast.getCredits(films?.id)
-                viewModelTrailer.getTrailer(films?.id)
-                films?.let { viewModelTrailer.getTrailer(it.id) }
-
                 viewModel.getGenres()
+
 
                 setupObservables()
                 Glide.with(this)
@@ -118,10 +113,17 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                         }
+
+                        movie.videos?.results?.forEach { trailer ->
+                            binding.btTrailerFilmsSeries.isVisible = trailer.key != ""
+                        }
+                        binding.btTrailerFilmsSeries.setOnClickListener {
+                            youtubeMovies(it)
+                        }
+
                         filmDetailed = movie
                     }
                 }
-
                 binding.btWebSiteFilmsSeries.setOnClickListener {
                     val uri = Uri.parse(filmDetailed?.homepage)
                     val intent = Intent(Intent.ACTION_VIEW, uri)
@@ -129,25 +131,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
 
 
-                binding.btTrailerFilmsSeries.setOnClickListener {
-                    viewModelTrailer.trailerSucess.observe(this) {
-                        it?.let { trailer ->
-
-                        }
-                    }
-                }
-
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
-
-                viewModelTrailer.trailerSucess?.observe(this) {trailer ->
-                    trailer.results?.forEach {
-                        binding.btTrailerFilmsSeries.isVisible = it.key != ""
-                    }
-
-                    binding.btTrailerFilmsSeries.setOnClickListener {
-                        youtubeMovies(it)
-                    }
-                }
 
                 /*viewModelCast.onResultCredits?.observe(this) {
                     it?.cast.let { cast ->
@@ -169,12 +153,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
             2 -> {
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
-                viewModelCastSerie = ViewModelProvider(this).get(SerieCreditsViewModel::class.java)
                 viewModelTrailerSeries = ViewModelProvider(this).get(TrailerSeriesViewModel::class.java)
-                viewModelCastSerie.getCreditsSerie(series?.id)
+                viewModelCastSerie = ViewModelProvider(this).get(SerieCreditsViewModel::class.java)
+//                viewModelSerie = ViewModelProvider(this).get(SerieDetailedViewModel::class.java)
+//                viewModelSerie.getSerieDetailed(series?.id)
+
                 viewModelTrailerSeries.getTrailerSerie(series?.id)
+                viewModelCastSerie.getCreditsSerie(series?.id)
                 viewModel.getGenres()
 
+                setupObservablesSeries()
                 series?.let {
                     Glide.with(binding.root.context)
                             .load(series?.posterPath)
@@ -195,6 +183,35 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                     binding.tvYearFilmsSeries.text = "${series?.firstAirDate?.getFirst4Chars()}"
                 }
+
+//                viewModelSerie.serieDetailedSucess.observe(this) { serie ->
+//                    serieDetailed = serie
+//
+//                    binding.tvDescriptionTextFilmsSeries.text = serie?.overview
+//                    binding.tvNameFilmsSeries.text = serie?.name
+//                    binding.tvNoteFilmsSeries.text = "${(serie?.vote_average)?.div(2)}"
+//                    serie?.vote_average?.let {
+//                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+//                        binding.ratingBarFilmsSeries.stepSize = .5f
+//                    }
+//                    binding.tvYearFilmsSeries.text = "(${serie?.first_air_date?.getFirst4Chars()})"
+//
+//                    serie?.episode_run_time?.forEach { binding.tvTimeFilmsSeries.text = "$it min" }
+//                    serie?.videos?.results?.forEach {
+//                        binding.btTrailerFilmsSeries.isVisible = it.key != ""
+//                    }
+//                    binding.btTrailerFilmsSeries.setOnClickListener {
+//                        youtubeSeries(it)
+//                    }
+//
+//                    serie?.credits?.cast.let { castSerie ->
+//                        binding.rvCardsListActors.apply {
+//                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+//                            adapter = castSerie?.let { it1 -> SerieCastAdapter(it1) }
+//                        }
+//                    }
+//
+//                }
 
                 viewModelTrailerSeries.trailerSucessSerie?.observe(this) {trailer ->
                     trailer.results?.forEach {
@@ -225,7 +242,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private fun setupObservables() {
         var generosText = ""
-        viewModel.onResultGenres.observe(this, {
+        viewModel.onResultGenres.observe(this) {
             it?.let { generos ->
                 films?.genreIds?.forEach { genreFilm ->
                     generos.genres.forEach { genre ->
@@ -234,11 +251,27 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                     }
                 }
-
             }
             binding.tvGenderFilmsSeries.text = generosText
-        })
+        }
     }
+
+    private fun setupObservablesSeries() {
+        var generosText = ""
+        viewModel.onResultGenres.observe(this) {
+            it?.let { generos ->
+                series?.genreIds?.forEach { genreSeries ->
+                    generos.genres.forEach { genre ->
+                        if (genre.id == genreSeries) {
+                            generosText += "${genre.name}  "
+                        }
+                    }
+                }
+            }
+            binding.tvGenderFilmsSeries.text = generosText
+        }
+    }
+
     private fun youtubeMovies(click: View) {
         val dialog = Dialog(click.context)
         dialog.setContentView(R.layout.youtube_popup)
@@ -246,8 +279,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
         val iFramePlayerOptions = IFramePlayerOptions.Builder().controls(1).build()
         var key = ""
-        viewModelTrailer.trailerSucess.observe(this) { trailer ->
-            trailer.results.forEach { key = it.key }
+        filmDetailed?.videos?.results?.forEach {
+            key = it.key
         }
         lifecycle.addObserver(dialog.youtubePlayerDialog)
         dialog.youtubePlayerDialog.initialize(object: AbstractYouTubePlayerListener() {
@@ -269,6 +302,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         viewModelTrailerSeries.trailerSucessSerie.observe(this) { trailer ->
             trailer.results.forEach { key = it.key }
         }
+//        serieDetailed?.videos?.results?.forEach { trailer ->
+//            key = trailer.key
+//        }
         lifecycle.addObserver(dialog.youtubePlayerDialog)
         dialog.youtubePlayerDialog.initialize(object: AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {

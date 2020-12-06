@@ -7,6 +7,7 @@ import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.movie.SearchMovie
 import com.example.madeinbrasil.model.search.serie.SearchSeries
 import com.example.madeinbrasil.model.serieCredits.SerieCredits
+import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.model.trailer.Trailer
 import com.example.madeinbrasil.model.upcoming.Upcoming
 import retrofit2.Response
@@ -25,6 +26,11 @@ interface TmdbAPI {
     suspend fun movieDetails(
         @Path("movie_id") movieId: Int
     ): Response<MovieDetailed>
+
+    @GET("tv/{tv_id}")
+    suspend fun serieDetails(
+        @Path("tv_id") serieId: Int
+    ): Response<SerieDetailed>
 
     @GET("movie/{movie_id}/credits")
     suspend fun movieCredits(
@@ -50,11 +56,6 @@ interface TmdbAPI {
 
     @GET("genre/movie/list")
     suspend fun movieGenres(): Response<GenderMovie>
-
-    @GET("movie/{movie_id}/videos")
-    suspend fun trailerMovies(
-            @Path("movie_id") movieId: Int
-    ): Response<Trailer>
 
     @GET("tv/{tv_id}/videos")
     suspend fun trailerSeries(

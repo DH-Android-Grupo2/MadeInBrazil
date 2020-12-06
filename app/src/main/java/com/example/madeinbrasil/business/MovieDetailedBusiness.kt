@@ -2,12 +2,8 @@ package com.example.madeinbrasil.business
 
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
-import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.example.madeinbrasil.model.result.MovieDetailed
-import com.example.madeinbrasil.model.trailer.Trailer
 import com.example.madeinbrasil.repository.MovieDetailedRepository
-import com.example.madeinbrasil.repository.TrailerRepository
-import com.example.madeinbrasil.utils.Constants
 
 class MovieDetailedBusiness  {
 
@@ -20,7 +16,7 @@ class MovieDetailedBusiness  {
         return if (response is ResponseAPI.Success) {
             val movie = response.data as MovieDetailed
             movie.credits.cast.forEach {
-                it.profile_path = it.profile_path?.getFullImagePath()
+                it.profilePath = it.profilePath?.getFullImagePath()
             }
             ResponseAPI.Success(movie)
         } else {

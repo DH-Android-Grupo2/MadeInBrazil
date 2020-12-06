@@ -12,7 +12,7 @@ class ViewHolderActors(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     fun bind(actors: Cast) = with(itemView) {
         Glide.with(itemView.context)
-            .load(actors.profile_path)
+            .load(actors.profilePath)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(cvImageActors)
 

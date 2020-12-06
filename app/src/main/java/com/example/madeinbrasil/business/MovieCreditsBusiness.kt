@@ -16,7 +16,7 @@ class MovieCreditsBusiness{
         return if (response is ResponseAPI.Success) {
             val credits = response.data as MovieCredits
             credits.cast.forEach {
-                it.profile_path = it.profile_path?.getFullImagePath()
+                it.profilePath = it.profilePath?.getFullImagePath()
             }
             ResponseAPI.Success(credits)
         } else {

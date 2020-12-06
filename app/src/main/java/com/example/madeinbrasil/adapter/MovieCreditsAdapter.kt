@@ -38,7 +38,7 @@ class MovieCreditsAdapter(
 
         fun bind(cast: Cast?, onMovieClicked: (Cast?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
-                .load(cast?.profile_path)
+                .load(cast?.profilePath)
                 .placeholder(R.drawable.made_in_brasil_logo)
                 .into(cvImageActors)
             tvActorsName.text = cast?.name

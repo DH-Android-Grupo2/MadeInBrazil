@@ -25,7 +25,7 @@ class PeopleActivity : AppCompatActivity() {
             tvNameFilmsSeries.text = people?.name
             tvDescriptionTextFilmsSeries.text = "BIOGRAFIA DA PESSOA"
             Glide.with(binding.root.context)
-                .load(people?.profile_path)
+                .load(people?.profilePath)
                 .into(ivBannerFilmsSeries)
 
         }
