@@ -10,18 +10,19 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.madeinbrasil.databinding.FragmentSelectShowsBinding
 import com.example.madeinbrasil.adapter.SelectMovieAdapter
-import com.example.madeinbrasil.viewmodel.CreateListViewModel
+import com.example.madeinbrasil.databinding.FragmentSelectMovieBinding
+import com.example.madeinbrasil.viewmodel.SelectMovieViewModel
+import com.example.madeinbrasil.viewmodel.SelectSerieViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class SelectShowsFragment : BottomSheetDialogFragment() {
+class SelectMovieFragment : BottomSheetDialogFragment() {
 
-    private lateinit var binding: FragmentSelectShowsBinding
-    private lateinit var viewModel: CreateListViewModel
+    private lateinit var binding: FragmentSelectMovieBinding
+    private lateinit var viewModel: SelectMovieViewModel
 
     private val selectMovieAdapter by lazy {
         SelectMovieAdapter()
@@ -30,7 +31,7 @@ class SelectShowsFragment : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        binding = FragmentSelectShowsBinding.inflate(layoutInflater, container, false)
+        binding = FragmentSelectMovieBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -39,7 +40,7 @@ class SelectShowsFragment : BottomSheetDialogFragment() {
 
         SetupSearchView()
         activity?.let{
-            viewModel = ViewModelProvider(it).get(CreateListViewModel::class.java)
+            viewModel = ViewModelProvider(it).get(SelectMovieViewModel::class.java)
             setupRecyclerView()
             loadContentSearch()
         }
@@ -68,8 +69,8 @@ class SelectShowsFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupRecyclerView() {
-        binding?.rvShows?.apply {
-            layoutManager = GridLayoutManager(this@SelectShowsFragment.context, 2)
+        binding.rvShows.apply {
+            layoutManager = GridLayoutManager(this@SelectMovieFragment.context, 2)
             adapter = selectMovieAdapter
         }
 

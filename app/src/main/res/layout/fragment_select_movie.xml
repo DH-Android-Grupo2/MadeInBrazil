@@ -7,7 +7,7 @@
     android:layout_gravity="bottom"
     android:background="@color/light_dark"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    tools:context=".view.fragment.SelectShowsFragment">
+    tools:context=".view.fragment.SelectMovieFragment">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchField"
