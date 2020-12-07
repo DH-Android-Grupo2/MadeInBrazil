@@ -67,7 +67,7 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupRecyclerView() {
-        binding?.rvShows?.apply {
+        binding.rvShows.apply {
             layoutManager = GridLayoutManager(this@SelectSerieFragment.context, 2)
             adapter = selectSerieAdapter
         }
