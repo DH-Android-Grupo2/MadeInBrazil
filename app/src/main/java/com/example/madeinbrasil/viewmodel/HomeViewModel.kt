@@ -15,10 +15,10 @@ class HomeViewModel: ViewModel() {
 
     var upcomingMoviePagedList: LiveData<PagedList<Result>>? = null
     var nowPlayingMoviePagedList: LiveData<PagedList<Result>>? = null
-    var discoverMoviePagedList: LiveData<PagedList<com.example.madeinbrasil.model.discover.Result>>? = null
+    var discoverMoviePagedList: LiveData<PagedList<Result>>? = null
     private var upcomingLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var nowPlayingLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
-    private var discoverMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, com.example.madeinbrasil.model.discover.Result>>? = null
+    private var discoverMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
 
     init {
         nowPlayingData()

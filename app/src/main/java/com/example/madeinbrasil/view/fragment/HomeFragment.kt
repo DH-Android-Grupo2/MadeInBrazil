@@ -55,8 +55,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private val homeAdapter3 : DiscoverMovieAdapter by lazy {
-        DiscoverMovieAdapter {
+    private val homeAdapter3 : HomeAdapter by lazy {
+        HomeAdapter {
             val movieClicked = it
             movieClicked?.let{result->
 
@@ -111,6 +111,7 @@ class HomeFragment : Fragment() {
             homeAdapter3.currentList?.clear()
             homeAdapter3.submitList(pagedList, null)
             homeAdapter3.notifyDataSetChanged()
+
         })
     }
 

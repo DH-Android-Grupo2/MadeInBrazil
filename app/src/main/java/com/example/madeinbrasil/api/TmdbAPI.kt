@@ -71,7 +71,8 @@ interface TmdbAPI {
     @GET("discover/movie")
    suspend fun discoverMovies(
             @Query("page") pageNumber: Int,
-           @Query("with_genres") genre: Int
+           @Query("with_genres") genre: String,
+            @Query("with_original_language")  language: String = "pt"
    ) : Response<DiscoverMovie>
 
 }

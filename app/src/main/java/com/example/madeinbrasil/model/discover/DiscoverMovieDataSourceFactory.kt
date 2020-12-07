@@ -3,7 +3,7 @@ package com.example.madeinbrasil.model.discover
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
-
+import com.example.madeinbrasil.model.upcoming.Result
 
 
 class DiscoverMovieDataSourceFactory() : DataSource.Factory<Int, Result>(){
