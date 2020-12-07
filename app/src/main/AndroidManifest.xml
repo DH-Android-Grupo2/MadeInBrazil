@@ -34,6 +34,11 @@
         <activity android:name=".view.activity.MyProfileOptionsActivity"></activity>
         <activity android:name=".view.activity.FilmsAndSeriesActivity" />
         <activity android:name=".view.activity.MenuActivity">
+        </activity>
+        <activity android:name=".view.activity.RegisterActivity" />
+        <activity android:name=".view.activity.LogInActivity" />
+        <activity android:name=".view.activity.InitialActivity"></activity>
+        <activity android:name=".view.activity.CreateListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,10 +46,6 @@
 
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.RegisterActivity" />
-        <activity android:name=".view.activity.LogInActivity" />
-        <activity android:name=".view.activity.InitialActivity"></activity>
-        <activity android:name=".view.activity.CreateListActivity"></activity>
         <activity android:name=".view.activity.FriendsActivity"></activity>
         <activity android:name=".view.activity.UserActivity"></activity>
     </application>
