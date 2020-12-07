@@ -6,10 +6,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,11 +22,10 @@ import com.example.madeinbrasil.model.upcoming.Result
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 
 
 class HomeAdapter(
-    private val onMovieClicked: (Result?) -> Unit
+        private val onMovieClicked: (Result?) -> Unit
 ) : PagedListAdapter<Result, HomeAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,9 +39,9 @@ class HomeAdapter(
     }
 
     class ViewHolder(
-        private val binding: MainCardsMenuBinding
+            private val binding: MainCardsMenuBinding
     ): RecyclerView.ViewHolder(
-        binding.root
+            binding.root
     ) {
 
         fun bind(movie: Result?, onMovieClicked: (Result?) -> Unit) = with(binding) {
@@ -71,7 +68,6 @@ class HomeAdapter(
                 dialog.tvDialogName.text = movie?.title
                 dialog.cbShare.setOnClickListener {
                     val image: Bitmap? = getBitmapFromView(binding.cvImageCardMenu)
-
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
 
@@ -81,15 +77,15 @@ class HomeAdapter(
                         type = "image/*"
                         putExtra(Intent.EXTRA_STREAM, image?.let { it1 ->
                             getImageUri(
-                                it.context,
-                                it1
+                                    it.context,
+                                    it1
                             )
                         })
 
 
                         putExtra(
-                            Intent.EXTRA_TITLE,
-                            "Filme: ${movie?.title} \nShared by MadeInBrasil"
+                                Intent.EXTRA_TITLE,
+                                "Filme: ${movie?.title} \nShared by MadeInBrasil"
                         )
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -115,12 +111,13 @@ class HomeAdapter(
             val bytes = ByteArrayOutputStream()
             inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
             val path = MediaStore.Images.Media.insertImage(
-                inContext.contentResolver,
-                inImage,
-                "${binding.tvNameRecyclerViewMenu.text}",
-                "Imagem gerado pelo MadeInBrasil"
+                    inContext.contentResolver,
+                    inImage,
+                    "${binding.tvNameRecyclerViewMenu.text}",
+                    "Imagem gerado pelo MadeInBrasil"
             )
-            return Uri.parse(path)
+            val f: File = File(path)
+            return Uri.fromFile(f)
 
         }
 

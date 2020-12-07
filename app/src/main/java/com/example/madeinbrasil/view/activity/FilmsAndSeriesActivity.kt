@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.MovieCreditsAdapter
+import com.example.madeinbrasil.adapter.MovieStreamingAdapter
 import com.example.madeinbrasil.adapter.SerieCastAdapter
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
@@ -109,13 +110,21 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = MovieCreditsAdapter(movie?.credits.cast){
+                            adapter = MovieCreditsAdapter(movie.credits.cast){
                                     val castClicked = it
                                     castClicked?.let{result->
                                         val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
                                         intent.putExtra(BASE_ACTOR_KEY, result)
                                         startActivity(intent)
                                     }
+                            }
+                        }
+                        binding.rvStreaming.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = movie.watch_providers?.results?.BR?.let { it1 ->
+                                MovieStreamingAdapter(it1.flatrate){
+
+                                }
                             }
                         }
                         filmDetailed = movie
