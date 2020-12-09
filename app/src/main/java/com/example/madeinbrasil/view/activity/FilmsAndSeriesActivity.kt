@@ -17,6 +17,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.MovieCreditsAdapter
 import com.example.madeinbrasil.adapter.MovieStreamingAdapter
 import com.example.madeinbrasil.adapter.SerieCastAdapter
+import com.example.madeinbrasil.adapter.SerieStreamingAdapter
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.model.home.CommentRepository
@@ -101,7 +102,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     it?.let { movie ->
                         val horas = movie.runtime?.div(60)
                         val minutos = movie.runtime?.rem(60)
-                        binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                        binding.tvTimeFilmsSeries.text = "(${horas}h${minutos}min)"
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie?.credits.cast?.let { it1 ->
@@ -123,22 +124,31 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             youtubeMovies(it)
                         }
 
+                        binding.btStreamingFilmsSeries.isVisible = movie.homepage != ""
+                        binding.btStreamingFilmsSeries.setOnClickListener {
+                            val uri = Uri.parse(movie.watch_providers?.results?.BR?.link)
+                            val intent = Intent(Intent.ACTION_VIEW, uri)
+                            startActivity(intent)
+                        }
+
                         binding.rvStreaming.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie.watch_providers?.results?.BR?.let { it1 ->
                                 MovieStreamingAdapter(it1.flatrate){
-
+                                    val uri = Uri.parse(movie.homepage)
+                                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                                    startActivity(intent)
                                 }
                             }
                         }
                         filmDetailed = movie
                     }
                 }
-                binding.btWebSiteFilmsSeries.setOnClickListener {
-                    val uri = Uri.parse(filmDetailed?.homepage)
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    startActivity(intent)
-                }
+//                binding.btWebSiteFilmsSeries.setOnClickListener {
+//                    val uri = Uri.parse(filmDetailed?.homepage)
+//                    val intent = Intent(Intent.ACTION_VIEW, uri)
+//                    startActivity(intent)
+//                }
 
 
                 binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
@@ -189,6 +199,23 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                     binding.tvYearFilmsSeries.text = "(${serie?.first_air_date?.getFirst4Chars()})"
 
+                    binding.btStreamingFilmsSeries.isVisible = serie.homepage != ""
+                    binding.btStreamingFilmsSeries.setOnClickListener {
+                        val uri = Uri.parse(serie.watch_providers?.results?.BR?.link)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                    }
+
+                    binding.rvStreaming?.apply {
+                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                        adapter = serie?.watch_providers?.results?.BR?.flatrate?.let {
+                            SerieStreamingAdapter(it) {
+                                val uri = Uri.parse(serie.homepage)
+                                val intent = Intent(Intent.ACTION_VIEW, uri)
+                                startActivity(intent)
+                            }
+                        }
+                    }
                     serie?.episode_run_time?.forEach { binding.tvTimeFilmsSeries.text = "$it min" }
                     serie?.videos?.results?.forEach {
                         binding.btTrailerFilmsSeries.isVisible = it.key != ""

@@ -17,6 +17,9 @@ class SerieDetailedBusiness {
             serie.credits?.cast?.forEach {
                 it.profile_path = it.profile_path?.getFullImagePath()
             }
+            serie.watch_providers?.results?.BR?.flatrate?.forEach {
+                it.logo_path = it.logo_path?.getFullImagePath()
+            }
             serie.poster_path = serie.poster_path?.getFullImagePath()
             serie.backdrop_path = serie.backdrop_path?.getFullImagePath()
             serie.seasons?.forEach {
