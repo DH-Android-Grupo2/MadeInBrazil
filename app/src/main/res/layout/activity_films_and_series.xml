@@ -177,6 +177,27 @@
             app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries"
             app:layout_constraintEnd_toEndOf="@+id/cbWatchedFilmsSeries"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvStreaming"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            tools:listitem="@layout/item_streaming"
+            tools:itemCount="1"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/cbWatchedFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/cbListFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/ivAgeRatingFilmsSeries"/>
+
+        <ImageView
+            android:id="@+id/ivAgeRatingFilmsSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/class_livre"
+            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries" />
+
 
         <Button
             style="@style/ButtonWatchedActivity"

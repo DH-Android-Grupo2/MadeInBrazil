@@ -18,6 +18,9 @@ class MovieDetailedBusiness  {
             movie?.credits?.cast?.forEach {
                 it.profilePath = it.profilePath?.getFullImagePath()
             }
+            movie.watch_providers?.results?.BR?.flatrate?.forEach {
+                it.logo_path = it.logo_path?.getFullImagePath()
+            }
             ResponseAPI.Success(movie)
         } else {
             response

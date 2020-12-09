@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.MovieCreditsAdapter
+import com.example.madeinbrasil.adapter.MovieStreamingAdapter
 import com.example.madeinbrasil.adapter.SerieCastAdapter
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
@@ -123,6 +123,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             youtubeMovies(it)
                         }
 
+                        binding.rvStreaming.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = movie.watch_providers?.results?.BR?.let { it1 ->
+                                MovieStreamingAdapter(it1.flatrate){
+
+                                }
+                            }
+                        }
                         filmDetailed = movie
                     }
                 }

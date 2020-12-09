@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,17 +13,18 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.SerieAdapter
 import com.example.madeinbrasil.databinding.FragmentSeriesBinding
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewModel.SerieViewModel
+import com.example.madeinbrasil.view.activity.UserActivity
+import com.example.madeinbrasil.view.adapter.MainAdapterSeries
 
 class SeriesFragment : Fragment() {
-    private var binding: FragmentSeriesBinding? = null
-    private lateinit var viewModel: SerieViewModel
-
     private val seriesAdapter: SerieAdapter by lazy {
         SerieAdapter {result ->
             result?.let {
@@ -33,6 +35,10 @@ class SeriesFragment : Fragment() {
             }
         }
     }
+
+    private var binding: FragmentSeriesBinding? = null
+    private lateinit var viewModel: SerieViewModel
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +58,10 @@ class SeriesFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSeriesBinding.inflate(layoutInflater, container, false)
         return binding?.root
+    }
+    fun startUserActivity(context: Context) {
+        val intent = Intent(context, UserActivity::class.java)
+        startActivity(intent)
     }
 
     private fun setUpRecyclerView() {

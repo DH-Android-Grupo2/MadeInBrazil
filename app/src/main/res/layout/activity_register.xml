@@ -19,7 +19,8 @@
             style="@style/ArrowBackDefault"
             android:src="@drawable/ic_baseline_arrow_back_ios_20"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:clickable="true"/>
 
         <TextView
             android:id="@+id/tvRegisterTitle"
@@ -51,7 +52,8 @@
                 android:textColor="@color/colorAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName"
+                android:tag="@string/string_name"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +74,8 @@
                 android:textColor="@color/colorAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:tag="@string/string_email"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +97,8 @@
                 android:textColor="@color/colorAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:tag="@string/string_password"/>
 
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -108,7 +112,7 @@
             app:layout_constraintEnd_toEndOf="@+id/tilRegisterName"
             app:layout_constraintTop_toBottomOf="@+id/tilRegisterPassword"
             android:layout_marginTop="20dp"
-            android:hint="@string/string_confirmar_senha"
+            android:hint="@string/string_confirm_password"
             android:background="@color/colorPrimary"
             android:textColorHint="@color/colorAccent">
 
@@ -117,7 +121,8 @@
                 android:textColor="@color/colorAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:tag="@string/string_password"/>
 
 
         </com.google.android.material.textfield.TextInputLayout>

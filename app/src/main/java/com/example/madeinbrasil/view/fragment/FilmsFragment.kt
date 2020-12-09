@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.icu.text.IDNA
 import android.os.Bundle
@@ -13,14 +14,14 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
-//import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.madeinbrasil.adapter.FilmsAdapter
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
-import com.example.madeinbrasil.model.home.FilmRepository
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewModel.FilmsViewModel
+import com.example.madeinbrasil.view.activity.UserActivity
 import kotlinx.android.synthetic.main.fragment_films.*
 import java.util.*
 
@@ -44,7 +45,9 @@ class FilmsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding?.ivProfileFilms?.setOnClickListener {
+            this.context?.let { it1 -> startUserActivity(it1) }
+        }
         SetupSearchView()
         activity?.let{
             viewModel = ViewModelProvider(this).get(FilmsViewModel::class.java)
@@ -100,6 +103,11 @@ class FilmsFragment : Fragment() {
                 return true
             }
         })
+    }
+
+    fun startUserActivity(context: Context) {
+        val intent = Intent(context, UserActivity::class.java)
+        startActivity(intent)
     }
 
 }

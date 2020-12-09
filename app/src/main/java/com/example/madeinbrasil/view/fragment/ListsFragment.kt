@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.databinding.FragmentListsBinding
 import com.example.madeinbrasil.view.activity.ListDetailActivity
+import com.example.madeinbrasil.view.activity.UserActivity
 import com.example.madeinbrasil.view.adapter.ListAdapter
 import com.example.madeinbrasil.view.classes.Item
 import com.example.madeinbrasil.view.classes.Lista
@@ -28,6 +30,9 @@ class ListsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding?.ivProfileLists?.setOnClickListener {
+            this.context?.let { it1 -> startUserActivity(it1) }
+        }
         val item = Item("filme do babu", "https://cdn-istoe-ssl.akamaized.net/wp-content/uploads/sites/14/2020/04/babu-santana.jpg")
         val item2 = Item("filme do santoro", "https://cdn-istoe-ssl.akamaized.net/wp-content/uploads/sites/14/2020/04/babu-santana.jpg")
         val item3 = Item("filme do babu", "https://cdn-istoe-ssl.akamaized.net/wp-content/uploads/sites/14/2020/04/babu-santana.jpg")
@@ -61,7 +66,10 @@ class ListsFragment : Fragment() {
 
 
     }
-
+    fun startUserActivity(context: Context) {
+        val intent = Intent(context, UserActivity::class.java)
+        startActivity(intent)
+    }
     companion object {
         const val KEY_INTENT_LISTA = "lista"
     }
