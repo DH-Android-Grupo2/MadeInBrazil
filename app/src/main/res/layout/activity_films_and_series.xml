@@ -65,7 +65,7 @@
             android:layout_width="210sp"
             android:layout_height="wrap_content"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="O Auto da Compadecida"
+            tools:text="O Auto da Compadecida"
             android:textSize="16sp"
             android:layout_marginStart="15dp"
             app:layout_constraintStart_toEndOf="@id/cvFilmsSeries"
@@ -75,7 +75,7 @@
         <TextView
             android:id="@+id/tvYearFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="(2000)"
+            tools:text="(2000)"
             android:textColor="@color/colorAccentOpaque"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
@@ -124,7 +124,7 @@
         <TextView
             android:id="@+id/tvNoteFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="4,5"
+            tools:text="4,5"
             android:textSize="18sp"
             android:textColor="@color/colorNotes"
             android:layout_marginStart="10dp"
@@ -170,8 +170,8 @@
             android:id="@+id/btStreamingFilmsSeries"
             style="@style/ButtonWatchedActivity"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:text="Streaming"
+            android:layout_marginEnd="5dp"
+            android:text="@string/string_streaming"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries"
@@ -182,7 +182,7 @@
             android:id="@+id/btSeasonsFilmsSeries"
             style="@style/ButtonWatchedActivity"
             android:layout_marginTop="20dp"
-            android:text="Temporadas"
+            android:text="@string/string_seasons"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toEndOf="@id/btStreamingFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries"
@@ -198,7 +198,6 @@
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@id/cbWatchedFilmsSeries"
             app:layout_constraintEnd_toEndOf="@id/cbListFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/btStreamingFilmsSeries"
             app:layout_constraintBottom_toBottomOf="@+id/cvFilmsSeries"/>
 
 
@@ -234,7 +233,7 @@
             android:layout_marginEnd="20dp"
             android:textSize="15sp"
             android:layout_marginTop="5dp"
-            android:text="O Auto da Compadecida: As aventuras dos nordestinos João Grilo (Matheus Natchergaele), um sertanejo pobre e mentiroso, e Chicó (Selton Mello), o mais covarde dos homens. Ambos lutam pelo pão de cada dia e atravessam por vários episódios enganando a todos do pequeno vilarejo de Taperoá, no sertão da Paraíba. A salvação da dupla acontece com a aparição da Nossa Senhora (Fernanda Montenegro). Adaptação da obra de Ariano Suassuna."
+            tools:text="O Auto da Compadecida: As aventuras dos nordestinos João Grilo (Matheus Natchergaele), um sertanejo pobre e mentiroso, e Chicó (Selton Mello), o mais covarde dos homens. Ambos lutam pelo pão de cada dia e atravessam por vários episódios enganando a todos do pequeno vilarejo de Taperoá, no sertão da Paraíba. A salvação da dupla acontece com a aparição da Nossa Senhora (Fernanda Montenegro). Adaptação da obra de Ariano Suassuna."
             app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitleFilmsSeries"
             app:layout_constraintEnd_toEndOf="parent"/>

@@ -41,6 +41,7 @@ import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import kotlinx.android.synthetic.main.activity_films_and_series.*
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -129,13 +130,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             youtubeMovies(it)
                         }
 
-                        binding.btStreamingFilmsSeries.isVisible = movie.homepage != ""
+                        binding.btStreamingFilmsSeries.isVisible = movie.watch_providers?.results?.BR?.link != null
                         binding.btStreamingFilmsSeries.setOnClickListener {
                             val uri = Uri.parse(movie.watch_providers?.results?.BR?.link)
                             val intent = Intent(Intent.ACTION_VIEW, uri)
                             startActivity(intent)
                         }
 
+                        binding.rvStreaming.isVisible = movie.homepage != ""
                         binding.rvStreaming.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie.watch_providers?.results?.BR?.let { it1 ->
@@ -188,13 +190,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                     binding.tvYearFilmsSeries.text = "(${serie?.first_air_date?.getFirst4Chars()})"
 
-                    binding.btStreamingFilmsSeries.isVisible = serie.homepage != ""
+                    binding.btStreamingFilmsSeries.isVisible = serie.watch_providers?.results?.BR?.link != null
                     binding.btStreamingFilmsSeries.setOnClickListener {
                         val uri = Uri.parse(serie.watch_providers?.results?.BR?.link)
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
                     }
 
+                    binding.rvStreaming.isVisible = serie.homepage != ""
                     binding.rvStreaming?.apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                         adapter = serie?.watch_providers?.results?.BR?.flatrate?.let {
