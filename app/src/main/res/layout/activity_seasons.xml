@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".view.activity.SeasonsActivity">
+
+        <ImageView
+            android:id="@+id/ivArrowBackSeasons"
+            style="@style/ArrowBackDefault"
+            android:src="@drawable/ic_baseline_arrow_back_ios_20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvSeasons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temporadas"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/ivArrowBackSeasons"
+            app:layout_constraintTop_toBottomOf="@id/ivArrowBackSeasons"
+            app:layout_constraintBottom_toTopOf="@id/rvCardsSeasons"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsSeasons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSeasons"
+            tools:itemCount="3"
+            tools:listitem="@layout/recyclerview_seasons" />
+
+        <FrameLayout
+            android:id="@+id/containerEpisode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

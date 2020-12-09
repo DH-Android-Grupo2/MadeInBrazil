@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".view.fragment.FilmsFragment">
 
         <ImageView
-            android:id="@+id/ivProfileFilms"
+            android:id="@+id/ivProfileSeries"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_person_20"
@@ -21,16 +21,44 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
         <SearchView
             android:id="@+id/tilSearchSeries"
-            android:theme="@style/AppTheme.Toolbar"
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_margin="20dp"
-            app:layout_constraintEnd_toStartOf="@id/ivProfileFilms"
+            android:theme="@style/AppTheme.Toolbar"
+            app:layout_constraintEnd_toStartOf="@id/ivProfileSeries"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMessageSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Pesquise uma Série"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toTopOf="@+id/animationSeries"
+            app:layout_constraintEnd_toEndOf="@id/ivProfileSeries"
+            app:layout_constraintStart_toStartOf="@id/tilSearchSeries"
+            app:layout_constraintTop_toBottomOf="@id/tilSearchSeries" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationSeries"
+            android:layout_width="200dp"
+            android:layout_height="240dp"
+            app:lottie_rawRes="@raw/claqueteaction"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:layout_constraintStart_toStartOf="@id/tilSearchSeries"
+            app:layout_constraintEnd_toEndOf="@id/ivProfileSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvMessageSeries"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListSeries"
@@ -38,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             tools:listitem="@layout/main_cards"
-            tools:itemCount="5"
+            tools:itemCount="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tilSearchSeries"/>

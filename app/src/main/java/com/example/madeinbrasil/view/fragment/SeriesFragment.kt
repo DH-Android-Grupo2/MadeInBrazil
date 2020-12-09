@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -82,6 +83,8 @@ class SeriesFragment : Fragment() {
         searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.setQuerySerie(query)
+                binding?.tvMessageSeries?.isVisible = query != ""
+                binding?.animationSeries?.isVisible = query != ""
                 setUpRecyclerView()
                 loadContentSerie()
                 return true
@@ -89,6 +92,8 @@ class SeriesFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 viewModel.setQuerySerie(newText)
+                binding?.tvMessageSeries?.isVisible = newText == ""
+                binding?.animationSeries?.isVisible = newText == ""
                 setUpRecyclerView()
                 loadContentSerie()
                 return true

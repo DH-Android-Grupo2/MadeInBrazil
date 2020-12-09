@@ -72,4 +72,6 @@
     <string name="filmes_para_voce">Filmes para Você</string>
     <string name="series_para_voce">Séries para Você</string>
     <string name="desc_logo_madeinbrasil">Logo MadeInBrasil</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

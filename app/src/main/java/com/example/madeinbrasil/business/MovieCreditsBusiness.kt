@@ -11,12 +11,12 @@ class MovieCreditsBusiness{
         MovieCreditsRepository()
     }
 
-    suspend fun getMovieCredits(query: Int?): ResponseAPI {
+    suspend fun getMovieCredits(query: Int): ResponseAPI {
         val response = repository.searchMovieCredits(query)
         return if (response is ResponseAPI.Success) {
             val credits = response.data as MovieCredits
-            credits.cast.forEach {
-                it.profile_path = it.profile_path?.getFullImagePath()
+            credits.cast?.forEach {
+                it.profilePath = it.profilePath?.getFullImagePath()
             }
             ResponseAPI.Success(credits)
         } else {

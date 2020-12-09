@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.filmsseries_popup.*
 
 class SerieAdapter(
     private val onSerieClicked: (ResultSearch?) -> Unit
-):PagedListAdapter<ResultSearch, SerieAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK)   {
+):PagedListAdapter<ResultSearch, SerieAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

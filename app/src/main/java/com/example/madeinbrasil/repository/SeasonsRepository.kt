@@ -3,11 +3,11 @@ package com.example.madeinbrasil.repository
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
 
-class TrailerSeriesRepository {
+class SeasonsRepository {
 
-    suspend fun getTrailerSerie(serieId: Int?): ResponseAPI {
+    suspend fun getSeasonRepository(serieId: Int?, seasonId: Int?): ResponseAPI {
         return try {
-            val response = APIService.tmdbApi.trailerSeries(serieId?:0)
+            val response = APIService.tmdbApi.seasonsEpisodes(serieId?:0, seasonId?:0)
 
             if (response.isSuccessful) {
                 ResponseAPI.Success(response.body())
