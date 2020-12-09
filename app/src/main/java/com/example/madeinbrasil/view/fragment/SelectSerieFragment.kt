@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.adapter.SelectSerieAdapter
 import com.example.madeinbrasil.databinding.FragmentSelectSerieBinding
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
 import com.example.madeinbrasil.viewmodel.SelectSerieViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -23,7 +24,7 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: SelectSerieViewModel
 
     private val selectSerieAdapter by lazy {
-        SelectSerieAdapter()
+        arguments?.getIntArray(SELECTED_SERIES)?.let{ SelectSerieAdapter(it.toMutableList()) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +44,9 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
             loadContentSearch()
         }
 
+        selectSerieAdapter?.onItemClick = {
+            viewModel.postClikedItemId(it)
+        }
     }
 
     private fun SetupSearchView() {
@@ -76,7 +80,7 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
 
     private fun loadContentSearch() {
         viewModel.searchSeriePagedList?.observe(viewLifecycleOwner) { pagedList ->
-            selectSerieAdapter.submitList(pagedList)
+            selectSerieAdapter?.submitList(pagedList)
         }
     }
 

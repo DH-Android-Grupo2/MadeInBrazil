@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.example.madeinbrasil.databinding.ActivityCreateListBinding
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
 import com.example.madeinbrasil.view.fragment.SelectMovieFragment
 import com.example.madeinbrasil.view.fragment.SelectSerieFragment
 import com.example.madeinbrasil.viewmodel.SelectMovieViewModel
@@ -46,14 +47,26 @@ class CreateListActivity : AppCompatActivity() {
 
         binding.imAddSerie.setOnClickListener{
             val fragment = SelectSerieFragment()
+            fragment.arguments = Bundle().apply {
+                putIntArray(SELECTED_SERIES, selectedSeries.toIntArray())
+            }
             fragment.show(supportFragmentManager, null)
         }
     }
 
     private fun setupShowClickListeners() {
         selectMovieViewModel.clickedItemId.observe(this, {
-            selectedMovies.add(it)
-            Log.i("ADDED", it.toString())
+            if (selectedMovies.contains(it))
+                selectedMovies.remove(it)
+            else
+                selectedMovies.add(it)
+        })
+
+        selectSerieViewModel.clikedItemId.observe(this, {
+            if (selectedSeries.contains(it))
+                selectedSeries.remove(it)
+            else
+                selectedSeries.add(it)
         })
 
     }

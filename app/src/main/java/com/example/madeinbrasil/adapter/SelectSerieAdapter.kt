@@ -9,9 +9,9 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCardsSelectionBinding
 import com.example.madeinbrasil.model.search.ResultSearch
 
-class SelectSerieAdapter() : PagedListAdapter<ResultSearch, SelectSerieAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK)   {
+class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter<ResultSearch, SelectSerieAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK)   {
 
-    var selectedItems = mutableListOf<Int>()
+    var onItemClick: ((Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -21,10 +21,13 @@ class SelectSerieAdapter() : PagedListAdapter<ResultSearch, SelectSerieAdapter.V
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val serie = getItem(position)
-        holder.bind(getItem(position), selectedItems)
-        holder.itemView.setOnClickListener {
-            tooglePosition(serie)
-            notifyItemChanged(position)
+        serie?.let {
+            holder.bind(getItem(position), selectedItems)
+            holder.itemView.setOnClickListener {
+                onItemClick?.invoke(serie.id)
+                tooglePosition(serie)
+                notifyItemChanged(position)
+            }
         }
     }
 

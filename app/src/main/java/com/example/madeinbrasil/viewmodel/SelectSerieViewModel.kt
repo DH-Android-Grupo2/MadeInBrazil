@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PageKeyedDataSource
@@ -13,6 +14,8 @@ class SelectSerieViewModel: ViewModel() {
     var searchSeriePagedList: LiveData<PagedList<ResultSearch>>? = null
     private var searchSerieLiveDataSource: LiveData<PageKeyedDataSource<Int, ResultSearch>>? = null
     var query = " "
+
+    var clikedItemId: MutableLiveData<Int> = MutableLiveData()
 
     init {
         searchSerieData()
@@ -37,5 +40,9 @@ class SelectSerieViewModel: ViewModel() {
                 .setPageSize(Constants.Paging.PAGE_SIZE).build()
 
         searchSeriePagedList = LivePagedListBuilder(tmdbSourceFactory, pagedListConfig).build()
+    }
+
+    fun postClikedItemId(id: Int) {
+        clikedItemId.postValue(id)
     }
 }

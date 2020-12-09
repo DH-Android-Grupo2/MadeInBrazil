@@ -31,8 +31,7 @@ class Constants {
         const val ID_FRAGMENTS = "idFragment"
         const val BASE_ACTOR_KEY = "Actor"
         const val SELECTED_MOVIES = "selected_movies"
-        const val MOVIE_ADDED = "movie added"
-        const val SERIE_ADDED = "serie_added"
+        const val SELECTED_SERIES = "selected_series"
     }
 
     object Paging {
