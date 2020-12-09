@@ -16,10 +16,10 @@ class PersonBusiness {
             val person = response.data as com.example.madeinbrasil.model.people.Person
 //            person.movie_credits?.cast?.filter { it.original_language.equals("pt") }
             person.movie_credits?.cast?.forEach {
-                it.profilePath = it.profilePath?.getFullImagePath()
+                it.posterPath = it.posterPath?.getFullImagePath()
             }
             person.tv_credits?.cast?.forEach {
-                it.profilePath = it.profilePath?.getFullImagePath()
+                it.posterPath = it.posterPath?.getFullImagePath()
             }
             ResponseAPI.Success(person)
         } else {

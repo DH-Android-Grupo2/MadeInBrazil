@@ -43,10 +43,10 @@ class FilmsSeriesFromUserAdapter(
 
         fun bind(cast: Cast?, onMovieClicked: (Cast?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
-                    .load(cast?.profilePath)
+                    .load(cast?.posterPath)
                     .placeholder(R.drawable.made_in_brasil_logo)
                     .into(cvImageActors)
-            tvActorsName.text = cast?.name
+            tvActorsName.text = cast?.title
 
             itemView.setOnClickListener {
                 onMovieClicked(cast)
