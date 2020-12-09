@@ -113,5 +113,30 @@
             app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitleFilmsSeries"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <TextView
+            android:id="@+id/tvFilmesRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Filmes"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescriptionTextFilmsSeries"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListFilmes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/main_cards_menu"
+            tools:itemCount="1"
+            tools:orientation="horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFilmesRecycler"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

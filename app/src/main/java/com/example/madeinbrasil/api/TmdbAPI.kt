@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.api
 
+import android.app.Person
 import com.example.madeinbrasil.model.gender.GenderMovie
 import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.example.madeinbrasil.model.nowPlaying.NowPlaying
@@ -25,6 +26,11 @@ interface TmdbAPI {
     suspend fun movieDetails(
         @Path("movie_id") movieId: Int
     ): Response<MovieDetailed>
+
+    @GET("person/{person_id}")
+    suspend fun personDetails(
+            @Path("person_id") personId: Int
+    ): Response<com.example.madeinbrasil.model.people.Person>
 
     @GET("movie/{movie_id}/credits")
     suspend fun movieCredits(

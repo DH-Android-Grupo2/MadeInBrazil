@@ -15,5 +15,17 @@ data class Crew(
     val name: String,
     val original_name: String,
     val popularity: Double,
-    val profile_path: String
+    val profile_path: String,
+    val backdrop_path: String,
+    val first_air_date: String,
+    val genre_ids: List<Int>,
+    val original_language: String,
+    val original_title: String,
+    val overview: String,
+    val poster_path: String,
+    val release_date: String,
+    val title: String,
+    val video: Boolean,
+    val vote_average: Double,
+    val vote_count: Int
 ):Parcelable

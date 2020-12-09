@@ -46,7 +46,6 @@ class FilmsViewModel() : ViewModel() {
 
         searchMoviePagedList = LivePagedListBuilder(tmdbDataSourceFactory, pagedListConfig)
             .build()
-        Log.i("HELPs","$searchMoviePagedList")
     }
 
 }

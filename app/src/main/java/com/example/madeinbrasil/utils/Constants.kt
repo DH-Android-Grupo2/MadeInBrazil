@@ -22,6 +22,8 @@ class Constants {
         const val QUERY_PARAM_REGION_VALUE = "BR"
         const val QUERY_PARAM_APPEND_LABEL = "append_to_response"
         const val QUERY_PARAM_APPEND_VALUE = "videos,credits,recommendations,similar,watch/providers"
+        const val QUERY_PARAM_APPEND_VALUE_PERSON = "movie_credits,tv_credits"
+
     }
 
     object ConstantsFilms {
