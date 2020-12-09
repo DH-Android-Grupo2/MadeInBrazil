@@ -40,6 +40,7 @@ import kotlinx.android.synthetic.main.youtube_popup.*
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -71,9 +72,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
         when(positionFragment) {
             1 -> {
-//                viewModelCast = ViewModelProvider(this).get(MovieCreditsViewModel::class.java)
-//                viewModelCast.getCredits(films?.id)
-
                 viewModelMovie = ViewModelProvider(this).get(MovieDetailedViewModel::class.java)
                 viewModelMovie.getMovie(films?.id)
 
@@ -151,23 +149,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         filmDetailed = movie
                     }
                 }
-//                binding.btWebSiteFilmsSeries.setOnClickListener {
-//                    val uri = Uri.parse(filmDetailed?.homepage)
-//                    val intent = Intent(Intent.ACTION_VIEW, uri)
-//                    startActivity(intent)
-//                }
-
-                /*viewModelCast.onResultCredits?.observe(this) {
-                    it?.cast.let { cast ->
-                        binding.rvCardsListActors.apply {
-                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = cast?.let { it1 -> MovieCreditsAdapter(it1) }
-                        }
-                    }
-                }
-                viewModelCast.onResultCredits?.observe(this) {
-
-                }*/
 
                     findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
