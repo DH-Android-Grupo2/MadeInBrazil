@@ -9,9 +9,9 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.databinding.MainCardsSelectionBinding
 
-class SelectMovieAdapter(): PagedListAdapter<Result, SelectMovieAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
+class SelectMovieAdapter(private var selectedItems: MutableList<Int>): PagedListAdapter<Result, SelectMovieAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
 
-    var selectedItems = mutableListOf<Int>()
+    var onItemClick: ((Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -22,12 +22,14 @@ class SelectMovieAdapter(): PagedListAdapter<Result, SelectMovieAdapter.ViewHold
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie = getItem(position)
 
-        holder.bind(movie, selectedItems)
-        holder.itemView.setOnClickListener {
-            tooglePosition(movie)
-            notifyItemChanged(position)
+        movie?.let {
+            holder.bind(movie, selectedItems)
+            holder.itemView.setOnClickListener {
+                onItemClick?.invoke(movie.id)
+                tooglePosition(movie)
+                notifyItemChanged(position)
+            }
         }
-
     }
 
     private fun tooglePosition(movie: Result?) {

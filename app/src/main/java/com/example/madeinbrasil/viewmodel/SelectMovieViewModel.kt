@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PageKeyedDataSource
@@ -13,6 +14,8 @@ class SelectMovieViewModel: ViewModel() {
     var searchMoviePagedList: LiveData<PagedList<Result>>? = null
     private var searchMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var query = ""
+
+    var clickedItemId: MutableLiveData<Int> = MutableLiveData()
 
     init {
         searchData()
@@ -42,4 +45,9 @@ class SelectMovieViewModel: ViewModel() {
         searchMoviePagedList = LivePagedListBuilder(tmdbDataSourceFactory, pagedListConfig)
                 .build()
     }
+
+    fun postClickedItemId(id: Int) {
+        clickedItemId.postValue(id)
+    }
+
 }

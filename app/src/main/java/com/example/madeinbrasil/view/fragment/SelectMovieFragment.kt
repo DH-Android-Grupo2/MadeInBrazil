@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.adapter.SelectMovieAdapter
 import com.example.madeinbrasil.databinding.FragmentSelectMovieBinding
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.viewmodel.SelectMovieViewModel
-import com.example.madeinbrasil.viewmodel.SelectSerieViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,7 +25,7 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: SelectMovieViewModel
 
     private val selectMovieAdapter by lazy {
-        SelectMovieAdapter()
+        arguments?.getIntArray(SELECTED_MOVIES)?.let { SelectMovieAdapter(it.toMutableList()) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +43,10 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
             viewModel = ViewModelProvider(it).get(SelectMovieViewModel::class.java)
             setupRecyclerView()
             loadContentSearch()
+        }
+
+        selectMovieAdapter?.onItemClick = {
+            viewModel.postClickedItemId(it)
         }
 
     }
@@ -73,12 +77,11 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
             layoutManager = GridLayoutManager(this@SelectMovieFragment.context, 2)
             adapter = selectMovieAdapter
         }
-
     }
 
     private fun loadContentSearch() {
         viewModel.searchMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
-            selectMovieAdapter.submitList(pagedList)
+            selectMovieAdapter?.submitList(pagedList)
         }
     }
 
