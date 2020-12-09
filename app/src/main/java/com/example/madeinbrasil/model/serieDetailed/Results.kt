@@ -4,5 +4,6 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class Results(
+data class Results(
+    val BR: BR?,
 ): Parcelable

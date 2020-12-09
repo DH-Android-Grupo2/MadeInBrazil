@@ -20,7 +20,7 @@ class MovieCreditsViewModel() : ViewModel() {
 
     fun getCredits(query: Int?) {
         viewModelScope.launch {
-            when(val response = business.getMovieCredits(query)) {
+            when(val response = query?.let { business.getMovieCredits(it) }) {
                 is ResponseAPI.Success -> {
                     onResultCredits?.postValue(
                         response.data as MovieCredits

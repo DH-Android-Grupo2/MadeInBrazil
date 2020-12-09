@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Logo(
-    val aspect_ratio: Double?,
-    val path: String?
+data class BR(
+    val flatrate: List<Flatrate>?,
+    val link: String?
 ): Parcelable

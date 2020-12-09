@@ -5,5 +5,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Videos(
-    val results: List<ResultXX>
+    val results: List<ResultXX>?
 ): Parcelable

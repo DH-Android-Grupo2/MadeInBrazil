@@ -2,15 +2,12 @@ package com.example.madeinbrasil.repository
 
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
-import java.lang.Exception
 
-class SerieCreditsRepository {
+class SeasonsRepository {
 
-    suspend fun searchSerieCredits(
-           search: Int?
-    ): ResponseAPI {
+    suspend fun getSeasonRepository(serieId: Int?, seasonId: Int?): ResponseAPI {
         return try {
-            val response = APIService.tmdbApi.serieCredits(search?:0)
+            val response = APIService.tmdbApi.seasonsEpisodes(serieId?:0, seasonId?:0)
 
             if (response.isSuccessful) {
                 ResponseAPI.Success(response.body())

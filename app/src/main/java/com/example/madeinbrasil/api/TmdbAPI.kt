@@ -6,9 +6,9 @@ import com.example.madeinbrasil.model.nowPlaying.NowPlaying
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.movie.SearchMovie
 import com.example.madeinbrasil.model.search.serie.SearchSeries
+import com.example.madeinbrasil.model.seasons.Seasons
 import com.example.madeinbrasil.model.serieCredits.SerieCredits
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
-import com.example.madeinbrasil.model.trailer.Trailer
 import com.example.madeinbrasil.model.upcoming.Upcoming
 import retrofit2.Response
 import retrofit2.http.GET
@@ -57,14 +57,9 @@ interface TmdbAPI {
     @GET("genre/movie/list")
     suspend fun movieGenres(): Response<GenderMovie>
 
-    @GET("tv/{tv_id}/videos")
-    suspend fun trailerSeries(
-            @Path("tv_id") serieId: Int
-    ): Response<Trailer>
-
-    @GET("tv/{tv_id}/credits")
-    suspend fun serieCredits(
-            @Path("tv_id") serieId: Int
-    ): Response<SerieCredits>
-
+    @GET("tv/{tv_id}/season/{season_number}")
+    suspend fun seasonsEpisodes(
+        @Path("tv_id") serieId: Int,
+        @Path("season_number") seasonNumber: Int
+    ): Response<Seasons>
 }

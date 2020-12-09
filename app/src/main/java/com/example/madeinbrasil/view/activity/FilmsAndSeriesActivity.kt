@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
+import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
@@ -40,16 +42,14 @@ import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GenderMovieViewModel
-    private lateinit var viewModelTrailerSeries: TrailerSeriesViewModel
-    private lateinit var viewModelCastSerie: SerieCreditsViewModel
-    private lateinit var viewModelCast: MovieCreditsViewModel
+//    private lateinit var viewModelCast: MovieCreditsViewModel
     private lateinit var viewModelMovie: MovieDetailedViewModel
-//    private lateinit var viewModelSerie: SerieDetailedViewModel
+    private lateinit var viewModelSerie: SerieDetailedViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
     private var films: Result? = null
     private var filmDetailed: MovieDetailed?  = null
-//    private var serieDetailed: SerieDetailed? = null
+    private var serieDetailed: SerieDetailed? = null
     private var series: ResultSearch? = null
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
@@ -69,8 +69,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
         when(positionFragment) {
             1 -> {
-                viewModelCast = ViewModelProvider(this).get(MovieCreditsViewModel::class.java)
-                viewModelCast.getCredits(films?.id)
+//                viewModelCast = ViewModelProvider(this).get(MovieCreditsViewModel::class.java)
+//                viewModelCast.getCredits(films?.id)
 
                 viewModelMovie = ViewModelProvider(this).get(MovieDetailedViewModel::class.java)
                 viewModelMovie.getMovie(films?.id)
@@ -78,7 +78,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModel.getGenres()
 
-
+                binding.btSeasonsFilmsSeries.isVisible = false
                 setupObservables()
                 Glide.with(this)
                         .load(films?.posterPath)
@@ -104,12 +104,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = MovieCreditsAdapter(movie?.credits.cast){
-                                val castClicked = it
-                                castClicked?.let{result->
-                                    val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
-                                    intent.putExtra(BASE_ACTOR_KEY, result)
-                                    startActivity(intent)
+                            adapter = movie?.credits.cast?.let { it1 ->
+                                MovieCreditsAdapter(it1){
+                                    val castClicked = it
+                                    castClicked?.let{result->
+                                        val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                        intent.putExtra(BASE_ACTOR_KEY, result)
+                                        startActivity(intent)
+                                    }
                                 }
                             }
                         }
@@ -153,82 +155,51 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
             2 -> {
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
-                viewModelTrailerSeries = ViewModelProvider(this).get(TrailerSeriesViewModel::class.java)
-                viewModelCastSerie = ViewModelProvider(this).get(SerieCreditsViewModel::class.java)
-//                viewModelSerie = ViewModelProvider(this).get(SerieDetailedViewModel::class.java)
-//                viewModelSerie.getSerieDetailed(series?.id)
+                viewModelSerie = ViewModelProvider(this).get(SerieDetailedViewModel::class.java)
 
-                viewModelTrailerSeries.getTrailerSerie(series?.id)
-                viewModelCastSerie.getCreditsSerie(series?.id)
+                viewModelSerie.getSerieDetailed(series?.id)
                 viewModel.getGenres()
 
-                setupObservablesSeries()
-                series?.let {
+                viewModelSerie.serieDetailedSucess.observe(this) { serie ->
+                    serieDetailed = serie
+                    setupObservablesSeries()
                     Glide.with(binding.root.context)
-                            .load(series?.posterPath)
+                            .load(serie?.poster_path)
                             .into(binding.ivBannerFilmsSeries)
-                    series?.backdropPath?.let {
+                    serie?.backdrop_path?.let {
                         Glide.with(binding.root.context)
-                                .load(series?.backdropPath)
+                                .load(serie?.backdrop_path)
                                 .into(binding.ivBackDropFilmSeries)
                     }
 
-                    binding.tvDescriptionTextFilmsSeries.text = series?.overview
-                    binding.tvNameFilmsSeries.text = series?.name
-                    binding.tvNoteFilmsSeries.text = "${(series?.voteAverage)?.div(2)}"
-                    series?.voteAverage?.let {
+                    binding.tvDescriptionTextFilmsSeries.text = serie?.overview
+                    binding.tvNameFilmsSeries.text = serie?.name
+                    binding.tvNoteFilmsSeries.text = "${(serie?.vote_average)?.div(2)}"
+                    serie?.vote_average?.let {
                         binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
                         binding.ratingBarFilmsSeries.stepSize = .5f
                     }
+                    binding.tvYearFilmsSeries.text = "(${serie?.first_air_date?.getFirst4Chars()})"
 
-                    binding.tvYearFilmsSeries.text = "${series?.firstAirDate?.getFirst4Chars()}"
-                }
-
-//                viewModelSerie.serieDetailedSucess.observe(this) { serie ->
-//                    serieDetailed = serie
-//
-//                    binding.tvDescriptionTextFilmsSeries.text = serie?.overview
-//                    binding.tvNameFilmsSeries.text = serie?.name
-//                    binding.tvNoteFilmsSeries.text = "${(serie?.vote_average)?.div(2)}"
-//                    serie?.vote_average?.let {
-//                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
-//                        binding.ratingBarFilmsSeries.stepSize = .5f
-//                    }
-//                    binding.tvYearFilmsSeries.text = "(${serie?.first_air_date?.getFirst4Chars()})"
-//
-//                    serie?.episode_run_time?.forEach { binding.tvTimeFilmsSeries.text = "$it min" }
-//                    serie?.videos?.results?.forEach {
-//                        binding.btTrailerFilmsSeries.isVisible = it.key != ""
-//                    }
-//                    binding.btTrailerFilmsSeries.setOnClickListener {
-//                        youtubeSeries(it)
-//                    }
-//
-//                    serie?.credits?.cast.let { castSerie ->
-//                        binding.rvCardsListActors.apply {
-//                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-//                            adapter = castSerie?.let { it1 -> SerieCastAdapter(it1) }
-//                        }
-//                    }
-//
-//                }
-
-                viewModelTrailerSeries.trailerSucessSerie?.observe(this) {trailer ->
-                    trailer.results?.forEach {
+                    serie?.episode_run_time?.forEach { binding.tvTimeFilmsSeries.text = "$it min" }
+                    serie?.videos?.results?.forEach {
                         binding.btTrailerFilmsSeries.isVisible = it.key != ""
                     }
-
                     binding.btTrailerFilmsSeries.setOnClickListener {
                         youtubeSeries(it)
                     }
-                }
 
-                viewModelCastSerie.creditsSucess?.observe(this) {
-                    it?.cast.let { castSerie ->
+                    serie?.credits?.cast.let { castSerie ->
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = castSerie?.let { it1 -> SerieCastAdapter(it1) }
                         }
+                    }
+
+                    binding.btSeasonsFilmsSeries.setOnClickListener {
+                        val intent = Intent(this, SeasonsActivity::class.java)
+                        intent.putExtra("season", serie)
+                        startActivity(intent)
                     }
                 }
 
@@ -298,17 +269,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val iFramePlayerOptions = IFramePlayerOptions.Builder().controls(1).build()
-        var key = ""
-        viewModelTrailerSeries.trailerSucessSerie.observe(this) { trailer ->
-            trailer.results.forEach { key = it.key }
+        var key: String? = null
+        serieDetailed?.videos?.results?.forEach { trailer ->
+            key = trailer.key
         }
-//        serieDetailed?.videos?.results?.forEach { trailer ->
-//            key = trailer.key
-//        }
         lifecycle.addObserver(dialog.youtubePlayerDialog)
         dialog.youtubePlayerDialog.initialize(object: AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.loadOrCueVideo(lifecycle, key, 0.0f)
+                key?.let { youTubePlayer.loadOrCueVideo(lifecycle, it, 0.0f) }
             }
         }, true, iFramePlayerOptions)
 

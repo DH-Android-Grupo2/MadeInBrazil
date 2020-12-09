@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class NetworkX(
     val id: Int,
-    val logo: Logo,
-    val name: String,
-    val origin_country: String
+    val logo: Logo?,
+    val name: String?,
+    val origin_country: String?
 ): Parcelable

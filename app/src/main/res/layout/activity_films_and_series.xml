@@ -8,7 +8,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".view.activity.FilmsAndSeriesActivity">
@@ -84,6 +83,17 @@
             app:layout_constraintBottom_toTopOf="@id/tvGenderFilmsSeries"/>
 
         <TextView
+            android:id="@+id/tvTimeFilmsSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:layout_marginStart="10dp"
+            tools:text="50min"
+            app:layout_constraintStart_toEndOf="@id/tvYearFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/tvYearFilmsSeries"
+            app:layout_constraintBottom_toBottomOf="@+id/tvYearFilmsSeries" />
+
+        <TextView
             android:id="@+id/tvGenderFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
             android:text=""
@@ -132,7 +142,7 @@
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/ratingBarFilmsSeries"
             app:layout_constraintEnd_toStartOf="@id/cbFavoriteFilmsSeries"
-            app:layout_constraintBottom_toTopOf="@id/ivAgeRatingFilmsSeries"/>
+            />
 
         <CheckBox
             android:id="@+id/cbFavoriteFilmsSeries"
@@ -157,25 +167,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-        <ImageView
-            android:id="@+id/ivAgeRatingFilmsSeries"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/class_livre"
-            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries" />
-
-        <TextView
-            android:id="@+id/tvTimeFilmsSeries"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/btSeasonsFilmsSeries"
+            style="@style/ButtonWatchedActivity"
+            android:layout_marginTop="20dp"
+            android:text="Temporadas"
             android:textColor="@color/colorAccent"
-            android:text=""
-            android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@id/ivAgeRatingFilmsSeries"
-            app:layout_constraintTop_toTopOf="@id/ivAgeRatingFilmsSeries"
-            app:layout_constraintBottom_toBottomOf="@id/ivAgeRatingFilmsSeries"/>
+            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@+id/cbWatchedFilmsSeries"/>
+
 
         <Button
             style="@style/ButtonWatchedActivity"

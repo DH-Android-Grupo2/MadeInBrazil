@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCastRecyclerviewBinding
-import com.example.madeinbrasil.model.serieCredits.Cast
+import com.example.madeinbrasil.model.serieDetailed.Cast
+
+//import com.example.madeinbrasil.model.serieCredits.Cast
 
 class SerieCastAdapter(
         private val listSerieCast: List<Cast> = listOf()
@@ -32,7 +34,7 @@ class SerieCastAdapter(
 
         fun bind(serieCast: Cast?) = with(binding) {
             Glide.with(itemView.context)
-                    .load(serieCast?.profilePath)
+                    .load(serieCast?.profile_path)
                     .placeholder(R.drawable.made_in_brasil_logo)
                     .into(cvImageActors)
 

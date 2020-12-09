@@ -5,8 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Similar(
-    val page: Int,
-    val results: List<ResultX>,
-    val total_pages: Int,
-    val total_results: Int
+    val page: Int?,
+    val results: List<ResultX>?,
+    val total_pages: Int?,
+    val total_results: Int?
 ): Parcelable
