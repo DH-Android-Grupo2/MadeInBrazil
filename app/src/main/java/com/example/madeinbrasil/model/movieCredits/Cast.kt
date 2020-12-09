@@ -22,5 +22,10 @@ data class Cast(
     val originalName: String?,
     val popularity: Double?,
     @SerializedName("profile_path")
-    var profilePath: String?
+    var profilePath: String?,
+    //CastPeople
+    val title: String?,
+    val original_title: String?,
+    @SerializedName("poster_path")
+    var posterPath: String?
 ):Parcelable
