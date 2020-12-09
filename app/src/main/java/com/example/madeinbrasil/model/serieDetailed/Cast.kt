@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.model.serieDetailed
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -15,5 +16,10 @@ data class Cast(
         val order: Int?,
         val original_name: String?,
         val popularity: Double?,
-        var profile_path: String?
+        var profile_path: String?,
+//        //CastPeople
+//        val title: String?,
+//        val original_title: String?,
+//        @SerializedName("poster_path")
+//        var posterPath: String?
 ): Parcelable

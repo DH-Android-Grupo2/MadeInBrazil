@@ -24,7 +24,6 @@ object APIService {
     val tmdbApi: TmdbAPI = getTMDbApiClient().create(TmdbAPI::class.java)
     val tmdbApiSearch: TmdbAPI = getTMDbApiClientSearch().create(TmdbAPI::class.java)
     val tmdbApiMovieDetailed: TmdbAPI= getTMDbApiClientMovieDetailed().create(TmdbAPI::class.java)
-    //val tmdbApiTrailer: TmdbAPI = getTMDbApiClientTrailer().create(TmdbAPI::class.java)
     val tmdbApiPerson: TmdbAPI = getTMDbApiClientPersonDetailed().create(TmdbAPI::class.java)
 
     private fun getTMDbApiClient(): Retrofit {

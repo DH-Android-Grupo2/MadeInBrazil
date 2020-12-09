@@ -26,10 +26,13 @@ import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.model.upcoming.Result
+import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_TV_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
 import com.example.madeinbrasil.viewModel.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -96,6 +99,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                     castClicked?.let{result->
                                         val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
                                         intent.putExtra(BASE_ACTOR_KEY, result)
+                                        intent.putExtra(VALUE, 1)
                                         startActivity(intent)
                                     }
                                 }
@@ -219,7 +223,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     serie?.credits?.cast.let { castSerie ->
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = castSerie?.let { it1 -> SerieCastAdapter(it1) }
+                            adapter = castSerie?.let { it1 -> SerieCastAdapter(it1) {
+                                val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                intent.putExtra(BASE_ACTOR_TV_KEY, it)
+                                intent.putExtra(VALUE, 2)
+                                startActivity(intent)
+                                }
+                            }
                         }
                     }
 

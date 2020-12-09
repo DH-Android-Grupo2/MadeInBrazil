@@ -1,8 +1,8 @@
 package com.example.madeinbrasil.business
 
-import android.app.Person
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.model.people.Person
 import com.example.madeinbrasil.repository.PersonDetailedRepository
 
 class PersonBusiness {
@@ -13,8 +13,11 @@ class PersonBusiness {
     suspend fun getPerson(personId: Int): ResponseAPI {
         val response = repository.getPerson(personId)
         return if (response is ResponseAPI.Success) {
-            val person = response.data as com.example.madeinbrasil.model.people.Person
+            val person = response.data as Person
 //            person.movie_credits?.cast?.filter { it.original_language.equals("pt") }
+            if(person.biography == "") {
+                person.biography = "Biografia não encontrada"
+            }
             person.movie_credits?.cast?.forEach {
                 it.posterPath = it.posterPath?.getFullImagePath()
             }
