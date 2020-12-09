@@ -43,24 +43,26 @@ class PeopleActivity : AppCompatActivity() {
                 .load(people?.profilePath)
                 .into(ivBannerFilmsSeries)
             Glide.with(binding.root.context)
-                    .load(people?.profile_path)
+                    .load(people?.profilePath)
                     .into(ivBackDropFilmSeries)
 
-            viewModelPeople.personSucess.observe(this@PeopleActivity, {
+            viewModelPeople.personSucess.observe(this@PeopleActivity) {
                 it?.let { pessoa ->
                     tvDescriptionTextFilmsSeries.text = pessoa.biography
                     Log.i("CLICOU","${pessoa.movie_credits}")
                     binding.rvCardsListFilmes.apply {
                         layoutManager = LinearLayoutManager(this@PeopleActivity, LinearLayoutManager.HORIZONTAL, false)
                         adapter = pessoa.movie_credits?.let { it1 ->
-                            FilmsSeriesFromUserAdapter(it1.cast){
-                                Log.i("CLICOU","CLICOU")
+                            it1.cast?.let { it2 ->
+                                FilmsSeriesFromUserAdapter(it2){
+                                    Log.i("CLICOU","CLICOU")
+                                }
                             }
                         }
                     }
 
                 }
-            })
+            }
 
         }
 
