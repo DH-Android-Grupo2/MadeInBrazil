@@ -102,7 +102,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     it?.let { movie ->
                         val horas = movie.runtime?.div(60)
                         val minutos = movie.runtime?.rem(60)
-                        binding.tvTimeFilmsSeries.text = "(${horas}h${minutos}min)"
+                        binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                        binding.tvYearFilmsSeries.text = "(${movie?.release_date?.getFirst4Chars()})"
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie?.credits.cast?.let { it1 ->
@@ -149,9 +150,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 //                    val intent = Intent(Intent.ACTION_VIEW, uri)
 //                    startActivity(intent)
 //                }
-
-
-                binding.tvYearFilmsSeries.text = "${films?.releaseDate?.getFirst4Chars()}"
 
                 /*viewModelCast.onResultCredits?.observe(this) {
                     it?.cast.let { cast ->
