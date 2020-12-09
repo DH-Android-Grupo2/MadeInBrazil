@@ -21,7 +21,14 @@ class SerieDetailedBusiness {
                 it.logo_path = it.logo_path?.getFullImagePath()
             }
             serie.poster_path = serie.poster_path?.getFullImagePath()
-            serie.backdrop_path = serie.backdrop_path?.getFullImagePath()
+            serie.backdrop_path?.let { string ->
+                serie.backdrop_path = string.getFullImagePath()
+            }.also {
+                serie.backdrop_path = serie.poster_path
+            }
+            if(serie.overview == "") {
+                serie.overview = "Sinopse não encontrada"
+            }
             serie.seasons?.forEach {
                 it.poster_path = it.poster_path?.getFullImagePath()
                 if(it.overview == "") {

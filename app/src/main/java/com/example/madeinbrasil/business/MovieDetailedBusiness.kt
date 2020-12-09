@@ -15,6 +15,15 @@ class MovieDetailedBusiness  {
         val response = repository.getMovie(movieId)
         return if (response is ResponseAPI.Success) {
             val movie = response.data as MovieDetailed
+            if(movie.overview == "") {
+                movie.overview = "Sinopse não encontrada"
+            }
+            movie.poster_path = movie.poster_path?.getFullImagePath()
+            movie.backdrop_path?.let { string ->
+                movie.backdrop_path = string.getFullImagePath()
+            }.also {
+                movie.backdrop_path = movie.poster_path
+            }
             movie?.credits?.cast?.forEach {
                 it.profilePath = it.profilePath?.getFullImagePath()
             }

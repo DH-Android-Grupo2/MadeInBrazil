@@ -26,7 +26,7 @@ data class SerieDetailed(
         val origin_country: List<String>?,
         val original_language: String?,
         val original_name: String?,
-        val overview: String?,
+        var overview: String?,
         val popularity: Double?,
         var poster_path: String?,
         val production_companies: List<ProductionCompany>?,

@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.activity
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -81,22 +82,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                 binding.btSeasonsFilmsSeries.isVisible = false
                 setupObservables()
-                Glide.with(this)
-                        .load(films?.posterPath)
-                        .into(binding.ivBannerFilmsSeries)
-                films?.backdropPath?.let {
-                    Glide.with(this)
-                            .load(films?.backdropPath)
-                            .into(binding.ivBackDropFilmSeries)
-                }
-
-                binding.tvDescriptionTextFilmsSeries.text = films?.overview
-                binding.tvNameFilmsSeries.text = films?.title
-                binding.tvNoteFilmsSeries.text = "${films?.voteAverage?.div(2)}"
-                films?.voteAverage?.let {
-                    binding.ratingBarFilmsSeries.rating = it/2.0f
-                    binding.ratingBarFilmsSeries.stepSize = .5f
-                }
 
                 viewModelMovie.movieSucess.observe(this) {
                     it?.let { movie ->
@@ -116,6 +101,27 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                     }
                                 }
                             }
+                        }
+
+                        Glide.with(this)
+                                .load(movie.poster_path)
+                                .placeholder(R.drawable.made_in_brasil_logo)
+                                .into(binding.ivBannerFilmsSeries)
+                        movie.backdrop_path?.let {
+                            Glide.with(this)
+                                    .load(it)
+                                    .placeholder(R.drawable.made_in_brasil_logo)
+                                    .into(binding.ivBackDropFilmSeries)
+                        }?: Glide.with(this)
+                                .load(R.drawable.made_in_brasil_logo)
+                                .into(binding.ivBackDropFilmSeries)
+
+                        binding.tvDescriptionTextFilmsSeries.text = movie.overview
+                        binding.tvNameFilmsSeries.text = movie.title
+                        binding.tvNoteFilmsSeries.text = "${movie.vote_average?.div(2)}"
+                        movie.vote_average?.let {
+                            binding.ratingBarFilmsSeries.rating = (it/2.0f).toFloat()
+                            binding.ratingBarFilmsSeries.stepSize = .5f
                         }
 
                         movie.videos?.results?.forEach { trailer ->
@@ -181,12 +187,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     setupObservablesSeries()
                     Glide.with(binding.root.context)
                             .load(serie?.poster_path)
+                            .placeholder(R.drawable.made_in_brasil_logo)
                             .into(binding.ivBannerFilmsSeries)
                     serie?.backdrop_path?.let {
                         Glide.with(binding.root.context)
                                 .load(serie?.backdrop_path)
+                                .placeholder(R.drawable.made_in_brasil_logo)
                                 .into(binding.ivBackDropFilmSeries)
-                    }
+                    }?: Glide.with(this)
+                            .load(R.drawable.made_in_brasil_logo)
+                            .into(binding.ivBackDropFilmSeries)
 
                     binding.tvDescriptionTextFilmsSeries.text = serie?.overview
                     binding.tvNameFilmsSeries.text = serie?.name
