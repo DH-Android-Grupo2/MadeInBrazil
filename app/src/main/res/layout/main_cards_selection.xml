@@ -40,7 +40,6 @@
                 android:layout_height="162dp"
                 app:layout_constraintTop_toTopOf="@id/cvImageCard"
                 android:background="@color/opac_white"
-                android:src="@drawable/add_item"
                 app:layout_constraintBottom_toBottomOf="@id/cvImageCard"
                 app:layout_constraintEnd_toEndOf="@id/cvImageCard"
                 app:layout_constraintStart_toStartOf="@id/cvImageCard"/>
