@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.api
 
 import com.example.madeinbrasil.model.discover.DiscoverMovie
+import com.example.madeinbrasil.model.discoverTV.DiscoverTV
 import com.example.madeinbrasil.model.gender.GenderMovie
 import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.example.madeinbrasil.model.nowPlaying.NowPlaying
@@ -74,5 +75,15 @@ interface TmdbAPI {
            @Query("with_genres") genre: String,
             @Query("with_original_language")  language: String = "pt"
    ) : Response<DiscoverMovie>
+
+
+
+   @GET ("discover/tv")
+   suspend fun discoverTV(
+           @Query("page") pageNumber: Int,
+           @Query("with_genres")  genre: String?,
+           @Query("with_original_language") language: String = "pt"
+                    ) : Response<DiscoverTV>
+
 
 }

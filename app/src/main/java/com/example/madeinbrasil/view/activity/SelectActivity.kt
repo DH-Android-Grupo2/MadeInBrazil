@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivitySelectBinding
+import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.Genre
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.activity_select.*
@@ -15,13 +16,15 @@ import kotlinx.android.synthetic.main.activity_select.view.*
 
 class SelectActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectBinding
+    val selectedGenres = mutableListOf<Genre>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySelectBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val selectedGenres = mutableListOf<Genre>()
+
         val button = findViewById<Button>(R.id.btContinueGender)
         val chip18drama : Chip = findViewById(R.id.chip18Drama)
         val chip28action : Chip = findViewById(R.id.chip28Action)
@@ -127,6 +130,7 @@ class SelectActivity : AppCompatActivity() {
 
     fun startMenuActivity(context: Context) {
         val intent = Intent(context, MenuActivity::class.java)
+        intent.putExtra("genreList",GenreSelected(selectedGenres))
         startActivity(intent)
 
     }
