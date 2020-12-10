@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ import com.example.madeinbrasil.adapter.SerieStreamingAdapter
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.model.home.CommentRepository
+import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
@@ -141,14 +143,19 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
 
-                        binding.rvStreaming.isVisible = movie.homepage != ""
+                        //binding.rvStreaming.isVisible = movie.homepage != ""
                         binding.rvStreaming.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie.watch_providers?.results?.BR?.let { it1 ->
-                                MovieStreamingAdapter(it1.flatrate){
-                                    val uri = Uri.parse(movie.homepage)
-                                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                                    startActivity(intent)
+                                it1.flatrate?.let { it2 ->
+                                    Log.i("FLATRATE","$it2")
+                                    MovieStreamingAdapter(it2){
+                                        if(movie.homepage != ""){
+                                            val uri = Uri.parse(movie.homepage)
+                                            val intent = Intent(Intent.ACTION_VIEW, uri)
+                                            startActivity(intent)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -201,7 +208,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
 
-                    binding.rvStreaming.isVisible = serie.homepage != ""
+                    //binding.rvStreaming.isVisible = serie.homepage != ""
                     binding.rvStreaming?.apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                         adapter = serie?.watch_providers?.results?.BR?.flatrate?.let {

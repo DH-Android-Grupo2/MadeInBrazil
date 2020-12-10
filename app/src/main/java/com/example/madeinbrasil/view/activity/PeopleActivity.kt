@@ -70,8 +70,11 @@ class PeopleActivity : AppCompatActivity() {
                                 layoutManager = LinearLayoutManager(this@PeopleActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = pessoa.movie_credits?.let { it1 ->
                                     it1.cast?.let { it2 ->
-                                        FilmsSeriesFromUserAdapter(it2){
-                                            Log.i("CLICOU","CLICOU")
+                                        FilmsSeriesFromUserAdapter(it2){ result->
+                                            val intent = Intent(this@PeopleActivity, FilmsAndSeriesActivity::class.java)
+                                            intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
+                                            intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                                            startActivity(intent)
                                         }
                                     }
                                 }
@@ -101,11 +104,11 @@ class PeopleActivity : AppCompatActivity() {
 
                             binding.rvCardsListFilmes.apply {
                                 layoutManager = LinearLayoutManager(this@PeopleActivity, LinearLayoutManager.HORIZONTAL, false)
-                                adapter = pessoa.tv_credits?.let { it1 ->
+                                /*adapter = pessoa.tv_credits?.let { it1 ->
                                     it1.cast?.let { it2 ->
                                         CastDetailsAdapter(it2)
                                     }
-                                }
+                                }*/
                             }
                         }
                     }

@@ -5,5 +5,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Results(
-    val BR: BR
+    val BR: BR?
 ):Parcelable

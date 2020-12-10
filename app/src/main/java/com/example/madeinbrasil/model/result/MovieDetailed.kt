@@ -33,5 +33,5 @@ data class MovieDetailed(
         val similar: Similar?,
         val videos: Videos?,
         @SerializedName("watch/providers")
-    val watch_providers: Watchproviders?
+        val watch_providers: Watchproviders?
 ): Parcelable

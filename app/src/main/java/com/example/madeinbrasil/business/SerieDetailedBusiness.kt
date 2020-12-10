@@ -15,7 +15,7 @@ class SerieDetailedBusiness {
         return if(response is ResponseAPI.Success) {
             val serie = response.data as SerieDetailed
             serie.credits?.cast?.forEach {
-                it.profile_path = it.profile_path?.getFullImagePath()
+                it.profilePath = it.profilePath?.getFullImagePath()
             }
             serie.watch_providers?.results?.BR?.flatrate?.forEach {
                 it.logo_path = it.logo_path?.getFullImagePath()
