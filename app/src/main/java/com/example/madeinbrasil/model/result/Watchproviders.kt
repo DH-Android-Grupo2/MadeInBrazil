@@ -5,5 +5,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Watchproviders(
-    val results: Results?
+    val results: Results
 ): Parcelable

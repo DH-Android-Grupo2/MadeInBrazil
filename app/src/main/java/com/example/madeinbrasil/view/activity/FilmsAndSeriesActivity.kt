@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
@@ -142,15 +143,18 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
 
-                        binding.rvStreaming.isVisible = movie.homepage != ""
+                        //binding.rvStreaming.isVisible = movie.homepage != ""
                         binding.rvStreaming.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie.watch_providers?.results?.BR?.let { it1 ->
                                 it1.flatrate?.let { it2 ->
+                                    Log.i("FLATRATE","$it2")
                                     MovieStreamingAdapter(it2){
-                                        val uri = Uri.parse(movie.homepage)
-                                        val intent = Intent(Intent.ACTION_VIEW, uri)
-                                        startActivity(intent)
+                                        if(movie.homepage != ""){
+                                            val uri = Uri.parse(movie.homepage)
+                                            val intent = Intent(Intent.ACTION_VIEW, uri)
+                                            startActivity(intent)
+                                        }
                                     }
                                 }
                             }
@@ -204,7 +208,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
 
-                    binding.rvStreaming.isVisible = serie.homepage != ""
+                    //binding.rvStreaming.isVisible = serie.homepage != ""
                     binding.rvStreaming?.apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                         adapter = serie?.watch_providers?.results?.BR?.flatrate?.let {
