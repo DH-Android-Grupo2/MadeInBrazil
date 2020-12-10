@@ -18,7 +18,8 @@ import com.example.madeinbrasil.model.search.ResultSearch
 
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 
-class DiscoverTvAdapter(
+class DiscoverTvAdapter
+(
         private val onSerieClicked: (ResultSearch?) -> Unit
 ) : PagedListAdapter<ResultSearch, DiscoverTvAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK) {
 
