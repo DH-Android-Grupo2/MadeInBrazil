@@ -108,38 +108,38 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadContentUpcoming() {
-        viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+        viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
             homeAdapter2.currentList?.clear()
             homeAdapter2.submitList(pagedList,null)
             homeAdapter2.notifyDataSetChanged()
-        })
+        }
     }
 
     private fun loadContentNowPlaying() {
-        viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+        viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
             homeAdapter.currentList?.clear()
             homeAdapter.submitList(pagedList,null)
             homeAdapter.notifyDataSetChanged()
-       })
+        }
     }
 
 
     private fun loadContentDiscoverMovie() {
-        viewModel.discoverMoviePagedList?.observe(viewLifecycleOwner, { pagedList ->
+        viewModel.discoverMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
             homeAdapter3.currentList?.clear()
             homeAdapter3.submitList(pagedList, null)
             homeAdapter3.notifyDataSetChanged()
 
-        })
+        }
     }
 
     private fun loadContentDiscoverTv() {
-        viewModel.discoverTvPagedList?.observe(viewLifecycleOwner, { pagedList ->
+        viewModel.discoverTvPagedList?.observe(viewLifecycleOwner) { pagedList ->
             homeAdapter4.currentList?.clear()
             homeAdapter4.submitList(pagedList, null)
             homeAdapter4.notifyDataSetChanged()
 
-        })
+        }
     }
 
     private fun setupRecyclerView() {

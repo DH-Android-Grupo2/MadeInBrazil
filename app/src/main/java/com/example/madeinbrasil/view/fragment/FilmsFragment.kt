@@ -105,7 +105,7 @@ class FilmsFragment : Fragment() {
         })
     }
 
-    fun startUserActivity(context: Context) {
+    private fun startUserActivity(context: Context) {
         val intent = Intent(context, UserActivity::class.java)
         startActivity(intent)
     }

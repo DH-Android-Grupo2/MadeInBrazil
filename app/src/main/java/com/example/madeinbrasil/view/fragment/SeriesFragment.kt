@@ -44,6 +44,9 @@ class SeriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding?.ivProfileSeries?.setOnClickListener {
+            this.context?.let { it1 -> startUserActivity(it1) }
+        }
         setUpSearchView()
         activity?.let {
             viewModel = ViewModelProvider(this).get(SerieViewModel::class.java)
@@ -99,4 +102,8 @@ class SeriesFragment : Fragment() {
         })
     }
 
+    private fun startUserActivity(context: Context) {
+        val intent = Intent(context, UserActivity::class.java)
+        startActivity(intent)
+    }
 }
