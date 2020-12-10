@@ -14,9 +14,17 @@ import com.example.madeinbrasil.view.fragment.HomeFragment
 
 class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
 
-    val genre1 = HomeFragment.genre?.Selected?.get(1)
-    val genre0 = HomeFragment.genre?.Selected?.get(0)
-    val genreFinish = genre0 + genre1
+
+
+    var genreFinish = ""
+
+    val teste = HomeFragment.genre?.Selected?.onEach {
+        genreFinish = it + genreFinish
+    }
+
+
+
+
     private val repository by lazy {
         HomeRepository()
     }

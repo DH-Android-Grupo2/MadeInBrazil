@@ -5,6 +5,7 @@ import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.gender.Genre
 import com.example.madeinbrasil.model.gender.GenreSelected
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.repository.HomeRepository
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.Paging.FIRST_PAGE
@@ -14,29 +15,35 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
-class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, Result>() {
+class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, ResultSearch>() {
 
+    var vazio = ""
+    var genreSelected = ""
 
-    val genre = HomeFragment.genre.toString()
+    val teste = HomeFragment.genre?.Selected?.onEach {
+
+        genreSelected = it + genreSelected
+    }
+
     private  val  repository by lazy {
         HomeRepository()
     }
 
     override fun loadInitial(
             params: LoadInitialParams<Int>,
-            callback: LoadInitialCallback<Int, Result>
+            callback: LoadInitialCallback<Int, ResultSearch>
     ) {
 
         CoroutineScope(Dispatchers.IO).launch {
-            when (val response = repository.getDiscoverTV(FIRST_PAGE, "18")) {
+            when (val response = repository.getDiscoverTV(FIRST_PAGE, genreSelected)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as DiscoverTV
                     data.results.forEach { result ->
-                        result.poster_path = result.poster_path?.getFullImagePath()
-                        result.backdrop_path?.let { string ->
-                            result.backdrop_path = string.getFullImagePath()
+                        result.posterPath = result.posterPath?.getFullImagePath()
+                        result.backdropPath?.let { string ->
+                            result.backdropPath = string.getFullImagePath()
                         }.also {
-                            result.backdrop_path = result.poster_path
+                            result.backdropPath = result.backdropPath
                         }
                     }
 
@@ -52,21 +59,21 @@ class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, Result>() {
 
     override fun loadAfter(
             params: LoadParams<Int>,
-            callback: LoadCallback<Int, Result>
+            callback: LoadCallback<Int, ResultSearch>
     ) {
         val page = params.key
 
 
         CoroutineScope(Dispatchers.IO).launch {
-            when (val response = repository.getDiscoverTV(page, "18")) {
+            when (val response = repository.getDiscoverTV(page,genreSelected)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as DiscoverTV
                     data.results.forEach { result ->
-                        result.poster_path = result.poster_path?.getFullImagePath()
-                        result.backdrop_path?.let { string ->
-                            result.backdrop_path= string.getFullImagePath()
+                        result.posterPath = result.posterPath?.getFullImagePath()
+                        result.backdropPath?.let { string ->
+                            result.backdropPath= string.getFullImagePath()
                         }.also {
-                            result.backdrop_path= result.poster_path
+                            result.backdropPath= result.posterPath
                         }
                     }
                     callback.onResult(data.results, page + 1)
@@ -82,24 +89,24 @@ class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, Result>() {
 
     override fun loadBefore(
             params: LoadParams<Int>,
-            callback: LoadCallback<Int, Result>
+            callback: LoadCallback<Int, ResultSearch>
     ) {
         val page = params.key
 
 
 
         CoroutineScope(Dispatchers.IO).launch {
-            when (val response = repository.getDiscoverTV(page, "18")) {
+            when (val response = repository.getDiscoverTV(page, genreSelected)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as DiscoverTV
                     data.results.forEach { result ->
-                        result.poster_path?.let { string ->
-                            result.poster_path = string.getFullImagePath()
+                        result.posterPath?.let { string ->
+                            result.posterPath = string.getFullImagePath()
                         }
-                        result.backdrop_path?.let { string ->
-                            result.backdrop_path = string.getFullImagePath()
+                        result.backdropPath?.let { string ->
+                            result.backdropPath = string.getFullImagePath()
                         }.also {
-                            result.backdrop_path = result.poster_path
+                            result.backdropPath = result.posterPath
                         }
                     }
                     callback.onResult(data.results, page - 1)

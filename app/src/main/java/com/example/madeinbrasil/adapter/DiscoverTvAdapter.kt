@@ -14,12 +14,13 @@ import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCardsMenuBinding
 import com.example.madeinbrasil.model.discoverTV.Result
+import com.example.madeinbrasil.model.search.ResultSearch
 
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 
 class DiscoverTvAdapter(
-        private val onSerieClicked: (Result?) -> Unit
-) : PagedListAdapter<Result, DiscoverTvAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
+        private val onSerieClicked: (ResultSearch?) -> Unit
+) : PagedListAdapter<ResultSearch, DiscoverTvAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -38,9 +39,9 @@ class DiscoverTvAdapter(
             binding.root
     ) {
 
-        fun bind(serie: Result?, onSerieClicked: (Result?) -> Unit) = with(binding) {
+        fun bind(serie: ResultSearch?, onSerieClicked: (ResultSearch?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
-                    .load(serie?.poster_path)
+                    .load(serie?.posterPath)
                     .placeholder(R.drawable.made_in_brasil_logo)
                     .into(cvImageCardMenu)
             tvNameRecyclerViewMenu.text = serie?.name
@@ -55,7 +56,7 @@ class DiscoverTvAdapter(
                 dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
                 Glide.with(it.context)
-                        .load(serie?.poster_path)
+                        .load(serie?.posterPath)
                         .placeholder(R.drawable.made_in_brasil_logo)
                         .into(dialog.ivDialogPoster)
 

@@ -57,6 +57,7 @@ class SelectActivity : AppCompatActivity() {
 
 
 
+
         chip28action.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip28action.isChecked){
                 selectedGenres.add("28,")
@@ -85,6 +86,9 @@ class SelectActivity : AppCompatActivity() {
                 selectedGenres.add("16,")
             }
         }
+
+
+
 
 
 
