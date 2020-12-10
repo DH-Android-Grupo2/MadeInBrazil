@@ -13,6 +13,7 @@ import com.example.madeinbrasil.model.discoverTV.Result
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.Genre
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.activity_select.*
 import kotlinx.android.synthetic.main.activity_select.view.*
 
@@ -29,7 +30,7 @@ class SelectActivity : AppCompatActivity() {
         binding = ActivitySelectBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        val chipgroup : ChipGroup = findViewById<ChipGroup>(R.id.chipGroupGender)
         val button = findViewById<Button>(R.id.btContinueGender)
         val chip18drama : Chip = findViewById(R.id.chip18Drama)
         val chip28action : Chip = findViewById(R.id.chip28Action)
@@ -52,6 +53,8 @@ class SelectActivity : AppCompatActivity() {
         chip18drama.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip18drama.isChecked){
                 selectedGenres.add("18,")
+            } else {
+                selectedGenres.remove("18,")
             }
         }
 
@@ -61,6 +64,8 @@ class SelectActivity : AppCompatActivity() {
         chip28action.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip28action.isChecked){
                 selectedGenres.add("28,")
+            }else {
+                selectedGenres.remove("28,")
             }
         }
 
@@ -68,6 +73,8 @@ class SelectActivity : AppCompatActivity() {
         chip27horror.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip27horror.isChecked){
                 selectedGenres.add("27,")
+            }else {
+                selectedGenres.remove("27,")
             }
         }
 
@@ -75,6 +82,8 @@ class SelectActivity : AppCompatActivity() {
         chip10751family.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip10751family.isChecked){
                 selectedGenres.add("10751,")
+            }else {
+                selectedGenres.remove("10751,")
             }
         }
 
@@ -84,9 +93,10 @@ class SelectActivity : AppCompatActivity() {
         chip16animation.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip16animation.isChecked){
                 selectedGenres.add("16,")
+            } else {
+                selectedGenres.remove("16,")
             }
         }
-
 
 
 
@@ -96,6 +106,8 @@ class SelectActivity : AppCompatActivity() {
         chip99doc.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip99doc.isChecked){
                 selectedGenres.add("99,")
+            }else {
+                selectedGenres.remove("99,")
             }
         }
 
@@ -103,6 +115,8 @@ class SelectActivity : AppCompatActivity() {
         chip35comedy.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip35comedy.isChecked){
                 selectedGenres.add("35,")
+            }else {
+                selectedGenres.remove("35,")
             }
         }
 
@@ -112,6 +126,8 @@ class SelectActivity : AppCompatActivity() {
         chip80crime.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip80crime.isChecked){
                 selectedGenres.add("80,")
+            }else {
+                selectedGenres.remove("80,")
             }
         }
 
@@ -120,6 +136,8 @@ class SelectActivity : AppCompatActivity() {
         chip14fantasy.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip14fantasy.isChecked){
                 selectedGenres.add("14,")
+            }else {
+                selectedGenres.remove("14,")
             }
         }
 
@@ -127,6 +145,8 @@ class SelectActivity : AppCompatActivity() {
         chip9648mistery.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip9648mistery.isChecked){
                 selectedGenres.add("9648,")
+            }else {
+                selectedGenres.remove("9648,")
             }
         }
 
@@ -134,12 +154,16 @@ class SelectActivity : AppCompatActivity() {
         chip10752war.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip10752war.isChecked){
                 selectedGenres.add("10752,")
+            }else {
+                selectedGenres.remove("10752,")
             }
         }
 
         chip878scifi.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip878scifi.isChecked){
                 selectedGenres.add("878,")
+            }else {
+                selectedGenres.remove("878,")
             }
         }
 
@@ -147,12 +171,16 @@ class SelectActivity : AppCompatActivity() {
         chip53Thriller.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip53Thriller.isChecked){
                 selectedGenres.add("53,")
+            }else {
+                selectedGenres.remove("53,")
             }
         }
 
         chip10402music.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip10402music.isChecked){
                 selectedGenres.add("10402,")
+            }else {
+                selectedGenres.remove("10402,")
             }
         }
 
@@ -160,6 +188,8 @@ class SelectActivity : AppCompatActivity() {
         chip10770tvmovie.setOnCheckedChangeListener { buttonView, isChecked ->
             if (chip10770tvmovie.isChecked){
                 selectedGenres.add("10770,")
+            }else {
+                selectedGenres.remove("10770,")
             }
         }
 
