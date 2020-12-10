@@ -50,6 +50,10 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
             viewModel.postClickedItem(it)
         }
 
+        binding.btnClose.setOnClickListener {
+            dismiss()
+        }
+
     }
 
     private fun SetupSearchView() {

@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/vgMainCard"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardViewMenu"
+        android:id="@+id/cardView"
         style="@style/CardViewDefault"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,29 +24,21 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/tvShowCover"
-                android:layout_width="100dp"
-                android:layout_height="120dp"
+                android:id="@+id/cvImageCard"
+                android:layout_width="139dp"
+                android:layout_height="162dp"
                 android:scaleType="centerCrop"
+                tools:src="@drawable/auto_da_compadecida_capa"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/tvShowName"/>
 
-            <ImageView
-                android:id="@+id/imDeleteShow"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/remove_item"
-                app:layout_constraintTop_toTopOf="@id/tvShowCover"
-                app:layout_constraintEnd_toEndOf="@id/tvShowCover"
-                android:layout_margin="5dp"/>
-
             <TextView
                 android:id="@+id/tvShowName"
                 style="@style/TextViewFilmsSeriesDefault"
                 tools:text="O auto da Compadecida"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
@@ -55,7 +47,7 @@
                 android:ellipsize="end"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvShowCover"
+                app:layout_constraintTop_toBottomOf="@id/cvImageCard"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

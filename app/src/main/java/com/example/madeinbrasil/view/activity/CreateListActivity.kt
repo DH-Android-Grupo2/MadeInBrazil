@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.adapter.SelectedShowsAdapter
 import com.example.madeinbrasil.databinding.ActivityCreateListBinding
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
@@ -24,10 +25,14 @@ class CreateListActivity : AppCompatActivity() {
     private lateinit var selectMovieViewModel: SelectMovieViewModel
     private var selectedMovies: MutableList<Int> = mutableListOf()
     private var selectedSeries: MutableList<Int> = mutableListOf()
-    private var selectedItems: MutableList<Any> = mutableListOf()
 
     private val selectedShowsAdapter by lazy {
-        SelectedShowsAdapter()
+        SelectedShowsAdapter() {
+            when(it) {
+                is Result -> selectedMovies.remove(it.id)
+                is ResultSearch -> selectedSeries.remove(it.id)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,11 +88,15 @@ class CreateListActivity : AppCompatActivity() {
             }
         })
 
-        selectSerieViewModel.clikedItemId.observe(this, {
-            if (selectedSeries.contains(it))
-                selectedSeries.remove(it)
-            else
-                selectedSeries.add(it)
+        selectSerieViewModel.clickedSerieItem.observe(this, {
+            if (selectedSeries.contains(it.id)) {
+                selectedSeries.remove(it.id)
+                selectedShowsAdapter.deleteItem(it)
+            }
+            else {
+                selectedSeries.add(it.id)
+                selectedShowsAdapter.addItem(it)
+            }
         })
 
     }
