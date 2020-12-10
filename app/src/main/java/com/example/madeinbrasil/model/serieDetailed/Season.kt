@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.model.serieDetailed
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -10,6 +11,7 @@ data class Season(
     val id: Int?,
     var name: String?,
     var overview: String?,
-    var poster_path: String?,
+    @SerializedName("poster_path")
+    var posterPath: String?,
     val season_number: Int?
 ): Parcelable

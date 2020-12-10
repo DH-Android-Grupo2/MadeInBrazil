@@ -6,10 +6,12 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class SerieDetailed(
-        var backdrop_path: String?,
+        @SerializedName("backdrop_path")
+        var backdropPath: String?,
         val created_by: List<CreatedBy>?,
         val credits: Credits?,
-        val episode_run_time: List<Int>?,
+        @SerializedName("episode_run_time")
+        var episodeRunTime: List<Int>?,
         val first_air_date: String?,
         val genres: List<Genre>?,
         val homepage: String?,
@@ -28,7 +30,8 @@ data class SerieDetailed(
         val original_name: String?,
         var overview: String?,
         val popularity: Double?,
-        var poster_path: String?,
+        @SerializedName("poster_path")
+        var posterPath: String?,
         val production_companies: List<ProductionCompany>?,
         val production_countries: List<ProductionCountry>?,
         val recommendations: Recommendations?,

@@ -32,7 +32,7 @@ class SerieStreamingAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind(flatrate: Flatrate, streamingLink: (Flatrate) -> Unit) = with(binding) {
             Glide.with(itemView.context)
-                .load(flatrate.logo_path)
+                .load(flatrate.logoPath)
                 .placeholder(R.drawable.made_in_brasil_logo)
                 .into(ivStreaming)
 

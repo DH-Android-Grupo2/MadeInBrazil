@@ -33,7 +33,7 @@ class SeasonsAdapter(
 
         fun bind(season: Season, onSeasonCLicked: (Season?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
-                .load(season?.poster_path)
+                .load(season?.posterPath)
                 .placeholder(R.drawable.made_in_brasil_logo)
                 .into(cvImageSeason)
 

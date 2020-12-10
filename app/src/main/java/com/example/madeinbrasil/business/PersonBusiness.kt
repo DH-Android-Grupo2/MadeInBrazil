@@ -16,15 +16,15 @@ class PersonBusiness {
         val response = repository.getPerson(personId)
         return if (response is ResponseAPI.Success) {
             val person = response.data as Person
-//            person.movie_credits?.cast?.filter { it.original_language.equals("pt") }
+
             if(person.biography == "") {
                 person.biography = "Biografia não encontrada"
             }
-            if(person.birthday == "") {
-                person.birthday = "Idade não informada"
-            }else{
-                person.birthday = person.birthday?.getFirst4Chars()
+
+            person.birthday?.let {
+                person.birthday = it.getFirst4Chars()
             }
+
             person.movie_credits?.cast?.forEach {
                 it.posterPath = it.posterPath?.getFullImagePath()
             }

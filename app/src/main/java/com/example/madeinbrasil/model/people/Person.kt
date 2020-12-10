@@ -22,5 +22,5 @@ data class Person(
         val place_of_birth: String?,
         val popularity: Double?,
         var profile_path: String?,
-        val tv_credits: MoviesTVFromPerson?
+        val tv_credits: TvPerson?
 ): Parcelable

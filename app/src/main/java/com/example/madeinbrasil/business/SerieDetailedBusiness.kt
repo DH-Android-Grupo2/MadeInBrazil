@@ -18,19 +18,19 @@ class SerieDetailedBusiness {
                 it.profilePath = it.profilePath?.getFullImagePath()
             }
             serie.watch_providers?.results?.BR?.flatrate?.forEach {
-                it.logo_path = it.logo_path?.getFullImagePath()
+                it.logoPath = it.logoPath?.getFullImagePath()
             }
-            serie.poster_path = serie.poster_path?.getFullImagePath()
-            serie.backdrop_path?.let { string ->
-                serie.backdrop_path = string.getFullImagePath()
+            serie.posterPath = serie.posterPath?.getFullImagePath()
+            serie.backdropPath?.let { string ->
+                serie.backdropPath = string.getFullImagePath()
             }.also {
-                serie.backdrop_path = serie.poster_path
+                serie.backdropPath = serie.posterPath
             }
             if(serie.overview == "") {
                 serie.overview = "Sinopse não encontrada"
             }
             serie.seasons?.forEach {
-                it.poster_path = it.poster_path?.getFullImagePath()
+                it.posterPath = it.posterPath?.getFullImagePath()
                 if(it.overview == "") {
                     it.overview = "Sinopse não encontrada"
                 }

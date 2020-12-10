@@ -1,6 +1,6 @@
 package com.example.madeinbrasil.view.activity
 
-import android.annotation.SuppressLint
+
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -30,7 +30,6 @@ import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
-import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_TV_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
@@ -180,12 +179,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     serieDetailed = serie
                     setupObservablesSeries()
                     Glide.with(binding.root.context)
-                            .load(serie?.poster_path)
+                            .load(serie?.posterPath)
                             .placeholder(R.drawable.made_in_brasil_logo)
                             .into(binding.ivBannerFilmsSeries)
-                    serie?.backdrop_path?.let {
+                    serie?.backdropPath?.let {
                         Glide.with(binding.root.context)
-                                .load(serie?.backdrop_path)
+                                .load(serie?.backdropPath)
                                 .placeholder(R.drawable.made_in_brasil_logo)
                                 .into(binding.ivBackDropFilmSeries)
                     }?: Glide.with(this)
@@ -208,8 +207,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
 
-                    //binding.rvStreaming.isVisible = serie.homepage != ""
-                    binding.rvStreaming?.apply {
+                    binding.rvStreaming.isVisible = serie.homepage != ""
+                    binding.rvStreaming.apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                         adapter = serie?.watch_providers?.results?.BR?.flatrate?.let {
                             SerieStreamingAdapter(it) {
@@ -219,7 +218,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    serie?.episode_run_time?.forEach { binding.tvTimeFilmsSeries.text = "$it min" }
+                    serie?.episodeRunTime?.forEach {
+                        if(it > 60) {
+                            val horas = listOf(it.div(60))
+                            val min = listOf(it.rem(60))
+                            binding.tvTimeFilmsSeries.text = "${horas[0]}h${min[0]}min"
+                        }else {
+                            binding.tvTimeFilmsSeries.text = "$it min"
+                        }
+                    }
                     serie?.videos?.results?.forEach {
                         binding.btTrailerFilmsSeries.isVisible = it.key != ""
                     }
@@ -232,7 +239,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = castSerie?.let { it1 -> SerieCastAdapter(it1) {
                                 val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
-                                intent.putExtra(BASE_ACTOR_TV_KEY, it)
+                                intent.putExtra(BASE_ACTOR_KEY, it)
                                 intent.putExtra(VALUE, 2)
                                 startActivity(intent)
                                 }
