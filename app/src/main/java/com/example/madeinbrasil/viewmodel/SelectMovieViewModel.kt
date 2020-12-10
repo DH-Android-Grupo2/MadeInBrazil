@@ -15,20 +15,15 @@ class SelectMovieViewModel: ViewModel() {
     private var searchMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var query = ""
 
-    var clickedItemId: MutableLiveData<Int> = MutableLiveData()
+    var clickedMovieItem: MutableLiveData<Result> = MutableLiveData()
 
     init {
         searchData()
     }
 
-
     fun setQuery(newQuery:String){
         this.query = newQuery
         searchData()
-    }
-
-    fun getQuery():String{
-        return query
     }
 
     fun searchData(){
@@ -46,8 +41,8 @@ class SelectMovieViewModel: ViewModel() {
                 .build()
     }
 
-    fun postClickedItemId(id: Int) {
-        clickedItemId.postValue(id)
+    fun postClickedItem(movie: Result) {
+        clickedMovieItem.postValue(movie)
     }
 
 }

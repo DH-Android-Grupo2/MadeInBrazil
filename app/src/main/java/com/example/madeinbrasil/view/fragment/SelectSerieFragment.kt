@@ -38,9 +38,9 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         SetupSearchView()
+        setupRecyclerView()
         activity?.let{
             viewModel = ViewModelProvider(it).get(SelectSerieViewModel::class.java)
-            setupRecyclerView()
             loadContentSearch()
         }
 
@@ -56,14 +56,12 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query:String):Boolean {
                 viewModel.setQuerySerie(query)
-                setupRecyclerView()
                 loadContentSearch()
                 return true
             }
 
             override fun onQueryTextChange(newText: String):Boolean{
                 viewModel.setQuerySerie(newText)
-                setupRecyclerView()
                 loadContentSearch()
                 return true
             }

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.adapter.SelectMovieAdapter
 import com.example.madeinbrasil.databinding.FragmentSelectMovieBinding
+import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.viewmodel.SelectMovieViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -25,7 +26,7 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: SelectMovieViewModel
 
     private val selectMovieAdapter by lazy {
-        arguments?.getIntArray(SELECTED_MOVIES)?.let { SelectMovieAdapter(it.toMutableList()) }
+        arguments?.getIntArray(SELECTED_MOVIES)?.let {SelectMovieAdapter(it.toMutableList())}
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -39,14 +40,14 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         SetupSearchView()
+        setupRecyclerView()
         activity?.let{
             viewModel = ViewModelProvider(it).get(SelectMovieViewModel::class.java)
-            setupRecyclerView()
             loadContentSearch()
         }
 
         selectMovieAdapter?.onItemClick = {
-            viewModel.postClickedItemId(it)
+            viewModel.postClickedItem(it)
         }
 
     }
@@ -58,14 +59,12 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
         searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query:String):Boolean {
                 viewModel.setQuery(query)
-                setupRecyclerView()
                 loadContentSearch()
                 return true
             }
 
             override fun onQueryTextChange(newText: String):Boolean{
                 viewModel.setQuery(newText)
-                setupRecyclerView()
                 loadContentSearch()
                 return true
             }

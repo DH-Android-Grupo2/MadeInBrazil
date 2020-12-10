@@ -2,15 +2,20 @@ package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.os.Parcelable
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.madeinbrasil.adapter.SelectedShowsAdapter
 import com.example.madeinbrasil.databinding.ActivityCreateListBinding
+import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
 import com.example.madeinbrasil.view.fragment.SelectMovieFragment
 import com.example.madeinbrasil.view.fragment.SelectSerieFragment
 import com.example.madeinbrasil.viewmodel.SelectMovieViewModel
 import com.example.madeinbrasil.viewmodel.SelectSerieViewModel
+import java.util.ArrayList
 
 class CreateListActivity : AppCompatActivity() {
 
@@ -19,6 +24,11 @@ class CreateListActivity : AppCompatActivity() {
     private lateinit var selectMovieViewModel: SelectMovieViewModel
     private var selectedMovies: MutableList<Int> = mutableListOf()
     private var selectedSeries: MutableList<Int> = mutableListOf()
+    private var selectedItems: MutableList<Any> = mutableListOf()
+
+    private val selectedShowsAdapter by lazy {
+        SelectedShowsAdapter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +37,16 @@ class CreateListActivity : AppCompatActivity() {
 
         selectSerieViewModel = ViewModelProvider(this).get(SelectSerieViewModel::class.java)
         selectMovieViewModel = ViewModelProvider(this).get(SelectMovieViewModel::class.java)
+        setUpRecyclerView()
         setupButtonListeners()
         setupShowClickListeners()
+    }
 
+    private fun setUpRecyclerView() {
+        binding.rvSelectedShows.apply {
+            layoutManager = LinearLayoutManager(this@CreateListActivity, RecyclerView.HORIZONTAL, false)
+            adapter = selectedShowsAdapter
+        }
     }
 
     private fun setupButtonListeners() {
@@ -55,11 +72,15 @@ class CreateListActivity : AppCompatActivity() {
     }
 
     private fun setupShowClickListeners() {
-        selectMovieViewModel.clickedItemId.observe(this, {
-            if (selectedMovies.contains(it))
-                selectedMovies.remove(it)
-            else
-                selectedMovies.add(it)
+        selectMovieViewModel.clickedMovieItem.observe(this, {
+            if (selectedMovies.contains(it.id)) {
+                selectedMovies.remove(it.id)
+                selectedShowsAdapter.deleteItem(it)
+            }
+            else {
+                selectedMovies.add(it.id)
+                selectedShowsAdapter.addItem(it)
+            }
         })
 
         selectSerieViewModel.clikedItemId.observe(this, {
