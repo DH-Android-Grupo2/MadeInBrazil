@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/vgMainCard"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardView"
+        android:id="@+id/cardViewMenu"
         style="@style/CardViewDefault"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,30 +24,20 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/cvImageCard"
-                android:layout_width="139dp"
-                android:layout_height="162dp"
+                android:id="@+id/tvShowCover"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tvNameRecyclerView"/>
-
-            <ImageView
-                android:id="@+id/tvSelectionCover"
-                android:layout_width="139dp"
-                android:layout_height="162dp"
-                app:layout_constraintTop_toTopOf="@id/cvImageCard"
-                android:background="@color/opac_white"
-                app:layout_constraintBottom_toBottomOf="@id/cvImageCard"
-                app:layout_constraintEnd_toEndOf="@id/cvImageCard"
-                app:layout_constraintStart_toStartOf="@id/cvImageCard"/>
+                app:layout_constraintBottom_toTopOf="@id/tvShowName"/>
 
             <TextView
-                android:id="@+id/tvNameRecyclerView"
+                android:id="@+id/tvShowName"
                 style="@style/TextViewFilmsSeriesDefault"
                 tools:text="O auto da Compadecida"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
@@ -56,18 +46,10 @@
                 android:ellipsize="end"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cvImageCard"
+                app:layout_constraintTop_toBottomOf="@id/tvShowCover"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/tvSelectionIcon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:padding="5dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -9,9 +10,9 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.databinding.MainCardsSelectionBinding
 
-class SelectMovieAdapter(): PagedListAdapter<Result, SelectMovieAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
+class SelectMovieAdapter(private var selectedItems: MutableList<Int>): PagedListAdapter<Result, SelectMovieAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
 
-    var selectedItems = mutableListOf<Int>()
+    var onItemClick: ((Result) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -22,12 +23,14 @@ class SelectMovieAdapter(): PagedListAdapter<Result, SelectMovieAdapter.ViewHold
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie = getItem(position)
 
-        holder.bind(movie, selectedItems)
-        holder.itemView.setOnClickListener {
-            tooglePosition(movie)
-            notifyItemChanged(position)
+        movie?.let {
+            holder.bind(movie, selectedItems)
+            holder.itemView.setOnClickListener {
+                onItemClick?.invoke(movie)
+                tooglePosition(movie)
+                notifyItemChanged(position)
+            }
         }
-
     }
 
     private fun tooglePosition(movie: Result?) {
@@ -54,10 +57,14 @@ class SelectMovieAdapter(): PagedListAdapter<Result, SelectMovieAdapter.ViewHold
 
                 tvNameRecyclerView.text = movie.title
 
-                if(selectedItems.contains(it.id))
-                    tvSelectionCover.setImageResource(R.drawable.remove_item)
-                else
-                    tvSelectionCover.setImageResource(R.drawable.add_item)
+                if(selectedItems.contains(movie.id)) {
+                    tvSelectionIcon.setImageResource(R.drawable.remove_item)
+                    tvSelectionCover.visibility = View.INVISIBLE
+                }
+                else {
+                    tvSelectionIcon.setImageResource(R.drawable.add_item)
+                    tvSelectionCover.visibility = View.VISIBLE
+                }
             }
         }
     }

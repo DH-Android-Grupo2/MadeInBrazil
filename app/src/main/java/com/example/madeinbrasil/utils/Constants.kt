@@ -36,6 +36,8 @@ class Constants {
         const val SERIE_TAG = "serie"
         const val BASE_EPISODE_KEY = "episode"
         const val VALUE = "position"
+        const val SELECTED_MOVIES = "selected_movies"
+        const val SELECTED_SERIES = "selected_series"
     }
 
     object Paging {
