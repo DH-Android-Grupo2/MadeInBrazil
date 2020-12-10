@@ -44,9 +44,6 @@ class SeriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.ivProfileFilms?.setOnClickListener {
-            this.context?.let { it1 -> startUserActivity(it1) }
-        }
         setUpSearchView()
         activity?.let {
             viewModel = ViewModelProvider(this).get(SerieViewModel::class.java)
@@ -62,10 +59,6 @@ class SeriesFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSeriesBinding.inflate(layoutInflater, container, false)
         return binding?.root
-    }
-    fun startUserActivity(context: Context) {
-        val intent = Intent(context, UserActivity::class.java)
-        startActivity(intent)
     }
 
     private fun setUpRecyclerView() {
@@ -104,11 +97,6 @@ class SeriesFragment : Fragment() {
             }
 
         })
-    }
-    fun startUserActivity(context: Context) {
-        val intent2 = Intent(context, UserActivity::class.java)
-        startActivity(intent2)
-    }
     }
 
 }

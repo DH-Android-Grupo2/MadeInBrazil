@@ -7,6 +7,7 @@ class Constants {
         const val BASE_URL_v4 = "https://api.themoviedb.org/4/"
         const val BASE_URL_ORIGINAL_IMAGE = "https://image.tmdb.org/t/p/original"
         const val BASE_URL_YOUTUBE_BROWSER = "https://www.youtube.com/watch?v="
+        const val BASE_URL_YOUTUBE_APP = "vnd.youtube:"
         const val API_AUTH_NAME = "Authorization"
         const val API_AUTH_VALUE = "Bearer eyJhbGciOiJIUzI1NiJ9.ey" +
                 "JhdWQiOiIwMDg3YjJhMzE0ZDg0ZjQ4MTFkMWEyYzc1NTg1MDN" +
@@ -31,6 +32,8 @@ class Constants {
         const val BASE_SERIE_KEY = "Serie"
         const val ID_FRAGMENTS = "idFragment"
         const val BASE_ACTOR_KEY = "Actor"
+        const val MOVIE_TAG = "movie"
+        const val SERIE_TAG = "serie"
         const val BASE_EPISODE_KEY = "episode"
         const val VALUE = "position"
     }
