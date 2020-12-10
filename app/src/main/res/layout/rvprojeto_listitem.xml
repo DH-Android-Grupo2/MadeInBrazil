@@ -75,7 +75,7 @@
     <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_favorite_20"
+        android:src="@drawable/ic_baseline_favorite_30"
         android:background="@color/colorPrimary"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
