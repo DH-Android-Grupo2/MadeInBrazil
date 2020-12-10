@@ -17,10 +17,10 @@ data class Person(
         val id: Int,
         val imdb_id: String?,
         val known_for_department: String?,
-        val movie_credits: MovieCredits?,
+        val movie_credits: MoviesTVFromPerson?,
         val name: String?,
         val place_of_birth: String?,
         val popularity: Double?,
         var profile_path: String?,
-        val tv_credits: MovieCredits?
+        val tv_credits: MoviesTVFromPerson?
 ): Parcelable

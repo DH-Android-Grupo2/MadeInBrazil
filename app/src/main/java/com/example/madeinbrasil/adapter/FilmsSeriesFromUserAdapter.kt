@@ -17,9 +17,11 @@ import com.example.madeinbrasil.model.movieCredits.Cast
 
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 import com.example.madeinbrasil.model.movieCredits.MovieCredits
+import com.example.madeinbrasil.model.upcoming.Result
+
 class FilmsSeriesFromUserAdapter(
-        private var filmList: List<Cast> = listOf(),
-        private val onMovieClicked: (Cast?) -> Unit
+        private var filmList: List<Result> = listOf(),
+        private val onMovieClicked: (Result?) -> Unit
 ): RecyclerView.Adapter<FilmsSeriesFromUserAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,7 +43,7 @@ class FilmsSeriesFromUserAdapter(
             binding.root
     ) {
 
-        fun bind(cast: Cast?, onMovieClicked: (Cast?) -> Unit) = with(binding) {
+        fun bind(cast: Result?, onMovieClicked: (Result?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                     .load(cast?.posterPath)
                     .placeholder(R.drawable.made_in_brasil_logo)
