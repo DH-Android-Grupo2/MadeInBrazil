@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityMyProfileOptionsBinding
 import com.example.madeinbrasil.view.fragment.FavoritesFragment
+import com.example.madeinbrasil.view.fragment.HomeFragment
 import com.example.madeinbrasil.view.fragment.MyListsFragment
 import com.example.madeinbrasil.view.fragment.WatchedFragment
 import com.google.android.material.tabs.TabLayout
@@ -28,6 +29,9 @@ class MyProfileOptionsActivity : AppCompatActivity() {
             super.onBackPressed()
         }
 
+
+
+        initFragments(MyListsFragment())
 
         binding.tlOptionsProfile.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {

@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -42,7 +44,9 @@ class SeriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding?.ivProfileFilms?.setOnClickListener {
+            this.context?.let { it1 -> startUserActivity(it1) }
+        }
         setUpSearchView()
         activity?.let {
             viewModel = ViewModelProvider(this).get(SerieViewModel::class.java)
@@ -100,6 +104,11 @@ class SeriesFragment : Fragment() {
             }
 
         })
+    }
+    fun startUserActivity(context: Context) {
+        val intent2 = Intent(context, UserActivity::class.java)
+        startActivity(intent2)
+    }
     }
 
 }
