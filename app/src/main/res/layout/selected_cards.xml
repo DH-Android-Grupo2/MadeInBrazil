@@ -33,6 +33,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/tvShowName"/>
 
+            <ImageView
+                android:id="@+id/imDeleteShow"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/remove_item"
+                app:layout_constraintTop_toTopOf="@id/tvShowCover"
+                app:layout_constraintEnd_toEndOf="@id/tvShowCover"
+                android:layout_margin="5dp"/>
+
             <TextView
                 android:id="@+id/tvShowName"
                 style="@style/TextViewFilmsSeriesDefault"

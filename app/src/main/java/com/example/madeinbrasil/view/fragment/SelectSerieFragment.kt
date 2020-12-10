@@ -47,6 +47,11 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
         selectSerieAdapter?.onItemClick = {
             viewModel.postClikedItem(it)
         }
+
+        binding.btnClose.setOnClickListener {
+            dismiss()
+        }
+
     }
 
     private fun SetupSearchView() {
