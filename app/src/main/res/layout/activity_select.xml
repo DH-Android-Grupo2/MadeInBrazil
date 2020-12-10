@@ -137,9 +137,30 @@
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip15"
+            android:id="@+id/chip12Aventura"
             style="@style/ChipDefault"
-            android:text="@string/string_suspense"
+            android:text="Aventura"
+            android:checked="false"
+            />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip37Faroeste"
+            style="@style/ChipDefault"
+            android:text="Faroeste"
+            android:checked="false"
+            />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip10749Romance"
+            style="@style/ChipDefault"
+            android:text="Romance"
+            android:checked="false"
+            />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip36Historia"
+            style="@style/ChipDefault"
+            android:text="História"
             android:checked="false"
             />
 
