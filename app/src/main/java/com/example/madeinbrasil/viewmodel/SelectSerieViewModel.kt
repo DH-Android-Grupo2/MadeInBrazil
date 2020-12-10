@@ -26,10 +26,6 @@ class SelectSerieViewModel: ViewModel() {
         searchSerieData()
     }
 
-    fun getQuerySerie(): String {
-        return query
-    }
-
     private fun searchSerieData() {
 
         val tmdbSourceFactory = SearchSerieDataSourceFactory(query)

@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -54,10 +55,14 @@ class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter
 
                 tvNameRecyclerView.text = serie.name
 
-                if(selectedItems.contains(serie.id))
-                    tvSelectionCover.setImageResource(R.drawable.remove_item)
-                else
-                    tvSelectionCover.setImageResource(R.drawable.add_item)
+                if(selectedItems.contains(serie.id)) {
+                    tvSelectionIcon.setImageResource(R.drawable.remove_item)
+                    tvSelectionCover.visibility = View.INVISIBLE
+                }
+                else {
+                    tvSelectionIcon.setImageResource(R.drawable.add_item)
+                    tvSelectionCover.visibility = View.VISIBLE
+                }
             }
         }
     }
