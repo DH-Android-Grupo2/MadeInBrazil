@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.adapter.DiscoverTvAdapter
 import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
+import com.example.madeinbrasil.model.discover.DiscoverMovie
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
@@ -24,8 +25,9 @@ import com.example.madeinbrasil.viewModel.HomeViewModel
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private var binding: FragmentHomeBinding? = null
-    var movieComplete:MovieDetailed? = null
+    var movieComplete: MovieDetailed? = null
     private  var selected: GenreSelected? = null
+    private var discover: DiscoverMovie? = null
     companion object {
          var genre : GenreSelected? = null
     }
@@ -134,12 +136,18 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadContentDiscoverTv() {
-        viewModel.discoverTvPagedList?.observe(viewLifecycleOwner) { pagedList ->
-            homeAdapter4.currentList?.clear()
-            homeAdapter4.submitList(pagedList, null)
-            homeAdapter4.notifyDataSetChanged()
+        discover?.results?.let {
+            if(it.size < 20) {
+                loadContentNowPlaying()
+            }else {
+                viewModel.discoverTvPagedList?.observe(viewLifecycleOwner) { pagedList ->
+                    homeAdapter4.currentList?.clear()
+                    homeAdapter4.submitList(pagedList, null)
+                    homeAdapter4.notifyDataSetChanged()
 
-        }
+                }
+            }
+        }?: loadContentNowPlaying()
     }
 
     private fun setupRecyclerView() {
@@ -164,7 +172,7 @@ class HomeFragment : Fragment() {
 
         binding?.rvCardListSeries?.apply {
            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
-                loadContentDiscoverTv()
+            loadContentDiscoverTv()
             adapter = homeAdapter4
         }
     }
