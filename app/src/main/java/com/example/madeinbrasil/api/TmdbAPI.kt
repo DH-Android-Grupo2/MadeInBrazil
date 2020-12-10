@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.api
 
 import com.example.madeinbrasil.model.gender.GenderMovie
+import com.example.madeinbrasil.model.gender.GenderSerie
 import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.example.madeinbrasil.model.nowPlaying.NowPlaying
 import com.example.madeinbrasil.model.people.Person
@@ -62,6 +63,9 @@ interface TmdbAPI {
 
     @GET("genre/movie/list")
     suspend fun movieGenres(): Response<GenderMovie>
+
+    @GET("genre/tv/list")
+    suspend fun serieGenders(): Response<GenderSerie>
 
     @GET("tv/{tv_id}/season/{season_number}")
     suspend fun seasonsEpisodes(

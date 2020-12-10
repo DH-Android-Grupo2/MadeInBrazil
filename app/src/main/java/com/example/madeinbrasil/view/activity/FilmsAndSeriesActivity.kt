@@ -48,7 +48,7 @@ import kotlinx.android.synthetic.main.activity_films_and_series.*
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GenderMovieViewModel
-//    private lateinit var viewModelCast: MovieCreditsViewModel
+    private lateinit var viewModelGenderSeries: GenderSerieViewModel
     private lateinit var viewModelMovie: MovieDetailedViewModel
     private lateinit var viewModelSerie: SerieDetailedViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
@@ -202,6 +202,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
 
             2 -> {
+                viewModelGenderSeries = ViewModelProvider(this).get(GenderSerieViewModel::class.java)
+                viewModelGenderSeries.getGenres()
+
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModelSerie = ViewModelProvider(this).get(SerieDetailedViewModel::class.java)
 
@@ -347,11 +350,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private fun setupObservablesSeries() {
         var generosText = ""
-        viewModel.onResultGenres.observe(this) {
+        viewModelGenderSeries.onResultGenresSeries.observe(this) {
             it?.let { generos ->
-                series?.genreIds?.forEach { genreSeries ->
+                series?.genreIds?.forEach { genreSerie ->
                     generos.genres.forEach { genre ->
-                        if (genre.id == genreSeries) {
+                        if (genre.id == genreSerie) {
                             generosText += "${genre.name}  "
                         }
                     }
