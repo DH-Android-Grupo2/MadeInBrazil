@@ -47,7 +47,46 @@ class SelectActivity : AppCompatActivity() {
         val chip53Thriller: Chip = findViewById(R.id.chip53Thriller)
         val chip10402music: Chip = findViewById(R.id.chip10402Music)
         val chip10770tvmovie: Chip = findViewById(R.id.chip10770TvMovie)
+        val chip36Historia: Chip = findViewById(R.id.chip36Historia)
+        val chip37Faroeste: Chip = findViewById(R.id.chip37Faroeste)
+        val chip10749Romance: Chip= findViewById(R.id.chip10749Romance)
+        val chip12Aventura: Chip= findViewById(R.id.chip12Aventura)
 
+
+        chip36Historia.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip36Historia.isChecked){
+                selectedGenres.add("36,")
+            } else {
+                selectedGenres.remove("36,")
+            }
+        }
+
+        chip37Faroeste.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip37Faroeste.isChecked){
+                selectedGenres.add("37,")
+            } else {
+                selectedGenres.remove("37,")
+            }
+
+        }
+
+
+        chip10749Romance.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip10749Romance.isChecked){
+                selectedGenres.add("10749,")
+            } else {
+                selectedGenres.remove("18,")
+            }
+
+        }
+
+        chip12Aventura.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip12Aventura.isChecked){
+                selectedGenres.add("12,")
+            } else {
+                selectedGenres.remove("12,")
+            }
+        }
 
 
         chip18drama.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -192,6 +231,9 @@ class SelectActivity : AppCompatActivity() {
                 selectedGenres.remove("10770,")
             }
         }
+
+
+
 
 
 
