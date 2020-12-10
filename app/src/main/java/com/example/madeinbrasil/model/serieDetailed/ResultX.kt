@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.model.serieDetailed
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -11,7 +12,8 @@ data class ResultX(
     val id: Int,
     val name: String?,
     val origin_country: List<String>?,
-    val original_language: String?,
+    @SerializedName("original_language")
+    val originalLanguage: String?,
     val original_name: String?,
     val overview: String?,
     val popularity: Double?,
