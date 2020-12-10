@@ -9,6 +9,7 @@ import android.widget.Switch
 import androidx.fragment.app.Fragment
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityMenuBinding
+import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.view.fragment.FilmsFragment
 import com.example.madeinbrasil.view.fragment.HomeFragment
 import com.example.madeinbrasil.view.fragment.ListsFragment
@@ -17,19 +18,27 @@ import com.example.madeinbrasil.view.fragment.SeriesFragment
 class MenuActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMenuBinding
-
+    var  genreList: GenreSelected? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-      initFragments(HomeFragment())
+
+      intent?.let {
+       genreList = it.getParcelableExtra<GenreSelected>("genreList")
+     }
+
+
+
+            initFragmentsHome(HomeFragment(), genreList)
+
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener {
             when(it.itemId) {
                 R.id.buttonHome -> {
-                    initFragments(HomeFragment())
+                    initFragmentsHome(HomeFragment(),genreList)
                     true
                 }
                 R.id.buttonFilms -> {
@@ -57,4 +66,16 @@ class MenuActivity : AppCompatActivity() {
         fragmentStart.replace(R.id.flContainerMenu, fragment)
         fragmentStart.commit()
     }
+
+      private fun initFragmentsHome(fragment: Fragment, genreSelected: GenreSelected?) {
+       val bundle = Bundle()
+       bundle.putParcelable("Selected", (genreSelected))
+       fragment.arguments = bundle
+
+       val fragmentStart = supportFragmentManager.beginTransaction()
+       fragmentStart.replace(R.id.flContainerMenu, fragment)
+        fragmentStart.commit()
+    }
+
+
 }

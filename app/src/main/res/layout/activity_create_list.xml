@@ -75,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@id/tilDescription">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvSelectedMovies"
+                android:id="@+id/rvSelectedShows"
                 android:layout_width="match_parent"
                 tools:itemCount="3"
                 android:layout_height="wrap_content" />

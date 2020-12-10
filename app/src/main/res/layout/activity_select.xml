@@ -38,100 +38,101 @@
 
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip1"
+            android:id="@+id/chip18Drama"
             style="@style/ChipDefault"
             android:text="@string/string_drama"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip2"
+            android:id="@+id/chip28Action"
             style="@style/ChipDefault"
             android:text="@string/string_action"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip3"
+            android:id="@+id/chip27Horror"
             style="@style/ChipDefault"
             android:text="@string/string_horror"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip4"
+            android:id="@+id/chip10751Family"
             style="@style/ChipDefault"
             android:text="@string/string_family"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip5"
+            android:id="@+id/chip16Animation"
             style="@style/ChipDefault"
+            android:checkable="true"
             android:text="@string/string_animation"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip6"
+            android:id="@+id/chip99Documentary"
             style="@style/ChipDefault"
             android:text="@string/string_doc"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip7"
+            android:id="@+id/chip35Comedy"
             style="@style/ChipDefault"
             android:text="@string/string_comedy"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip8"
+            android:id="@+id/chip80Crime"
             style="@style/ChipDefault"
             android:text="@string/string_crime"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip9"
+            android:id="@+id/chip14Fantasy"
             style="@style/ChipDefault"
             android:text="@string/string_fantasy"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip10"
+            android:id="@+id/chip9648Mistery"
             style="@style/ChipDefault"
             android:text="@string/string_mistery"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip11"
+            android:id="@+id/chip10752War"
             style="@style/ChipDefault"
             android:text="@string/string_war"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip12"
+            android:id="@+id/chip878Scifi"
             style="@style/ChipDefault"
             android:text="@string/string_syfi"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip13"
+            android:id="@+id/chip53Thriller"
             style="@style/ChipDefault"
             android:text="@string/string_thriller"
             android:checked="false"
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip14"
+            android:id="@+id/chip10402Music"
             style="@style/ChipDefault"
-            android:text="@string/string_mistery"
+            android:text="@string/musical"
             android:checked="false"
             />
 
@@ -143,7 +144,7 @@
             />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip16"
+            android:id="@+id/chip10770TvMovie"
             style="@style/ChipDefault"
             android:text="@string/string_tvmovies"
             android:checked="false"
