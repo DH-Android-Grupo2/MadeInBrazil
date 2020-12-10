@@ -45,7 +45,7 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
         }
 
         selectSerieAdapter?.onItemClick = {
-            viewModel.postClikedItemId(it)
+            viewModel.postClikedItem(it)
         }
     }
 

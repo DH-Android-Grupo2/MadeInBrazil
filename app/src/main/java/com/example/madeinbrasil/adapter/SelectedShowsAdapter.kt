@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.databinding.MainCardsMenuBinding
 import com.example.madeinbrasil.databinding.SelectedCardsBinding
+import com.example.madeinbrasil.model.search.ResultSearch
 
 class SelectedShowsAdapter(): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
 
@@ -39,6 +39,10 @@ class SelectedShowsAdapter(): RecyclerView.Adapter<SelectedShowsAdapter.ViewHold
                 is Result -> {
                     Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
                     tvShowName.text = show.title
+                }
+                is ResultSearch -> {
+                    Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
+                    tvShowName.text = show.name
                 }
             }
         }

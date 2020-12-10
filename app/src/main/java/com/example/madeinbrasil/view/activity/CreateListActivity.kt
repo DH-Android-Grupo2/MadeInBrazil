@@ -24,7 +24,6 @@ class CreateListActivity : AppCompatActivity() {
     private lateinit var selectMovieViewModel: SelectMovieViewModel
     private var selectedMovies: MutableList<Int> = mutableListOf()
     private var selectedSeries: MutableList<Int> = mutableListOf()
-    private var selectedItems: MutableList<Any> = mutableListOf()
 
     private val selectedShowsAdapter by lazy {
         SelectedShowsAdapter()
@@ -83,11 +82,15 @@ class CreateListActivity : AppCompatActivity() {
             }
         })
 
-        selectSerieViewModel.clikedItemId.observe(this, {
-            if (selectedSeries.contains(it))
-                selectedSeries.remove(it)
-            else
-                selectedSeries.add(it)
+        selectSerieViewModel.clickedSerieItem.observe(this, {
+            if (selectedSeries.contains(it.id)) {
+                selectedSeries.remove(it.id)
+                selectedShowsAdapter.deleteItem(it)
+            }
+            else {
+                selectedSeries.add(it.id)
+                selectedShowsAdapter.addItem(it)
+            }
         })
 
     }
