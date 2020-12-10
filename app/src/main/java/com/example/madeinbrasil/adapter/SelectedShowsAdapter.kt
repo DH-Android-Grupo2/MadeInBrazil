@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.databinding.SelectedCardsBinding
 import com.example.madeinbrasil.model.search.ResultSearch
-import kotlinx.android.synthetic.main.selected_cards.view.*
 
 class SelectedShowsAdapter(val onCloseClick: ((Any) -> Unit)): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
 

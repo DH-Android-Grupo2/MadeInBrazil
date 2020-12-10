@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
@@ -16,6 +17,17 @@ import com.example.madeinbrasil.view.adapter.MainAdapterFilm
 class FavoritesFragment : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
     private val listFilms = FilmRepository().setFilms()
+    var actionMode: ActionMode? = null
+
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        binding = FragmentFavoritesBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,16 +52,7 @@ class FavoritesFragment : Fragment() {
                 }
             }
 
-//            setBackgroundResource(R.drawable.custom_spinner)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentFavoritesBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
 }
