@@ -41,7 +41,6 @@ class SeriesFragment : Fragment() {
     private var binding: FragmentSeriesBinding? = null
     private lateinit var viewModel: SerieViewModel
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.ivProfileSeries?.setOnClickListener {
