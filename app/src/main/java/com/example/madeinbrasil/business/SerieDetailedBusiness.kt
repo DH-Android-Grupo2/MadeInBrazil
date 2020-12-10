@@ -21,9 +21,12 @@ class SerieDetailedBusiness {
                 it.logoPath = it.logoPath?.getFullImagePath()
             }
             serie.posterPath = serie.posterPath?.getFullImagePath()
+
+            serie.recommendations?.results = serie.recommendations?.results?.filter { it.originalLanguage.equals("pt") }
             serie.recommendations?.results?.forEach {
                 it.posterPath = it.posterPath?.getFullImagePath()
             }
+            serie.similar?.results = serie.similar?.results?.filter { it.originalLanguage.equals("pt") }
             serie.similar?.results?.forEach {
                 it.posterPath = it.posterPath?.getFullImagePath()
             }

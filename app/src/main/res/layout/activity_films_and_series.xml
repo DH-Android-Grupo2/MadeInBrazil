@@ -276,13 +276,24 @@
         <TextView
             android:id="@+id/tvRecomendacoesTitleFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="Recomendações"
+            android:text="@string/string_recomendations"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/rvCardsListActors"
             />
+        <TextView
+            android:id="@+id/tvMessageRecomendation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/string_recomendation_not_found"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvRecomendacoesTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/tvSimilaresTitleFilmsSeries"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListRecomendacoes"
@@ -294,19 +305,33 @@
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
             app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/tvRecomendacoesTitleFilmsSeries"/>
+            app:layout_constraintTop_toBottomOf="@id/tvRecomendacoesTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/tvSimilaresTitleFilmsSeries"/>
 
 
         <TextView
             android:id="@+id/tvSimilaresTitleFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="Similares"
+            android:text="@string/string_similars"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/rvCardsListRecomendacoes"
             />
+
+        <TextView
+            android:id="@+id/tvMessageSimilar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/string_similars_not_found"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvSimilaresTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/hr"/>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListSimilares"
@@ -318,7 +343,8 @@
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
             app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/tvSimilaresTitleFilmsSeries"/>
+            app:layout_constraintTop_toBottomOf="@id/tvSimilaresTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/hr"/>
 
 
         <View
