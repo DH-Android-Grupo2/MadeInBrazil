@@ -12,7 +12,7 @@ import com.example.madeinbrasil.model.search.ResultSearch
 
 class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter<ResultSearch, SelectSerieAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK)   {
 
-    var onItemClick: ((Int) -> Unit)? = null
+    var onItemClick: ((ResultSearch) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -23,9 +23,9 @@ class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val serie = getItem(position)
         serie?.let {
-            holder.bind(getItem(position), selectedItems)
+            holder.bind(serie, selectedItems)
             holder.itemView.setOnClickListener {
-                onItemClick?.invoke(serie.id)
+                onItemClick?.invoke(serie)
                 tooglePosition(serie)
                 notifyItemChanged(position)
             }

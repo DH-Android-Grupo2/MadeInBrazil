@@ -9,4 +9,5 @@ class Films (var img: String,
             var description: String,
             var gender: String,
             var year: String,
-            var time: String): Parcelable
+            var time: String,
+            var selected: Boolean = false): Parcelable

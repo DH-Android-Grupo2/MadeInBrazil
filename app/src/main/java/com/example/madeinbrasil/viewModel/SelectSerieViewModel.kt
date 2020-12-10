@@ -15,7 +15,8 @@ class SelectSerieViewModel: ViewModel() {
     private var searchSerieLiveDataSource: LiveData<PageKeyedDataSource<Int, ResultSearch>>? = null
     var query = " "
 
-    var clikedItemId: MutableLiveData<Int> = MutableLiveData()
+    var clickedSerieItem: MutableLiveData<ResultSearch> = MutableLiveData<ResultSearch>()
+
 
     init {
         searchSerieData()
@@ -38,7 +39,7 @@ class SelectSerieViewModel: ViewModel() {
         searchSeriePagedList = LivePagedListBuilder(tmdbSourceFactory, pagedListConfig).build()
     }
 
-    fun postClikedItemId(id: Int) {
-        clikedItemId.postValue(id)
+    fun postClikedItem(serie: ResultSearch) {
+        clickedSerieItem.postValue(serie)
     }
 }

@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.databinding.MainCardsMenuBinding
 import com.example.madeinbrasil.databinding.SelectedCardsBinding
+import com.example.madeinbrasil.model.search.ResultSearch
 
-class SelectedShowsAdapter(): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
+class SelectedShowsAdapter(val onCloseClick: ((Any) -> Unit)): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
 
     val list: MutableList<Any> = mutableListOf()
 
@@ -18,7 +18,8 @@ class SelectedShowsAdapter(): RecyclerView.Adapter<SelectedShowsAdapter.ViewHold
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(list[position])
+        val item = list[position]
+        holder.bind(item)
     }
 
     override fun getItemCount(): Int = list.size
@@ -40,6 +41,16 @@ class SelectedShowsAdapter(): RecyclerView.Adapter<SelectedShowsAdapter.ViewHold
                     Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
                     tvShowName.text = show.title
                 }
+                is ResultSearch -> {
+                    Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
+                    tvShowName.text = show.name
+                }
+            }
+
+            imDeleteShow.setOnClickListener {
+                onCloseClick(show)
+                list.remove(show)
+                notifyItemRemoved(adapterPosition)
             }
         }
     }
