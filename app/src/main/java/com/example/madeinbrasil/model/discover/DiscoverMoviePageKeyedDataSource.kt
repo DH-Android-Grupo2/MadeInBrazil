@@ -1,6 +1,5 @@
 package com.example.madeinbrasil.model.discover
 
-import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
@@ -11,8 +10,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.Paging.FIRST_PAGE
+import com.example.madeinbrasil.view.fragment.HomeFragment
 
 class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
+
+
+
+    var genreFinish = ""
+
+    val teste = HomeFragment.genre?.Selected?.onEach {
+        genreFinish = it + genreFinish
+    }
+
+
+
 
     private val repository by lazy {
         HomeRepository()
@@ -23,7 +34,7 @@ class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             callback: LoadInitialCallback<Int, Result>
     ) {
         CoroutineScope(Dispatchers.IO).launch {
-            when (val response = repository.getDiscover(FIRST_PAGE, "18")) {
+            when (val response = repository.getDiscover(FIRST_PAGE, genreFinish)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as DiscoverMovie
                     data.results.forEach { result ->
@@ -51,7 +62,7 @@ class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
         val page = params.key
 
         CoroutineScope(Dispatchers.IO).launch {
-            when (val response = repository.getDiscover(page, "18")) {
+            when (val response = repository.getDiscover(page, genreFinish)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as DiscoverMovie
                     data.results.forEach { result ->
@@ -79,7 +90,7 @@ class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
         val page = params.key
 
         CoroutineScope(Dispatchers.IO).launch {
-            when (val response = repository.getDiscover(page, "18")) {
+            when (val response = repository.getDiscover(page, genreFinish)) {
                 is ResponseAPI.Success -> {
                     val data = response.data as DiscoverMovie
                     data.results.forEach { result ->

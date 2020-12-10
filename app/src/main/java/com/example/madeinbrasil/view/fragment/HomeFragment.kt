@@ -15,6 +15,7 @@ import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.view.adapter.DiscoverMovieAdapter
@@ -73,17 +74,13 @@ class HomeFragment : Fragment() {
     }
 
     private val homeAdapter4 : DiscoverTvAdapter by lazy {
-        DiscoverTvAdapter {
-            val movieClicked = it
-            movieClicked?.let{result->
-
+        DiscoverTvAdapter {result ->
+            result?.let {
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                intent.putExtra(Constants.ConstantsFilms.BASE_SERIE_KEY, result )
+                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 2)
                 startActivity(intent)
             }
-
         }
     }
 

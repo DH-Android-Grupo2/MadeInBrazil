@@ -6,5 +6,5 @@ import kotlinx.android.parcel.Parcelize
 
 
 @Parcelize
-data class GenreSelected(var Selected : MutableList<Genre> )
+data class GenreSelected(var Selected : MutableList<String> )
  : Parcelable

@@ -8,6 +8,7 @@ import androidx.paging.PagedList
 import com.example.madeinbrasil.model.discover.DiscoverMovieDataSourceFactory
 import com.example.madeinbrasil.model.discoverTV.DiscoverTvDataSourceFactory
 import com.example.madeinbrasil.model.nowPlaying.NowPlayingDataSourceFactory
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.model.upcoming.UpcomingDataSourceFactory
 import com.example.madeinbrasil.utils.Constants.Paging.PAGE_SIZE
@@ -17,11 +18,11 @@ class HomeViewModel: ViewModel() {
     var upcomingMoviePagedList: LiveData<PagedList<Result>>? = null
     var nowPlayingMoviePagedList: LiveData<PagedList<Result>>? = null
     var discoverMoviePagedList: LiveData<PagedList<Result>>? = null
-    var discoverTvPagedList: LiveData<PagedList<com.example.madeinbrasil.model.discoverTV.Result>>? = null
+    var discoverTvPagedList: LiveData<PagedList<ResultSearch>>? = null
     private var upcomingLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var nowPlayingLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var discoverMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
-    private var discoverTvLiveDataSource: LiveData<PageKeyedDataSource<Int,com.example.madeinbrasil.model.discoverTV.Result>>? = null
+    private var discoverTvLiveDataSource: LiveData<PageKeyedDataSource<Int,ResultSearch>>? = null
 
     init {
         nowPlayingData()

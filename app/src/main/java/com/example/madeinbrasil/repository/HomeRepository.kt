@@ -3,6 +3,7 @@ package com.example.madeinbrasil.repository
 import android.util.Log
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.model.gender.GenreSelected
 import java.lang.Exception
 
 class HomeRepository {
@@ -62,9 +63,9 @@ class HomeRepository {
     }
 
 
-    suspend fun getDiscover(pageNumber: Int, genre: String): ResponseAPI {
+    suspend fun getDiscover(pageNumber: Int, genre: String?): ResponseAPI {
         return try {
-            val response = APIService.tmdbApi.discoverMovies(pageNumber,"18")
+            val response = APIService.tmdbApi.discoverMovies(pageNumber,genre)
             if (response.isSuccessful) {
                 ResponseAPI.Success(response.body())
             } else {

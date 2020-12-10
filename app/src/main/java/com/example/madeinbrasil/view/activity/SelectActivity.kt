@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivitySelectBinding
+import com.example.madeinbrasil.model.discoverTV.Result
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.Genre
 import com.google.android.material.chip.Chip
@@ -15,8 +17,11 @@ import kotlinx.android.synthetic.main.activity_select.*
 import kotlinx.android.synthetic.main.activity_select.view.*
 
 class SelectActivity : AppCompatActivity() {
+    var selectedGenres = mutableListOf<String>()
+
+
     private lateinit var binding: ActivitySelectBinding
-    val selectedGenres = mutableListOf<Genre>()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,81 +48,121 @@ class SelectActivity : AppCompatActivity() {
         val chip10770tvmovie: Chip = findViewById(R.id.chip10770TvMovie)
 
 
-        chip18drama.setOnClickListener {
-           val genre18 = Genre(18, "Drama")
-            selectedGenres.add(genre18)
+
+        chip18drama.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip18drama.isChecked){
+                selectedGenres.add("18,")
+            }
         }
 
 
-        chip28action.setOnClickListener {
-            val genre28 = Genre(28, "Action")
-            selectedGenres.add(genre28)
+
+
+        chip28action.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip28action.isChecked){
+                selectedGenres.add("28,")
+            }
         }
 
-        chip27horror.setOnClickListener {
-            val genre27 = Genre(27, "Horror")
-            selectedGenres.add(genre27)
+
+        chip27horror.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip27horror.isChecked){
+                selectedGenres.add("27,")
+            }
         }
 
-        chip10751family.setOnClickListener {
-            val genre10751 = Genre(10751, "Family")
-            selectedGenres.add(genre10751)
+
+        chip10751family.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip10751family.isChecked){
+                selectedGenres.add("10751,")
+            }
         }
 
-        chip16animation.setOnClickListener {
-            val genre16 = Genre(16, "Animation")
-            selectedGenres.add(genre16)
+
+
+
+        chip16animation.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip16animation.isChecked){
+                selectedGenres.add("16,")
+            }
         }
 
-        chip99doc.setOnClickListener {
-            val genre99 = Genre(99, "Documentary")
-            selectedGenres.add(genre99)
+
+
+
+
+
+
+        chip99doc.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip99doc.isChecked){
+                selectedGenres.add("99,")
+            }
         }
 
-        chip35comedy.setOnClickListener {
-            val genre35 = Genre(35, "Comedy")
-            selectedGenres.add(genre35)
+
+        chip35comedy.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip35comedy.isChecked){
+                selectedGenres.add("35,")
+            }
         }
 
-        chip80crime.setOnClickListener {
-            val genre80 = Genre(80, "Crime")
-            selectedGenres.add(genre80)
+
+
+
+        chip80crime.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip80crime.isChecked){
+                selectedGenres.add("80,")
+            }
         }
 
-        chip14fantasy.setOnClickListener {
-            val genre14 = Genre(14, "Fantasy")
-            selectedGenres.add(genre14)
+
+
+        chip14fantasy.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip14fantasy.isChecked){
+                selectedGenres.add("14,")
+            }
         }
 
-        chip9648mistery.setOnClickListener {
-            val genre9648 = Genre(9648, "Mistery")
-            selectedGenres.add(genre9648)
+
+        chip9648mistery.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip9648mistery.isChecked){
+                selectedGenres.add("9648,")
+            }
         }
 
-        chip10752war.setOnClickListener {
-            val genre10752 = Genre(10752, "War")
-            selectedGenres.add(genre10752)
+
+        chip10752war.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip10752war.isChecked){
+                selectedGenres.add("10752,")
+            }
         }
 
-        chip878scifi.setOnClickListener {
-            val genre878 = Genre(878, "Scifi")
-            selectedGenres.add(genre878)
+        chip878scifi.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip878scifi.isChecked){
+                selectedGenres.add("878,")
+            }
         }
 
-        chip53Thriller.setOnClickListener {
-            val genre53 = Genre(53, "Thriller")
-            selectedGenres.add(genre53)
+
+        chip53Thriller.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip53Thriller.isChecked){
+                selectedGenres.add("53,")
+            }
         }
 
-        chip10402music.setOnClickListener {
-            val genre10402 = Genre(10402, "Music")
-            selectedGenres.add(genre10402)
+        chip10402music.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip10402music.isChecked){
+                selectedGenres.add("10402,")
+            }
         }
 
-        chip10770tvmovie.setOnClickListener {
-            val genre10770 = Genre(10770, "Tv Movie")
-            selectedGenres.add(genre10770)
+
+        chip10770tvmovie.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (chip10770tvmovie.isChecked){
+                selectedGenres.add("10770,")
+            }
         }
+
 
 
 
@@ -134,5 +179,7 @@ class SelectActivity : AppCompatActivity() {
         startActivity(intent)
 
     }
+
+
 
 }
