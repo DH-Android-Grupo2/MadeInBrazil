@@ -34,7 +34,7 @@ class CastDetailsAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind(cast: ResultSearch, onClickSerie: (ResultSearch) -> Unit) = with(binding) {
             Glide.with(itemView.context)
-                    .load(cast?.posterPath)
+                    .load(cast.posterPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.made_in_brasil_logo)
                     .into(cvImageActors)

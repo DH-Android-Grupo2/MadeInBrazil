@@ -19,6 +19,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.*
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
+import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.result.MovieDetailed
@@ -170,7 +171,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             }
                         }
 
-                        //binding.rvStreaming.isVisible = movie.homepage != ""
+                        binding.rvStreaming.isVisible = movie.homepage != ""
                         binding.rvStreaming.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie.watch_providers?.results?.BR?.let { it1 ->
@@ -279,6 +280,37 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val intent = Intent(this, SeasonsActivity::class.java)
                         intent.putExtra("season", serie)
                         startActivity(intent)
+                    }
+
+                    binding.rvCardsListRecomendacoes.apply {
+                        serie.recommendations?.results = serie.recommendations?.results?.filter { it.originalLanguage.equals("pt") }
+                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                        adapter = serie.recommendations?.let { it1 ->
+                            Log.i("lLLLLO","$it1")
+                            it1.results?.let { it2 ->
+                                CastDetailsAdapter(it2){ result->
+                                    val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
+                                    intent.putExtra(BASE_SERIE_KEY, result)
+                                    intent.putExtra(ID_FRAGMENTS, 2)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+
+                    binding.rvCardsListSimilares.apply {
+                        serie.similar?.results = serie.similar?.results?.filter { it.originalLanguage.equals("pt") }
+                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                        adapter = serie.similar?.let { it1 ->
+                            it1.results?.let { it2 ->
+                                CastDetailsAdapter(it2){ result->
+                                    val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
+                                    intent.putExtra(BASE_SERIE_KEY, result)
+                                    intent.putExtra(ID_FRAGMENTS, 2)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
                     }
                 }
 
