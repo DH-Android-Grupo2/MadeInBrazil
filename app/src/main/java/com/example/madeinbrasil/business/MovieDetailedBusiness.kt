@@ -27,9 +27,11 @@ class MovieDetailedBusiness  {
             movie?.credits?.cast?.forEach {
                 it.profilePath = it.profilePath?.getFullImagePath()
             }
-            movie?.recommendations?.results?.forEach {
+            movie.recommendations?.results = movie.recommendations?.results?.filter { it.originalLanguage.equals("pt") }
+            movie.recommendations?.results?.forEach {
                 it.posterPath = it.posterPath?.getFullImagePath()
             }
+            movie.similar?.results = movie.similar?.results?.filter { it.originalLanguage.equals("pt") }
             movie?.similar?.results?.forEach {
                 it.posterPath = it.posterPath?.getFullImagePath()
             }

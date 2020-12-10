@@ -140,35 +140,39 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
 
-                        binding.rvCardsListRecomendacoes.apply {
-                            movie.recommendations?.results= movie.recommendations?.results?.filter { it.originalLanguage.equals("pt") }
-                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = movie.recommendations?.let { it1 ->
-                                Log.i("lLLLLO","$it1")
-                                it1.results?.let { it2 ->
-                                    FilmsSeriesFromUserAdapter(it2){ result->
-                                        val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
-                                        intent.putExtra(BASE_FILM_KEY, result)
-                                        intent.putExtra(ID_FRAGMENTS, 1)
-                                        startActivity(intent)
+                        if(movie.recommendations?.results?.size != 0) {
+                            binding.rvCardsListRecomendacoes.apply {
+                                layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                adapter = movie.recommendations?.let { it1 ->
+                                    Log.i("lLLLLO","$it1")
+                                    it1.results?.let { it2 ->
+                                        FilmsSeriesFromUserAdapter(it2){ result->
+                                            val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
+                                            intent.putExtra(BASE_FILM_KEY, result)
+                                            intent.putExtra(ID_FRAGMENTS, 1)
+                                            startActivity(intent)
+                                        }
                                     }
                                 }
                             }
+                            binding.tvMessageRecomendation.isVisible = false
                         }
 
-                        binding.rvCardsListSimilares.apply {
-                            movie.similar?.results = movie.similar?.results?.filter { it.originalLanguage.equals("pt") }
-                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = movie.similar?.let { it1 ->
-                                it1.results?.let { it2 ->
-                                    FilmsSeriesFromUserAdapter(it2){ result->
-                                        val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
-                                        intent.putExtra(BASE_FILM_KEY, result)
-                                        intent.putExtra(ID_FRAGMENTS, 1)
-                                        startActivity(intent)
+                        if(movie.similar?.results?.size != 0) {
+                            binding.rvCardsListSimilares.apply {
+                                layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                adapter = movie.similar?.let { it1 ->
+                                    it1.results?.let { it2 ->
+                                        FilmsSeriesFromUserAdapter(it2){ result->
+                                            val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
+                                            intent.putExtra(BASE_FILM_KEY, result)
+                                            intent.putExtra(ID_FRAGMENTS, 1)
+                                            startActivity(intent)
+                                        }
                                     }
                                 }
                             }
+                            binding.tvMessageSimilar.isVisible = false
                         }
 
                         binding.rvStreaming.isVisible = movie.homepage != ""
@@ -282,35 +286,38 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
 
-                    binding.rvCardsListRecomendacoes.apply {
-                        serie.recommendations?.results = serie.recommendations?.results?.filter { it.originalLanguage.equals("pt") }
-                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        adapter = serie.recommendations?.let { it1 ->
-                            Log.i("lLLLLO","$it1")
-                            it1.results?.let { it2 ->
-                                CastDetailsAdapter(it2){ result->
-                                    val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
-                                    intent.putExtra(BASE_SERIE_KEY, result)
-                                    intent.putExtra(ID_FRAGMENTS, 2)
-                                    startActivity(intent)
+                    if(serie.recommendations?.results?.size != 0) {
+                        binding.rvCardsListRecomendacoes.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = serie.recommendations?.let { it1 ->
+                                it1.results?.let { it2 ->
+                                    CastDetailsAdapter(it2){ result->
+                                        val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
+                                        intent.putExtra(BASE_SERIE_KEY, result)
+                                        intent.putExtra(ID_FRAGMENTS, 2)
+                                        startActivity(intent)
+                                    }
                                 }
                             }
                         }
+                        binding.tvMessageRecomendation.isVisible = false
                     }
 
-                    binding.rvCardsListSimilares.apply {
-                        serie.similar?.results = serie.similar?.results?.filter { it.originalLanguage.equals("pt") }
-                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        adapter = serie.similar?.let { it1 ->
-                            it1.results?.let { it2 ->
-                                CastDetailsAdapter(it2){ result->
-                                    val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
-                                    intent.putExtra(BASE_SERIE_KEY, result)
-                                    intent.putExtra(ID_FRAGMENTS, 2)
-                                    startActivity(intent)
+                    if(serie.similar?.results?.size != 0) {
+                        binding.rvCardsListSimilares.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = serie.similar?.let { it1 ->
+                                it1.results?.let { it2 ->
+                                    CastDetailsAdapter(it2){ result->
+                                        val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
+                                        intent.putExtra(BASE_SERIE_KEY, result)
+                                        intent.putExtra(ID_FRAGMENTS, 2)
+                                        startActivity(intent)
+                                    }
                                 }
                             }
                         }
+                        binding.tvMessageSimilar.isVisible = false
                     }
                 }
 
