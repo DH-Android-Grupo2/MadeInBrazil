@@ -68,6 +68,7 @@
         <com.google.android.material.chip.Chip
             android:id="@+id/chip16Animation"
             style="@style/ChipDefault"
+            android:checkable="true"
             android:text="@string/string_animation"
             android:checked="false"
             />

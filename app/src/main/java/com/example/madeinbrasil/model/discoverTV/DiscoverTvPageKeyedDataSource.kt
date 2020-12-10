@@ -3,6 +3,7 @@ package com.example.madeinbrasil.model.discoverTV
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.model.gender.Genre
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.repository.HomeRepository
 import com.example.madeinbrasil.utils.Constants
@@ -13,10 +14,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
-class DiscoverTvPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
+class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, Result>() {
 
-    var pronto: String? = null
-    val genre = HomeFragment.genre
+
+    val genre = HomeFragment.genre.toString()
     private  val  repository by lazy {
         HomeRepository()
     }
@@ -25,7 +26,7 @@ class DiscoverTvPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
             params: LoadInitialParams<Int>,
             callback: LoadInitialCallback<Int, Result>
     ) {
-       val teste = genre?.Selected?.get(0)?.id
+
         CoroutineScope(Dispatchers.IO).launch {
             when (val response = repository.getDiscoverTV(FIRST_PAGE, "18")) {
                 is ResponseAPI.Success -> {
