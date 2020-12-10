@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCardsBinding
 import com.example.madeinbrasil.model.upcoming.Result
@@ -40,6 +41,7 @@ class FilmsAdapter(
             Glide.with(itemView.context)
                 .load(movie?.posterPath)
                 .placeholder(R.drawable.made_in_brasil_logo)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(cvImageCard)
 
             tvNameRecyclerView.text = movie?.title
@@ -56,6 +58,7 @@ class FilmsAdapter(
                 Glide.with(it.context)
                     .load(movie?.posterPath)
                     .placeholder(R.drawable.made_in_brasil_logo)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(dialog.ivDialogPoster)
 
                 dialog.tvDialogName.text = movie?.title

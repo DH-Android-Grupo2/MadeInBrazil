@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCardsBinding
 import com.example.madeinbrasil.model.search.ResultSearch
@@ -31,6 +32,7 @@ class SerieAdapter(
         fun bind(serie: ResultSearch?, onSerieClicked: (ResultSearch?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                 .load(serie?.posterPath)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.made_in_brasil_logo)
                 .into(cvImageCard)
 
@@ -47,6 +49,7 @@ class SerieAdapter(
 
                 Glide.with(it.context)
                     .load(serie?.posterPath)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.made_in_brasil_logo)
                     .into(dialog.ivDialogPoster)
 

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ItemStreamingBinding
 import com.example.madeinbrasil.databinding.RecyclerviewSeasonsBinding
@@ -33,6 +34,7 @@ class SerieStreamingAdapter(
         fun bind(flatrate: Flatrate, streamingLink: (Flatrate) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                 .load(flatrate.logoPath)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.made_in_brasil_logo)
                 .into(ivStreaming)
 
