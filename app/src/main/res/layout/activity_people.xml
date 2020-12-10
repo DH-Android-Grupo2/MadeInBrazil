@@ -138,6 +138,33 @@
             app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitleFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvFilmesRecycler"
             app:layout_constraintEnd_toEndOf="@+id/tvDescriptionTextFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@+id/tvSeriesRecycler"/>
+
+        <TextView
+            android:id="@+id/tvSeriesRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Séries"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitleFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListFilmes"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/main_cast_recyclerview"
+            tools:itemCount="1"
+            tools:orientation="horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitleFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvSeriesRecycler"
+            app:layout_constraintEnd_toEndOf="@+id/tvDescriptionTextFilmsSeries"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

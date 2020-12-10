@@ -75,8 +75,6 @@ class PeopleActivity : AppCompatActivity() {
                     Log.i("CLICOU","${pessoa.movie_credits}")
                     binding.rvCardsListFilmes.apply {
                         layoutManager = LinearLayoutManager(this@PeopleActivity, LinearLayoutManager.HORIZONTAL, false)
-                        when(position) {
-                            1 -> {
                                 adapter = pessoa.movie_credits?.let { it1 ->
                                     it1.cast?.let { it2 ->
                                         FilmsSeriesFromUserAdapter(it2){ result->
@@ -87,8 +85,9 @@ class PeopleActivity : AppCompatActivity() {
                                         }
                                     }
                                 }
-                            }
-                            2 -> {
+                    }
+                    binding.rvCardsListSeries.apply {
+                        layoutManager = LinearLayoutManager(this@PeopleActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = pessoa.tv_credits?.let { it1 ->
                                     it1.cast?.let { it2 ->
                                         CastDetailsAdapter(it2){ result->
@@ -99,8 +98,7 @@ class PeopleActivity : AppCompatActivity() {
                                         }
                                     }
                                 }
-                            }
-                        }
+
                     }
                 }
             }
