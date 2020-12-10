@@ -47,24 +47,18 @@ class SeasonsActivity : AppCompatActivity() {
             adapter = seasons?.seasons?.let { season ->
                 SeasonsAdapter(season) {
                     viewModelSeason.getSeasons(seasons?.id, it?.season_number)
-                    val bottomSheet = EpisodesFragment()
-                    viewModelSeason.seasonSucess?.observe(this@SeasonsActivity) { ep ->
-                        val bundle = Bundle()
-                        bundle.putParcelable(BASE_EPISODE_KEY, ep)
-
-                        bottomSheet.arguments = bundle
-
-                        if(!bottomSheet.isAdded && !bottomSheet.isVisible) {
-                            val ft = supportFragmentManager.beginTransaction()
-                            if(bottomSheet.tag != null) {
-                                ft.remove(bottomSheet)
-                            }
-                            ft.remove(bottomSheet)
-                            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
-                        }
-                    }
                 }
             }
+        }
+
+
+        viewModelSeason.seasonSucess?.observe(this@SeasonsActivity) { ep ->
+            val bottomSheet = EpisodesFragment()
+            val bundle = Bundle()
+            bundle.putParcelable(BASE_EPISODE_KEY, ep)
+
+            bottomSheet.arguments = bundle
+            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
         }
     }
 }

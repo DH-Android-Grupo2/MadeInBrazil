@@ -131,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            tools:listitem="@layout/main_cards_menu"
+            tools:listitem="@layout/main_cast_recyclerview"
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"

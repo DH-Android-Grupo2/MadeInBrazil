@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 data class Person(
         val adult: Boolean?,
         var biography: String?,
-        val birthday: String?,
+        var birthday: String?,
         val deathday: String?,
         val gender: Int?,
         val homepage: String?,

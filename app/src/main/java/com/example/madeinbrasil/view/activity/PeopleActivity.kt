@@ -25,6 +25,8 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_TV_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
 import com.example.madeinbrasil.viewModel.PersonViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PeopleActivity : AppCompatActivity() {
     private var people: Cast? = null
@@ -32,17 +34,18 @@ class PeopleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPeopleBinding
     private lateinit var viewModelPeople: PersonViewModel
     private var position: Int = 0
+    private val date = Calendar.getInstance().time
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPeopleBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val dateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
         people = intent.getParcelableExtra(BASE_ACTOR_KEY)
         peopleSerie = intent.getParcelableExtra(BASE_ACTOR_TV_KEY)
         position = intent.getIntExtra(VALUE, 0)
 
-
+        Log.i("date", dateFormat.format(date).toString())
         when(position) {
             1 -> {
                 viewModelPeople = ViewModelProvider(this).get(PersonViewModel::class.java)
@@ -61,6 +64,7 @@ class PeopleActivity : AppCompatActivity() {
                     viewModelPeople.personSucess.observe(this@PeopleActivity) {
                         it?.let { pessoa ->
                             tvDescriptionTextFilmsSeries.text = pessoa.biography
+                            tvYearFilmsSeries.text = pessoa.birthday
                             Log.i("CLICOU","${pessoa.movie_credits}")
                             binding.rvCardsListFilmes.apply {
                                 layoutManager = LinearLayoutManager(this@PeopleActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -93,6 +97,7 @@ class PeopleActivity : AppCompatActivity() {
                     viewModelPeople.personSucess.observe(this@PeopleActivity) {
                         it?.let { pessoa ->
                             tvDescriptionTextFilmsSeries.text = pessoa.biography
+                            tvYearFilmsSeries.text = pessoa.birthday
 
                             binding.rvCardsListFilmes.apply {
                                 layoutManager = LinearLayoutManager(this@PeopleActivity, LinearLayoutManager.HORIZONTAL, false)
