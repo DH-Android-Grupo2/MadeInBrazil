@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCardsBinding
 import com.example.madeinbrasil.databinding.MainCastRecyclerviewBinding
@@ -47,6 +48,7 @@ class FilmsSeriesFromUserAdapter(
             Glide.with(itemView.context)
                     .load(cast?.posterPath)
                     .placeholder(R.drawable.made_in_brasil_logo)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(cvImageActors)
             tvActorsName.text = cast?.title
 

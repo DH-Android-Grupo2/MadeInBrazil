@@ -16,10 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.adapter.MovieCreditsAdapter
-import com.example.madeinbrasil.adapter.MovieStreamingAdapter
-import com.example.madeinbrasil.adapter.SerieCastAdapter
-import com.example.madeinbrasil.adapter.SerieStreamingAdapter
+import com.example.madeinbrasil.adapter.*
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.model.home.CommentRepository
@@ -141,6 +138,37 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             val uri = Uri.parse(movie.watch_providers?.results?.BR?.link)
                             val intent = Intent(Intent.ACTION_VIEW, uri)
                             startActivity(intent)
+                        }
+
+                        binding.rvCardsListRecomendacoes.apply {
+                            movie.recommendations?.results= movie.recommendations?.results?.filter { it.originalLanguage.equals("pt") }
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = movie.recommendations?.let { it1 ->
+                                Log.i("lLLLLO","$it1")
+                                it1.results?.let { it2 ->
+                                    FilmsSeriesFromUserAdapter(it2){ result->
+                                        val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
+                                        intent.putExtra(BASE_FILM_KEY, result)
+                                        intent.putExtra(ID_FRAGMENTS, 1)
+                                        startActivity(intent)
+                                    }
+                                }
+                            }
+                        }
+
+                        binding.rvCardsListSimilares.apply {
+                            movie.similar?.results = movie.similar?.results?.filter { it.originalLanguage.equals("pt") }
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = movie.similar?.let { it1 ->
+                                it1.results?.let { it2 ->
+                                    FilmsSeriesFromUserAdapter(it2){ result->
+                                        val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
+                                        intent.putExtra(BASE_FILM_KEY, result)
+                                        intent.putExtra(ID_FRAGMENTS, 1)
+                                        startActivity(intent)
+                                    }
+                                }
+                            }
                         }
 
                         //binding.rvStreaming.isVisible = movie.homepage != ""

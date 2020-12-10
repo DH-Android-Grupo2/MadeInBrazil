@@ -261,6 +261,78 @@
             app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvCastTitleFilmsSeries"/>
 
+        <View
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListActors"
+            app:layout_constraintBottom_toTopOf="@id/tvRecomendacoesTitleFilmsSeries"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorAccentOpaque"
+            />
+
+        <TextView
+            android:id="@+id/tvRecomendacoesTitleFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text="Recomendações"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListActors"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListRecomendacoes"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            tools:listitem="@layout/main_cast_recyclerview"
+            tools:itemCount="1"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvRecomendacoesTitleFilmsSeries"/>
+
+
+        <TextView
+            android:id="@+id/tvSimilaresTitleFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text="Similares"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListRecomendacoes"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListSimilares"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            tools:listitem="@layout/main_cast_recyclerview"
+            tools:itemCount="1"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvSimilaresTitleFilmsSeries"/>
+
+
+        <View
+            android:id="@+id/hr"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListSimilares"
+            app:layout_constraintBottom_toTopOf="@id/tilCommentFilmsSeries"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorAccentOpaque"
+            />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/CommentTextInputDefault"
@@ -269,7 +341,7 @@
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
             app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListActors">
+            app:layout_constraintTop_toBottomOf="@id/hr">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tietCommentFilmsSeries"

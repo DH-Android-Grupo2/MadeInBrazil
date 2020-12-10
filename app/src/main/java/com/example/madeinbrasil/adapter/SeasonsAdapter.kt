@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.RecyclerviewSeasonsBinding
 import com.example.madeinbrasil.model.serieDetailed.Season
@@ -34,6 +35,7 @@ class SeasonsAdapter(
         fun bind(season: Season, onSeasonCLicked: (Season?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                 .load(season?.poster_path)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.made_in_brasil_logo)
                 .into(cvImageSeason)
 
