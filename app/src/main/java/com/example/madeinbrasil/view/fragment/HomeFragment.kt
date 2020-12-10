@@ -136,18 +136,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadContentDiscoverTv() {
-        discover?.results?.let {
-            if(it.size < 20) {
-                loadContentNowPlaying()
-            }else {
-                viewModel.discoverTvPagedList?.observe(viewLifecycleOwner) { pagedList ->
-                    homeAdapter4.currentList?.clear()
-                    homeAdapter4.submitList(pagedList, null)
-                    homeAdapter4.notifyDataSetChanged()
+        viewModel.discoverTvPagedList?.observe(viewLifecycleOwner) { pagedList ->
+            homeAdapter4.currentList?.clear()
+            homeAdapter4.submitList(pagedList, null)
+            homeAdapter4.notifyDataSetChanged()
 
-                }
-            }
-        }?: loadContentNowPlaying()
+        }
     }
 
     private fun setupRecyclerView() {
