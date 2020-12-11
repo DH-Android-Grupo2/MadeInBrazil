@@ -106,6 +106,7 @@
             style="@style/ButtonWatchedFragment"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="15dp"
+            android:enabled="false"
             app:layout_constraintEnd_toEndOf="@+id/tilLoginEmail"
             app:layout_constraintStart_toStartOf="@+id/ivArrowBackLogin"
             app:layout_constraintBottom_toBottomOf="parent"

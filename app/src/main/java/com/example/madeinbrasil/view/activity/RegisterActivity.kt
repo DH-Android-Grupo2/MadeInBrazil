@@ -3,23 +3,33 @@ package com.example.madeinbrasil.view.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.databinding.ActivityInitialBinding
+import com.example.madeinbrasil.databinding.ActivityRegisterBinding
 import com.example.madeinbrasil.databinding.ActivitySelectBinding
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_register.*
-
-
-
+import kotlinx.coroutines.handleCoroutineException
 
 
 class RegisterActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivityRegisterBinding
     private var isNameOk = false
     private var isEmailOk = false
     private var isPasswordOk = false
@@ -28,10 +38,19 @@ class RegisterActivity : AppCompatActivity() {
     private var validationEmail = false
     private var validationPassword = false
 
+    private val callbackManager by lazy {
+        CallbackManager.Factory.create()
+    }
+    private lateinit var registerClient: GoogleSignInClient
+    private val RC_REGISTER = 999
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.btFaceRegister.setPermissions("email,name")
 
 
         textChangeDefault(tietRegisterName, tilRegisterName, R.string.string_name)
@@ -49,7 +68,80 @@ class RegisterActivity : AppCompatActivity() {
         ivArrowBackRegister.setOnClickListener {
             startInitialActivity(this)
         }
+        //cadastrar com google
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        binding.btGoogleRegister.setOnClickListener {
+            val registerIntent: Intent = registerClient.signInIntent
+            startActivityForResult(registerIntent, RC_REGISTER)
+        }
+        registerClient = GoogleSignIn.getClient(this, gso)
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult?> {
+                override fun onSuccess(registerResult: LoginResult?) {
+                    val request = GraphRequest.newMeRequest(
+                        registerResult?.accessToken
+
+                    ) { jsonResponse, response ->
+                        jsonResponse
+                        response
+                    }
+                    val parameters = Bundle()
+                    parameters.putString("fields", "id,name,link, email")
+                    request.parameters = parameters
+                    request.executeAsync()
+                }
+
+                override fun onCancel() {
+                    Log.i("teste", "teste")
+                    TODO("Not yet implemented")
+                }
+
+                override fun onError(exception: FacebookException) {
+                    exception
+                }
+            })
     }
+
+    override fun onResume() {
+        super.onResume()
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        val accessToken = AccessToken.getCurrentAccessToken()
+        val isRegistered = accessToken != null && !accessToken.isExpired
+
+        if (isRegistered) {
+            binding.btFaceRegister.isVisible = false
+        } else {
+            binding.btFaceRegister.setPermissions("email")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int,
+                                  resultCode: Int,
+                                  data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_REGISTER) {
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+            // Signed in successfully, show authenticated UI.
+            binding.btGoogleRegister.isVisible = false
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("TAG", "signInResult:failed code=" + e.statusCode)
+        }
+    }
+
 
 
 
@@ -160,9 +252,3 @@ class RegisterActivity : AppCompatActivity() {
 
 
 }
-
-
-
-
-
-
