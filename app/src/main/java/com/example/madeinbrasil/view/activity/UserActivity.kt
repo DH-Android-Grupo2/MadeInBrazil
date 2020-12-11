@@ -24,7 +24,6 @@ class UserActivity : AppCompatActivity() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val btAchiev = findViewById<TextView>(R.id.tvNumConquistas)
         val btFriends = findViewById<TextView>(R.id.tvNumAmigos)
         val btLists = findViewById<TextView>(R.id.tvNumListas)
         val backButton = findViewById<ImageView>(R.id.imBackButton)
@@ -44,10 +43,6 @@ class UserActivity : AppCompatActivity() {
             startListsActivity(this@UserActivity)
         }
 
-        btAchiev.setOnClickListener {
-            startAchievmentActivity(this@UserActivity)
-        }
-
         btFriends.setOnClickListener {
             startFriendsActivity(this@UserActivity)
         }
@@ -57,11 +52,6 @@ class UserActivity : AppCompatActivity() {
 
     fun startListsActivity(context: Context) {
         val intent = Intent(context, MyProfileOptionsActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun startAchievmentActivity(context: Context) {
-        val intent = Intent(context, AchievementActivity::class.java)
         startActivity(intent)
     }
 
@@ -84,7 +74,7 @@ class UserActivity : AppCompatActivity() {
         Glide.with(this)
             .load("https://pareto.io/wp-content/uploads/2019/06/bg-full.png")
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(binding.ivBGProfile)
+            .into(binding.ivUserBackgroundPhoto)
 
 
         binding.rvCardsListFavorites.apply {
