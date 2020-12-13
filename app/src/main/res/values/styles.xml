@@ -18,14 +18,17 @@
     </style>
 
     <style name="ChipDefault" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="chipStrokeColor">@color/colorAccent</item>
-        <item name="chipStrokeWidth">1dp</item>
-        <item name="chipCornerRadius">15dp</item>
+        <item name="toggle_borderColor">@color/colorAccent</item>
+        <item name="toggle_borderWidth">1dp</item>
+        <item name="toggle_btnCornerRadius">15dp</item>
 
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="chipBackgroundColor">@color/color</item>
+        <item name="toggle_backgroundColor">@color/colorPrimary</item>
+        <item name="toggle_selectedBackgroundColor">@color/colorAccent</item>
         <item name="android:textColor">@color/chip_text_color</item>
+        <item name="toggle_textColor">@color/colorAccent</item>
+        <item name="toggle_selectedTextColor">@color/white</item>
     </style>
 
     <style name="FormTextInput">
