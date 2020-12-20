@@ -22,155 +22,192 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupGender"
-        android:layout_width="0dp"
+    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
+        android:id="@+id/tags"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:paddingStart="30dp"
-        android:paddingEnd="10dp"
-        app:chipSpacingVertical="10dp"
-        app:chipSpacingHorizontal="10dp"
+        app:toggle_selectableAmount="2"
+        app:toggle_requiredAmount="0"
+        app:justifyContent="space_around"
+        app:flexWrap="wrap"
         app:layout_constraintStart_toStartOf="@+id/tvSelectGender"
         app:layout_constraintEnd_toEndOf="@+id/tvSelectGender"
-        app:layout_constraintTop_toBottomOf="@+id/tvSelectGender">
+        app:layout_constraintTop_toBottomOf="@+id/tvSelectGender"
+        android:padding="10dp">
 
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip18Drama"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag1"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_drama"
-            android:checked="false"
-            />
+            android:tag="18"
+            app:toggle_text="@string/string_drama" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip28Action"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag2"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_action"
-            android:checked="false"
-            />
+            android:tag="28"
+            app:toggle_text="@string/string_action" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip27Horror"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag3"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_horror"
-            android:checked="false"
-            />
+            android:tag="27"
+            app:toggle_text="@string/string_horror" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip10751Family"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag4"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_family"
-            android:checked="false"
-            />
+            android:tag="10751"
+            app:toggle_text="@string/string_family" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip16Animation"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag5"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:checkable="true"
-            android:text="@string/string_animation"
-            android:checked="false"
-            />
+            android:tag="16"
+            app:toggle_text="@string/string_animation" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip99Documentary"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag6"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_doc"
-            android:checked="false"
-            />
+            android:tag="99"
+            app:toggle_text="@string/string_doc" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip35Comedy"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag7"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_comedy"
-            android:checked="false"
-            />
+            android:tag="35"
+            app:toggle_text="@string/string_comedy" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip80Crime"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag8"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_crime"
-            android:checked="false"
-            />
+            android:tag="80"
+            app:toggle_text="@string/string_crime" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip14Fantasy"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag9"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_fantasy"
-            android:checked="false"
-            />
+            android:tag="14"
+            app:toggle_text="@string/string_fantasy" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip9648Mistery"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag10"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_mistery"
-            android:checked="false"
-            />
+            android:tag="9648"
+            app:toggle_text="@string/string_mistery" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip10752War"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag11"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_war"
-            android:checked="false"
-            />
+            android:tag="10752"
+            app:toggle_text="@string/string_war" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip878Scifi"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag12"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_syfi"
-            android:checked="false"
-            />
+            android:tag="878"
+            app:toggle_text="@string/string_syfi" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip53Thriller"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag13"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_thriller"
-            android:checked="false"
-            />
+            android:tag="53"
+            app:toggle_text="@string/string_thriller" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip10402Music"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag14"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/musical"
-            android:checked="false"
-            />
+            android:tag="10402"
+            app:toggle_text="@string/musical" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip12Aventura"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag15"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="Aventura"
-            android:checked="false"
-            />
+            android:tag="12"
+            app:toggle_text="@string/string_adventure" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip37Faroeste"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag16"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="Faroeste"
-            android:checked="false"
-            />
+            android:tag="37"
+            app:toggle_text="@string/string_faroeste" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip10749Romance"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag17"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="Romance"
-            android:checked="false"
-            />
+            android:tag="36"
+            app:toggle_text="@string/string_history" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip36Historia"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag18"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="História"
-            android:checked="false"
-            />
+            android:tag="10749"
+            app:toggle_text="@string/string_romance" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip10770TvMovie"
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/tag19"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
             style="@style/ChipDefault"
-            android:text="@string/string_tvmovies"
-            android:checked="false"
-            />
-    </com.google.android.material.chip.ChipGroup>
+            android:tag="10070"
+            app:toggle_text="@string/string_tvmovies" />
+
+    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btContinueGender"
@@ -178,7 +215,7 @@
         android:layout_margin="0dp"
         app:layout_constraintEnd_toEndOf="@+id/tvSelectGender"
         app:layout_constraintStart_toStartOf="@+id/tvSelectGender"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroupGender"
+        app:layout_constraintTop_toBottomOf="@+id/tags"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/string_continue_gender" />
 

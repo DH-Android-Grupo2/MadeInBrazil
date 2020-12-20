@@ -83,5 +83,7 @@
     <string name="string_similars_not_found">Similares não encontrados</string>
     <string name="string_similars">Similares</string>
     <string name="string_recomendations">Recomendações</string>
+    <string name="string_romance">Romance</string>
+    <string name="string_faroeste">Faroeste</string>
 
 </resources>
