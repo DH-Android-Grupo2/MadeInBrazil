@@ -40,7 +40,7 @@ class MovieStreamingAdapter(
             Glide.with(itemView.context)
                     .load(watchProviders?.logo_path)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.made_in_brasil_logo)
+                    .placeholder(R.drawable.logo_made_in_brasil)
                     .into(ivStreaming)
 
             itemView.setOnClickListener {

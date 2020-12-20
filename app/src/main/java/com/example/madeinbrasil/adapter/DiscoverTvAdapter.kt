@@ -43,7 +43,7 @@ class DiscoverTvAdapter
         fun bind(serie: ResultSearch?, onSerieClicked: (ResultSearch?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                     .load(serie?.posterPath)
-                    .placeholder(R.drawable.made_in_brasil_logo)
+                    .placeholder(R.drawable.logo_made_in_brasil)
                     .into(cvImageCardMenu)
             tvNameRecyclerViewMenu.text = serie?.name
 
@@ -58,7 +58,7 @@ class DiscoverTvAdapter
 
                 Glide.with(it.context)
                         .load(serie?.posterPath)
-                        .placeholder(R.drawable.made_in_brasil_logo)
+                        .placeholder(R.drawable.logo_made_in_brasil)
                         .into(dialog.ivDialogPoster)
 
                 dialog.tvDialogName.text = serie?.name

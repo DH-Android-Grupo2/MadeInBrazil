@@ -35,7 +35,7 @@ class SerieStreamingAdapter(
             Glide.with(itemView.context)
                 .load(flatrate.logoPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.made_in_brasil_logo)
+                .placeholder(R.drawable.logo_made_in_brasil)
                 .into(ivStreaming)
 
             itemView.setOnClickListener {

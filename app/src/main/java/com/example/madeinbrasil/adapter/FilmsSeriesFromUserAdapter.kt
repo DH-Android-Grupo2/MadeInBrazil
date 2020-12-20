@@ -47,7 +47,7 @@ class FilmsSeriesFromUserAdapter(
         fun bind(cast: Result?, onMovieClicked: (Result?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                     .load(cast?.posterPath)
-                    .placeholder(R.drawable.made_in_brasil_logo)
+                    .placeholder(R.drawable.logo_made_in_brasil)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(cvImageActors)
             tvActorsName.text = cast?.title

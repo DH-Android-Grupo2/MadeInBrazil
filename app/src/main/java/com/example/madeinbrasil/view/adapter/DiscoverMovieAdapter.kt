@@ -45,7 +45,7 @@ class DiscoverMovieAdapter(
         fun bind(movie: Result?, onMovieClicked: (Result?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                     .load(movie?.poster_path)
-                    .placeholder(R.drawable.made_in_brasil_logo)
+                    .placeholder(R.drawable.logo_made_in_brasil)
                     .into(cvImageCardMenu)
             tvNameRecyclerViewMenu.text = movie?.title
 
@@ -60,7 +60,7 @@ class DiscoverMovieAdapter(
 
                 Glide.with(it.context)
                         .load(movie?.poster_path)
-                        .placeholder(R.drawable.made_in_brasil_logo)
+                        .placeholder(R.drawable.logo_made_in_brasil)
                         .into(dialog.ivDialogPoster)
 
                 dialog.tvDialogName.text = movie?.title

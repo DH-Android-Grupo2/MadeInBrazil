@@ -107,15 +107,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                         Glide.with(this)
                                 .load(movie.poster_path)
-                                .placeholder(R.drawable.made_in_brasil_logo)
+                                .placeholder(R.drawable.logo_made_in_brasil)
                                 .into(binding.ivBannerFilmsSeries)
                         movie.backdrop_path?.let {
                             Glide.with(this)
                                     .load(it)
-                                    .placeholder(R.drawable.made_in_brasil_logo)
+                                    .placeholder(R.drawable.logo_made_in_brasil)
                                     .into(binding.ivBackDropFilmSeries)
                         }?: Glide.with(this)
-                                .load(R.drawable.made_in_brasil_logo)
+                                .load(R.drawable.logo_made_in_brasil)
                                 .into(binding.ivBackDropFilmSeries)
 
                         binding.tvDescriptionTextFilmsSeries.text = movie.overview
@@ -216,15 +216,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     setupObservablesSeries()
                     Glide.with(binding.root.context)
                             .load(serie?.posterPath)
-                            .placeholder(R.drawable.made_in_brasil_logo)
+                            .placeholder(R.drawable.logo_made_in_brasil)
                             .into(binding.ivBannerFilmsSeries)
                     serie?.backdropPath?.let {
                         Glide.with(binding.root.context)
                                 .load(serie?.backdropPath)
-                                .placeholder(R.drawable.made_in_brasil_logo)
+                                .placeholder(R.drawable.logo_made_in_brasil)
                                 .into(binding.ivBackDropFilmSeries)
                     }?: Glide.with(this)
-                            .load(R.drawable.made_in_brasil_logo)
+                            .load(R.drawable.logo_made_in_brasil)
                             .into(binding.ivBackDropFilmSeries)
 
                     binding.tvDescriptionTextFilmsSeries.text = serie?.overview

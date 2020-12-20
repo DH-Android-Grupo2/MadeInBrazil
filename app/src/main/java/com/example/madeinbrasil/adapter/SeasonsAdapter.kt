@@ -36,7 +36,7 @@ class SeasonsAdapter(
             Glide.with(itemView.context)
                 .load(season?.posterPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.made_in_brasil_logo)
+                .placeholder(R.drawable.logo_made_in_brasil)
                 .into(cvImageSeason)
 
             tvSeasonName.text = season?.name

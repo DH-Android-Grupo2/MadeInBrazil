@@ -36,7 +36,7 @@ class CastDetailsAdapter(
             Glide.with(itemView.context)
                     .load(cast.posterPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.made_in_brasil_logo)
+                    .placeholder(R.drawable.logo_made_in_brasil)
                     .into(cvImageActors)
             tvActorsName.text = cast?.name
 

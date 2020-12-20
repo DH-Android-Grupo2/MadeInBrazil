@@ -33,7 +33,7 @@ class SerieAdapter(
             Glide.with(itemView.context)
                 .load(serie?.posterPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.made_in_brasil_logo)
+                .placeholder(R.drawable.logo_made_in_brasil)
                 .into(cvImageCard)
 
             tvNameRecyclerView.text = serie?.name
@@ -50,7 +50,7 @@ class SerieAdapter(
                 Glide.with(it.context)
                     .load(serie?.posterPath)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.made_in_brasil_logo)
+                    .placeholder(R.drawable.logo_made_in_brasil)
                     .into(dialog.ivDialogPoster)
 
                 dialog.tvDialogName.text = serie?.name

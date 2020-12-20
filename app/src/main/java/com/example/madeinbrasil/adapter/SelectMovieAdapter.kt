@@ -52,7 +52,7 @@ class SelectMovieAdapter(private var selectedItems: MutableList<Int>): PagedList
 
                 Glide.with(itemView.context)
                         .load(movie.posterPath)
-                        .placeholder(R.drawable.made_in_brasil_logo)
+                        .placeholder(R.drawable.logo_made_in_brasil)
                         .into(cvImageCard)
 
                 tvNameRecyclerView.text = movie.title

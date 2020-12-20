@@ -50,7 +50,7 @@ class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter
 
                 Glide.with(itemView.context)
                         .load(serie.posterPath)
-                        .placeholder(R.drawable.made_in_brasil_logo)
+                        .placeholder(R.drawable.logo_made_in_brasil)
                         .into(cvImageCard)
 
                 tvNameRecyclerView.text = serie.name

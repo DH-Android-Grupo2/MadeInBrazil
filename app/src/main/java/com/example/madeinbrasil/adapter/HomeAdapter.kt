@@ -48,7 +48,7 @@ class HomeAdapter(
         fun bind(movie: Result?, onMovieClicked: (Result?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                 .load(movie?.posterPath)
-                .placeholder(R.drawable.made_in_brasil_logo)
+                .placeholder(R.drawable.logo_made_in_brasil)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(cvImageCardMenu)
             tvNameRecyclerViewMenu.text = movie?.title
@@ -64,7 +64,7 @@ class HomeAdapter(
 
                 Glide.with(it.context)
                     .load(movie?.posterPath)
-                    .placeholder(R.drawable.made_in_brasil_logo)
+                    .placeholder(R.drawable.logo_made_in_brasil)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(dialog.ivDialogPoster)
 

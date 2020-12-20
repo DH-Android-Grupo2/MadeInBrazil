@@ -16,7 +16,7 @@
             android:id="@+id/logoMadeInBrasil"
             android:layout_width="match_parent"
             android:layout_height="85sp"
-            android:src="@drawable/made_in_brasil_logo"
+            android:src="@drawable/logo_made_in_brasil"
             android:scaleType="centerCrop"
             android:contentDescription="@string/desc_logo_madeinbrasil"
             app:layout_constraintTop_toTopOf="parent"
