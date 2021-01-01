@@ -2,24 +2,24 @@ package com.example.madeinbrasil.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.DiscoverTvAdapter
 import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
 import com.example.madeinbrasil.model.discover.DiscoverMovie
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.MovieDetailed
-import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
-import com.example.madeinbrasil.view.adapter.DiscoverMovieAdapter
 import com.example.madeinbrasil.viewModel.HomeViewModel
 
 class HomeFragment : Fragment() {
@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
     private val homeAdapter : HomeAdapter by lazy {
         HomeAdapter {
             val movieClicked = it
-            movieClicked?.let{result->
+            movieClicked?.let{ result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
     private val homeAdapter2 : HomeAdapter by lazy {
         HomeAdapter {
             val movieClicked = it
-            movieClicked?.let{result->
+            movieClicked?.let{ result->
 
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
     private val homeAdapter3 : HomeAdapter by lazy {
         HomeAdapter {
             val movieClicked = it
-            movieClicked?.let{result->
+            movieClicked?.let{ result->
 
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
@@ -76,10 +76,10 @@ class HomeFragment : Fragment() {
     }
 
     private val homeAdapter4 : DiscoverTvAdapter by lazy {
-        DiscoverTvAdapter {result ->
+        DiscoverTvAdapter { result ->
             result?.let {
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_SERIE_KEY, result )
+                intent.putExtra(Constants.ConstantsFilms.BASE_SERIE_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 2)
                 startActivity(intent)
             }
@@ -93,7 +93,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
        selected = arguments?.getParcelable<GenreSelected>("Selected")
         genre = selected
-        activity?.let{
+
+       activity?.let{
             viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
         }
@@ -101,8 +102,8 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
@@ -112,7 +113,7 @@ class HomeFragment : Fragment() {
     private fun loadContentUpcoming() {
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
             homeAdapter2.currentList?.clear()
-            homeAdapter2.submitList(pagedList,null)
+            homeAdapter2.submitList(pagedList, null)
             homeAdapter2.notifyDataSetChanged()
         }
     }
@@ -120,9 +121,11 @@ class HomeFragment : Fragment() {
     private fun loadContentNowPlaying() {
         viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
             homeAdapter.currentList?.clear()
-            homeAdapter.submitList(pagedList,null)
+            homeAdapter.submitList(pagedList, null)
             homeAdapter.notifyDataSetChanged()
         }
+
+
     }
 
 
@@ -146,26 +149,27 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding?.rvCardsListLancamentos?.apply {
-            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentNowPlaying()
             adapter = homeAdapter
+
         }
 
         binding?.rvCardsListFuturosLancamentos?.apply {
-            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentUpcoming()
 
             adapter = homeAdapter2
         }
 
        binding?.rvCardsListMovies?.apply {
-         layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+         layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
            loadContentDiscoverMovie()
            adapter = homeAdapter3
          }
 
         binding?.rvCardListSeries?.apply {
-           layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL,false)
+           layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentDiscoverTv()
             adapter = homeAdapter4
         }
