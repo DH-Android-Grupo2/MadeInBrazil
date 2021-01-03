@@ -24,49 +24,50 @@ class UserActivity : AppCompatActivity() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val btFriends = findViewById<TextView>(R.id.tvNumAmigos)
-        val btLists = findViewById<TextView>(R.id.tvNumListas)
-        val backButton = findViewById<ImageView>(R.id.imBackButton)
-        val btLogOut = findViewById<Button>(R.id.btLogOut)
-
-
-
-        btLogOut.setOnClickListener {
+        binding.btLogOut.setOnClickListener {
             startLoginActivity(this@UserActivity)
         }
 
-        backButton.setOnClickListener {
-            super.onBackPressed()
+        binding.imBackButton.setOnClickListener {
+            finish()
         }
 
-        btLists.setOnClickListener {
-            startListsActivity(this@UserActivity)
+        binding.tvNumListas.setOnClickListener {
+            startMyProfileOptionsActivity(this@UserActivity)
         }
 
-        btFriends.setOnClickListener {
+        binding.tvNumAmigos.setOnClickListener {
             startFriendsActivity(this@UserActivity)
+        }
+
+        binding.tvFavoritesRecycler.setOnClickListener {
+            startMyProfileOptionsActivity(this@UserActivity)
+        }
+
+        binding.tvListasRecycler.setOnClickListener {
+            startMyProfileOptionsActivity(this@UserActivity)
         }
 
         setupUser()
     }
 
-    fun startListsActivity(context: Context) {
+    private fun startMyProfileOptionsActivity(context: Context) {
         val intent = Intent(context, MyProfileOptionsActivity::class.java)
         startActivity(intent)
     }
 
-    fun startFriendsActivity(context: Context) {
+    private fun startFriendsActivity(context: Context) {
         val intent = Intent(context, FriendsActivity::class.java)
         startActivity(intent)
     }
 
-    fun startLoginActivity(context: Context) {
+    private fun startLoginActivity(context: Context) {
         val intent = Intent(context, LogInActivity::class.java)
         startActivity(intent)
     }
 
-    fun setupUser(){
-        var image = "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
+    private fun setupUser(){
+        val image = "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
         Glide.with(this)
             .load(image)
             .diskCacheStrategy(DiskCacheStrategy.ALL)

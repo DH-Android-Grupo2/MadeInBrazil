@@ -8,13 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.adapter.SelectMovieAdapter
 import com.example.madeinbrasil.databinding.FragmentSelectMovieBinding
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
-import com.example.madeinbrasil.viewmodel.SelectMovieViewModel
+import com.example.madeinbrasil.viewModel.SelectMovieViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -64,12 +66,16 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
             override fun onQueryTextSubmit(query:String):Boolean {
                 viewModel.setQuery(query)
                 loadContentSearch()
+                binding.tvMessageFilmsAdd.isVisible = query == ""
+                binding.animationFilmsAdd.isVisible = query == ""
                 return true
             }
 
             override fun onQueryTextChange(newText: String):Boolean{
                 viewModel.setQuery(newText)
                 loadContentSearch()
+                binding.tvMessageFilmsAdd.isVisible = newText == ""
+                binding.animationFilmsAdd.isVisible = newText == ""
                 return true
             }
         })

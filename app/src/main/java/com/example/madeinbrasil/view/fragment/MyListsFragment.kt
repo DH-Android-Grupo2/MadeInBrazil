@@ -36,7 +36,7 @@ class MyListsFragment : Fragment() {
     }
 
 
-    fun startCreateListActivity(context: Context) {
+    private fun startCreateListActivity(context: Context) {
         val intent = Intent(context, CreateListActivity::class.java)
         startActivity(intent)
     }

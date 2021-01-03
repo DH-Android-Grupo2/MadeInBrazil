@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@color/light_dark"
+    android:background="@color/colorPrimary"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     tools:context=".view.fragment.SelectSerieFragment">
 
@@ -37,6 +37,31 @@
         app:layout_constraintTop_toTopOf="@id/searchField"
         app:layout_constraintBottom_toBottomOf="@id/searchField"
         app:layout_constraintStart_toEndOf="@+id/searchField"/>
+
+    <TextView
+        android:id="@+id/tvMessageSeriesAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Pesquise uma Série"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/animationSeriesAdd"
+        app:layout_constraintEnd_toEndOf="@id/btnClose"
+        app:layout_constraintStart_toStartOf="@id/searchField"
+        app:layout_constraintTop_toBottomOf="@id/searchField" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationSeriesAdd"
+        android:layout_width="200dp"
+        android:layout_height="240dp"
+        app:lottie_rawRes="@raw/claqueteaction"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintStart_toStartOf="@id/searchField"
+        app:layout_constraintEnd_toEndOf="@id/btnClose"
+        app:layout_constraintTop_toBottomOf="@id/tvMessageSeriesAdd" />
 
     <ScrollView
         android:id="@+id/scrollView"
