@@ -175,12 +175,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             binding.tvMessageSimilar.isVisible = false
                         }
 
-                        binding.rvStreaming.isVisible = movie.homepage != ""
+                        //binding.rvStreaming.isVisible = movie.homepage != ""
                         binding.rvStreaming.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie.watch_providers?.results?.BR?.let { it1 ->
                                 it1.flatrate?.let { it2 ->
-                                    Log.i("FLATRATE","$it2")
                                     MovieStreamingAdapter(it2){
                                         if(movie.homepage != ""){
                                             val uri = Uri.parse(movie.homepage)

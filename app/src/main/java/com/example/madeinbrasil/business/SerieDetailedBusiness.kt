@@ -30,9 +30,10 @@ class SerieDetailedBusiness {
             serie.similar?.results?.forEach {
                 it.posterPath = it.posterPath?.getFullImagePath()
             }
+
             serie.backdropPath?.let { string ->
                 serie.backdropPath = string.getFullImagePath()
-            }.also {
+            } ?: run {
                 serie.backdropPath = serie.posterPath
             }
             if(serie.overview == "") {

@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.business
 
+import android.util.Log
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.result.MovieDetailed
@@ -21,7 +22,7 @@ class MovieDetailedBusiness  {
             movie.poster_path = movie.poster_path?.getFullImagePath()
             movie.backdrop_path?.let { string ->
                 movie.backdrop_path = string.getFullImagePath()
-            }.also {
+            }?: run {
                 movie.backdrop_path = movie.poster_path
             }
             movie?.credits?.cast?.forEach {
