@@ -1,9 +1,11 @@
 package com.example.madeinbrasil.model.upcoming
 
 import android.os.Parcelable
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 @Parcelize
 data class Result(
@@ -35,7 +37,8 @@ data class Result(
     @SerializedName("vote_average")
     val voteAverage: Float?,
     @SerializedName("vote_count")
-    val voteCount: Int?
+    val voteCount: Int?,
+
 ) : Parcelable {
 
     companion object {

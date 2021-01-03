@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -18,6 +20,7 @@ import com.example.madeinbrasil.databinding.FragmentHomeBinding
 import com.example.madeinbrasil.model.discover.DiscoverMovie
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewModel.HomeViewModel
@@ -32,44 +35,48 @@ class HomeFragment : Fragment() {
          var genre : GenreSelected? = null
     }
     private val homeAdapter : HomeAdapter by lazy {
-        HomeAdapter {
+        HomeAdapter { it: Result?, imageView: ImageView? ->
             val movieClicked = it
             movieClicked?.let{ result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
-                startActivity(intent)
+
+                val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
+                startActivity(intent,options.toBundle())
             }
 
         }
     }
 
     private val homeAdapter2 : HomeAdapter by lazy {
-        HomeAdapter {
+        HomeAdapter { it: Result?, imageView: ImageView? ->
             val movieClicked = it
             movieClicked?.let{ result->
-
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
-                startActivity(intent)
+
+                val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
+                startActivity(intent,options.toBundle())
             }
 
         }
     }
 
     private val homeAdapter3 : HomeAdapter by lazy {
-        HomeAdapter {
+        HomeAdapter { it: Result?, imageView: ImageView? ->
             val movieClicked = it
             movieClicked?.let{ result->
-
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
-                startActivity(intent)
+
+                val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
+                startActivity(intent,options.toBundle())
             }
 
         }
@@ -127,7 +134,6 @@ class HomeFragment : Fragment() {
 
 
     }
-
 
     private fun loadContentDiscoverMovie() {
         viewModel.discoverMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->

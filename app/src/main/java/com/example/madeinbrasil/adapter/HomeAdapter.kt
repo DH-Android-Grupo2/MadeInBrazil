@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -21,12 +22,13 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.*
 import com.example.madeinbrasil.model.upcoming.Result
 import kotlinx.android.synthetic.main.filmsseries_popup.*
+import kotlinx.android.synthetic.main.main_cards_menu.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 
 
 class HomeAdapter(
-        private val onMovieClicked: (Result?) -> Unit
+        private val onMovieClicked: (Result?,ImageView?) -> Unit
 ) : PagedListAdapter<Result, HomeAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,16 +47,15 @@ class HomeAdapter(
             binding.root
     ) {
 
-        fun bind(movie: Result?, onMovieClicked: (Result?) -> Unit) = with(binding) {
+        fun bind(movie: Result?,onMovieClicked: (Result?,ImageView?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                 .load(movie?.posterPath)
                 .placeholder(R.drawable.logo_made_in_brasil)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(cvImageCardMenu)
             tvNameRecyclerViewMenu.text = movie?.title
-
             itemView.setOnClickListener {
-                onMovieClicked(movie)
+                onMovieClicked(movie,cvImageCardMenu)
             }
 
             itemView.setOnLongClickListener {
