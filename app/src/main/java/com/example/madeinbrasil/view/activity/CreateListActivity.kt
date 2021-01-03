@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.adapter.SelectedShowsAdapter
@@ -14,8 +15,8 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
 import com.example.madeinbrasil.view.fragment.SelectMovieFragment
 import com.example.madeinbrasil.view.fragment.SelectSerieFragment
-import com.example.madeinbrasil.viewmodel.SelectMovieViewModel
-import com.example.madeinbrasil.viewmodel.SelectSerieViewModel
+import com.example.madeinbrasil.viewModel.SelectMovieViewModel
+import com.example.madeinbrasil.viewModel.SelectSerieViewModel
 import java.util.ArrayList
 
 class CreateListActivity : AppCompatActivity() {
@@ -77,27 +78,25 @@ class CreateListActivity : AppCompatActivity() {
     }
 
     private fun setupShowClickListeners() {
-        selectMovieViewModel.clickedMovieItem.observe(this, {
+        selectMovieViewModel.clickedMovieItem.observe(this) {
             if (selectedMovies.contains(it.id)) {
                 selectedMovies.remove(it.id)
                 selectedShowsAdapter.deleteItem(it)
-            }
-            else {
+            } else {
                 selectedMovies.add(it.id)
                 selectedShowsAdapter.addItem(it)
             }
-        })
+        }
 
-        selectSerieViewModel.clickedSerieItem.observe(this, {
+        selectSerieViewModel.clickedSerieItem.observe(this) {
             if (selectedSeries.contains(it.id)) {
                 selectedSeries.remove(it.id)
                 selectedShowsAdapter.deleteItem(it)
-            }
-            else {
+            } else {
                 selectedSeries.add(it.id)
                 selectedShowsAdapter.addItem(it)
             }
-        })
+        }
 
     }
 
