@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.ActivityLogInBinding
+import com.example.madeinbrasil.model.users.Users
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -22,6 +24,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_log_in.*
+import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 //184980070731-6dpbve1t4asg125d9b69c5qk9tor0n39.apps.googleusercontent.com
 //viCv12wGxwi56K9f-IMhJKoM
@@ -46,7 +52,15 @@ class LogInActivity : AppCompatActivity() {
         textChangeDefault(tietLoginPassword, tilLoginPassword, R.string.string_password)
 
         btSaveLogin.setOnClickListener {
-            startSelectActivity(this)
+            CoroutineScope(Dispatchers.IO).launch {
+                val userDao = MadeInBrazilDatabase.getDatabase(this@LogInActivity).userDao()
+                val userInDatabase = userDao.login(tietLoginEmail.text.toString(),tietLoginPassword.text.toString())
+
+                userInDatabase?.let {
+                    startSelectActivity(this@LogInActivity)
+                }
+            }
+
         }
 
         ivArrowBackLogin.setOnClickListener {

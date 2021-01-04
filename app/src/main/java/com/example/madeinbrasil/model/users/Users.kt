@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.model.users
 
 import android.os.Parcelable
+import androidx.annotation.NonNull
 import androidx.room.*
 import kotlinx.android.parcel.Parcelize
 
@@ -17,4 +18,12 @@ data class Users (
     var password: String?,
     @ColumnInfo(name = "picture")
     var picture: String?
-        ): Parcelable
+        ): Parcelable {
+
+    override fun equals(other: Any?): Boolean {
+        return (other as? Users)?.let {
+            it.email == email
+        } ?: false
+    }
+
+}

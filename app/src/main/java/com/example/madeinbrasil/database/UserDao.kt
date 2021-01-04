@@ -12,7 +12,10 @@ interface UserDao {
     suspend fun getUserbyId(userId:Int): List<Users>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertAllUsers(users: List<Users>)
+    suspend fun insertUser(user:Users)
+
+    @Query("SELECT * FROM users WHERE email = (:userEmail) AND password = (:userPass) LIMIT 1")
+    suspend fun login(userEmail:String,userPass:String): Users
 
     @Delete
     suspend fun deleteUser(user:Users)
