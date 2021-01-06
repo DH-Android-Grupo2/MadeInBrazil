@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Switch
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityMenuBinding
@@ -14,6 +15,8 @@ import com.example.madeinbrasil.view.fragment.FilmsFragment
 import com.example.madeinbrasil.view.fragment.HomeFragment
 import com.example.madeinbrasil.view.fragment.ListsFragment
 import com.example.madeinbrasil.view.fragment.SeriesFragment
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 
 class MenuActivity : AppCompatActivity() {
 
@@ -58,8 +61,22 @@ class MenuActivity : AppCompatActivity() {
         }
 
         supportActionBar?.hide()
+        tutorialImplementation()
     }
 
+    private fun tutorialImplementation() {
+        TapTargetSequence(this).targets(
+                TapTarget.forView(binding.bottomNavigation,
+                        "Navegação",
+                        "Aqui você poderá Navegar pelo Made In Brasil")
+                        .cancelable(true)
+                        .transparentTarget(true).targetRadius(100)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {}
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
+    }
 
     private fun initFragments(fragment: Fragment) {
         val fragmentStart = supportFragmentManager.beginTransaction()
