@@ -104,7 +104,7 @@ class HomeFragment : Fragment() {
             viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
         }
-        tutorialImplementation()
+//        tutorialImplementation()
     }
 
     override fun onCreateView(
@@ -116,28 +116,28 @@ class HomeFragment : Fragment() {
         return binding?.root
     }
 
-    private fun tutorialImplementation() {
-        TapTargetSequence(activity).targets(
-                TapTarget.forView(binding?.logoMadeInBrasil,
-                        getString(R.string.string_welcome_tutorial_title),
-                        getString(R.string.string_welcome_tutorial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(100),
-                TapTarget.forView(binding?.rvCardsListLancamentos,
-                        getString(R.string.string_cards_tutorial_title),
-                getString(R.string.string_cards_tutorial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(220)
-        ).listener(object: TapTargetSequence.Listener{
-            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-            override fun onSequenceFinish() {}
-            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-        }).start()
-    }
+//    private fun tutorialImplementation() {
+//        TapTargetSequence(activity).targets(
+//                TapTarget.forView(binding?.logoMadeInBrasil,
+//                        getString(R.string.string_welcome_tutorial_title),
+//                        getString(R.string.string_welcome_tutorial_description))
+//                        .cancelable(false)
+//                        .outerCircleColor(R.color.colorAccentOpaque)
+//                        .targetCircleColor(R.color.colorAccent)
+//                        .transparentTarget(true).targetRadius(100),
+//                TapTarget.forView(binding?.rvCardsListLancamentos,
+//                        getString(R.string.string_cards_tutorial_title),
+//                getString(R.string.string_cards_tutorial_description))
+//                        .cancelable(false)
+//                        .outerCircleColor(R.color.colorAccentOpaque)
+//                        .targetCircleColor(R.color.colorAccent)
+//                        .transparentTarget(true).targetRadius(220)
+//        ).listener(object: TapTargetSequence.Listener{
+//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+//            override fun onSequenceFinish() {}
+//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+//        }).start()
+//    }
 
     private fun loadContentUpcoming() {
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->

@@ -47,45 +47,45 @@ class UserActivity : AppCompatActivity() {
         }
 
         setupUser()
-        tutorialImplementation()
+//        tutorialImplementation()
     }
 
-    private fun tutorialImplementation() {
-        TapTargetSequence(this).targets(
-                TapTarget.forView(binding.ivEditIcon,
-                        getString(R.string.string_edit_tutorial_title),
-                        getString(R.string.string_edit_tutorial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(20),
-                TapTarget.forView(binding.tvAmigos,
-                        getString(R.string.string_friends_tutorial_title),
-                        getString(R.string.string_friends_tutorial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(50),
-                TapTarget.forView(binding.rvCardsListFavorites,
-                        getString(R.string.string_my_favorites_tutorial_title),
-                        getString(R.string.string_my_favorites_tutorial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(120),
-                TapTarget.forView(binding.rvCardsListLists,
-                        getString(R.string.string_my_lists_tutorial_title),
-                        getString(R.string.string_my_lists_tutorial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(120)
-        ).listener(object: TapTargetSequence.Listener{
-            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-            override fun onSequenceFinish() {}
-            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-        }).start()
-    }
+//    private fun tutorialImplementation() {
+//        TapTargetSequence(this).targets(
+//                TapTarget.forView(binding.ivEditIcon,
+//                        getString(R.string.string_edit_tutorial_title),
+//                        getString(R.string.string_edit_tutorial_description))
+//                        .cancelable(false)
+//                        .outerCircleColor(R.color.colorAccentOpaque)
+//                        .targetCircleColor(R.color.colorAccent)
+//                        .transparentTarget(true).targetRadius(20),
+//                TapTarget.forView(binding.tvAmigos,
+//                        getString(R.string.string_friends_tutorial_title),
+//                        getString(R.string.string_friends_tutorial_description))
+//                        .cancelable(false)
+//                        .outerCircleColor(R.color.colorAccentOpaque)
+//                        .targetCircleColor(R.color.colorAccent)
+//                        .transparentTarget(true).targetRadius(50),
+//                TapTarget.forView(binding.rvCardsListFavorites,
+//                        getString(R.string.string_my_favorites_tutorial_title),
+//                        getString(R.string.string_my_favorites_tutorial_description))
+//                        .cancelable(false)
+//                        .outerCircleColor(R.color.colorAccentOpaque)
+//                        .targetCircleColor(R.color.colorAccent)
+//                        .transparentTarget(true).targetRadius(120),
+//                TapTarget.forView(binding.rvCardsListLists,
+//                        getString(R.string.string_my_lists_tutorial_title),
+//                        getString(R.string.string_my_lists_tutorial_description))
+//                        .cancelable(false)
+//                        .outerCircleColor(R.color.colorAccentOpaque)
+//                        .targetCircleColor(R.color.colorAccent)
+//                        .transparentTarget(true).targetRadius(120)
+//        ).listener(object: TapTargetSequence.Listener{
+//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+//            override fun onSequenceFinish() {}
+//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+//        }).start()
+//    }
 
     private fun startMyProfileOptionsActivity(context: Context) {
         val intent = Intent(context, MyProfileOptionsActivity::class.java)

@@ -57,7 +57,7 @@ class FilmsFragment : Fragment() {
             setupRecyclerView()
             loadContentSearchMovie()
         }
-        tutorialImplementation()
+//        tutorialImplementation()
     }
 
     override fun onCreateView(
@@ -69,28 +69,28 @@ class FilmsFragment : Fragment() {
         return binding?.root
     }
 
-    private fun tutorialImplementation() {
-        TapTargetSequence(activity).targets(
-                TapTarget.forView(binding?.tilSearchFilms,
-                        getString(R.string.string_search_tutorial_title),
-                        getString(R.string.string_search_tutorial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(40),
-                TapTarget.forView(binding?.ivProfileFilms,
-                        getString(R.string.string_profile_tutorial_title),
-                       getString(R.string.string_profile_tutotial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(40)
-        ).listener(object: TapTargetSequence.Listener{
-            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-            override fun onSequenceFinish() {}
-            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-        }).start()
-    }
+//    private fun tutorialImplementation() {
+//        TapTargetSequence(activity).targets(
+//                TapTarget.forView(binding?.tilSearchFilms,
+//                        getString(R.string.string_search_tutorial_title),
+//                        getString(R.string.string_search_tutorial_description))
+//                        .cancelable(false)
+//                        .outerCircleColor(R.color.colorAccentOpaque)
+//                        .targetCircleColor(R.color.colorAccent)
+//                        .transparentTarget(true).targetRadius(40),
+//                TapTarget.forView(binding?.ivProfileFilms,
+//                        getString(R.string.string_profile_tutorial_title),
+//                       getString(R.string.string_profile_tutotial_description))
+//                        .cancelable(false)
+//                        .outerCircleColor(R.color.colorAccentOpaque)
+//                        .targetCircleColor(R.color.colorAccent)
+//                        .transparentTarget(true).targetRadius(40)
+//        ).listener(object: TapTargetSequence.Listener{
+//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+//            override fun onSequenceFinish() {}
+//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+//        }).start()
+//    }
 
     private fun loadContentSearchMovie() {
         viewModel.searchMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
