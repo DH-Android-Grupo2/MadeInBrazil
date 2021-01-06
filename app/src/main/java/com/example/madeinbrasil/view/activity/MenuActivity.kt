@@ -61,21 +61,6 @@ class MenuActivity : AppCompatActivity() {
         }
 
         supportActionBar?.hide()
-        tutorialImplementation()
-    }
-
-    private fun tutorialImplementation() {
-        TapTargetSequence(this).targets(
-                TapTarget.forView(binding.bottomNavigation,
-                        "Navegação",
-                        "Aqui você poderá Navegar pelo Made In Brasil")
-                        .cancelable(true)
-                        .transparentTarget(true).targetRadius(100)
-        ).listener(object: TapTargetSequence.Listener{
-            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-            override fun onSequenceFinish() {}
-            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-        }).start()
     }
 
     private fun initFragments(fragment: Fragment) {

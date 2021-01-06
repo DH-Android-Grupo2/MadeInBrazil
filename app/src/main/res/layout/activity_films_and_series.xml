@@ -158,6 +158,7 @@
             app:layout_constraintStart_toEndOf="@id/cbFavoriteFilmsSeries"
             app:layout_constraintTop_toTopOf="@id/cbWatchedFilmsSeries"
             />
+
         <Button
             android:id="@+id/btStreamingFilmsSeries"
             style="@style/ButtonWatchedActivity"

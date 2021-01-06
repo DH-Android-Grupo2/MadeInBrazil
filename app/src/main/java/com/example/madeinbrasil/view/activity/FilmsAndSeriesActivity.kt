@@ -42,6 +42,8 @@ import kotlinx.android.synthetic.main.youtube_popup.*
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_films_and_series.*
 
@@ -72,6 +74,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         binding.ivArrowBackFilmsSeries.setOnClickListener {
             finish()
         }
+        tutorialImplementation()
 
         when(positionFragment) {
             1 -> {
@@ -329,6 +332,71 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun tutorialImplementation() {
+        TapTargetSequence(this).targets(
+                TapTarget.forView(binding.cbWatchedFilmsSeries,
+                        getString(R.string.string_watched_tutorial_title),
+                        getString(R.string.string_watched_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(30),
+                TapTarget.forView(binding.cbFavoriteFilmsSeries,
+                        getString(R.string.string_favorite_tutorial_title),
+                        getString(R.string.string_favorite_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(30),
+                TapTarget.forView(binding.cbListFilmsSeries,
+                        getString(R.string.string_list_tutorial_title),
+                        getString(R.string.string_list_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(30),
+                TapTarget.forView(binding?.btStreamingFilmsSeries,
+                        getString(R.string.string_streamming_tutorial_title),
+                        getString(R.string.string_streamming_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.btSeasonsFilmsSeries,
+                        getString(R.string.string_seasons_tutorial_title),
+                        getString(R.string.string_seasons_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.rvStreaming,
+                        getString(R.string.string_stream_tutorial_title),
+                        getString(R.string.string_stream_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.rvCardsListActors,
+                        getString(R.string.string_cast_tutorial_title),
+                        getString(R.string.string_cast_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.ivArrowBackFilmsSeries,
+                        getString(R.string.string_back_tutotial_title),
+                        getString(R.string.string_back_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(20)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {}
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
     }
 
     private fun setupObservables() {

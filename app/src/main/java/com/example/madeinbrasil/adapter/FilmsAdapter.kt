@@ -16,6 +16,8 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCardsBinding
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 
 class FilmsAdapter(
@@ -76,8 +78,8 @@ class FilmsAdapter(
                     startActivity(it.context,shareIntent,null)
 
                 }
-                dialog.show()
 
+                dialog.show()
                 return@setOnLongClickListener true
             }
         }
