@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Switch
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityMenuBinding
@@ -14,6 +15,8 @@ import com.example.madeinbrasil.view.fragment.FilmsFragment
 import com.example.madeinbrasil.view.fragment.HomeFragment
 import com.example.madeinbrasil.view.fragment.ListsFragment
 import com.example.madeinbrasil.view.fragment.SeriesFragment
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 
 class MenuActivity : AppCompatActivity() {
 
@@ -59,7 +62,6 @@ class MenuActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
     }
-
 
     private fun initFragments(fragment: Fragment) {
         val fragmentStart = supportFragmentManager.beginTransaction()

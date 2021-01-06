@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.airbnb.lottie.LottieAnimationView
+import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.FilmsAdapter
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
@@ -22,6 +23,8 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewModel.FilmsViewModel
 import com.example.madeinbrasil.view.activity.UserActivity
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import kotlinx.android.synthetic.main.fragment_films.*
 import java.util.*
 
@@ -54,7 +57,7 @@ class FilmsFragment : Fragment() {
             setupRecyclerView()
             loadContentSearchMovie()
         }
-
+        tutorialImplementation()
     }
 
     override fun onCreateView(
@@ -64,6 +67,29 @@ class FilmsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentFilmsBinding.inflate(layoutInflater, container, false)
         return binding?.root
+    }
+
+    private fun tutorialImplementation() {
+        TapTargetSequence(activity).targets(
+                TapTarget.forView(binding?.tilSearchFilms,
+                        getString(R.string.string_search_tutorial_title),
+                        getString(R.string.string_search_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(40),
+                TapTarget.forView(binding?.ivProfileFilms,
+                        getString(R.string.string_profile_tutorial_title),
+                       getString(R.string.string_profile_tutotial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(40)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {}
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
     }
 
     private fun loadContentSearchMovie() {

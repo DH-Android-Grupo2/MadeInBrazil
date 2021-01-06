@@ -85,5 +85,37 @@
     <string name="string_recomendations">Recomendações</string>
     <string name="string_romance">Romance</string>
     <string name="string_faroeste">Faroeste</string>
+    <string name="string_watched_tutorial_description">Clicando nesse botão, você adicionará este filme ou série a sua lista de assistidos!</string>
+    <string name="string_watched_tutorial_title">Assistidos</string>
+    <string name="string_favorite_tutorial_title">Favoritos</string>
+    <string name="string_favorite_tutorial_description">Clicando nesse botão, você adicionará este filme ou série a sua lista de favoritos!</string>
+    <string name="string_list_tutorial_title">Adicionar a uma lista</string>
+    <string name="string_list_tutorial_description">Clicando nesse botão, você adicionará este filme ou série a uma lista que você criou de sua escolha!</string>
+    <string name="string_streamming_tutorial_title">Streamming</string>
+    <string name="string_streamming_tutorial_description">Caso esse botão apareça, significa que ao clicar nele você será redirecionado a um site que mostrará em qual portal de Stream esse filme está disponível!</string>
+    <string name="string_seasons_tutorial_title">Temporadas</string>
+    <string name="string_seasons_tutorial_description">No caso das séries, você poderá ver alguns detalhes das temporadas que a mesma possui!</string>
+    <string name="string_stream_tutorial_title">Acesso direto</string>
+    <string name="string_stream_tutorial_description">\"Caso esse botão apareça, significa que ao clicar nele você será redirecionado diretamente para a Stream que esse filem ou série está disponível!"</string>
+    <string name="string_cast_tutorial_title">Cartões do Elenco</string>
+    <string name="string_cast_tutorial_description">Clique no cartão de um ator ou atriz para ver as suas obras e a sua descrição!</string>
+    <string name="string_back_tutotial_title">Retornar</string>
+    <string name="string_back_tutorial_description">Ao clicar nessa setinha, você irá para a página anterior!</string>
+    <string name="string_welcome_tutorial_title">Bem-vindo(a) ao Made In Brasil</string>
+    <string name="string_welcome_tutorial_description">Esse será um tutorial rápido explicando o passo a passo de como usar ao máximo este App.</string>
+    <string name="string_cards_tutorial_title">Cartões de Filmes e Séries</string>
+    <string name="string_cards_tutorial_description">Com apenas um clique nesses cartões você poderá ter acesso a descrição completa do seu filme ou série de interesse e caso queira apenas dar uma olhadinha rápida, basta clicar e segurar para abrir uma tela rápida</string>
+    <string name="string_search_tutorial_title">Pesquise um filme ou série</string>
+    <string name="string_search_tutorial_description">Aqui você poderá pesquisar qualquer filme ou série pelo nome!</string>
+    <string name="string_profile_tutorial_title">Perfil</string>
+    <string name="string_profile_tutotial_description">Clicando nesse botão, você terá acesso ao seu perfil</string>
+    <string name="string_edit_tutorial_title">Edição</string>
+    <string name="string_edit_tutorial_description">Aqui você poderá editar o seu perfil da maneira que mais gostar!</string>
+    <string name="string_friends_tutorial_title">Meus Amigos</string>
+    <string name="string_friends_tutorial_description">Clicando aqui, você terá acesso aos seus amigos!</string>
+    <string name="string_my_favorites_tutorial_title">Meus Favoritos</string>
+    <string name="string_my_favorites_tutorial_description">Aqui será listado todos os seus filmes favoritos e você pode clicar para ver uma lista mais completa</string>
+    <string name="string_my_lists_tutorial_title">Minhas listas</string>
+    <string name="string_my_lists_tutorial_description">Clicando aqui, você terá acesso as suas listas!</string>
 
 </resources>
