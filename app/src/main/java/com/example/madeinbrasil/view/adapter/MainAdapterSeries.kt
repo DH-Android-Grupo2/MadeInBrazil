@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.model.`class`.Series
+import com.example.madeinbrasil.model.classe.Series
 
 class MainAdapterSeries(
     private val seriesList: List<Series>,

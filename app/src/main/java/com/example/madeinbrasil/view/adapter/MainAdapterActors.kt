@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.model.`class`.Actors
-import java.util.zip.Inflater
+import com.example.madeinbrasil.model.classe.Actors
+import com.example.madeinbrasil.model.movieCredits.Cast
 
 class MainAdapterActors(
-    private val actorsList: List<Actors>
+    private val actorsList: List<Cast>
 ): RecyclerView.Adapter<ViewHolderActors>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderActors {

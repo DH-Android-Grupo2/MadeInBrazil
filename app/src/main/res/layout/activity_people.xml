@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true" >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".view.activity.FilmsAndSeriesActivity">
+
+
+        <com.github.florent37.shapeofview.shapes.ArcView
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            app:shape_arc_cropDirection="outside"
+            app:shape_arc_height="20dp"
+            app:shape_arc_position="bottom"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/ivBackDropFilmSeries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:alpha="0.2"
+                android:contentDescription="BackDrop"
+                android:src="@drawable/auto_da_compadecida_capa"/>
+
+        </com.github.florent37.shapeofview.shapes.ArcView>
+
+        <ImageView
+            android:id="@+id/ivArrowBackFilmsSeries"
+            style="@style/ArrowBackDefault"
+            android:src="@drawable/ic_baseline_arrow_back_ios_20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvFilmsSeries"
+            style="@style/CardViewDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@id/ivArrowBackFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/ivArrowBackFilmsSeries"
+            >
+
+            <ImageView
+                android:id="@+id/ivBannerFilmsSeries"
+                android:layout_width="150dp"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/auto_da_compadecida_capa"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tvNameFilmsSeries"
+            android:layout_width="210sp"
+            android:layout_height="wrap_content"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text="O Auto da Compadecida"
+            android:textSize="16sp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toEndOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/cvFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/tvYearFilmsSeries"/>
+
+        <TextView
+            android:id="@+id/tvYearFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text="(2000)"
+            android:textColor="@color/colorAccentOpaque"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvNameFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/tvGenderFilmsSeries"/>
+
+        <TextView
+            android:id="@+id/tvGenderFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text=""
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvYearFilmsSeries"/>
+
+        <TextView
+            android:id="@+id/tvDescriptionTitleFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text="Biografia"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/cvFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/tvDescriptionTextFilmsSeries"/>
+
+        <TextView
+            android:id="@+id/tvDescriptionTextFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:layout_marginEnd="20dp"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:text="O Auto da Compadecida: As aventuras dos nordestinos João Grilo (Matheus Natchergaele), um sertanejo pobre e mentiroso, e Chicó (Selton Mello), o mais covarde dos homens. Ambos lutam pelo pão de cada dia e atravessam por vários episódios enganando a todos do pequeno vilarejo de Taperoá, no sertão da Paraíba. A salvação da dupla acontece com a aparição da Nossa Senhora (Fernanda Montenegro). Adaptação da obra de Ariano Suassuna."
+            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitleFilmsSeries"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvFilmesRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Filmes"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitleFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvDescriptionTextFilmsSeries"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListFilmes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/main_cast_recyclerview"
+            tools:itemCount="1"
+            tools:orientation="horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitleFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvFilmesRecycler"
+            app:layout_constraintEnd_toEndOf="@+id/tvDescriptionTextFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@+id/tvSeriesRecycler"/>
+
+        <TextView
+            android:id="@+id/tvSeriesRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Séries"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitleFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListFilmes"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/main_cast_recyclerview"
+            tools:itemCount="1"
+            tools:orientation="horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitleFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvSeriesRecycler"
+            app:layout_constraintEnd_toEndOf="@+id/tvDescriptionTextFilmsSeries"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

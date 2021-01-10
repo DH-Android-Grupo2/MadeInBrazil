@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true" >
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".view.activity.FilmsAndSeriesActivity"
-        android:background="@color/colorPrimary">
+        tools:context=".view.activity.FilmsAndSeriesActivity">
+
+        <com.github.florent37.shapeofview.shapes.ArcView
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            app:shape_arc_cropDirection="outside"
+            app:shape_arc_height="20dp"
+            app:shape_arc_position="bottom"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/ivBackDropFilmSeries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.2"
+                android:contentDescription="BackDrop"
+                android:scaleType="centerCrop"
+                android:src="@drawable/auto_da_compadecida_capa" />
+
+        </com.github.florent37.shapeofview.shapes.ArcView>
 
         <ImageView
             android:id="@+id/ivArrowBackFilmsSeries"
@@ -19,39 +41,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvFilmsSeries"
-            style="@style/CardViewDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <com.rishabhharit.roundedimageview.RoundedImageView
+            android:transitionName="sharedImgView"
+            app:cornerRadius="25dp"
+            android:id="@+id/ivBannerFilmsSeries"
+            android:layout_width="150dp"
+            android:layout_height="250dp"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/ivArrowBackFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/ivArrowBackFilmsSeries"
-            >
-
-            <ImageView
-                android:id="@+id/ivBannerFilmsSeries"
-                android:layout_width="150dp"
-                android:layout_height="250dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/auto_da_compadecida_capa"/>
-
-        </com.google.android.material.card.MaterialCardView>
+            android:scaleType="centerCrop"
+            android:src="@drawable/auto_da_compadecida_capa"/>
 
         <TextView
             android:id="@+id/tvNameFilmsSeries"
+            android:layout_width="210sp"
+            android:layout_height="wrap_content"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="O Auto da Compadecida"
+            tools:text="O Auto da Compadecida"
             android:textSize="16sp"
             android:layout_marginStart="15dp"
-            app:layout_constraintStart_toEndOf="@id/cvFilmsSeries"
-            app:layout_constraintTop_toTopOf="@id/cvFilmsSeries"
+            app:layout_constraintStart_toEndOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/ivBannerFilmsSeries"
             app:layout_constraintBottom_toTopOf="@id/tvYearFilmsSeries"/>
 
         <TextView
             android:id="@+id/tvYearFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="(2000)"
+            tools:text="(2000)"
             android:textColor="@color/colorAccentOpaque"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
@@ -59,32 +77,49 @@
             app:layout_constraintBottom_toTopOf="@id/tvGenderFilmsSeries"/>
 
         <TextView
+            android:id="@+id/tvTimeFilmsSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:layout_marginStart="10dp"
+            tools:text="50min"
+            app:layout_constraintStart_toEndOf="@id/tvYearFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/tvYearFilmsSeries"
+            app:layout_constraintBottom_toBottomOf="@+id/tvYearFilmsSeries" />
+
+        <TextView
             android:id="@+id/tvGenderFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="Aventura, Comédia"
+            android:text="O"
             android:textSize="14sp"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvYearFilmsSeries"
-            app:layout_constraintBottom_toTopOf="@id/ratingBarFilmsSeries"/>
+            app:layout_constraintBottom_toTopOf="@+id/ratingBarFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@+id/tvNameFilmsSeries"/>
 
-        <RatingBar
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/ratingBarFilmsSeries"
-            style="@style/RatingDefault"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_marginTop="10dp"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:numStars="5"
             android:isIndicator="true"
-            android:stepSize="0.01"
+            app:mrb_fillBackgroundStars="false"
+            android:stepSize="0.5"
+            android:rating="4.5"
+            app:mrb_progressTint="@color/colorNotes"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvGenderFilmsSeries"
             app:layout_constraintEnd_toStartOf="@id/tvNoteFilmsSeries"
-            app:layout_constraintBottom_toTopOf="@id/btWatchedFilmsSeries"/>
+            app:layout_constraintBottom_toTopOf="@id/cbWatchedFilmsSeries"
+            />
 
         <TextView
             android:id="@+id/tvNoteFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="4,5"
+            tools:text="4,5"
             android:textSize="18sp"
             android:textColor="@color/colorNotes"
             android:layout_marginStart="10dp"
@@ -92,70 +127,89 @@
             app:layout_constraintTop_toTopOf="@id/ratingBarFilmsSeries"
             />
 
-        <Button
-            style="@style/ButtonWatchedActivity"
-            android:id="@+id/btWatchedFilmsSeries"
-            android:text="@string/string_button_watched"
-            android:drawableStart="@drawable/ic_baseline_check_circle_16"
-            android:padding="3dp"
+        <CheckBox
+            android:id="@+id/cbWatchedFilmsSeries"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:button="@drawable/checkbox_watched_selector"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/ratingBarFilmsSeries"
-            app:layout_constraintEnd_toStartOf="@id/btFavoriteFilmsSeries"
-            app:layout_constraintBottom_toTopOf="@id/ivAgeRatingFilmsSeries"/>
+            app:layout_constraintEnd_toStartOf="@id/cbFavoriteFilmsSeries"
+            />
+
+        <CheckBox
+            android:id="@+id/cbFavoriteFilmsSeries"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:button="@drawable/checkbox_favorite_selector"
+            android:layout_marginStart="25dp"
+            app:layout_constraintStart_toEndOf="@id/cbWatchedFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/cbWatchedFilmsSeries"
+            app:layout_constraintEnd_toStartOf="@id/cbListFilmsSeries"
+            />
+
+        <CheckBox
+            android:id="@+id/cbListFilmsSeries"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:button="@drawable/ic_baseline_playlist_add_30"
+            android:layout_marginStart="25dp"
+            app:layout_constraintStart_toEndOf="@id/cbFavoriteFilmsSeries"
+            app:layout_constraintTop_toTopOf="@id/cbWatchedFilmsSeries"
+            />
 
         <Button
-            style="@style/ButtonFavoriteAndLists"
-            android:id="@+id/btFavoriteFilmsSeries"
-            android:layout_marginStart="10dp"
-            android:drawableStart="@drawable/ic_baseline_favorite_16"
-            android:padding="5dp"
-            app:layout_constraintStart_toEndOf="@id/btWatchedFilmsSeries"
-            app:layout_constraintTop_toTopOf="@id/btWatchedFilmsSeries"
-            app:layout_constraintEnd_toStartOf="@id/btListFilmsSeries"/>
+            android:id="@+id/btStreamingFilmsSeries"
+            style="@style/ButtonWatchedActivity"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/string_streaming"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/rvStreaming"
+            app:layout_constraintEnd_toStartOf="@+id/btSeasonsFilmsSeries"/>
+
 
         <Button
-            style="@style/ButtonFavoriteAndLists"
-            android:id="@+id/btListFilmsSeries"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="10dp"
-            android:drawableStart="@drawable/ic_baseline_playlist_add_16"
-            android:padding="5dp"
-            app:layout_constraintStart_toEndOf="@id/btFavoriteFilmsSeries"
-            app:layout_constraintTop_toTopOf="@id/btWatchedFilmsSeries"
+            android:id="@+id/btSeasonsFilmsSeries"
+            style="@style/ButtonWatchedActivity"
+            android:layout_marginTop="19dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/string_seasons"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toEndOf="@id/btStreamingFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <ImageView
-            android:id="@+id/ivAgeRatingFilmsSeries"
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvStreaming"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:src="@drawable/class_livre"
-            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/btListFilmsSeries" />
-
-        <TextView
-            android:id="@+id/tvTimeFilmsSeries"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:text="1h40min"
-            android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@id/ivAgeRatingFilmsSeries"
-            app:layout_constraintTop_toTopOf="@id/ivAgeRatingFilmsSeries"
-            app:layout_constraintBottom_toBottomOf="@id/ivAgeRatingFilmsSeries"/>
+            tools:listitem="@layout/item_streaming"
+            tools:itemCount="1"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/cbWatchedFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/cbListFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/btStreamingFilmsSeries"
+            app:layout_constraintBottom_toBottomOf="@+id/ivBannerFilmsSeries"/>
 
         <Button
             style="@style/ButtonWatchedActivity"
             android:id="@+id/btTrailerFilmsSeries"
             android:text="@string/string_trailer"
+            android:visibility="gone"
             android:drawableStart="@drawable/ic_baseline_play_circle_filled_20"
-            android:padding="3dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/cvFilmsSeries"
-            app:layout_constraintEnd_toEndOf="@id/cvFilmsSeries"
+            android:padding="3dp"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/ivBannerFilmsSeries"
+            android:layout_marginEnd="2dp"
             />
+
 
         <TextView
             android:id="@+id/tvDescriptionTitleFilmsSeries"
@@ -164,7 +218,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/btTrailerFilmsSeries"
             app:layout_constraintBottom_toTopOf="@id/tvDescriptionTextFilmsSeries"/>
 
@@ -174,8 +228,8 @@
             android:layout_marginEnd="20dp"
             android:textSize="15sp"
             android:layout_marginTop="5dp"
-            android:text="O Auto da Compadecida: As aventuras dos nordestinos João Grilo (Matheus Natchergaele), um sertanejo pobre e mentiroso, e Chicó (Selton Mello), o mais covarde dos homens. Ambos lutam pelo pão de cada dia e atravessam por vários episódios enganando a todos do pequeno vilarejo de Taperoá, no sertão da Paraíba. A salvação da dupla acontece com a aparição da Nossa Senhora (Fernanda Montenegro). Adaptação da obra de Ariano Suassuna."
-            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            tools:text="O Auto da Compadecida: As aventuras dos nordestinos João Grilo (Matheus Natchergaele), um sertanejo pobre e mentiroso, e Chicó (Selton Mello), o mais covarde dos homens. Ambos lutam pelo pão de cada dia e atravessam por vários episódios enganando a todos do pequeno vilarejo de Taperoá, no sertão da Paraíba. A salvação da dupla acontece com a aparição da Nossa Senhora (Fernanda Montenegro). Adaptação da obra de Ariano Suassuna."
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitleFilmsSeries"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -186,7 +240,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvDescriptionTextFilmsSeries"
             />
 
@@ -198,19 +252,117 @@
             tools:listitem="@layout/main_cast_recyclerview"
             tools:itemCount="1"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvCastTitleFilmsSeries"/>
 
+        <View
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListActors"
+            app:layout_constraintBottom_toTopOf="@id/tvRecomendacoesTitleFilmsSeries"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorAccentOpaque"
+            />
+
+        <TextView
+            android:id="@+id/tvRecomendacoesTitleFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text="@string/string_recomendations"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListActors"
+            />
+        <TextView
+            android:id="@+id/tvMessageRecomendation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/string_recomendation_not_found"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvRecomendacoesTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/tvSimilaresTitleFilmsSeries"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListRecomendacoes"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            tools:listitem="@layout/main_cast_recyclerview"
+            tools:itemCount="1"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvRecomendacoesTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/tvSimilaresTitleFilmsSeries"/>
+
+
+        <TextView
+            android:id="@+id/tvSimilaresTitleFilmsSeries"
+            style="@style/TextViewFilmsSeriesDefault"
+            android:text="@string/string_similars"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListRecomendacoes"
+            />
+
+        <TextView
+            android:id="@+id/tvMessageSimilar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/string_similars_not_found"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvSimilaresTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/hr"/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCardsListSimilares"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            tools:listitem="@layout/main_cast_recyclerview"
+            tools:itemCount="1"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvSimilaresTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/hr"/>
+
+
+        <View
+            android:id="@+id/hr"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListSimilares"
+            app:layout_constraintBottom_toTopOf="@id/tilCommentFilmsSeries"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorAccentOpaque"
+            />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/CommentTextInputDefault"
             android:id="@+id/tilCommentFilmsSeries"
             android:hint="@string/string_comment_input"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListActors">
+            app:layout_constraintTop_toBottomOf="@id/hr">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tietCommentFilmsSeries"
@@ -237,7 +389,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/btAddCommentFilmsSeries"
             />
 
@@ -249,9 +401,10 @@
             tools:listitem="@layout/main_comment_recyclerview"
             tools:itemCount="1"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@id/cvFilmsSeries"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintEnd_toEndOf="@id/tvDescriptionTextFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvCommentTitleFilmsSeries"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+

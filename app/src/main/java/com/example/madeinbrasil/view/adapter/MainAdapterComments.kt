@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.model.`class`.Comments
+import com.example.madeinbrasil.model.classe.Comments
 
 class MainAdapterComments(
     private val commentsList: List<Comments>

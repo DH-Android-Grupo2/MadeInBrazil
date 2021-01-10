@@ -8,14 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.view.classes.Item
 import com.example.madeinbrasil.view.classes.Lista
-import com.example.madeinbrasil.view.fragment.ListDetailsAdapter
 import com.example.madeinbrasil.view.fragment.ListDetailsFragment
 
 class ListDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_detail)
+//        setContentView(R.layout.activity_list_detail)
 
         val item = Item("filme do babu", "https://cdn-istoe-ssl.akamaized.net/wp-content/uploads/sites/14/2020/04/babu-santana.jpg")
         val item2 = Item("filme do santoro", "https://cdn-istoe-ssl.akamaized.net/wp-content/uploads/sites/14/2020/04/babu-santana.jpg")
@@ -40,14 +39,14 @@ class ListDetailActivity : AppCompatActivity() {
 
         listas.addAll(listOf(lista1,lista2,lista3,lista5,lista6,lista7))
 
-        findViewById<RecyclerView>(R.id.rvListDetails).apply {
-            layoutManager = GridLayoutManager(this@ListDetailActivity,2)
-            adapter = ListDetailsAdapter(listas) { position ->
-                val intent1 = Intent(this@ListDetailActivity, ListDetailsFragment::class.java)
-                intent1.putExtra(KEY_INTENT_LIST, listas[position])
-                startActivity(intent1)
-            }
-        }
+//        findViewById<RecyclerView>(R.id.rvListDetails).apply {
+//            layoutManager = GridLayoutManager(this@ListDetailActivity,2)
+//            adapter = ListDetailsAdapter(listas) { position ->
+//                val intent1 = Intent(this@ListDetailActivity, ListDetailsFragment::class.java)
+//                intent1.putExtra(KEY_INTENT_LIST, listas[position])
+//                startActivity(intent1)
+//            }
+//        }
 
     }
 

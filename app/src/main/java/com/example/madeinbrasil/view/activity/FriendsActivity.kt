@@ -2,6 +2,7 @@ package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -20,6 +21,11 @@ class FriendsActivity : AppCompatActivity() {
 
         setupFriends()
 
+        val backButton = findViewById<ImageView>(R.id.btBackFriends)
+
+        backButton.setOnClickListener {
+            super.onBackPressed()
+        }
     }
 
     fun setupFriends(){

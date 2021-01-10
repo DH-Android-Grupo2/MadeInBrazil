@@ -1,42 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.madeinbrasil">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".MadeInBrasilApplication"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".view.activity.SelectActivity"></activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.madeinbrasil.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+        <activity android:name=".view.activity.SeasonsActivity"/>
+        <activity android:name=".view.activity.PeopleActivity" />
+        <activity android:name=".view.activity.SelectActivity"/>
         <activity android:name=".view.activity.SplashActivity">
         </activity>
-        <activity android:name=".view.activity.AchievementActivity">
-        </activity>
-        <activity android:name=".view.activity.ListDetailActivity"/>
-        <activity android:name=".view.activity.MyProfileOptionsActivity">
-        </activity>
-        <activity android:name=".view.activity.FilmsAndSeriesActivity"/>
+        <activity android:name=".view.activity.ListDetailActivity" />
+        <activity android:name=".view.activity.MyProfileOptionsActivity"/>
+        <activity android:name=".view.activity.FilmsAndSeriesActivity" />
         <activity android:name=".view.activity.MenuActivity">
-        </activity>
-        <activity android:name=".view.activity.FavoriteActivity">
-        </activity>
-        <activity android:name=".view.activity.RegisterActivity" />
-        <activity android:name=".view.activity.LogInActivity" />
-        <activity android:name=".view.activity.InitialActivity" />
-        <activity android:name=".view.activity.CreateListActivity"></activity>
-        <activity android:name=".view.activity.FriendsActivity">
-        </activity>
-        <activity android:name=".view.activity.UserActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.RegisterActivity" />
+        <activity android:name=".view.activity.LogInActivity"/>
+        <activity android:name=".view.activity.InitialActivity" />
+        <activity android:name=".view.activity.CreateListActivity" />
+        <activity android:name=".view.activity.FriendsActivity" />
+        <activity android:name=".view.activity.UserActivity"/>
+
+        <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled" android:value="true" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity android:name="com.facebook.CustomTabActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

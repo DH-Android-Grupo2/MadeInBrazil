@@ -1,17 +1,15 @@
 package com.example.madeinbrasil.view.fragment
 
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.FragmentListDetailsBinding
-import com.example.madeinbrasil.databinding.FragmentListsBinding
+import com.example.madeinbrasil.view.adapter.ListAdapter
 import com.example.madeinbrasil.view.classes.Lista
 
 class ListDetailsFragment : Fragment() {
