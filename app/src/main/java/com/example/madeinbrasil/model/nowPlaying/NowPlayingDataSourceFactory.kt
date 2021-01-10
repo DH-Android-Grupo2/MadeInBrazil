@@ -1,18 +1,21 @@
 package com.example.madeinbrasil.model.nowPlaying
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.model.upcoming.Result
 
-class NowPlayingDataSourceFactory : DataSource.Factory<Int, Result>() {
+class NowPlayingDataSourceFactory(
+    private val context: Context
+) : DataSource.Factory<Int, Result>() {
 
     //creating the mutable live data
     private val tmdbLiveDataSource = MutableLiveData<PageKeyedDataSource<Int, Result>>()
 
     override fun create(): DataSource<Int, Result> {
         //getting our data source object
-        val tmdbDataSource = NowPlayingPageKeyedDataSource()
+        val tmdbDataSource = NowPlayingPageKeyedDataSource(context)
 
         //posting the datasource to get the values
         tmdbLiveDataSource.postValue(tmdbDataSource)

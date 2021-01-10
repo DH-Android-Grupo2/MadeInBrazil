@@ -1,7 +1,9 @@
 package com.example.madeinbrasil.model.discoverTV
 
+import android.content.Context
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.gender.Genre
 import com.example.madeinbrasil.model.gender.GenreSelected
@@ -15,7 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
-class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, ResultSearch>() {
+class DiscoverTvPageKeyedDataSource(
+    private val context: Context
+): PageKeyedDataSource<Int, ResultSearch>() {
 
     var vazio = ""
     var genreSelected = ""
@@ -47,10 +51,18 @@ class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, ResultSearch>() 
                         }
                     }
 
+
+                    val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                    discoverTvDb.insertDiscover(data.results)
+
                     callback.onResult(data.results , null, Constants.Paging.FIRST_PAGE + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), null, Constants.Paging.FIRST_PAGE + 1)
+
+                    val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                    val movies = discoverTvDb.getDiscover()
+
+                    callback.onResult(movies, null, Constants.Paging.FIRST_PAGE + 1)
                 }
             }
         }
@@ -76,10 +88,17 @@ class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, ResultSearch>() 
                             result.backdropPath= result.posterPath
                         }
                     }
+
+                    val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                    discoverTvDb.insertDiscover(data.results)
+
                     callback.onResult(data.results, page + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), page + 1)
+                    val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                    val movies = discoverTvDb.getDiscover()
+
+                    callback.onResult(movies, page + 1)
                 }
             }
         }
@@ -109,10 +128,16 @@ class DiscoverTvPageKeyedDataSource(): PageKeyedDataSource<Int, ResultSearch>() 
                             result.backdropPath = result.posterPath
                         }
                     }
+                    val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                    discoverTvDb.insertDiscover(data.results)
+
                     callback.onResult(data.results, page - 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), page - 1)
+                    val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                    val movies = discoverTvDb.getDiscover()
+
+                    callback.onResult(movies, page - 1)
                 }
             }
         }

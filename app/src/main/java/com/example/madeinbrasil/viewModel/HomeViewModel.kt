@@ -1,5 +1,7 @@
 package com.example.madeinbrasil.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
@@ -13,7 +15,9 @@ import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.model.upcoming.UpcomingDataSourceFactory
 import com.example.madeinbrasil.utils.Constants.Paging.PAGE_SIZE
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel(
+        application: Application
+): AndroidViewModel(application) {
 
     var upcomingMoviePagedList: LiveData<PagedList<Result>>? = null
     var nowPlayingMoviePagedList: LiveData<PagedList<Result>>? = null
@@ -25,15 +29,15 @@ class HomeViewModel: ViewModel() {
     private var discoverTvLiveDataSource: LiveData<PageKeyedDataSource<Int,ResultSearch>>? = null
 
     init {
-        nowPlayingData()
-        upcomingData()
-        discoverMovieData()
-        discoverTvData()
+        nowPlayingData(application)
+        upcomingData(application)
+        discoverMovieData(application)
+        discoverTvData(application)
 
     }
 
-    fun nowPlayingData(){
-        val tmdbDataSourceFactory = NowPlayingDataSourceFactory()
+    fun nowPlayingData(application: Application){
+        val tmdbDataSourceFactory = NowPlayingDataSourceFactory(application)
 
         nowPlayingLiveDataSource = tmdbDataSourceFactory.getSearchLiveDataSource()
 
@@ -45,8 +49,8 @@ class HomeViewModel: ViewModel() {
             .build()
     }
 
-    fun upcomingData(){
-        val tmdbDataSourceFactory = UpcomingDataSourceFactory()
+    fun upcomingData(application: Application){
+        val tmdbDataSourceFactory = UpcomingDataSourceFactory(application)
 
         upcomingLiveDataSource = tmdbDataSourceFactory.getSearchLiveDataSource()
 
@@ -60,8 +64,8 @@ class HomeViewModel: ViewModel() {
 
 
 
-    fun discoverMovieData(){
-        val tmdbDataSourceFactory = DiscoverMovieDataSourceFactory()
+    fun discoverMovieData(application: Application){
+        val tmdbDataSourceFactory = DiscoverMovieDataSourceFactory(application)
 
         discoverMovieLiveDataSource = tmdbDataSourceFactory.getSearchLiveDataSource()
 
@@ -74,8 +78,9 @@ class HomeViewModel: ViewModel() {
     }
 
 
-    fun discoverTvData(){
-        val tmdbDataSourceFactory = DiscoverTvDataSourceFactory()
+    fun discoverTvData(application: Application){
+
+        val tmdbDataSourceFactory = DiscoverTvDataSourceFactory(application)
 
         discoverTvLiveDataSource = tmdbDataSourceFactory.getSearchLiveDataSource()
 
