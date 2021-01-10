@@ -1,8 +1,10 @@
 package com.example.madeinbrasil.model.upcoming
 
+import android.content.Context
 import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.repository.HomeRepository
 import com.example.madeinbrasil.utils.Constants.Paging.FIRST_PAGE
@@ -10,7 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
-class UpcomingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
+class UpcomingPageKeyedDataSource(
+        private val context: Context
+) : PageKeyedDataSource<Int, Result>() {
 
     private val repository by lazy {
         HomeRepository()
@@ -33,10 +37,22 @@ class UpcomingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                             result.backdropPath = result.posterPath
                         }
                     }
+
+
+                    data.results.forEach {
+                        it.type = 2
+                    }
+
+                     val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    upcomingDB.insertUpcoming(data.results)
+
+
                     callback.onResult(data.results, null, FIRST_PAGE + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), null, FIRST_PAGE + 1)
+                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movies = upcomingDB.getUpcoming()
+                    callback.onResult(movies, null, FIRST_PAGE + 1)
                 }
             }
         }
@@ -61,10 +77,19 @@ class UpcomingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                             result.backdropPath = result.posterPath
                         }
                     }
+                    data.results.forEach {
+                        it.type = 2
+                    }
+
+                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    upcomingDB.insertUpcoming(data.results)
+
                     callback.onResult(data.results, page + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), page + 1)
+                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movies = upcomingDB.getUpcoming()
+                    callback.onResult(movies, page + 1)
                 }
             }
         }
@@ -91,9 +116,19 @@ class UpcomingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                             result.backdropPath = result.posterPath
                         }
                     }
+
+                    data.results.forEach {
+                        it.type = 2
+                    }
+
+                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    upcomingDB.insertUpcoming(data.results)
+
                     callback.onResult(data.results, page - 1)
                 }
                 is ResponseAPI.Error -> {
+                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    upcomingDB.getUpcoming()
                     callback.onResult(mutableListOf(), page - 1)
                 }
             }

@@ -1,7 +1,9 @@
 package com.example.madeinbrasil.model.nowPlaying
 
+import android.content.Context
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.model.nowPlaying.NowPlaying
@@ -11,7 +13,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NowPlayingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
+class NowPlayingPageKeyedDataSource(
+    private val context: Context
+) : PageKeyedDataSource<Int, Result>() {
 
     private val repository by lazy {
         HomeRepository()
@@ -34,10 +38,20 @@ class NowPlayingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                             result.backdropPath = result.posterPath
                         }
                     }
+
+                    data.results.forEach {
+                        it.type = 1
+                    }
+
+
+                    val nowPlayingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    nowPlayingDB.insertUpcoming(data.results)
                     callback.onResult(data.results, null, Constants.Paging.FIRST_PAGE + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), null, Constants.Paging.FIRST_PAGE + 1)
+                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movies = upcomingDB.getNowPlaying()
+                    callback.onResult(movies, null, Constants.Paging.FIRST_PAGE + 1)
                 }
             }
         }
@@ -62,10 +76,19 @@ class NowPlayingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                             result.backdropPath = result.posterPath
                         }
                     }
+
+                    data.results.forEach {
+                        it.type = 1
+                    }
+
+                    val nowPlaying = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    nowPlaying.insertUpcoming(data.results)
                     callback.onResult(data.results, page + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), page + 1)
+                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movies = upcomingDB.getNowPlaying()
+                    callback.onResult(movies, page + 1)
                 }
             }
         }
@@ -92,10 +115,21 @@ class NowPlayingPageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                             result.backdropPath = result.posterPath
                         }
                     }
+
+                    data.results.forEach {
+                        it.type = 1
+                    }
+
+                    val nowPlayingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    nowPlayingDB.insertUpcoming(data.results)
                     callback.onResult(data.results, page - 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), page - 1)
+                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movies = upcomingDB.getNowPlaying()
+
+
+                    callback.onResult(movies, page - 1)
                 }
             }
         }

@@ -1,7 +1,9 @@
 package com.example.madeinbrasil.model.discover
 
+import android.content.Context
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.repository.HomeRepository
 import com.example.madeinbrasil.utils.Constants
@@ -12,7 +14,9 @@ import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.Paging.FIRST_PAGE
 import com.example.madeinbrasil.view.fragment.HomeFragment
 
-class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
+class DiscoverMoviePageKeyedDataSource(
+    private val context: Context
+) : PageKeyedDataSource<Int, Result>() {
 
 
 
@@ -46,10 +50,18 @@ class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                         }
                     }
 
+                    data.results.forEach {
+                        it.type = 3
+                    }
+                    val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    DiscoverMovieDB.insertUpcoming(data.results)
+
                     callback.onResult(data.results , null, Constants.Paging.FIRST_PAGE + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), null, Constants.Paging.FIRST_PAGE + 1)
+                    val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movies =  DiscoverMovieDB.getDiscover()
+                    callback.onResult(movies, null, Constants.Paging.FIRST_PAGE + 1)
                 }
             }
         }
@@ -73,10 +85,19 @@ class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                             result.backdropPath = result.posterPath
                         }
                     }
+                    data.results.forEach {
+                        it.type = 3
+                    }
+                    val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    DiscoverMovieDB.insertUpcoming(data.results)
+
                     callback.onResult(data.results, page + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), page + 1)
+                    val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movies =  DiscoverMovieDB.getDiscover()
+
+                    callback.onResult(movies, page + 1)
                 }
             }
         }
@@ -103,10 +124,21 @@ class DiscoverMoviePageKeyedDataSource : PageKeyedDataSource<Int, Result>() {
                             result.backdropPath = result.posterPath
                         }
                     }
+
+                    data.results.forEach {
+                        it.type = 3
+                    }
+
+                    val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    DiscoverMovieDB.insertUpcoming(data.results)
+
                     callback.onResult(data.results, page - 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), page - 1)
+                    val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movies =  DiscoverMovieDB.getDiscover()
+
+                    callback.onResult(movies, page - 1)
                 }
             }
         }
