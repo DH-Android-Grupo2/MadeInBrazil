@@ -3,43 +3,66 @@ package com.example.madeinbrasil.model.upcoming
 import android.os.Parcelable
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
 
 @Parcelize
-data class Result(
-    val adult: Boolean?,
-    @SerializedName("backdrop_path")
-    var backdropPath: String?,
-    @SerializedName("genre_ids")
-    val genreIds: List<Int>,
-    val id: Int,
-    @SerializedName("first_air_date")
-    var firstAirDate: String?,
-    @SerializedName("origin_country")
-    var originalCountry:List<String>?,
-    @SerializedName("original_language")
-    val originalLanguage: String?,
-    @SerializedName("original_title")
-    val originalTitle: String?,
-    val overview: String?,
-    val popularity: Double?,
-    @SerializedName("poster_path")
-    var posterPath: String?,
-    @SerializedName("release_date")
-    val releaseDate: String?,
-    var title: String?,
-    var name: String?,
-    @SerializedName("original_name")
-    var originalName: String?,
-    val video: Boolean?,
-    @SerializedName("vote_average")
-    val voteAverage: Float?,
-    @SerializedName("vote_count")
-    val voteCount: Int?,
+@Entity(tableName = "movies_home")
+ class Result (
+        val adult: Boolean?,
+        @SerializedName("backdrop_path")
+        @ColumnInfo(name ="backdrop_path")
+        var backdropPath: String?,
+        @ColumnInfo(name ="genre_ids")
+        @SerializedName("genre_ids")
+        @TypeConverters(GenreConverter::class)
+        val genreIds: MutableList<Int>,
+        @PrimaryKey
+        val id: Int,
+        @ColumnInfo(name ="first_air_date")
+        @SerializedName("first_air_date")
+        var firstAirDate: String?,
+       // @ColumnInfo(name ="origin_country")
+       // @SerializedName("origin_country")
+      // @TypeConverters(GenreConverter::class)
+      //  var originalCountry: MutableList<String>?,
+        @SerializedName("original_language")
+        @ColumnInfo(name ="original_language")
+        val originalLanguage: String?,
+        @SerializedName("original_title")
+        @ColumnInfo(name = "original_title")
+        val originalTitle: String?,
+        val overview: String?,
+        val popularity: Double?,
+        @SerializedName("poster_path")
+        @ColumnInfo(name = "poster_path")
+        var posterPath: String?,
+        @ColumnInfo(name ="release_date")
+        @SerializedName("release_date")
+        val releaseDate: String?,
+        var title: String?,
+        var name: String?,
+        @ColumnInfo(name ="original_name")
+        @SerializedName("original_name")
+        var originalName: String?,
+        val video: Boolean?,
+        @ColumnInfo(name ="vote_average")
+        @SerializedName("vote_average")
+        val voteAverage: Float?,
+        @ColumnInfo(name ="vote_count")
+        @SerializedName("vote_count")
+        val voteCount: Int?,
+        var type: Int
 
-) : Parcelable {
+        //Now playing =1
+        //upcoming = 2
+        //discover = 3
+        //discoverTv = 4
+
+
+        ) : Parcelable {
 
     companion object {
         var DIFF_CALLBACK: DiffUtil.ItemCallback<Result> = object : DiffUtil.ItemCallback<Result>() {

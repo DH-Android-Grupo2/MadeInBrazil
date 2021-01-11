@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.DiscoverTvAdapter
 import com.example.madeinbrasil.adapter.HomeAdapter
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
 import com.example.madeinbrasil.model.discover.DiscoverMovie
 import com.example.madeinbrasil.model.gender.GenreSelected
@@ -100,11 +101,19 @@ class HomeFragment : Fragment() {
        selected = arguments?.getParcelable<GenreSelected>("Selected")
         genre = selected
 
+
+
+
        activity?.let{
             viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
         }
 //        tutorialImplementation()
+
+        val userDao = context?.let { MadeInBrazilDatabase.getDatabase(it) }?.userDao()
+
+
+
     }
 
     override fun onCreateView(
