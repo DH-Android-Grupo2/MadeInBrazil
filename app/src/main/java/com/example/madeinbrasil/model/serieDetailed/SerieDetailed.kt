@@ -45,5 +45,5 @@ data class SerieDetailed(
         val vote_average: Double?,
         val vote_count: Int?,
         @SerializedName("watch/providers")
-    val watch_providers: Watchproviders?
+        val watch_providers: Watchproviders?
 ): Parcelable
