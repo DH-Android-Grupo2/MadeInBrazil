@@ -1,49 +1,43 @@
 package com.example.madeinbrasil.model.serieDetailed
 
 import android.os.Parcelable
+import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
+@Entity(tableName = "series_detailed")
 data class SerieDetailed(
+        @PrimaryKey
+        @ColumnInfo(name = "serie_id")
+        val id: Int,
+        @ColumnInfo(name = "backdrop_path")
         @SerializedName("backdrop_path")
         var backdropPath: String?,
-        val created_by: List<CreatedBy>?,
+        @Embedded
+        @Relation(parentColumn = "serie_id", entityColumn = "id")
         val credits: Credits?,
+        @ColumnInfo(name = "episode_run_time")
         @SerializedName("episode_run_time")
         var episodeRunTime: List<Int>?,
-        val first_air_date: String?,
+        @ColumnInfo(name = "first_air_date")
+        @SerializedName("first_air_date")
+        val firstAirDate: String?,
         val genres: List<Genre>?,
         val homepage: String?,
-        val id: Int,
-        val in_production: Boolean?,
-        val languages: List<String>?,
-        val last_air_date: String?,
-        val last_episode_to_air: LastEpisodeToAir?,
         val name: String?,
-        val networks: List<Network>?,
-        val next_episode_to_air: String?,
-        val number_of_episodes: Int?,
-        val number_of_seasons: Int?,
-        val origin_country: List<String>?,
-        val original_language: String?,
-        val original_name: String?,
         var overview: String?,
-        val popularity: Double?,
+        @ColumnInfo(name = "poster_path")
         @SerializedName("poster_path")
         var posterPath: String?,
-        val production_companies: List<ProductionCompany>?,
-        val production_countries: List<ProductionCountry>?,
         val recommendations: Recommendations?,
         val seasons: List<Season>?,
         val similar: Similar?,
-        val spoken_languages: List<SpokenLanguage>?,
-        val status: String?,
-        val tagline: String?,
-        val type: String?,
         val videos: Videos?,
-        val vote_average: Double?,
-        val vote_count: Int?,
+        @ColumnInfo(name = "vote_average")
+        @SerializedName("vote_average")
+        val voteAverage: Double?,
+        @ColumnInfo(name = "watch/providers")
         @SerializedName("watch/providers")
-        val watch_providers: Watchproviders?
+        val watchProviders: Watchproviders?
 ): Parcelable

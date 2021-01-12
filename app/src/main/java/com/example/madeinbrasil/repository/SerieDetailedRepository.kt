@@ -1,9 +1,15 @@
 package com.example.madeinbrasil.repository
 
+import android.content.Context
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 
-class SerieDetailedRepository {
+class SerieDetailedRepository(val context: Context) {
+    private val favoriteDao by lazy {
+        MadeInBrazilDatabase.getDatabase(context).favoriteDao()
+    }
 
     suspend fun getSerieRepository(serieId: Int): ResponseAPI{
         return try {
@@ -21,5 +27,9 @@ class SerieDetailedRepository {
         } catch (exception: Exception) {
             ResponseAPI.Error("Erro ao carregar os dados")
         }
+    }
+
+    suspend fun insertSerie(serie: SerieDetailed) {
+        favoriteDao.insertSerie(serie)
     }
 }

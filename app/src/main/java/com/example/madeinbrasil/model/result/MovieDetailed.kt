@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.model.result
 
 import android.os.Parcelable
+import androidx.room.Entity
 import com.example.madeinbrasil.model.movieCredits.MovieCredits
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize

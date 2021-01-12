@@ -231,16 +231,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                     binding.tvDescriptionTextFilmsSeries.text = serie?.overview
                     binding.tvNameFilmsSeries.text = serie?.name
-                    binding.tvNoteFilmsSeries.text = "${(serie?.vote_average)?.div(2)}"
-                    serie?.vote_average?.let {
+                    binding.tvNoteFilmsSeries.text = "${(serie?.voteAverage)?.div(2)}"
+                    serie?.voteAverage?.let {
                         binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
                         binding.ratingBarFilmsSeries.stepSize = .5f
                     }
-                    binding.tvYearFilmsSeries.text = "(${serie?.first_air_date?.getFirst4Chars()})"
+                    binding.tvYearFilmsSeries.text = "(${serie?.firstAirDate?.getFirst4Chars()})"
 
-                    binding.btStreamingFilmsSeries.isVisible = serie.watch_providers?.results?.BR?.link != null
+                    binding.btStreamingFilmsSeries.isVisible = serie.watchProviders?.results?.BR?.link != null
                     binding.btStreamingFilmsSeries.setOnClickListener {
-                        val uri = Uri.parse(serie.watch_providers?.results?.BR?.link)
+                        val uri = Uri.parse(serie.watchProviders?.results?.BR?.link)
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
                     }
@@ -248,7 +248,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.rvStreaming.isVisible = serie.homepage != ""
                     binding.rvStreaming.apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        adapter = serie?.watch_providers?.results?.BR?.flatrate?.let {
+                        adapter = serie?.watchProviders?.results?.BR?.flatrate?.let {
                             SerieStreamingAdapter(it) {
                                 val uri = Uri.parse(serie.homepage)
                                 val intent = Intent(Intent.ACTION_VIEW, uri)
@@ -326,6 +326,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
+                binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if(isChecked) {
+                        serieDetailed?.let { viewModelSerie.insertSerie(it) }
+                    }
+                }
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
                     adapter = MainAdapterComments(comments)

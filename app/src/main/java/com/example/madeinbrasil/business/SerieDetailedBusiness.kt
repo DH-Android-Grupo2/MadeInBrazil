@@ -1,13 +1,14 @@
 package com.example.madeinbrasil.business
 
+import android.content.Context
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.repository.SerieDetailedRepository
 
-class SerieDetailedBusiness {
+class SerieDetailedBusiness (val context: Context) {
     private val repository: SerieDetailedRepository by lazy {
-        SerieDetailedRepository()
+        SerieDetailedRepository(context)
     }
 
     suspend fun getSerieDetails(serieId: Int): ResponseAPI {
@@ -17,7 +18,7 @@ class SerieDetailedBusiness {
             serie.credits?.cast?.forEach {
                 it.profilePath = it.profilePath?.getFullImagePath()
             }
-            serie.watch_providers?.results?.BR?.flatrate?.forEach {
+            serie.watchProviders?.results?.BR?.flatrate?.forEach {
                 it.logoPath = it.logoPath?.getFullImagePath()
             }
             serie.posterPath = serie.posterPath?.getFullImagePath()
@@ -52,5 +53,9 @@ class SerieDetailedBusiness {
         }else {
             response
         }
+    }
+
+    suspend fun insertSerie(serie: SerieDetailed) {
+        repository.insertSerie(serie)
     }
 }
