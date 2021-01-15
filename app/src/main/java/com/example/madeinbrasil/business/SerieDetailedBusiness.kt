@@ -1,23 +1,28 @@
 package com.example.madeinbrasil.business
 
+import android.content.Context
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.database.entities.favorites.FavoritesSerieDetailed
+import com.example.madeinbrasil.database.entities.watched.WatchedSerieDetailed
+import com.example.madeinbrasil.model.serieDetailed.Genre
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.repository.SerieDetailedRepository
 
-class SerieDetailedBusiness {
+class SerieDetailedBusiness (val context: Context) {
     private val repository: SerieDetailedRepository by lazy {
-        SerieDetailedRepository()
+        SerieDetailedRepository(context)
     }
 
     suspend fun getSerieDetails(serieId: Int): ResponseAPI {
         val response = repository.getSerieRepository(serieId)
         return if(response is ResponseAPI.Success) {
             val serie = response.data as SerieDetailed
+
             serie.credits?.cast?.forEach {
                 it.profilePath = it.profilePath?.getFullImagePath()
             }
-            serie.watch_providers?.results?.BR?.flatrate?.forEach {
+            serie.watchProviders?.results?.BR?.flatrate?.forEach {
                 it.logoPath = it.logoPath?.getFullImagePath()
             }
             serie.posterPath = serie.posterPath?.getFullImagePath()
@@ -48,9 +53,31 @@ class SerieDetailedBusiness {
                     it.name = "Título não encontrado"
                 }
             }
+
             ResponseAPI.Success(serie)
         }else {
             response
         }
     }
+
+    suspend fun insertSerieFavorite(serie: FavoritesSerieDetailed) {
+        repository.insertSerieFavorite(serie)
+    }
+
+    suspend fun insertGenreFavorite(genre: List<Genre>) {
+        repository.insertGenreFavorite(genre)
+    }
+
+    suspend fun deleteSerieFavorite(serie: FavoritesSerieDetailed) {
+        repository.deleteSerieFavorite(serie)
+    }
+
+    suspend fun insertSerieWatched(serie: WatchedSerieDetailed) {
+        repository.insertSerieWatched(serie)
+    }
+
+    suspend fun deleteSerieWatched(serie: WatchedSerieDetailed) {
+        repository.deleteSerieWatched(serie)
+    }
+
 }

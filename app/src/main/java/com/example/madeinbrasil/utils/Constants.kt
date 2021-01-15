@@ -44,4 +44,11 @@ class Constants {
         const val PAGE_SIZE = 20
         const val FIRST_PAGE = 1
     }
+
+    object SharedPreferences {
+        const val FAVORITE_SERIE = "favorite_serie"
+        const val WATCHED_SERIE = "watched_serie"
+        const val FAVORITE_MOVIE = "favorite_movie"
+        const val WATCHED_MOVIE = "watched_movie"
+    }
 }

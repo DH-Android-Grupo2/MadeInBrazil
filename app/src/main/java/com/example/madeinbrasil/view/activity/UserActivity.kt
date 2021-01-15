@@ -7,13 +7,18 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.adapter.FavoriteMovieAdapter
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.ActivityUserBinding
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 
 class UserActivity : AppCompatActivity() {
@@ -44,6 +49,19 @@ class UserActivity : AppCompatActivity() {
 
         binding.tvListasRecycler.setOnClickListener {
             startMyProfileOptionsActivity(this@UserActivity)
+        }
+
+        lifecycleScope.launch {
+            val db = MadeInBrazilDatabase.getDatabase(this@UserActivity).favoriteDao()
+            val dbWatched = MadeInBrazilDatabase.getDatabase(this@UserActivity).watchedDao()
+
+            binding.rvCardsListFavorites.apply {
+                layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = FavoriteMovieAdapter(db.getMovieFavorites())
+            }
+
+            binding.tvNumMovies.text = dbWatched.getMovieWatched().size.toString()
+            binding.tvNumSeries.text = dbWatched.getSerieWatched().size.toString()
         }
 
         setupUser()

@@ -1,25 +1,38 @@
 package com.example.madeinbrasil.view.activity
 
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.lifecycle.*
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.*
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.favorites.FavoritesMovieDetailed
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.database.entities.favorites.FavoritesSerieDetailed
+import com.example.madeinbrasil.database.entities.watched.WatchedMovieDetailed
+import com.example.madeinbrasil.database.entities.watched.WatchedSerieDetailed
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.result.MovieDetailed
@@ -32,7 +45,12 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
+import com.example.madeinbrasil.utils.Constants.SharedPreferences.FAVORITE_MOVIE
+import com.example.madeinbrasil.utils.Constants.SharedPreferences.FAVORITE_SERIE
+import com.example.madeinbrasil.utils.Constants.SharedPreferences.WATCHED_MOVIE
+import com.example.madeinbrasil.utils.Constants.SharedPreferences.WATCHED_SERIE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
+import com.example.madeinbrasil.view.fragment.FavoritesFragment
 import com.example.madeinbrasil.viewModel.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -46,6 +64,9 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_films_and_series.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -76,7 +97,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
 //        tutorialImplementation()
 
-        when(positionFragment) {
+        when (positionFragment) {
             1 -> {
                 viewModelMovie = ViewModelProvider(this).get(MovieDetailedViewModel::class.java)
                 viewModelMovie.getMovie(films?.id)
@@ -96,9 +117,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie?.credits.cast?.let { it1 ->
-                                MovieCreditsAdapter(it1){
+                                MovieCreditsAdapter(it1) {
                                     val castClicked = it
-                                    castClicked?.let{result->
+                                    castClicked?.let { result ->
                                         val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
                                         intent.putExtra(BASE_ACTOR_KEY, result)
                                         intent.putExtra(VALUE, 1)
@@ -117,7 +138,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                     .load(it)
                                     .placeholder(R.drawable.logo_made_in_brasil)
                                     .into(binding.ivBackDropFilmSeries)
-                        }?: Glide.with(this)
+                        } ?: Glide.with(this)
                                 .load(R.drawable.logo_made_in_brasil)
                                 .into(binding.ivBackDropFilmSeries)
 
@@ -125,7 +146,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.tvNameFilmsSeries.text = movie.title
                         binding.tvNoteFilmsSeries.text = "${movie.vote_average?.div(2)}"
                         movie.vote_average?.let {
-                            binding.ratingBarFilmsSeries.rating = (it/2.0f).toFloat()
+                            binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
                             binding.ratingBarFilmsSeries.stepSize = .5f
                         }
 
@@ -143,13 +164,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
 
-                        if(movie.recommendations?.results?.size != 0) {
+                        if (movie.recommendations?.results?.size != 0) {
                             binding.rvCardsListRecomendacoes.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie.recommendations?.let { it1 ->
-                                    Log.i("lLLLLO","$it1")
+                                    Log.i("lLLLLO", "$it1")
                                     it1.results?.let { it2 ->
-                                        FilmsSeriesFromUserAdapter(it2){ result->
+                                        FilmsSeriesFromUserAdapter(it2) { result ->
                                             val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
                                             intent.putExtra(BASE_FILM_KEY, result)
                                             intent.putExtra(ID_FRAGMENTS, 1)
@@ -161,12 +182,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             binding.tvMessageRecomendation.isVisible = false
                         }
 
-                        if(movie.similar?.results?.size != 0) {
+                        if (movie.similar?.results?.size != 0) {
                             binding.rvCardsListSimilares.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie.similar?.let { it1 ->
                                     it1.results?.let { it2 ->
-                                        FilmsSeriesFromUserAdapter(it2){ result->
+                                        FilmsSeriesFromUserAdapter(it2) { result ->
                                             val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
                                             intent.putExtra(BASE_FILM_KEY, result)
                                             intent.putExtra(ID_FRAGMENTS, 1)
@@ -183,8 +204,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = movie.watch_providers?.results?.BR?.let { it1 ->
                                 it1.flatrate?.let { it2 ->
-                                    MovieStreamingAdapter(it2){
-                                        if(movie.homepage != ""){
+                                    MovieStreamingAdapter(it2) {
+                                        if (movie.homepage != "") {
                                             val uri = Uri.parse(movie.homepage)
                                             val intent = Intent(Intent.ACTION_VIEW, uri)
                                             startActivity(intent)
@@ -194,14 +215,59 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             }
                         }
                         filmDetailed = movie
+
+                        binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
+                            val favMovie = FavoritesMovieDetailed(movie.id, movie.backdrop_path, movie.homepage,
+                                    movie.original_language, movie.original_title, movie.overview, movie.popularity,
+                                    movie.poster_path, movie.release_date, movie.runtime, movie.title, movie.vote_average,
+                                    movie.vote_count, isChecked)
+                            if(isChecked) {
+                                viewModelMovie.insertMovieFavorite(favMovie)
+                            }else {
+                                viewModelMovie.deleteMovieFavorite(favMovie)
+                            }
+                        }
+                        viewModelMovie.getFavorite.observe(this) {
+                            it.forEach {fav ->
+                                if(fav.id == movie.id) {
+                                    binding.cbFavoriteFilmsSeries.isChecked = fav.checked
+                                }
+                            }
+                        }
+
+                        binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
+                            val watched = WatchedMovieDetailed(movie.id, movie.backdrop_path, movie.homepage,
+                                    movie.original_language, movie.original_title, movie.overview, movie.popularity,
+                                    movie.poster_path, movie.release_date, movie.runtime, movie.title, movie.vote_average,
+                                    movie.vote_count, isChecked)
+                            if(isChecked) {
+                                viewModelMovie.insertMovieWatched(watched)
+                            }else {
+                                viewModelMovie.deleteMoviewatched(watched)
+                            }
+                        }
+                        viewModelMovie.getWatched.observe(this) {
+                            it.forEach {fav ->
+                                if(fav.id == movie.id) {
+                                    binding.cbWatchedFilmsSeries.isChecked = fav.checked
+                                }
+                            }
+                        }
                     }
                 }
 
-                    findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
-                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
-                        adapter = MainAdapterComments(comments)
-                    }
+                viewModelMovie.movieError.observe(this) { movie ->
+                    onApiErrorMovie(movie)
                 }
+                viewModelMovie.movieErrorWatched.observe(this) {movie ->
+                    onApiErrorMovieWatched(movie)
+                }
+
+                findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
+                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+                    adapter = MainAdapterComments(comments)
+                }
+            }
 
             2 -> {
                 viewModelGenderSeries = ViewModelProvider(this).get(GenderSerieViewModel::class.java)
@@ -225,22 +291,22 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 .load(serie?.backdropPath)
                                 .placeholder(R.drawable.logo_made_in_brasil)
                                 .into(binding.ivBackDropFilmSeries)
-                    }?: Glide.with(this)
+                    } ?: Glide.with(this)
                             .load(R.drawable.logo_made_in_brasil)
                             .into(binding.ivBackDropFilmSeries)
 
                     binding.tvDescriptionTextFilmsSeries.text = serie?.overview
                     binding.tvNameFilmsSeries.text = serie?.name
-                    binding.tvNoteFilmsSeries.text = "${(serie?.vote_average)?.div(2)}"
-                    serie?.vote_average?.let {
+                    binding.tvNoteFilmsSeries.text = "${(serie?.voteAverage)?.div(2)}"
+                    serie?.voteAverage?.let {
                         binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
                         binding.ratingBarFilmsSeries.stepSize = .5f
                     }
-                    binding.tvYearFilmsSeries.text = "(${serie?.first_air_date?.getFirst4Chars()})"
+                    binding.tvYearFilmsSeries.text = "(${serie?.firstAirDate?.getFirst4Chars()})"
 
-                    binding.btStreamingFilmsSeries.isVisible = serie.watch_providers?.results?.BR?.link != null
+                    binding.btStreamingFilmsSeries.isVisible = serie.watchProviders?.results?.BR?.link != null
                     binding.btStreamingFilmsSeries.setOnClickListener {
-                        val uri = Uri.parse(serie.watch_providers?.results?.BR?.link)
+                        val uri = Uri.parse(serie.watchProviders?.results?.BR?.link)
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
                     }
@@ -248,7 +314,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.rvStreaming.isVisible = serie.homepage != ""
                     binding.rvStreaming.apply {
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        adapter = serie?.watch_providers?.results?.BR?.flatrate?.let {
+                        adapter = serie?.watchProviders?.results?.BR?.flatrate?.let {
                             SerieStreamingAdapter(it) {
                                 val uri = Uri.parse(serie.homepage)
                                 val intent = Intent(Intent.ACTION_VIEW, uri)
@@ -257,11 +323,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                     }
                     serie?.episodeRunTime?.forEach {
-                        if(it > 60) {
+                        if (it > 60) {
                             val horas = listOf(it.div(60))
                             val min = listOf(it.rem(60))
                             binding.tvTimeFilmsSeries.text = "${horas[0]}h${min[0]}min"
-                        }else {
+                        } else {
                             binding.tvTimeFilmsSeries.text = "$it min"
                         }
                     }
@@ -275,11 +341,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     serie?.credits?.cast.let { castSerie ->
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = castSerie?.let { it1 -> SerieCastAdapter(it1) {
-                                val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
-                                intent.putExtra(BASE_ACTOR_KEY, it)
-                                intent.putExtra(VALUE, 2)
-                                startActivity(intent)
+                            adapter = castSerie?.let { it1 ->
+                                SerieCastAdapter(it1) {
+                                    val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                    intent.putExtra(BASE_ACTOR_KEY, it)
+                                    intent.putExtra(VALUE, 2)
+                                    startActivity(intent)
                                 }
                             }
                         }
@@ -291,12 +358,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
 
-                    if(serie.recommendations?.results?.size != 0) {
+                    if (serie.recommendations?.results?.size != 0) {
                         binding.rvCardsListRecomendacoes.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = serie.recommendations?.let { it1 ->
                                 it1.results?.let { it2 ->
-                                    CastDetailsAdapter(it2){ result->
+                                    CastDetailsAdapter(it2) { result ->
                                         val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
                                         intent.putExtra(BASE_SERIE_KEY, result)
                                         intent.putExtra(ID_FRAGMENTS, 2)
@@ -308,12 +375,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.tvMessageRecomendation.isVisible = false
                     }
 
-                    if(serie.similar?.results?.size != 0) {
+                    if (serie.similar?.results?.size != 0) {
                         binding.rvCardsListSimilares.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = serie.similar?.let { it1 ->
                                 it1.results?.let { it2 ->
-                                    CastDetailsAdapter(it2){ result->
+                                    CastDetailsAdapter(it2) { result ->
                                         val intent = Intent(this@FilmsAndSeriesActivity, FilmsAndSeriesActivity::class.java)
                                         intent.putExtra(BASE_SERIE_KEY, result)
                                         intent.putExtra(ID_FRAGMENTS, 2)
@@ -324,12 +391,186 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                         binding.tvMessageSimilar.isVisible = false
                     }
+
+                    binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
+                        val favorites = FavoritesSerieDetailed(
+                                serie.id, serie.backdropPath, serie.episodeRunTime, serie.firstAirDate,
+                                serie.homepage, serie.name, serie.overview, serie.posterPath,
+                                serie.voteAverage, isChecked)
+
+                        if (isChecked) {
+                            viewModelSerie.insertSerieFavorite(favorites)
+                            serie.genres?.let { viewModelSerie.insertGenreFavorite(it) }
+                        } else {
+                            viewModelSerie.deleteSerieFavorite(favorites)
+                        }
+                    }
+                    viewModelSerie.getFavorite.observe(this) {
+                        it.forEach {fav ->
+                            if(fav.id == serie.id) {
+                                binding.cbFavoriteFilmsSeries.isChecked = fav.checked
+                            }
+                        }
+                    }
+
+                    binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
+                        val watched = WatchedSerieDetailed(
+                                serie.id, serie.backdropPath, serie.episodeRunTime, serie.firstAirDate,
+                                serie.homepage, serie.name, serie.overview, serie.posterPath,
+                                serie.voteAverage, isChecked)
+
+                        if (isChecked) {
+                            viewModelSerie.insertSerieWatched(watched)
+                            serie.genres?.let { viewModelSerie.insertGenreFavorite(it) }
+                        } else {
+                            viewModelSerie.deleteSerieWatched(watched)
+                        }
+                    }
+                    viewModelSerie.getWatched.observe(this) {
+                        it.forEach {fav ->
+                            if(fav.id == serie.id) {
+                                binding.cbWatchedFilmsSeries.isChecked = fav.checked
+                            }
+                        }
+                    }
+
+                }
+
+                viewModelSerie.serieDetailedError.observe(this) { serie ->
+                    onApiErrorSerie(serie)
+                }
+                viewModelSerie.serieWatchedError.observe(this) {serie ->
+                    onApiErrorSerieWatched(serie)
                 }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
                     adapter = MainAdapterComments(comments)
                 }
+            }
+        }
+    }
+
+    private fun onApiErrorSerieWatched(serie: List<WatchedSerieDetailed>) {
+        serie.forEach {
+            if (it.id == series?.id) {
+                Glide.with(binding.root.context)
+                        .load(it.posterPath)
+                        .placeholder(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBannerFilmsSeries)
+                it.backdropPath?.let { it1 ->
+                    Glide.with(binding.root.context)
+                            .load(it.backdropPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+                } ?: Glide.with(this)
+                        .load(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBackDropFilmSeries)
+
+                binding.tvDescriptionTextFilmsSeries.text = it.overview
+                binding.tvNameFilmsSeries.text = it.name
+                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                it.voteAverage?.let {
+                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                    binding.ratingBarFilmsSeries.stepSize = .5f
+                }
+                binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
+                binding.cbFavoriteFilmsSeries.isChecked = it.checked
+                binding.cbWatchedFilmsSeries.isChecked = it.checked
+            }
+        }
+    }
+
+    private fun onApiErrorMovieWatched(movie: List<WatchedMovieDetailed>) {
+        movie.forEach {
+            if (it.id == films?.id) {
+                Glide.with(binding.root.context)
+                        .load(it.posterPath)
+                        .placeholder(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBannerFilmsSeries)
+                it.backdropPath?.let { it1 ->
+                    Glide.with(binding.root.context)
+                            .load(it.backdropPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+                } ?: Glide.with(this)
+                        .load(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBackDropFilmSeries)
+
+                binding.tvDescriptionTextFilmsSeries.text = it.overview
+                binding.tvNameFilmsSeries.text = it.title
+                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                it.voteAverage?.let {
+                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                    binding.ratingBarFilmsSeries.stepSize = .5f
+                }
+                val horas = it.runtime?.div(60)
+                val minutos = it.runtime?.rem(60)
+                binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
+                binding.cbFavoriteFilmsSeries.isChecked = it.checked
+                binding.cbWatchedFilmsSeries.isChecked = it.checked
+            }
+        }
+    }
+
+    private fun onApiErrorSerie(serie: List<FavoritesSerieDetailed>) {
+        serie.forEach {
+            if (it.id == series?.id) {
+                Glide.with(binding.root.context)
+                        .load(it.posterPath)
+                        .placeholder(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBannerFilmsSeries)
+                it.backdropPath?.let { it1 ->
+                    Glide.with(binding.root.context)
+                            .load(it.backdropPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+                } ?: Glide.with(this)
+                        .load(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBackDropFilmSeries)
+
+                binding.tvDescriptionTextFilmsSeries.text = it.overview
+                binding.tvNameFilmsSeries.text = it.name
+                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                it.voteAverage?.let {
+                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                    binding.ratingBarFilmsSeries.stepSize = .5f
+                }
+                binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
+                binding.cbFavoriteFilmsSeries.isChecked = it.checked
+            }
+        }
+    }
+
+    private fun onApiErrorMovie(movie: List<FavoritesMovieDetailed>) {
+        movie.forEach {
+            if (it.id == films?.id) {
+                Glide.with(binding.root.context)
+                        .load(it.posterPath)
+                        .placeholder(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBannerFilmsSeries)
+                it.backdropPath?.let { it1 ->
+                    Glide.with(binding.root.context)
+                            .load(it.backdropPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+                } ?: Glide.with(this)
+                        .load(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBackDropFilmSeries)
+
+                binding.tvDescriptionTextFilmsSeries.text = it.overview
+                binding.tvNameFilmsSeries.text = it.title
+                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                it.voteAverage?.let {
+                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                    binding.ratingBarFilmsSeries.stepSize = .5f
+                }
+                val horas = it.runtime?.div(60)
+                val minutos = it.runtime?.rem(60)
+                binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
+                binding.cbFavoriteFilmsSeries.isChecked = it.checked
             }
         }
     }

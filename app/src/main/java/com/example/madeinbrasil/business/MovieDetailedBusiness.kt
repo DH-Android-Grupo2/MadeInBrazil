@@ -1,15 +1,18 @@
 package com.example.madeinbrasil.business
 
+import android.content.Context
 import android.util.Log
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.entities.favorites.FavoritesMovieDetailed
+import com.example.madeinbrasil.database.entities.watched.WatchedMovieDetailed
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.repository.MovieDetailedRepository
 
-class MovieDetailedBusiness  {
+class MovieDetailedBusiness(val context: Context)  {
 
     private val repository:MovieDetailedRepository by lazy {
-        MovieDetailedRepository()
+        MovieDetailedRepository(context)
     }
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
@@ -43,5 +46,21 @@ class MovieDetailedBusiness  {
         } else {
             response
         }
+    }
+
+    suspend fun insertMovieFavorite(movie: FavoritesMovieDetailed) {
+        repository.insertMovieFavorite(movie)
+    }
+
+    suspend fun deleteMovieFavorite(movie: FavoritesMovieDetailed) {
+        repository.deleteMovieFavorite(movie)
+    }
+
+    suspend fun insertMovieWatched(movie: WatchedMovieDetailed) {
+        repository.insertMovieWatched(movie)
+    }
+
+    suspend fun deleteMoviewatched(movie: WatchedMovieDetailed) {
+        repository.deleteMoviewatched(movie)
     }
 }

@@ -3,8 +3,6 @@ package com.example.madeinbrasil.view.fragment
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.DiscoverTvAdapter
 import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
@@ -25,8 +22,6 @@ import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.viewModel.HomeViewModel
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetSequence
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel

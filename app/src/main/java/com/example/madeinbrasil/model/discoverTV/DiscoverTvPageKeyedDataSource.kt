@@ -5,8 +5,6 @@ import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
-import com.example.madeinbrasil.model.gender.Genre
-import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.repository.HomeRepository
 import com.example.madeinbrasil.utils.Constants
@@ -14,7 +12,6 @@ import com.example.madeinbrasil.utils.Constants.Paging.FIRST_PAGE
 import com.example.madeinbrasil.view.fragment.HomeFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class DiscoverTvPageKeyedDataSource(
