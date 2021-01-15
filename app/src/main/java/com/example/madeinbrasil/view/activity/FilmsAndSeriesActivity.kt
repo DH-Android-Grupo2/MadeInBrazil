@@ -259,6 +259,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModelMovie.movieError.observe(this) { movie ->
                     onApiErrorMovie(movie)
                 }
+                viewModelMovie.movieErrorWatched.observe(this) {movie ->
+                    onApiErrorMovieWatched(movie)
+                }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
@@ -436,13 +439,77 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModelSerie.serieDetailedError.observe(this) { serie ->
                     onApiErrorSerie(serie)
                 }
+                viewModelSerie.serieWatchedError.observe(this) {serie ->
+                    onApiErrorSerieWatched(serie)
+                }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
                     adapter = MainAdapterComments(comments)
                 }
+            }
+        }
+    }
 
-//                series?.id?.let { sharedPreferences(positionFragment, it) }
+    private fun onApiErrorSerieWatched(serie: List<WatchedSerieDetailed>) {
+        serie.forEach {
+            if (it.id == series?.id) {
+                Glide.with(binding.root.context)
+                        .load(it.posterPath)
+                        .placeholder(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBannerFilmsSeries)
+                it.backdropPath?.let { it1 ->
+                    Glide.with(binding.root.context)
+                            .load(it.backdropPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+                } ?: Glide.with(this)
+                        .load(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBackDropFilmSeries)
+
+                binding.tvDescriptionTextFilmsSeries.text = it.overview
+                binding.tvNameFilmsSeries.text = it.name
+                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                it.voteAverage?.let {
+                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                    binding.ratingBarFilmsSeries.stepSize = .5f
+                }
+                binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
+                binding.cbFavoriteFilmsSeries.isChecked = it.checked
+                binding.cbWatchedFilmsSeries.isChecked = it.checked
+            }
+        }
+    }
+
+    private fun onApiErrorMovieWatched(movie: List<WatchedMovieDetailed>) {
+        movie.forEach {
+            if (it.id == films?.id) {
+                Glide.with(binding.root.context)
+                        .load(it.posterPath)
+                        .placeholder(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBannerFilmsSeries)
+                it.backdropPath?.let { it1 ->
+                    Glide.with(binding.root.context)
+                            .load(it.backdropPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+                } ?: Glide.with(this)
+                        .load(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBackDropFilmSeries)
+
+                binding.tvDescriptionTextFilmsSeries.text = it.overview
+                binding.tvNameFilmsSeries.text = it.title
+                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                it.voteAverage?.let {
+                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                    binding.ratingBarFilmsSeries.stepSize = .5f
+                }
+                val horas = it.runtime?.div(60)
+                val minutos = it.runtime?.rem(60)
+                binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
+                binding.cbFavoriteFilmsSeries.isChecked = it.checked
+                binding.cbWatchedFilmsSeries.isChecked = it.checked
             }
         }
     }

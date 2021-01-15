@@ -21,6 +21,7 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
     val serieDetailedSucess: MutableLiveData<SerieDetailed> = MutableLiveData()
 //    val serieDetailedError: MutableLiveData<String> = MutableLiveData()
     val serieDetailedError: MutableLiveData<List<FavoritesSerieDetailed>> = MutableLiveData()
+    val serieWatchedError: MutableLiveData<List<WatchedSerieDetailed>> = MutableLiveData()
     val getFavorite: MutableLiveData<List<FavoritesSerieDetailed>> = MutableLiveData()
     val getWatched: MutableLiveData<List<WatchedSerieDetailed>> = MutableLiveData()
 
@@ -42,6 +43,7 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
                 is ResponseAPI.Error -> {
 //                    serieDetailedError.postValue(response.message)
                     serieDetailedError.postValue(favoriteDB.getSerieFavorites())
+                    serieWatchedError.postValue(watchedDB.getSerieWatched())
                 }
             }
         }

@@ -18,6 +18,7 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
     val movieSucess: MutableLiveData<MovieDetailed> = MutableLiveData()
 //    val movieError: MutableLiveData<String> = MutableLiveData()
     val movieError: MutableLiveData<List<FavoritesMovieDetailed>> = MutableLiveData()
+    val movieErrorWatched: MutableLiveData<List<WatchedMovieDetailed>> = MutableLiveData()
     val getFavorite: MutableLiveData<List<FavoritesMovieDetailed>> = MutableLiveData()
     val getWatched: MutableLiveData<List<WatchedMovieDetailed>> = MutableLiveData()
 
@@ -39,6 +40,7 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
                 is ResponseAPI.Error -> {
 //                    movieError.postValue(response.message)
                     movieError.postValue(favoriteDB.getMovieFavorites())
+                    movieErrorWatched.postValue(watchedDB.getMovieWatched())
                 }
             }
         }
