@@ -1,14 +1,19 @@
 package com.example.madeinbrasil.model.serieDetailed
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
+//@Entity
 data class Season(
     val air_date: String?,
     val episode_count: Int?,
+//    @PrimaryKey
     val id: Int?,
+    val serieId: Int,
     var name: String?,
     var overview: String?,
     @SerializedName("poster_path")

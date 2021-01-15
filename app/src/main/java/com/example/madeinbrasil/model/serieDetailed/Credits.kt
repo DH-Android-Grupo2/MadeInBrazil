@@ -2,14 +2,15 @@ package com.example.madeinbrasil.model.serieDetailed
 
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import androidx.room.Relation
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity
+//@Entity
 data class Credits(
-        @Relation(parentColumn = "serie_id", entityColumn = "id")
-        val cast: List<Cast>?,
-        @Relation(parentColumn = "serie_id", entityColumn = "id")
-        val crew: List<Crew>?
+//        @PrimaryKey(autoGenerate = true)
+//        val idCredit: Int,
+        val cast: List<Cast>?
+//        val crew: List<Crew>?
 ): Parcelable

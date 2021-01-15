@@ -6,7 +6,6 @@ import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.model.nowPlaying.NowPlaying
 import com.example.madeinbrasil.repository.HomeRepository
 import com.example.madeinbrasil.utils.Constants
 import kotlinx.coroutines.CoroutineScope

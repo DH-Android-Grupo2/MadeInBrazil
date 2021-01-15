@@ -2,42 +2,48 @@ package com.example.madeinbrasil.model.serieDetailed
 
 import android.os.Parcelable
 import androidx.room.*
+import com.example.madeinbrasil.model.upcoming.GenreConverter
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "series_detailed")
+//@Entity(tableName = "serie_detailed")
 data class SerieDetailed(
-        @PrimaryKey
-        @ColumnInfo(name = "serie_id")
+//        @PrimaryKey
+//        @ColumnInfo(name = "id_serie_detailed")
         val id: Int,
-        @ColumnInfo(name = "backdrop_path")
+//        @ColumnInfo(name = "backdrop_path")
         @SerializedName("backdrop_path")
         var backdropPath: String?,
-        @Embedded
-        @Relation(parentColumn = "serie_id", entityColumn = "id")
-        val credits: Credits?,
-        @ColumnInfo(name = "episode_run_time")
+//        @Ignore
+        var credits: Credits?,
+//        @ColumnInfo(name = "episode_run_time")
         @SerializedName("episode_run_time")
+//        @TypeConverters(GenreConverter::class)
         var episodeRunTime: List<Int>?,
-        @ColumnInfo(name = "first_air_date")
+//        @ColumnInfo(name = "first_air_date")
         @SerializedName("first_air_date")
-        val firstAirDate: String?,
+        var firstAirDate: String?,
+//        @Ignore
         val genres: List<Genre>?,
         val homepage: String?,
         val name: String?,
         var overview: String?,
-        @ColumnInfo(name = "poster_path")
+//        @ColumnInfo(name = "poster_path")
         @SerializedName("poster_path")
         var posterPath: String?,
+//        @Ignore
         val recommendations: Recommendations?,
+//        @Ignore
         val seasons: List<Season>?,
+//        @Ignore
         val similar: Similar?,
+//        @Ignore
         val videos: Videos?,
-        @ColumnInfo(name = "vote_average")
+//        @ColumnInfo(name = "vote_average")
         @SerializedName("vote_average")
         val voteAverage: Double?,
-        @ColumnInfo(name = "watch/providers")
+//        @Ignore
         @SerializedName("watch/providers")
         val watchProviders: Watchproviders?
 ): Parcelable

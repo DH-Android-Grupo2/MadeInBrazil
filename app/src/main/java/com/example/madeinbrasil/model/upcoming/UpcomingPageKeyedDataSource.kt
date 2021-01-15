@@ -1,7 +1,6 @@
 package com.example.madeinbrasil.model.upcoming
 
 import android.content.Context
-import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.MadeInBrazilDatabase

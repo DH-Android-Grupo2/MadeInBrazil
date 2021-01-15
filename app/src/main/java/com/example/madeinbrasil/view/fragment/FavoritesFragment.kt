@@ -7,16 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.view.ActionMode
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.adapter.FavoriteMovieAdapter
+import com.example.madeinbrasil.adapter.FavoriteMovieAndSerieAdapter
+import com.example.madeinbrasil.adapter.FavoriteSerieAdapter
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.favorites.FavoritesMovieDetailed
 import com.example.madeinbrasil.databinding.FragmentFavoritesBinding
+import com.example.madeinbrasil.database.entities.favorites.FavoritesSerieDetailed
 import com.example.madeinbrasil.model.home.FilmRepository
-import com.example.madeinbrasil.view.adapter.MainAdapterFilm
+import com.example.madeinbrasil.viewModel.SerieDetailedViewModel
+import kotlinx.coroutines.launch
 
-class FavoritesFragment : Fragment() {
+class FavoritesFragment() : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
-    private val listFilms = FilmRepository().setFilms()
     var actionMode: ActionMode? = null
 
     override fun onCreateView(
@@ -31,9 +38,24 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.findViewById<RecyclerView>(R.id.rvCardsListFavorites)?.apply {
-            layoutManager = GridLayoutManager(activity, 2)
-            adapter = MainAdapterFilm(listFilms) {
+        activity?.let {activity ->
+            val db = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
+
+            lifecycleScope.launch {
+                binding.rvCardsListFavorites.apply {
+                    layoutManager = GridLayoutManager(activity, 2)
+                    adapter = FavoriteMovieAdapter(db.getMovieFavorites())
+                }
+
+//                binding.rvCardsListFavorites.apply {
+//                    layoutManager = GridLayoutManager(activity, 2)
+//                    adapter = FavoriteMovieAndSerieAdapter(db.getSerieFavorites(), db.getMovieFavorites())
+//                }
+
+//                binding.rvCardsListFavorites.apply {
+//                    layoutManager = GridLayoutManager(activity, 2)
+//                    adapter = FavoriteMovieAdapter(db.getMovieFavorites())
+//                }
 
             }
         }
@@ -45,6 +67,7 @@ class FavoritesFragment : Fragment() {
         binding.spinnerFavorite.apply {
 
             adapter = activity?.let {
+                val db = MadeInBrazilDatabase.getDatabase(it).favoriteDao()
                 ArrayAdapter.createFromResource(it,
                         R.array.spinner_options,
                         R.layout.custom_spinner).apply {

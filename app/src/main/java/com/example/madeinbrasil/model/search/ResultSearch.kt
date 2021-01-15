@@ -13,6 +13,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = "home_discover")
 data class ResultSearch(
+//        val serieDetailedId: Int,
+//        val recommendationId: Int,
     val adult: Boolean,
     @SerializedName("backdrop_path")
     @ColumnInfo(name ="backdrop_path")

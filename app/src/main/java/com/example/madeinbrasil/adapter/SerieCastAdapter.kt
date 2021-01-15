@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCastRecyclerviewBinding
-import com.example.madeinbrasil.model.movieCredits.Cast
+import com.example.madeinbrasil.model.serieDetailed.Cast
 
 class SerieCastAdapter(
         private val listSerieCast: List<Cast> = listOf(),
