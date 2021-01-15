@@ -6,9 +6,6 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-//@Entity
 data class Results(
-//        @PrimaryKey(autoGenerate = true)
-//        val resultId: Int,
         val BR: BR?,
 ): Parcelable

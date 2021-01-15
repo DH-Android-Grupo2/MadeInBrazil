@@ -8,10 +8,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-//@Entity
 data class Cast(
-//        @PrimaryKey
-//        @ColumnInfo(name = "cast_id")
         val id: Int,
         val creditsId: Int?,
         val adult: Boolean?,

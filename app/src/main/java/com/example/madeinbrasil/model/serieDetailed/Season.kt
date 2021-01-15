@@ -7,11 +7,9 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-//@Entity
 data class Season(
     val air_date: String?,
     val episode_count: Int?,
-//    @PrimaryKey
     val id: Int?,
     val serieId: Int,
     var name: String?,

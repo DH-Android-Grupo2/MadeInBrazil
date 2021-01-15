@@ -7,10 +7,6 @@ import androidx.room.Relation
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-//@Entity
 data class Credits(
-//        @PrimaryKey(autoGenerate = true)
-//        val idCredit: Int,
         val cast: List<Cast>?
-//        val crew: List<Crew>?
 ): Parcelable
