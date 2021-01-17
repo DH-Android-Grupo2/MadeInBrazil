@@ -14,8 +14,11 @@ class SerieDetailedRepository(val context: Context) {
     private val watchedDao by lazy {
         MadeInBrazilDatabase.getDatabase(context).watchedDao()
     }
-    private val favoriteMidiaDao by lazy {
-        MadeInBrazilDatabase.getDatabase(context).favoriteMidiaDao()
+    private val favoriteDao by lazy {
+        MadeInBrazilDatabase.getDatabase(context).favoriteDao()
+    }
+    private val genderDao by lazy {
+        MadeInBrazilDatabase.getDatabase(context).genreDao()
     }
 
     suspend fun getSerieRepository(serieId: Int): ResponseAPI{
@@ -36,17 +39,12 @@ class SerieDetailedRepository(val context: Context) {
         }
     }
 
-    suspend fun insertMidia(midia: MidiaEntity) {
-        favoriteMidiaDao.insertMidia(midia)
-
-    }
-
     suspend fun insertFavorite(fav: Favorites) {
-        favoriteMidiaDao.insertFavorite(fav)
+        favoriteDao.insertFavorite(fav)
     }
 
     suspend fun deleteByIdFavorites(id: Int) {
-        favoriteMidiaDao.deleteByIdFavorites(id)
+        favoriteDao.deleteByIdFavorites(id)
     }
 
     suspend fun insertWatched(watched: Watched) {
@@ -56,4 +54,9 @@ class SerieDetailedRepository(val context: Context) {
     suspend fun deleteByIdWatched(id: Int) {
         watchedDao.deleteByIdWatched(id)
     }
+
+    suspend fun insertGenre(genre: GenreEntity) {
+        genderDao.insertGenre(genre)
+    }
+
 }

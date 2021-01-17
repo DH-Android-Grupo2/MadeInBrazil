@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.result.MovieDetailed
@@ -49,11 +50,6 @@ class MovieDetailedBusiness(val context: Context)  {
             response
         }
     }
-
-    suspend fun insertMidia(midia: MidiaEntity) {
-        repository.insertMidia(midia)
-    }
-
     suspend fun insertFavorite(fav: Favorites) {
         repository.insertFavorite(fav)
     }
@@ -68,5 +64,9 @@ class MovieDetailedBusiness(val context: Context)  {
 
     suspend fun deleteByIdWatched(id: Int) {
         repository.deleteByIdWatched(id)
+    }
+
+    suspend fun insertGenre(genre: GenreEntity) {
+        repository.insertGenre(genre)
     }
 }

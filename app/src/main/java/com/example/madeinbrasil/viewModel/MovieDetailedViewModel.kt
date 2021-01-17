@@ -9,6 +9,7 @@ import com.example.madeinbrasil.business.MovieDetailedBusiness
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.result.MovieDetailed
 import kotlinx.coroutines.launch
@@ -17,10 +18,9 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
     val movieSucess: MutableLiveData<MovieDetailed> = MutableLiveData()
     val movieError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
 
-    private val favoriteMidiaDB by lazy {
-        MadeInBrazilDatabase.getDatabase(application).favoriteMidiaDao()
+    private val midiaDB by lazy {
+        MadeInBrazilDatabase.getDatabase(application).midiaDao()
     }
-
     private val detailed by lazy {
         MovieDetailedBusiness(application)
     }
@@ -32,15 +32,9 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
                     movieSucess.postValue(response.data as MovieDetailed)
                 }
                 is ResponseAPI.Error -> {
-                    movieError.postValue(favoriteMidiaDB.getMidiaFavorite())
+                    movieError.postValue(midiaDB.getMidia())
                 }
             }
-        }
-    }
-
-    fun insertMidia(midia: MidiaEntity) {
-        viewModelScope.launch {
-            detailed.insertMidia(midia)
         }
     }
 
@@ -65,6 +59,11 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
     fun deleteByIdWatched(id: Int) {
         viewModelScope.launch {
             detailed.deleteByIdWatched(id)
+        }
+    }
+    fun insertGenre(genre: GenreEntity) {
+        viewModelScope.launch {
+            detailed.insertGenre(genre)
         }
     }
 }

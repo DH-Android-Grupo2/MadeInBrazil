@@ -6,14 +6,21 @@ import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.watched.Watched
 
 class MovieDetailedRepository(context: Context){
     private val watchedDao by lazy {
         MadeInBrazilDatabase.getDatabase(context).watchedDao()
     }
-    private val favoriteMidiaDao by lazy {
-        MadeInBrazilDatabase.getDatabase(context).favoriteMidiaDao()
+    private val favoriteDao by lazy {
+        MadeInBrazilDatabase.getDatabase(context).favoriteDao()
+    }
+    private val midiaDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).midiaDao()
+    }
+    private val genreDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).genreDao()
     }
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
@@ -34,16 +41,12 @@ class MovieDetailedRepository(context: Context){
         }
     }
 
-    suspend fun insertMidia(midia: MidiaEntity) {
-        favoriteMidiaDao.insertMidia(midia)
-    }
-
     suspend fun insertFavorite(fav: Favorites) {
-        favoriteMidiaDao.insertFavorite(fav)
+        favoriteDao.insertFavorite(fav)
     }
 
     suspend fun deleteByIdFavorites(id: Int) {
-        favoriteMidiaDao.deleteByIdFavorites(id)
+        favoriteDao.deleteByIdFavorites(id)
     }
 
     suspend fun insertWatched(watched: Watched) {
@@ -54,4 +57,7 @@ class MovieDetailedRepository(context: Context){
         watchedDao.deleteByIdWatched(id)
     }
 
+    suspend fun insertGenre(genre: GenreEntity) {
+        genreDB.insertGenre(genre)
+    }
 }

@@ -19,8 +19,8 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
     val serieDetailedSucess: MutableLiveData<SerieDetailed> = MutableLiveData()
     val serieDetailedError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
 
-    private val favoriteMidiaDB by lazy {
-        MadeInBrazilDatabase.getDatabase(application).favoriteMidiaDao()
+    private val midiaDB by lazy {
+        MadeInBrazilDatabase.getDatabase(application).midiaDao()
     }
 
     private val businessDetailed by lazy {
@@ -34,15 +34,9 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
                     serieDetailedSucess.postValue(response.data as SerieDetailed)
                 }
                 is ResponseAPI.Error -> {
-                    serieDetailedError.postValue(favoriteMidiaDB.getMidiaFavorite())
+                    serieDetailedError.postValue(midiaDB.getMidia())
                 }
             }
-        }
-    }
-
-    fun insertMidia(midia: MidiaEntity) {
-        viewModelScope.launch {
-            businessDetailed.insertMidia(midia)
         }
     }
 
@@ -70,5 +64,9 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
-
+    fun insertGenre(genre: GenreEntity) {
+        viewModelScope.launch {
+            businessDetailed.insertGenre(genre)
+        }
+    }
 }

@@ -64,9 +64,6 @@ class SerieDetailedBusiness (val context: Context) {
         }
     }
 
-    suspend fun insertMidia(midia: MidiaEntity) {
-        repository.insertMidia(midia)
-    }
 
     suspend fun insertFavorite(fav: Favorites) {
         repository.insertFavorite(fav)
@@ -82,5 +79,9 @@ class SerieDetailedBusiness (val context: Context) {
 
     suspend fun deleteByIdWatched(id: Int) {
         repository.deleteByIdWatched(id)
+    }
+
+    suspend fun insertGenre(genre: GenreEntity) {
+        repository.insertGenre(genre)
     }
 }

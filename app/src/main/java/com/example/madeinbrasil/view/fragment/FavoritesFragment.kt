@@ -32,7 +32,7 @@ class FavoritesFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {activity ->
-            val db = MadeInBrazilDatabase.getDatabase(activity).favoriteMidiaDao()
+            val db = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
 
             lifecycleScope.launch {
                 binding.rvCardsListFavorites.apply {

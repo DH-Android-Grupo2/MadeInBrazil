@@ -52,29 +52,29 @@ class UserActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            val db = MadeInBrazilDatabase.getDatabase(this@UserActivity).favoriteMidiaDao()
+            val db = MadeInBrazilDatabase.getDatabase(this@UserActivity).favoriteDao()
             val dbWatched = MadeInBrazilDatabase.getDatabase(this@UserActivity).watchedDao()
+            var countMovie = 0
+            var countSerie = 0
 
             binding.rvCardsListFavorites.apply {
                 layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
                 adapter = FavoriteMidiaAdapter(db.getMidiaWithFavorites())
             }
 
+            dbWatched.getMidiaWithWatched().forEach {
+                when(it.midia.midiaType) {
+                    1 -> {
+                        countMovie++
+                    }
+                    2 -> {
+                        countSerie++
+                    }
+                }
+            }
 
-//            dbWatched.getMidiaWithWatched().forEach {
-//                var countMovie = 0
-//                var countSerie = 0
-//                when(it.midia.midiaType) {
-//                    1 -> {
-//                        countMovie++
-//                        binding.tvNumMovies.text = countMovie.toString()
-//                    }
-//                    2 -> {
-//                        countSerie++
-//                        binding.tvNumSeries.text = countSerie.toString()
-//                    }
-//                }
-//            }
+            binding.tvNumMovies.text = countMovie.toString()
+            binding.tvNumSeries.text = countSerie.toString()
         }
 
         setupUser()

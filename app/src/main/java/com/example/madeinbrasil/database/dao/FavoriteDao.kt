@@ -6,7 +6,7 @@ import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.database.entities.favorites.MidiaWithFavorites
 
 @Dao
-interface FavoriteMidiaDao {
+interface FavoriteDao {
 
     @Query("SELECT * FROM midia")
     suspend fun getMidiaFavorite(): List<MidiaEntity>
@@ -26,7 +26,4 @@ interface FavoriteMidiaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMidia(media: MidiaEntity)
-
-    @Delete
-    suspend fun deleteMidia(midia: MidiaEntity)
 }

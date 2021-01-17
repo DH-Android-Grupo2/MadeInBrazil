@@ -194,15 +194,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         filmDetailed = movie
 
                         binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
-                            val favMovie = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
-                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
-                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
-                                    "", midiaType = 1)
-
                             val fav = Favorites(movie.id, movie.id, isChecked)
 
                             if(isChecked) {
-                                viewModelMovie.insertMidia(favMovie)
                                 viewModelMovie.insertFavorite(fav)
                             }else {
                                 viewModelMovie.deleteByIdFavorites(movie.id)
@@ -210,14 +204,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
-                            val favWatched = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
-                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
-                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
-                                    "", midiaType = 1)
                             val watched = Watched(movie.id, movie.id, isChecked)
 
                             if(isChecked) {
-                                viewModelMovie.insertMidia(favWatched)
                                 viewModelMovie.insertWatched(watched)
                             }else {
                                 viewModelMovie.deleteByIdWatched(movie.id)
@@ -225,8 +214,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         lifecycleScope.launch {
-                            val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
+                            val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
                             val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                            val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
+
+                            val midia = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
+                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
+                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
+                                    "", midiaType = 1)
+
+                            dbMidia.insertMidia(midia)
 
                             dbFav.getMidiaWithFavorites().forEach {
                                 if(it.midia.id == movie.id) {
@@ -247,30 +244,41 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                viewModelMovie.movieError.observe(this) {midia ->
+                    onApiErrorMovie(midia)
+                    lifecycleScope.launch {
+                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
+                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                        val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
+                        var gender = ""
 
-                    dbFav.getMidiaWithFavorites().forEach {
-                        viewModelMovie.movieError.observe(this@FilmsAndSeriesActivity) { midia ->
-                            onApiErrorMovie(midia)
+                        films?.id?.let {
+                            dbGender.getGenreById(it).forEach {
+                                val re = Regex("[^A-Za-z0-9 ãõçéíê]")
+                                var save: String = ""
+                                it.split(",").forEach { save += "$it " }
+                                save = re.replace(save, "")
+                                gender += save
+                            }
+                        }
+
+                        dbFav.getMidiaWithFavorites().forEach {
                             if(it.midia.id == films?.id) {
                                 it.favorites.forEach {fav ->
                                     binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
                                 }
                             }
                         }
-                    }
 
-                    dbWatched.getMidiaWithWatched().forEach {
-                        viewModelMovie.movieError.observe(this@FilmsAndSeriesActivity) { midia ->
-                            onApiErrorMovie(midia)
+                        dbWatched.getMidiaWithWatched().forEach {
                             if(it.midia.id == films?.id) {
                                 it.watched.forEach {watched ->
                                     binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
                                 }
                             }
                         }
+
+                        binding.tvGenderFilmsSeries.text = gender
                     }
                 }
 
@@ -404,15 +412,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
-                        val favSerie = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
                         val fav = Favorites(serie.id, serie.id, isChecked)
 
                         if(isChecked) {
-                            viewModelSerie.insertMidia(favSerie)
                             viewModelSerie.insertFavorite(fav)
                         }else {
                             viewModelSerie.deleteByIdFavorites(serie.id)
@@ -420,15 +422,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
-                        val favSerie = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
                         val watched = Watched(serie.id, serie.id, isChecked)
 
                         if(isChecked) {
-                            viewModelSerie.insertMidia(favSerie)
                             viewModelSerie.insertWatched(watched)
                         }else {
                             viewModelSerie.deleteByIdWatched(serie.id)
@@ -436,9 +432,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     lifecycleScope.launch {
-                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
+                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
                         val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                        val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
 
+                        val midia = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
+                                "", serie.overview, 0.0, serie.posterPath, "",
+                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
+                                serie.name, midiaType = 2)
+
+                        dbMidia.insertMidia(midia)
                         dbFav.getMidiaWithFavorites().forEach {
                             if(it.midia.id == serie.id) {
                                 it.favorites.forEach {fav ->
@@ -457,30 +460,40 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                viewModelSerie.serieDetailedError.observe(this) {midia ->
+                    onApiErrorSerie(midia)
+                    lifecycleScope.launch {
+                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
+                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                        val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
+                        var gender = ""
 
-                    dbFav.getMidiaWithFavorites().forEach {
-                        viewModelSerie.serieDetailedError.observe(this@FilmsAndSeriesActivity) { midia ->
-                            onApiErrorSerie(midia)
+                        series?.id?.let {
+                            dbGender.getGenreById(it).forEach {
+                                val re = Regex("[^A-Za-z0-9 ãõçéíê]")
+                                var save: String = ""
+                                it.split(",").forEach { save += "$it " }
+                                save = re.replace(save, "")
+                                gender += save
+                            }
+                        }
+
+                        dbFav.getMidiaWithFavorites().forEach {
                             if(it.midia.id == series?.id) {
                                 it.favorites.forEach {fav ->
                                     binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
                                 }
                             }
                         }
-                    }
 
-                    dbWatched.getMidiaWithWatched().forEach {
-                        viewModelSerie.serieDetailedError.observe(this@FilmsAndSeriesActivity) { midia ->
-                            onApiErrorSerie(midia)
+                        dbWatched.getMidiaWithWatched().forEach {
                             if(it.midia.id == series?.id) {
                                 it.watched.forEach {watched ->
                                     binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
                                 }
                             }
                         }
+                        binding.tvGenderFilmsSeries.text = gender
                     }
                 }
 
@@ -508,7 +521,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         .load(R.drawable.logo_made_in_brasil)
                         .into(binding.ivBackDropFilmSeries)
 
-                it?.episodeRunTime?.forEach {
+                it.episodeRunTime?.forEach {
                     if (it > 60) {
                         val horas = listOf(it.div(60))
                         val min = listOf(it.rem(60))
@@ -628,32 +641,48 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private fun setupObservables() {
         var generosText = ""
+        val listId = mutableListOf<Int>()
+        val listName = mutableListOf<String>()
         viewModel.onResultGenres.observe(this) {
             it?.let { generos ->
                 films?.genreIds?.forEach { genreFilm ->
                     generos.genres.forEach { genre ->
                         if (genre.id == genreFilm) {
                             generosText += "${genre.name}  "
+                            listId.add(genre.id)
+                            listName.add(genre.name)
                         }
                     }
                 }
             }
+            films?.id?.let {
+                it1 -> val gender = GenreEntity(listId, listName, it1)
+                viewModel.insertGenre(gender)}
+
             binding.tvGenderFilmsSeries.text = generosText
         }
     }
 
     private fun setupObservablesSeries() {
         var generosText = ""
+        val listId = mutableListOf<Int>()
+        val listName = mutableListOf<String>()
         viewModelGenderSeries.onResultGenresSeries.observe(this) {
             it?.let { generos ->
                 series?.genreIds?.forEach { genreSerie ->
                     generos.genres.forEach { genre ->
                         if (genre.id == genreSerie) {
                             generosText += "${genre.name}  "
+                            listId.add(genre.id)
+                            listName.add(genre.name)
                         }
                     }
                 }
             }
+            series?.id?.let {
+                it1 -> val gender = GenreEntity(listId, listName, it1)
+                viewModelGenderSeries.insertGenre(gender)}
+
             binding.tvGenderFilmsSeries.text = generosText
         }
     }
