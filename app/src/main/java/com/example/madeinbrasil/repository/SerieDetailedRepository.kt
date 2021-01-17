@@ -4,17 +4,18 @@ import android.content.Context
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.FavoritesSerieDetailed
-import com.example.madeinbrasil.database.entities.watched.WatchedMovieDetailed
-import com.example.madeinbrasil.database.entities.watched.WatchedSerieDetailed
+import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
 
 class SerieDetailedRepository(val context: Context) {
-    private val favoriteDao by lazy {
-        MadeInBrazilDatabase.getDatabase(context).favoriteDao()
-    }
     private val watchedDao by lazy {
         MadeInBrazilDatabase.getDatabase(context).watchedDao()
+    }
+    private val favoriteMidiaDao by lazy {
+        MadeInBrazilDatabase.getDatabase(context).favoriteMidiaDao()
     }
 
     suspend fun getSerieRepository(serieId: Int): ResponseAPI{
@@ -35,27 +36,24 @@ class SerieDetailedRepository(val context: Context) {
         }
     }
 
-    suspend fun insertSerieFavorite(serie: FavoritesSerieDetailed) {
-        favoriteDao.insertSerie(serie)
+    suspend fun insertMidia(midia: MidiaEntity) {
+        favoriteMidiaDao.insertMidia(midia)
+
     }
 
-    suspend fun insertGenreFavorite(genre: List<Genre>) {
-        favoriteDao.insertGenre(genre)
+    suspend fun insertFavorite(fav: Favorites) {
+        favoriteMidiaDao.insertFavorite(fav)
     }
 
-    suspend fun getSerieDetailedWithGenre() {
-        favoriteDao.getSerieDetailedWithGenre()
+    suspend fun deleteByIdFavorites(id: Int) {
+        favoriteMidiaDao.deleteByIdFavorites(id)
     }
 
-    suspend fun deleteSerieFavorite(serie: FavoritesSerieDetailed) {
-        favoriteDao.deleteSerie(serie)
+    suspend fun insertWatched(watched: Watched) {
+        watchedDao.insertWatched(watched)
     }
 
-    suspend fun insertSerieWatched(serie: WatchedSerieDetailed) {
-        watchedDao.insertSerieWatched(serie)
-    }
-
-    suspend fun deleteSerieWatched(serie: WatchedSerieDetailed) {
-        watchedDao.deleteWatchedSerie(serie)
+    suspend fun deleteByIdWatched(id: Int) {
+        watchedDao.deleteByIdWatched(id)
     }
 }

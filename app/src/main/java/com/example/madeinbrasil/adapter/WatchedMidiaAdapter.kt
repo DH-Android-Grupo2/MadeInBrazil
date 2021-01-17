@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.madeinbrasil.database.entities.watched.WatchedSerieDetailed
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.watched.MidiaWithWatched
 import com.example.madeinbrasil.databinding.MainCardsBinding
 
-class WatchedSerieAdapter(
-        val listSerie: List<WatchedSerieDetailed>
-): RecyclerView.Adapter<WatchedSerieAdapter.ViewHolder>() {
+class WatchedMidiaAdapter(
+        val listSerie: List<MidiaWithWatched>
+): RecyclerView.Adapter<WatchedMidiaAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = MainCardsBinding.inflate(layoutInflater, parent, false)
@@ -27,9 +28,17 @@ class WatchedSerieAdapter(
     class ViewHolder(
             val binding: MainCardsBinding
     ): RecyclerView.ViewHolder(binding.root) {
-        fun bind(serie: WatchedSerieDetailed) = with(binding) {
-            Glide.with(itemView.context).load(serie.posterPath).into(cvImageCard)
-            tvNameRecyclerView.text = serie.name
+        fun bind(watched: MidiaWithWatched) = with(binding) {
+            when(watched.midia.midiaType) {
+                1 -> {
+                    Glide.with(itemView.context).load(watched.midia.posterPath).into(cvImageCard)
+                    tvNameRecyclerView.text = watched.midia.title
+                }
+                2 -> {
+                    Glide.with(itemView.context).load(watched.midia.posterPath).into(cvImageCard)
+                    tvNameRecyclerView.text = watched.midia.name
+                }
+            }
         }
     }
 }

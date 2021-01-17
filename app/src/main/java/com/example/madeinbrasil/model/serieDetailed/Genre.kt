@@ -7,11 +7,7 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity
 data class Genre(
-        @PrimaryKey
-        @ColumnInfo(name = "id_genre")
         val id: Int,
-        val name: String?,
-        val serieId: Int?
+        val name: String?
 ): Parcelable

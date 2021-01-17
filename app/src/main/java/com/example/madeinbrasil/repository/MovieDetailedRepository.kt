@@ -4,15 +4,16 @@ import android.content.Context
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.FavoritesMovieDetailed
-import com.example.madeinbrasil.database.entities.watched.WatchedMovieDetailed
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.watched.Watched
 
 class MovieDetailedRepository(context: Context){
-    private val favoriteDao by lazy {
-        MadeInBrazilDatabase.getDatabase(context).favoriteDao()
-    }
     private val watchedDao by lazy {
         MadeInBrazilDatabase.getDatabase(context).watchedDao()
+    }
+    private val favoriteMidiaDao by lazy {
+        MadeInBrazilDatabase.getDatabase(context).favoriteMidiaDao()
     }
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
@@ -33,19 +34,24 @@ class MovieDetailedRepository(context: Context){
         }
     }
 
-    suspend fun insertMovieFavorite(movie: FavoritesMovieDetailed) {
-        favoriteDao.insertMovie(movie)
+    suspend fun insertMidia(midia: MidiaEntity) {
+        favoriteMidiaDao.insertMidia(midia)
     }
 
-    suspend fun deleteMovieFavorite(movie: FavoritesMovieDetailed) {
-        favoriteDao.deleteMovie(movie)
+    suspend fun insertFavorite(fav: Favorites) {
+        favoriteMidiaDao.insertFavorite(fav)
     }
 
-    suspend fun insertMovieWatched(movie: WatchedMovieDetailed) {
-        watchedDao.insertMovieWatched(movie)
+    suspend fun deleteByIdFavorites(id: Int) {
+        favoriteMidiaDao.deleteByIdFavorites(id)
     }
 
-    suspend fun deleteMoviewatched(movie: WatchedMovieDetailed) {
-        watchedDao.deleteWatchedMovie(movie)
+    suspend fun insertWatched(watched: Watched) {
+        watchedDao.insertWatched(watched)
     }
+
+    suspend fun deleteByIdWatched(id: Int) {
+        watchedDao.deleteByIdWatched(id)
+    }
+
 }

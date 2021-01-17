@@ -3,27 +3,23 @@ package com.example.madeinbrasil.viewModel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.business.MovieDetailedBusiness
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.FavoritesMovieDetailed
-import com.example.madeinbrasil.database.entities.favorites.FavoritesSerieDetailed
-import com.example.madeinbrasil.database.entities.watched.WatchedMovieDetailed
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.result.MovieDetailed
 import kotlinx.coroutines.launch
 
 class MovieDetailedViewModel(application: Application): AndroidViewModel(application) {
     val movieSucess: MutableLiveData<MovieDetailed> = MutableLiveData()
-//    val movieError: MutableLiveData<String> = MutableLiveData()
-    val movieError: MutableLiveData<List<FavoritesMovieDetailed>> = MutableLiveData()
-    val movieErrorWatched: MutableLiveData<List<WatchedMovieDetailed>> = MutableLiveData()
-    val getFavorite: MutableLiveData<List<FavoritesMovieDetailed>> = MutableLiveData()
-    val getWatched: MutableLiveData<List<WatchedMovieDetailed>> = MutableLiveData()
+    val movieError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
 
-    private val favoriteDB = MadeInBrazilDatabase.getDatabase(application).favoriteDao()
-    private val watchedDB = MadeInBrazilDatabase.getDatabase(application).watchedDao()
+    private val favoriteMidiaDB by lazy {
+        MadeInBrazilDatabase.getDatabase(application).favoriteMidiaDao()
+    }
 
     private val detailed by lazy {
         MovieDetailedBusiness(application)
@@ -34,39 +30,41 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
             when(val response = movieId?.let { detailed.getMovie(it) }) {
                 is ResponseAPI.Success -> {
                     movieSucess.postValue(response.data as MovieDetailed)
-                    getFavorite.postValue(favoriteDB.getMovieFavorites())
-                    getWatched.postValue(watchedDB.getMovieWatched())
                 }
                 is ResponseAPI.Error -> {
-//                    movieError.postValue(response.message)
-                    movieError.postValue(favoriteDB.getMovieFavorites())
-                    movieErrorWatched.postValue(watchedDB.getMovieWatched())
+                    movieError.postValue(favoriteMidiaDB.getMidiaFavorite())
                 }
             }
         }
     }
 
-    fun insertMovieFavorite(movie: FavoritesMovieDetailed) {
+    fun insertMidia(midia: MidiaEntity) {
         viewModelScope.launch {
-            detailed.insertMovieFavorite(movie)
+            detailed.insertMidia(midia)
         }
     }
 
-    fun deleteMovieFavorite(movie: FavoritesMovieDetailed) {
+    fun insertFavorite(fav: Favorites) {
         viewModelScope.launch {
-            detailed.deleteMovieFavorite(movie)
+            detailed.insertFavorite(fav)
         }
     }
 
-    fun insertMovieWatched(movie: WatchedMovieDetailed) {
+    fun insertWatched(watched: Watched) {
         viewModelScope.launch {
-            detailed.insertMovieWatched(movie)
+            detailed.insertWatched(watched)
         }
     }
 
-    fun deleteMoviewatched(movie: WatchedMovieDetailed) {
+    fun deleteByIdFavorites(id: Int) {
         viewModelScope.launch {
-            detailed.deleteMoviewatched(movie)
+            detailed.deleteByIdFavorites(id)
+        }
+    }
+
+    fun deleteByIdWatched(id: Int) {
+        viewModelScope.launch {
+            detailed.deleteByIdWatched(id)
         }
     }
 }

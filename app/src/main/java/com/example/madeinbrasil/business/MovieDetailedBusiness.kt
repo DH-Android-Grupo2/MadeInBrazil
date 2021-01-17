@@ -1,13 +1,15 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
-import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.database.entities.favorites.FavoritesMovieDetailed
-import com.example.madeinbrasil.database.entities.watched.WatchedMovieDetailed
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.repository.MovieDetailedRepository
+import kotlinx.coroutines.launch
 
 class MovieDetailedBusiness(val context: Context)  {
 
@@ -48,19 +50,23 @@ class MovieDetailedBusiness(val context: Context)  {
         }
     }
 
-    suspend fun insertMovieFavorite(movie: FavoritesMovieDetailed) {
-        repository.insertMovieFavorite(movie)
+    suspend fun insertMidia(midia: MidiaEntity) {
+        repository.insertMidia(midia)
     }
 
-    suspend fun deleteMovieFavorite(movie: FavoritesMovieDetailed) {
-        repository.deleteMovieFavorite(movie)
+    suspend fun insertFavorite(fav: Favorites) {
+        repository.insertFavorite(fav)
     }
 
-    suspend fun insertMovieWatched(movie: WatchedMovieDetailed) {
-        repository.insertMovieWatched(movie)
+    suspend fun deleteByIdFavorites(id: Int) {
+        repository.deleteByIdFavorites(id)
     }
 
-    suspend fun deleteMoviewatched(movie: WatchedMovieDetailed) {
-        repository.deleteMoviewatched(movie)
+    suspend fun insertWatched(watched: Watched) {
+        repository.insertWatched(watched)
+    }
+
+    suspend fun deleteByIdWatched(id: Int) {
+        repository.deleteByIdWatched(id)
     }
 }

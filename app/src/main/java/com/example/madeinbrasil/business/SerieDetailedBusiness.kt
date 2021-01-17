@@ -1,13 +1,17 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
+import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.extensions.getFullImagePath
-import com.example.madeinbrasil.database.entities.favorites.FavoritesSerieDetailed
-import com.example.madeinbrasil.database.entities.watched.WatchedSerieDetailed
+import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.repository.SerieDetailedRepository
+import kotlinx.coroutines.launch
 
 class SerieDetailedBusiness (val context: Context) {
     private val repository: SerieDetailedRepository by lazy {
@@ -60,24 +64,23 @@ class SerieDetailedBusiness (val context: Context) {
         }
     }
 
-    suspend fun insertSerieFavorite(serie: FavoritesSerieDetailed) {
-        repository.insertSerieFavorite(serie)
+    suspend fun insertMidia(midia: MidiaEntity) {
+        repository.insertMidia(midia)
     }
 
-    suspend fun insertGenreFavorite(genre: List<Genre>) {
-        repository.insertGenreFavorite(genre)
+    suspend fun insertFavorite(fav: Favorites) {
+        repository.insertFavorite(fav)
     }
 
-    suspend fun deleteSerieFavorite(serie: FavoritesSerieDetailed) {
-        repository.deleteSerieFavorite(serie)
+    suspend fun deleteByIdFavorites(id: Int) {
+        repository.deleteByIdFavorites(id)
     }
 
-    suspend fun insertSerieWatched(serie: WatchedSerieDetailed) {
-        repository.insertSerieWatched(serie)
+    suspend fun insertWatched(watched: Watched) {
+        repository.insertWatched(watched)
     }
 
-    suspend fun deleteSerieWatched(serie: WatchedSerieDetailed) {
-        repository.deleteSerieWatched(serie)
+    suspend fun deleteByIdWatched(id: Int) {
+        repository.deleteByIdWatched(id)
     }
-
 }

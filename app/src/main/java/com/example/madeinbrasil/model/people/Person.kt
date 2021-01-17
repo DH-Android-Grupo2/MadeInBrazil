@@ -1,9 +1,6 @@
 package com.example.madeinbrasil.model.people
 
 import android.os.Parcelable
-import com.example.madeinbrasil.model.movieCredits.MovieCredits
-import com.example.madeinbrasil.model.serieDetailed.Credits
-import com.example.madeinbrasil.model.serieDetailed.Result
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

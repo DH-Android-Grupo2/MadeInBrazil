@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.madeinbrasil.R
-import com.example.madeinbrasil.adapter.WatchedSerieAdapter
+import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
+import com.example.madeinbrasil.adapter.WatchedMidiaAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.FragmentWatchedBinding
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ class WatchedFragment : Fragment() {
 
                 binding.rvCardsListWatched.apply {
                     layoutManager = GridLayoutManager(activity, 2)
-                    adapter = WatchedSerieAdapter(db.getSerieWatched())
+                    adapter = WatchedMidiaAdapter(db.getMidiaWithWatched())
                 }
             }
         }
