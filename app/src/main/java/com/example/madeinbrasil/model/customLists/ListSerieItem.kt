@@ -12,5 +12,5 @@ data class ListSerieItem(
         @ColumnInfo(name = "backdrop_path")
         var backdropPath: String?,
         @ColumnInfo(name = "original_title")
-        val originalTitle: String?,
+        val originalTitle: String?
 )
