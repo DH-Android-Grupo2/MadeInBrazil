@@ -3,7 +3,11 @@ package com.example.madeinbrasil.view.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.TextWatcher
 import android.util.Log
+import android.widget.EditText
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +25,7 @@ import com.example.madeinbrasil.view.fragment.SelectSerieFragment
 import com.example.madeinbrasil.viewModel.CustomListViewModel
 import com.example.madeinbrasil.viewModel.SelectMovieViewModel
 import com.example.madeinbrasil.viewModel.SelectSerieViewModel
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_create_list.*
 import java.util.ArrayList
 
@@ -53,6 +58,7 @@ class CreateListActivity : AppCompatActivity() {
         setupRecyclerView()
         setupButtonListeners()
         setupShowClickListeners()
+        setupFormFieldsListeners()
     }
 
     private fun setupRecyclerView() {
@@ -109,6 +115,18 @@ class CreateListActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun setupFormFieldsListeners() {
+
+        val listNameField: EditText = binding.teetName
+        val createListBtn = binding.btnCreateList
+
+        listNameField.addTextChangedListener {
+            it?.let {
+                createListBtn.isEnabled = it.trim().isNotEmpty()
+            }
+        }
     }
 
 }
