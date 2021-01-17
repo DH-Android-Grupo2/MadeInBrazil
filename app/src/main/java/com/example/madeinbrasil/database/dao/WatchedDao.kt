@@ -7,9 +7,6 @@ import com.example.madeinbrasil.database.entities.watched.Watched
 
 @Dao
 interface WatchedDao {
-    @Query("SELECT * FROM midia")
-    suspend fun getMidiaWatched(): List<MidiaEntity>
-
     @Query("DELETE FROM Watched WHERE midiaId = :id")
     suspend fun deleteByIdWatched(id: Int)
 
@@ -19,7 +16,4 @@ interface WatchedDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWatched(watched: Watched)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMidia(media: MidiaEntity)
 }
