@@ -1,17 +1,19 @@
-package com.example.madeinbrasil.database.entities.watched
+package com.example.madeinbrasil.database.entities.midia
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.madeinbrasil.model.upcoming.GenreConverter
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "watched_movie_detailed")
-data class WatchedMovieDetailed (
+@Entity(tableName = "midia")
+data class MidiaEntity (
         @PrimaryKey
-        @ColumnInfo(name = "watched_movie_id")
+        @ColumnInfo(name = "id_midia")
         val id: Int,
         @ColumnInfo(name = "backdrop_path")
         @SerializedName("backdrop_path")
@@ -39,6 +41,13 @@ data class WatchedMovieDetailed (
         @ColumnInfo(name = "vote_count")
         @SerializedName("vote_count")
         val voteCount: Int?,
-        val checked: Boolean = false,
-        val idMovie: Int = 1
+        @ColumnInfo(name = "episode_run_time")
+        @SerializedName("episode_run_time")
+        @TypeConverters(GenreConverter::class)
+        var episodeRunTime: List<Int>?,
+        @ColumnInfo(name = "first_air_date")
+        @SerializedName("first_air_date")
+        var firstAirDate: String?,
+        var name: String?,
+        val midiaType: Int
 ): Parcelable

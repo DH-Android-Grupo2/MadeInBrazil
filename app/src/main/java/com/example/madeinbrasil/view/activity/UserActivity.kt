@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.adapter.FavoriteMovieAdapter
+import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.ActivityUserBinding
 import com.getkeepsafe.taptargetview.TapTarget
@@ -52,16 +52,29 @@ class UserActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            val db = MadeInBrazilDatabase.getDatabase(this@UserActivity).favoriteDao()
+            val db = MadeInBrazilDatabase.getDatabase(this@UserActivity).favoriteMidiaDao()
             val dbWatched = MadeInBrazilDatabase.getDatabase(this@UserActivity).watchedDao()
 
             binding.rvCardsListFavorites.apply {
                 layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
-                adapter = FavoriteMovieAdapter(db.getMovieFavorites())
+                adapter = FavoriteMidiaAdapter(db.getMidiaWithFavorites())
             }
 
-            binding.tvNumMovies.text = dbWatched.getMovieWatched().size.toString()
-            binding.tvNumSeries.text = dbWatched.getSerieWatched().size.toString()
+
+//            dbWatched.getMidiaWithWatched().forEach {
+//                var countMovie = 0
+//                var countSerie = 0
+//                when(it.midia.midiaType) {
+//                    1 -> {
+//                        countMovie++
+//                        binding.tvNumMovies.text = countMovie.toString()
+//                    }
+//                    2 -> {
+//                        countSerie++
+//                        binding.tvNumSeries.text = countSerie.toString()
+//                    }
+//                }
+//            }
         }
 
         setupUser()

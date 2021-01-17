@@ -1,4 +1,4 @@
-package com.example.madeinbrasil.database
+package com.example.madeinbrasil.database.dao
 
 import androidx.room.*
 import com.example.madeinbrasil.model.upcoming.GenreConverter

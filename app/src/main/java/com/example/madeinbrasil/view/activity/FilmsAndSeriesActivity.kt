@@ -1,56 +1,40 @@
 package com.example.madeinbrasil.view.activity
 
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.lifecycle.*
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.*
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.FavoritesMovieDetailed
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
-import com.example.madeinbrasil.extensions.getFullImagePath
-import com.example.madeinbrasil.database.entities.favorites.FavoritesSerieDetailed
-import com.example.madeinbrasil.database.entities.watched.WatchedMovieDetailed
-import com.example.madeinbrasil.database.entities.watched.WatchedSerieDetailed
+import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.home.CommentRepository
-import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
-import com.example.madeinbrasil.utils.Constants.SharedPreferences.FAVORITE_MOVIE
-import com.example.madeinbrasil.utils.Constants.SharedPreferences.FAVORITE_SERIE
-import com.example.madeinbrasil.utils.Constants.SharedPreferences.WATCHED_MOVIE
-import com.example.madeinbrasil.utils.Constants.SharedPreferences.WATCHED_SERIE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
-import com.example.madeinbrasil.view.fragment.FavoritesFragment
 import com.example.madeinbrasil.viewModel.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -58,14 +42,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFram
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrCueVideo
 import kotlinx.android.synthetic.main.youtube_popup.*
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
-import com.example.madeinbrasil.viewModel.MovieCreditsViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import kotlinx.android.synthetic.main.activity_films_and_series.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
@@ -216,51 +193,85 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                         filmDetailed = movie
 
-                        binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
-                            val favMovie = FavoritesMovieDetailed(movie.id, movie.backdrop_path, movie.homepage,
-                                    movie.original_language, movie.original_title, movie.overview, movie.popularity,
-                                    movie.poster_path, movie.release_date, movie.runtime, movie.title, movie.vote_average,
-                                    movie.vote_count, isChecked)
+                        binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
+                            val favMovie = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
+                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
+                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
+                                    "", midiaType = 1)
+
+                            val fav = Favorites(movie.id, movie.id, isChecked)
+
                             if(isChecked) {
-                                viewModelMovie.insertMovieFavorite(favMovie)
+                                viewModelMovie.insertMidia(favMovie)
+                                viewModelMovie.insertFavorite(fav)
                             }else {
-                                viewModelMovie.deleteMovieFavorite(favMovie)
-                            }
-                        }
-                        viewModelMovie.getFavorite.observe(this) {
-                            it.forEach {fav ->
-                                if(fav.id == movie.id) {
-                                    binding.cbFavoriteFilmsSeries.isChecked = fav.checked
-                                }
+                                viewModelMovie.deleteByIdFavorites(movie.id)
                             }
                         }
 
-                        binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
-                            val watched = WatchedMovieDetailed(movie.id, movie.backdrop_path, movie.homepage,
-                                    movie.original_language, movie.original_title, movie.overview, movie.popularity,
-                                    movie.poster_path, movie.release_date, movie.runtime, movie.title, movie.vote_average,
-                                    movie.vote_count, isChecked)
+                        binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
+                            val favWatched = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
+                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
+                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
+                                    "", midiaType = 1)
+                            val watched = Watched(movie.id, movie.id, isChecked)
+
                             if(isChecked) {
-                                viewModelMovie.insertMovieWatched(watched)
+                                viewModelMovie.insertMidia(favWatched)
+                                viewModelMovie.insertWatched(watched)
                             }else {
-                                viewModelMovie.deleteMoviewatched(watched)
+                                viewModelMovie.deleteByIdWatched(movie.id)
                             }
                         }
-                        viewModelMovie.getWatched.observe(this) {
-                            it.forEach {fav ->
-                                if(fav.id == movie.id) {
-                                    binding.cbWatchedFilmsSeries.isChecked = fav.checked
+
+                        lifecycleScope.launch {
+                            val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
+                            val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+
+                            dbFav.getMidiaWithFavorites().forEach {
+                                if(it.midia.id == movie.id) {
+                                    it.favorites.forEach {fav ->
+                                        binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
+                                    }
+                                }
+                            }
+
+                            dbWatched.getMidiaWithWatched().forEach {
+                                if(it.midia.id == movie.id) {
+                                    it.watched.forEach {watched ->
+                                        binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
+                                    }
                                 }
                             }
                         }
                     }
                 }
 
-                viewModelMovie.movieError.observe(this) { movie ->
-                    onApiErrorMovie(movie)
-                }
-                viewModelMovie.movieErrorWatched.observe(this) {movie ->
-                    onApiErrorMovieWatched(movie)
+                lifecycleScope.launch {
+                    val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
+                    val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+
+                    dbFav.getMidiaWithFavorites().forEach {
+                        viewModelMovie.movieError.observe(this@FilmsAndSeriesActivity) { midia ->
+                            onApiErrorMovie(midia)
+                            if(it.midia.id == films?.id) {
+                                it.favorites.forEach {fav ->
+                                    binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
+                                }
+                            }
+                        }
+                    }
+
+                    dbWatched.getMidiaWithWatched().forEach {
+                        viewModelMovie.movieError.observe(this@FilmsAndSeriesActivity) { midia ->
+                            onApiErrorMovie(midia)
+                            if(it.midia.id == films?.id) {
+                                it.watched.forEach {watched ->
+                                    binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
+                                }
+                            }
+                        }
+                    }
                 }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
@@ -393,54 +404,84 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
-                        val favorites = FavoritesSerieDetailed(
-                                serie.id, serie.backdropPath, serie.episodeRunTime, serie.firstAirDate,
-                                serie.homepage, serie.name, serie.overview, serie.posterPath,
-                                serie.voteAverage, isChecked)
+                        val favSerie = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
+                                "", serie.overview, 0.0, serie.posterPath, "",
+                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
+                                serie.name, midiaType = 2)
 
-                        if (isChecked) {
-                            viewModelSerie.insertSerieFavorite(favorites)
-                            serie.genres?.let { viewModelSerie.insertGenreFavorite(it) }
-                        } else {
-                            viewModelSerie.deleteSerieFavorite(favorites)
-                        }
-                    }
-                    viewModelSerie.getFavorite.observe(this) {
-                        it.forEach {fav ->
-                            if(fav.id == serie.id) {
-                                binding.cbFavoriteFilmsSeries.isChecked = fav.checked
-                            }
+                        val fav = Favorites(serie.id, serie.id, isChecked)
+
+                        if(isChecked) {
+                            viewModelSerie.insertMidia(favSerie)
+                            viewModelSerie.insertFavorite(fav)
+                        }else {
+                            viewModelSerie.deleteByIdFavorites(serie.id)
                         }
                     }
 
                     binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
-                        val watched = WatchedSerieDetailed(
-                                serie.id, serie.backdropPath, serie.episodeRunTime, serie.firstAirDate,
-                                serie.homepage, serie.name, serie.overview, serie.posterPath,
-                                serie.voteAverage, isChecked)
+                        val favSerie = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
+                                "", serie.overview, 0.0, serie.posterPath, "",
+                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
+                                serie.name, midiaType = 2)
 
-                        if (isChecked) {
-                            viewModelSerie.insertSerieWatched(watched)
-                            serie.genres?.let { viewModelSerie.insertGenreFavorite(it) }
-                        } else {
-                            viewModelSerie.deleteSerieWatched(watched)
+                        val watched = Watched(serie.id, serie.id, isChecked)
+
+                        if(isChecked) {
+                            viewModelSerie.insertMidia(favSerie)
+                            viewModelSerie.insertWatched(watched)
+                        }else {
+                            viewModelSerie.deleteByIdWatched(serie.id)
                         }
                     }
-                    viewModelSerie.getWatched.observe(this) {
-                        it.forEach {fav ->
-                            if(fav.id == serie.id) {
-                                binding.cbWatchedFilmsSeries.isChecked = fav.checked
+
+                    lifecycleScope.launch {
+                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
+                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+
+                        dbFav.getMidiaWithFavorites().forEach {
+                            if(it.midia.id == serie.id) {
+                                it.favorites.forEach {fav ->
+                                    binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
+                                }
+                            }
+                        }
+
+                        dbWatched.getMidiaWithWatched().forEach {
+                            if(it.midia.id == serie.id) {
+                                it.watched.forEach {watched ->
+                                    binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
+                                }
+                            }
+                        }
+                    }
+                }
+
+                lifecycleScope.launch {
+                    val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
+                    val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+
+                    dbFav.getMidiaWithFavorites().forEach {
+                        viewModelSerie.serieDetailedError.observe(this@FilmsAndSeriesActivity) { midia ->
+                            onApiErrorSerie(midia)
+                            if(it.midia.id == series?.id) {
+                                it.favorites.forEach {fav ->
+                                    binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
+                                }
                             }
                         }
                     }
 
-                }
-
-                viewModelSerie.serieDetailedError.observe(this) { serie ->
-                    onApiErrorSerie(serie)
-                }
-                viewModelSerie.serieWatchedError.observe(this) {serie ->
-                    onApiErrorSerieWatched(serie)
+                    dbWatched.getMidiaWithWatched().forEach {
+                        viewModelSerie.serieDetailedError.observe(this@FilmsAndSeriesActivity) { midia ->
+                            onApiErrorSerie(midia)
+                            if(it.midia.id == series?.id) {
+                                it.watched.forEach {watched ->
+                                    binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
+                                }
+                            }
+                        }
+                    }
                 }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
@@ -451,7 +492,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
     }
 
-    private fun onApiErrorSerieWatched(serie: List<WatchedSerieDetailed>) {
+    private fun onApiErrorSerie(serie: List<MidiaEntity>) {
         serie.forEach {
             if (it.id == series?.id) {
                 Glide.with(binding.root.context)
@@ -467,6 +508,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         .load(R.drawable.logo_made_in_brasil)
                         .into(binding.ivBackDropFilmSeries)
 
+                it?.episodeRunTime?.forEach {
+                    if (it > 60) {
+                        val horas = listOf(it.div(60))
+                        val min = listOf(it.rem(60))
+                        binding.tvTimeFilmsSeries.text = "${horas[0]}h${min[0]}min"
+                    } else {
+                        binding.tvTimeFilmsSeries.text = "$it min"
+                    }
+                }
+
                 binding.tvDescriptionTextFilmsSeries.text = it.overview
                 binding.tvNameFilmsSeries.text = it.name
                 binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
@@ -475,13 +526,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.ratingBarFilmsSeries.stepSize = .5f
                 }
                 binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
-                binding.cbFavoriteFilmsSeries.isChecked = it.checked
-                binding.cbWatchedFilmsSeries.isChecked = it.checked
             }
         }
     }
 
-    private fun onApiErrorMovieWatched(movie: List<WatchedMovieDetailed>) {
+    private fun onApiErrorMovie(movie: List<MidiaEntity>) {
         movie.forEach {
             if (it.id == films?.id) {
                 Glide.with(binding.root.context)
@@ -508,69 +557,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 val minutos = it.runtime?.rem(60)
                 binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                 binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
-                binding.cbFavoriteFilmsSeries.isChecked = it.checked
-                binding.cbWatchedFilmsSeries.isChecked = it.checked
-            }
-        }
-    }
-
-    private fun onApiErrorSerie(serie: List<FavoritesSerieDetailed>) {
-        serie.forEach {
-            if (it.id == series?.id) {
-                Glide.with(binding.root.context)
-                        .load(it.posterPath)
-                        .placeholder(R.drawable.logo_made_in_brasil)
-                        .into(binding.ivBannerFilmsSeries)
-                it.backdropPath?.let { it1 ->
-                    Glide.with(binding.root.context)
-                            .load(it.backdropPath)
-                            .placeholder(R.drawable.logo_made_in_brasil)
-                            .into(binding.ivBackDropFilmSeries)
-                } ?: Glide.with(this)
-                        .load(R.drawable.logo_made_in_brasil)
-                        .into(binding.ivBackDropFilmSeries)
-
-                binding.tvDescriptionTextFilmsSeries.text = it.overview
-                binding.tvNameFilmsSeries.text = it.name
-                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
-                it.voteAverage?.let {
-                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
-                    binding.ratingBarFilmsSeries.stepSize = .5f
-                }
-                binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
-                binding.cbFavoriteFilmsSeries.isChecked = it.checked
-            }
-        }
-    }
-
-    private fun onApiErrorMovie(movie: List<FavoritesMovieDetailed>) {
-        movie.forEach {
-            if (it.id == films?.id) {
-                Glide.with(binding.root.context)
-                        .load(it.posterPath)
-                        .placeholder(R.drawable.logo_made_in_brasil)
-                        .into(binding.ivBannerFilmsSeries)
-                it.backdropPath?.let { it1 ->
-                    Glide.with(binding.root.context)
-                            .load(it.backdropPath)
-                            .placeholder(R.drawable.logo_made_in_brasil)
-                            .into(binding.ivBackDropFilmSeries)
-                } ?: Glide.with(this)
-                        .load(R.drawable.logo_made_in_brasil)
-                        .into(binding.ivBackDropFilmSeries)
-
-                binding.tvDescriptionTextFilmsSeries.text = it.overview
-                binding.tvNameFilmsSeries.text = it.title
-                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
-                it.voteAverage?.let {
-                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
-                    binding.ratingBarFilmsSeries.stepSize = .5f
-                }
-                val horas = it.runtime?.div(60)
-                val minutos = it.runtime?.rem(60)
-                binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
-                binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
-                binding.cbFavoriteFilmsSeries.isChecked = it.checked
             }
         }
     }
