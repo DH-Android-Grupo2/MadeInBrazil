@@ -10,7 +10,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainCardsSelectionBinding
 import com.example.madeinbrasil.model.search.ResultSearch
 
-class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter<ResultSearch, SelectSerieAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK)   {
+class SelectSerieAdapter(var selectedItems: MutableList<Long>) : PagedListAdapter<ResultSearch, SelectSerieAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK)   {
 
     var onItemClick: ((ResultSearch) -> Unit)? = null
 
@@ -34,10 +34,10 @@ class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter
 
     private fun tooglePosition(serie: ResultSearch?) {
         serie?.let {
-            if(selectedItems.contains(it.id))
-                selectedItems.remove(it.id)
+            if(selectedItems.contains(it.id.toLong()))
+                selectedItems.remove(it.id.toLong())
             else
-                selectedItems.add(it.id)
+                selectedItems.add(it.id.toLong())
         }
     }
 
@@ -45,7 +45,7 @@ class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter
             val binding: MainCardsSelectionBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(serie: ResultSearch?, selectedItems: List<Int>) = with(binding) {
+        fun bind(serie: ResultSearch?, selectedItems: List<Long>) = with(binding) {
             serie?.let {
 
                 Glide.with(itemView.context)
@@ -55,7 +55,7 @@ class SelectSerieAdapter(var selectedItems: MutableList<Int>) : PagedListAdapter
 
                 tvNameRecyclerView.text = serie.name
 
-                if(selectedItems.contains(serie.id)) {
+                if(selectedItems.contains(serie.id.toLong())) {
                     tvSelectionIcon.setImageResource(R.drawable.remove_item)
                     tvSelectionCover.visibility = View.INVISIBLE
                 }

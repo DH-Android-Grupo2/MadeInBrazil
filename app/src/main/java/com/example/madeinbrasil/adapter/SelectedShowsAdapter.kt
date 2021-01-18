@@ -6,11 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.databinding.SelectedCardsBinding
+import com.example.madeinbrasil.model.customLists.ListMediaItem
 import com.example.madeinbrasil.model.search.ResultSearch
 
-class SelectedShowsAdapter(val onCloseClick: ((Any) -> Unit)): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
+class SelectedShowsAdapter(val onCloseClick: ((ListMediaItem) -> Unit)): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
 
-    val list: MutableList<Any> = mutableListOf()
+    val list: MutableList<ListMediaItem> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,28 +25,31 @@ class SelectedShowsAdapter(val onCloseClick: ((Any) -> Unit)): RecyclerView.Adap
 
     override fun getItemCount(): Int = list.size
 
-    fun deleteItem(it: Any) {
+    fun deleteItem(it: ListMediaItem) {
         list.remove(it)
         notifyDataSetChanged()
     }
 
-    fun addItem(it: Any) {
+    fun addItem(it: ListMediaItem) {
         list.add(it)
         notifyItemInserted(list.size - 1)
     }
 
     inner class ViewHolder(val binding: SelectedCardsBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(show: Any) = with(binding) {
-            when(show) {
-                is Result -> {
-                    Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
-                    tvShowName.text = show.title
-                }
-                is ResultSearch -> {
-                    Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
-                    tvShowName.text = show.name
-                }
-            }
+        fun bind(show: ListMediaItem) = with(binding) {
+//            when(show) {
+//                is Result -> {
+//                    Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
+//                    tvShowName.text = show.title
+//                }
+//                is ResultSearch -> {
+//                    Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
+//                    tvShowName.text = show.name
+//                }
+//            }
+
+            Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
+            tvShowName.text = show.title
 
             imDeleteShow.setOnClickListener {
                 onCloseClick(show)

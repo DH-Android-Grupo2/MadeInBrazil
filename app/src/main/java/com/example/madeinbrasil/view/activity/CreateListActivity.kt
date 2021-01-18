@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.adapter.SelectedShowsAdapter
 import com.example.madeinbrasil.databinding.ActivityCreateListBinding
 import com.example.madeinbrasil.model.customLists.CustomList
+import com.example.madeinbrasil.model.customLists.ListMovieItem
+import com.example.madeinbrasil.model.customLists.ListSerieItem
 import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
@@ -35,15 +37,19 @@ class CreateListActivity : AppCompatActivity() {
     private lateinit var selectSerieViewModel: SelectSerieViewModel
     private lateinit var selectMovieViewModel: SelectMovieViewModel
     private lateinit var customListViewModel: CustomListViewModel
-    private var selectedMovies: MutableList<Int> = mutableListOf()
-    private var selectedSeries: MutableList<Int> = mutableListOf()
+    private var selectedMovies: MutableList<Long> = mutableListOf()
+    private var selectedSeries: MutableList<Long> = mutableListOf()
 
     private val selectedShowsAdapter by lazy {
         SelectedShowsAdapter() {
-            when(it) {
-                is Result -> selectedMovies.remove(it.id)
-                is ResultSearch -> selectedSeries.remove(it.id)
-            }
+//            when(it) {
+//                is Result -> selectedMovies.remove(it.id)
+//                is ResultSearch -> selectedSeries.remove(it.id)
+//            }
+            if (selectedSeries.contains(it.id))
+                selectedSeries.remove(it.id)
+            else
+                selectedMovies.remove(it.id)
         }
     }
 
@@ -76,21 +82,21 @@ class CreateListActivity : AppCompatActivity() {
         binding.imAddMovie.setOnClickListener {
             val fragment = SelectMovieFragment()
             fragment.arguments = Bundle().apply {
-                putIntArray(SELECTED_MOVIES, selectedMovies.toIntArray())
+                putLongArray(SELECTED_MOVIES, selectedMovies.toLongArray())
             }
             fragment.show(supportFragmentManager, null)
         }
 
-        binding.imAddSerie.setOnClickListener{
+        binding.imAddSerie.setOnClickListener {
             val fragment = SelectSerieFragment()
             fragment.arguments = Bundle().apply {
-                putIntArray(SELECTED_SERIES, selectedSeries.toIntArray())
+                putLongArray(SELECTED_SERIES, selectedSeries.toLongArray())
             }
             fragment.show(supportFragmentManager, null)
         }
 
         binding.btnCreateList.setOnClickListener {
-            customListViewModel.createCustomList(ListWithMedia(CustomList(0, binding.teetName.text.toString(), binding.teetDescription.text.toString(), 0), listOf(), listOf()))
+            saveListDataToDB()
         }
     }
 
@@ -127,6 +133,24 @@ class CreateListActivity : AppCompatActivity() {
                 createListBtn.isEnabled = it.trim().isNotEmpty()
             }
         }
+    }
+
+    private fun saveListDataToDB() {
+
+        val movieList = mutableListOf<ListMovieItem>()
+        val serieList = mutableListOf<ListSerieItem>()
+
+        selectedShowsAdapter.list.forEach {
+            if (selectedSeries.contains(it.id))
+                serieList.add(ListSerieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+            else
+                movieList.add(ListMovieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+        }
+
+        customListViewModel.createCustomList(ListWithMedia(
+                CustomList(0, binding.teetName.text.toString(), binding.teetDescription.text.toString(), 0),
+                movieList,
+                serieList))
     }
 
 }
