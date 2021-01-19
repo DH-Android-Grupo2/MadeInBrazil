@@ -117,5 +117,6 @@
     <string name="string_my_favorites_tutorial_description">Aqui será listado todos os seus filmes favoritos e você pode clicar para ver uma lista mais completa</string>
     <string name="string_my_lists_tutorial_title">Minhas listas</string>
     <string name="string_my_lists_tutorial_description">Clicando aqui, você terá acesso as suas listas!</string>
+    <string name="created_list_success">Lista criada com sucesso!</string>
 
 </resources>
