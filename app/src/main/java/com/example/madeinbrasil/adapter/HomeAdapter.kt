@@ -28,7 +28,8 @@ import java.io.File
 
 
 class HomeAdapter(
-        private val onMovieClicked: (Result?,ImageView?) -> Unit
+        private val onMovieClicked: (Result?,ImageView?) -> Unit,
+        private val onMovieLongClicked: (Result?) -> Unit
 ) : PagedListAdapter<Result, HomeAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,7 +39,7 @@ class HomeAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onMovieClicked)
+        holder.bind(getItem(position), onMovieClicked, onMovieLongClicked)
     }
 
     class ViewHolder(
@@ -47,84 +48,94 @@ class HomeAdapter(
             binding.root
     ) {
 
-        fun bind(movie: Result?,onMovieClicked: (Result?,ImageView?) -> Unit) = with(binding) {
+        fun bind(
+            movie: Result?,
+            onMovieClicked: (Result?, ImageView?) -> Unit,
+            onMovieLongClicked: (Result?) -> Unit
+        ) = with(binding) {
             Glide.with(itemView.context)
                 .load(movie?.posterPath)
                 .placeholder(R.drawable.logo_made_in_brasil)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(cvImageCardMenu)
             tvNameRecyclerViewMenu.text = movie?.title
+
             itemView.setOnClickListener {
-                onMovieClicked(movie,cvImageCardMenu)
+                onMovieClicked(movie, cvImageCardMenu)
             }
 
             itemView.setOnLongClickListener {
-                val dialog = Dialog(it.context)
-                dialog.setContentView(R.layout.filmsseries_popup)
-                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-                Glide.with(it.context)
-                    .load(movie?.posterPath)
-                    .placeholder(R.drawable.logo_made_in_brasil)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(dialog.ivDialogPoster)
-
-                dialog.tvDialogName.text = movie?.title
-                dialog.cbShare.setOnClickListener {
-                    val image: Bitmap? = getBitmapFromView(binding.cvImageCardMenu)
-                    val sendIntent: Intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-
-                        type = "text/plain"
-                        putExtra(Intent.EXTRA_TEXT, "Filme: ${movie?.title} by MadeInBrasil")
-
-                        type = "image/*"
-                        putExtra(Intent.EXTRA_STREAM, image?.let { it1 ->
-                            getImageUri(
-                                    it.context,
-                                    it1
-                            )
-                        })
-
-
-                        putExtra(
-                                Intent.EXTRA_TITLE,
-                                "Filme: ${movie?.title} \nShared by MadeInBrasil"
-                        )
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                    }
-                    val shareIntent = Intent.createChooser(sendIntent, "Compartilhamento de Filmes")
-                    ContextCompat.startActivity(it.context, shareIntent, null)
-
-                }
-                dialog.show()
-
+                onMovieLongClicked(movie)
                 return@setOnLongClickListener true
             }
+
+//            itemView.setOnLongClickListener {
+//                val dialog = Dialog(it.context)
+//                dialog.setContentView(R.layout.filmsseries_popup)
+//                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//
+//                Glide.with(it.context)
+//                    .load(movie?.posterPath)
+//                    .placeholder(R.drawable.logo_made_in_brasil)
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .into(dialog.ivDialogPoster)
+//
+//                dialog.tvDialogName.text = movie?.title
+//                dialog.cbShare.setOnClickListener {
+//                    val image: Bitmap? = getBitmapFromView(binding.cvImageCardMenu)
+//                    val sendIntent: Intent = Intent().apply {
+//                        action = Intent.ACTION_SEND
+//
+//                        type = "text/plain"
+//                        putExtra(Intent.EXTRA_TEXT, "Filme: ${movie?.title} by MadeInBrasil")
+//
+//                        type = "image/*"
+//                        putExtra(Intent.EXTRA_STREAM, image?.let { it1 ->
+//                            getImageUri(
+//                                    it.context,
+//                                    it1
+//                            )
+//                        })
+//
+//
+//                        putExtra(
+//                                Intent.EXTRA_TITLE,
+//                                "Filme: ${movie?.title} \nShared by MadeInBrasil"
+//                        )
+//                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+//                    }
+//                    val shareIntent = Intent.createChooser(sendIntent, "Compartilhamento de Filmes")
+//                    ContextCompat.startActivity(it.context, shareIntent, null)
+//
+//                }
+//                dialog.show()
+//
+//                return@setOnLongClickListener true
+//            }
+//        }
+//
+//        fun getBitmapFromView(view: ImageView): Bitmap? {
+//            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+//            val canvas = Canvas(bitmap)
+//            view.draw(canvas)
+//            return bitmap
+//        }
+//
+//        fun getImageUri(inContext: Context, inImage: Bitmap):Uri?{
+//            val bytes = ByteArrayOutputStream()
+//            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+//            val path = MediaStore.Images.Media.insertImage(
+//                    inContext.contentResolver,
+//                    inImage,
+//                    "${binding.tvNameRecyclerViewMenu.text}",
+//                    "Imagem gerado pelo MadeInBrasil"
+//            )
+//            val f: File = File(path)
+//            return Uri.fromFile(f)
+//
+//        }
+
         }
-
-        fun getBitmapFromView(view: ImageView): Bitmap? {
-            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            view.draw(canvas)
-            return bitmap
-        }
-
-        fun getImageUri(inContext: Context, inImage: Bitmap):Uri?{
-            val bytes = ByteArrayOutputStream()
-            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-            val path = MediaStore.Images.Media.insertImage(
-                    inContext.contentResolver,
-                    inImage,
-                    "${binding.tvNameRecyclerViewMenu.text}",
-                    "Imagem gerado pelo MadeInBrasil"
-            )
-            val f: File = File(path)
-            return Uri.fromFile(f)
-
-        }
-
     }
-
 }

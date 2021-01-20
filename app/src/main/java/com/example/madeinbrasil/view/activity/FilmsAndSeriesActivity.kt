@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
@@ -663,6 +664,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 binding.btStreamingFilmsSeries.isVisible = false
             }
         }
+        Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
     private fun onApiErrorMovie(movie: List<MidiaEntity>) {
@@ -695,6 +697,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 binding.btStreamingFilmsSeries.isVisible = false
             }
         }
+        Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
 //    private fun tutorialImplementation() {
