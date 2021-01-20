@@ -46,8 +46,9 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>): RecyclerView.Ada
             } else if (mediaSize < 4) {
                     for (i in 0 until mediaSize) {
                         val imageView = ImageView(containerView.context)
-//
-                        imageView.layoutParams = LinearLayout.LayoutParams(convertDp(102/mediaSize, containerView.context), LinearLayout.LayoutParams.MATCH_PARENT)
+                        val lp = LinearLayout.LayoutParams(convertDp(0, containerView.context), LinearLayout.LayoutParams.MATCH_PARENT)
+                        lp.weight = 1F
+                        imageView.layoutParams = lp
                         Glide.with(containerView).load(list.media[i].backdropPath).into(imageView)
                         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                         containerView.addView(imageView)
@@ -55,8 +56,9 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>): RecyclerView.Ada
                      } else {
                         for (i in 0 until 4) {
                             val imageView = ImageView(containerView.context)
-
-                            imageView.layoutParams = LinearLayout.LayoutParams(convertDp(26, containerView.context), LinearLayout.LayoutParams.MATCH_PARENT)
+                            val lp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT)
+                            lp.weight = 1F
+                            imageView.layoutParams = lp
                             Glide.with(containerView).load(list.media[i].backdropPath).into(imageView)
                             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                             containerView.addView(imageView)
