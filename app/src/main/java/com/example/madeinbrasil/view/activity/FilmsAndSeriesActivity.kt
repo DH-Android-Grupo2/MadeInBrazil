@@ -99,19 +99,23 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val minutos = movie.runtime?.rem(60)
                         binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                         binding.tvYearFilmsSeries.text = "(${movie?.release_date?.getFirst4Chars()})"
-                        binding.rvCardsListActors.apply {
-                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = movie?.credits.cast?.let { it1 ->
-                                MovieCreditsAdapter(it1) {
-                                    val castClicked = it
-                                    castClicked?.let { result ->
-                                        val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
-                                        intent.putExtra(BASE_ACTOR_KEY, result)
-                                        intent.putExtra(VALUE, 1)
-                                        startActivity(intent)
+
+                        if(movie.credits.cast?.size != 0) {
+                            binding.rvCardsListActors.apply {
+                                layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                adapter = movie?.credits.cast?.let { it1 ->
+                                    MovieCreditsAdapter(it1) {
+                                        val castClicked = it
+                                        castClicked?.let { result ->
+                                            val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                            intent.putExtra(BASE_ACTOR_KEY, result)
+                                            intent.putExtra(VALUE, 1)
+                                            startActivity(intent)
+                                        }
                                     }
                                 }
                             }
+                            binding.tvMessageCast.isVisible = false
                         }
 
                         Glide.with(this)
@@ -286,7 +290,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                         films?.id?.let {
                             dbGender.getGenreById(it).forEach {
-                                val re = Regex("[^A-Za-z0-9 ãõçéíê]")
+                                val re = Regex("[^A-Za-z0-9 ãõçéíêá]")
                                 var save: String = ""
                                 it.split(",").forEach { save += "$it " }
                                 save = re.replace(save, "")
@@ -314,7 +318,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             films?.let {
-                                adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it.id))
+                                if(dbCast.getPeopleWithMidia(it.id).isNotEmpty()) {
+                                    adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it.id))
+                                    binding.tvMessageCast.isVisible = false
+                                }
                             }
                         }
 
@@ -425,6 +432,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                         }
+                        binding.tvMessageCast.isVisible = false
                     }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {
@@ -551,7 +559,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                         series?.id?.let {
                             dbGender.getGenreById(it).forEach {
-                                val re = Regex("[^A-Za-z0-9 ãõçéíê]")
+                                val re = Regex("[^A-Za-z0-9 ãõçéíêá]")
                                 var save: String = ""
                                 it.split(",").forEach { save += "$it " }
                                 save = re.replace(save, "")
@@ -578,7 +586,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             series?.id?.let {
-                                adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it))
+                                if(dbCast.getPeopleWithMidia(it).isNotEmpty()) {
+                                    adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it))
+                                    binding.tvMessageCast.isVisible = false
+                                }
                             }
                         }
                         binding.btSeasonsFilmsSeries.setOnClickListener {
@@ -649,6 +660,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.ratingBarFilmsSeries.stepSize = .5f
                 }
                 binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
+                binding.btStreamingFilmsSeries.isVisible = false
             }
         }
     }
@@ -680,6 +692,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 val minutos = it.runtime?.rem(60)
                 binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                 binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
+                binding.btStreamingFilmsSeries.isVisible = false
             }
         }
     }
