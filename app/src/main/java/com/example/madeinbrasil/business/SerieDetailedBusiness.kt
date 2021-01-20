@@ -7,6 +7,10 @@ import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
+import com.example.madeinbrasil.database.entities.season.SeasonEntity
+import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
@@ -83,5 +87,17 @@ class SerieDetailedBusiness (val context: Context) {
 
     suspend fun insertGenre(genre: GenreEntity) {
         repository.insertGenre(genre)
+    }
+
+    suspend fun insertSeason(season: SeasonEntity) {
+        repository.insertSeason(season)
+    }
+
+    suspend fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
+        repository.insertRecommendation(recommendation)
+    }
+
+    suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
+        repository.insertSimilar(similar)
     }
 }

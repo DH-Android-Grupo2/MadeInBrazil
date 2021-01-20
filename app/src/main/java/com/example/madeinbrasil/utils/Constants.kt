@@ -32,8 +32,8 @@ class Constants {
         const val BASE_SERIE_KEY = "Serie"
         const val ID_FRAGMENTS = "idFragment"
         const val BASE_ACTOR_KEY = "Actor"
-        const val MOVIE_TAG = "movie"
-        const val SERIE_TAG = "serie"
+        const val SEASON_KEY = "season"
+        const val SEASON_KEY_OFF = "seasonId"
         const val BASE_EPISODE_KEY = "episode"
         const val VALUE = "position"
         const val SELECTED_MOVIES = "selected_movies"
@@ -43,12 +43,5 @@ class Constants {
     object Paging {
         const val PAGE_SIZE = 20
         const val FIRST_PAGE = 1
-    }
-
-    object SharedPreferences {
-        const val FAVORITE_SERIE = "favorite_serie"
-        const val WATCHED_SERIE = "watched_serie"
-        const val FAVORITE_MOVIE = "favorite_movie"
-        const val WATCHED_MOVIE = "watched_movie"
     }
 }

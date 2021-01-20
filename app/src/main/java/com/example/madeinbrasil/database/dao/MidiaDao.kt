@@ -2,7 +2,6 @@ package com.example.madeinbrasil.database.dao
 
 import androidx.room.*
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.midia.MidiaWithGenre
 
 @Dao
 interface MidiaDao {

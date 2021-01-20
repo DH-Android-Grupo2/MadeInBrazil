@@ -6,12 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.database.entities.season.SeasonEntity
 import com.example.madeinbrasil.databinding.RecyclerviewSeasonsBinding
-import com.example.madeinbrasil.model.seasons.Episode
+import com.example.madeinbrasil.model.serieDetailed.Season
 
-class EpisodeAdapter(
-    private var episodelist: List<Episode>
-): RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
+class SeasonsDataBaseAdapter (
+        val seasonsList: List<SeasonEntity>,
+): RecyclerView.Adapter<SeasonsDataBaseAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -20,26 +21,26 @@ class EpisodeAdapter(
     }
 
     override fun getItemCount(): Int {
-        return episodelist.size
+        return seasonsList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(episodelist[position])
+        holder.bind(seasonsList[position])
     }
 
     class ViewHolder(
-        val binding: RecyclerviewSeasonsBinding
+            val binding: RecyclerviewSeasonsBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(episode: Episode) = with(binding) {
+        fun bind(season: SeasonEntity) = with(binding) {
             Glide.with(itemView.context)
-                    .load(episode.still_path)
+                    .load(season.posterPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.logo_made_in_brasil)
                     .into(cvImageSeason)
 
-            tvSeasonName.text = episode.name
-            tvSeasonOverview.text = episode.overview
+            tvSeasonName.text = season.name
+            tvSeasonOverview.text = season.overview
         }
     }
 }

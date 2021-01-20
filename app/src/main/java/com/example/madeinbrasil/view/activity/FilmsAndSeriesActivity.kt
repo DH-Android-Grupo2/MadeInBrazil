@@ -18,11 +18,17 @@ import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.*
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.cast.CastEntity
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.cast.MidiaCastCrossRef
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
+import com.example.madeinbrasil.database.entities.season.SeasonEntity
+import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.result.MovieDetailed
@@ -33,6 +39,8 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY_OFF
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
 import com.example.madeinbrasil.viewModel.*
@@ -142,6 +150,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         if (movie.recommendations?.results?.size != 0) {
+                            movie.recommendations?.results?.forEach {
+                                val recommendation = it.title?.let { it1 -> RecommendationMidiaCrossRef(movie.id, it.id, 1, it1, it.posterPath) }
+                                if (recommendation != null) {
+                                    viewModelMovie.insertRecommendation(recommendation)
+                                }
+                            }
+
                             binding.rvCardsListRecomendacoes.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie.recommendations?.let { it1 ->
@@ -160,6 +175,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         if (movie.similar?.results?.size != 0) {
+                            movie.similar?.results?.forEach {
+                                val similar = it.title?.let { it1 -> SimilarMidiaCrossRef(movie.id, it.id, 1, it1, it.posterPath) }
+                                if (similar != null) {
+                                    viewModelMovie.insertSimilar(similar)
+                                }
+                            }
+
                             binding.rvCardsListSimilares.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie.similar?.let { it1 ->
@@ -217,6 +239,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
                             val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
                             val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
+                            val dbPeople = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+
+
+                            movie.credits.cast?.forEach {
+                                val people = MidiaCastCrossRef(movie.id, it.id, it.name, it.profilePath, it.order)
+                                dbPeople.insertPeople(people)
+                            }
 
                             val midia = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
                                     movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
@@ -250,6 +279,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
                         val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
                         val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
+                        val dbCast = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+                        val dbRecommendation = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).recommendationDao()
+                        val dbSimilar = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).similarDao()
                         var gender = ""
 
                         films?.id?.let {
@@ -279,6 +311,30 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         binding.tvGenderFilmsSeries.text = gender
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            films?.let {
+                                adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it.id))
+                            }
+                        }
+
+                        films?.let {
+                            if(dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
+                                binding.rvCardsListRecomendacoes.apply {
+                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = RecommendationDataBaseAdapter(dbRecommendation.getRecommendations(it.id))
+                                }
+                                binding.tvMessageRecomendation.isVisible = false
+                            }
+
+                            if(dbSimilar.getSimilar(it.id).isNotEmpty()) {
+                                binding.rvCardsListSimilares.apply {
+                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = SimilarDataBaseAdapter(dbSimilar.getSimilar(it.id))
+                                }
+                                binding.tvMessageSimilar.isVisible = false
+                            }
+                        }
                     }
                 }
 
@@ -372,12 +428,22 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {
+                        serie?.seasons?.forEach {
+                            val seasonDB = SeasonEntity(it.id, serie.id, it.name, it.overview, it.posterPath, it.season_number)
+                            viewModelSerie.insertSeason(seasonDB)
+                        }
+
                         val intent = Intent(this, SeasonsActivity::class.java)
-                        intent.putExtra("season", serie)
+                        intent.putExtra(SEASON_KEY, serie)
                         startActivity(intent)
                     }
 
                     if (serie.recommendations?.results?.size != 0) {
+                        serie.recommendations?.results?.forEach {
+                            val recommendation = RecommendationMidiaCrossRef(serie.id, it.id, 2, it.name, it.posterPath)
+                            viewModelSerie.insertRecommendation(recommendation)
+                        }
+
                         binding.rvCardsListRecomendacoes.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = serie.recommendations?.let { it1 ->
@@ -395,6 +461,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     if (serie.similar?.results?.size != 0) {
+                        serie.similar?.results?.forEach {
+                            val similar = SimilarMidiaCrossRef(serie.id, it.id, 2, it.name, it.posterPath)
+                            viewModelSerie.insertSimilar(similar)
+                        }
+
                         binding.rvCardsListSimilares.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = serie.similar?.let { it1 ->
@@ -431,10 +502,17 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                     }
 
+
                     lifecycleScope.launch {
                         val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
                         val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
                         val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
+                        val dbPeople = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+
+                        serie.credits?.cast?.forEach {
+                            val people = MidiaCastCrossRef(serie.id, it.id, it.name, it.profilePath, it.order)
+                            dbPeople.insertPeople(people)
+                        }
 
                         val midia = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
                                 "", serie.overview, 0.0, serie.posterPath, "",
@@ -466,6 +544,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
                         val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
                         val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
+                        val dbCast = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+                        val dbRecommendation = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).recommendationDao()
+                        val dbSimilar = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).similarDao()
                         var gender = ""
 
                         series?.id?.let {
@@ -494,6 +575,35 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             }
                         }
                         binding.tvGenderFilmsSeries.text = gender
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            series?.id?.let {
+                                adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it))
+                            }
+                        }
+                        binding.btSeasonsFilmsSeries.setOnClickListener {
+                            val intent = Intent(this@FilmsAndSeriesActivity, SeasonsActivity::class.java)
+                            intent.putExtra(SEASON_KEY_OFF, series?.id)
+                            startActivity(intent)
+                        }
+
+                        series?.let {
+                            if(dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
+                                binding.rvCardsListRecomendacoes.apply {
+                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = RecommendationDataBaseAdapter(dbRecommendation.getRecommendations(it.id))
+                                }
+                                binding.tvMessageRecomendation.isVisible = false
+                            }
+
+                            if(dbSimilar.getSimilar(it.id).isNotEmpty()) {
+                                binding.rvCardsListSimilares.apply {
+                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = SimilarDataBaseAdapter(dbSimilar.getSimilar(it.id))
+                                }
+                                binding.tvMessageSimilar.isVisible = false
+                            }
+                        }
                     }
                 }
 

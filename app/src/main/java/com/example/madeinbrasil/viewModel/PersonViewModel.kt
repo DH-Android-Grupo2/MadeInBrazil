@@ -1,21 +1,21 @@
 package com.example.madeinbrasil.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.business.MovieDetailedBusiness
 import com.example.madeinbrasil.business.PersonBusiness
+import com.example.madeinbrasil.database.entities.cast.MidiaCastCrossRef
 import com.example.madeinbrasil.model.people.Person
-import com.example.madeinbrasil.model.result.MovieDetailed
 import kotlinx.coroutines.launch
 
-class PersonViewModel : ViewModel() {
+class PersonViewModel(application: Application): AndroidViewModel(application) {
     val personSucess: MutableLiveData<Person> = MutableLiveData()
     val personError: MutableLiveData<String> = MutableLiveData()
 
     private val detailed by lazy {
-        PersonBusiness()
+        PersonBusiness(application)
     }
 
     fun getPerson(personId: Int?) {
@@ -30,6 +30,18 @@ class PersonViewModel : ViewModel() {
                     personError.postValue(response.message)
                 }
             }
+        }
+    }
+
+//    fun insertPeople(people: CastEntity) {
+//        viewModelScope.launch {
+//            detailed.insertPeople(people)
+//        }
+//    }
+
+    fun insertPeople(people: MidiaCastCrossRef) {
+        viewModelScope.launch {
+            detailed.insertPeople(people)
         }
     }
 }

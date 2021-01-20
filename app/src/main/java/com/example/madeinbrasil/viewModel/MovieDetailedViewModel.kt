@@ -10,6 +10,8 @@ import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
+import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.result.MovieDetailed
 import kotlinx.coroutines.launch
@@ -66,4 +68,16 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
             detailed.insertGenre(genre)
         }
     }
+    fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
+        viewModelScope.launch {
+            detailed.insertRecommendation(recommendation)
+        }
+    }
+
+    fun insertSimilar(similar: SimilarMidiaCrossRef) {
+        viewModelScope.launch {
+            detailed.insertSimilar(similar)
+        }
+    }
+
 }

@@ -7,6 +7,8 @@ import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
+import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 
 class MovieDetailedRepository(context: Context){
@@ -16,11 +18,14 @@ class MovieDetailedRepository(context: Context){
     private val favoriteDao by lazy {
         MadeInBrazilDatabase.getDatabase(context).favoriteDao()
     }
-    private val midiaDB by lazy {
-        MadeInBrazilDatabase.getDatabase(context).midiaDao()
-    }
     private val genreDB by lazy {
         MadeInBrazilDatabase.getDatabase(context).genreDao()
+    }
+    private val recommendationDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).recommendationDao()
+    }
+    private val similarDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).similarDao()
     }
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
@@ -59,5 +64,13 @@ class MovieDetailedRepository(context: Context){
 
     suspend fun insertGenre(genre: GenreEntity) {
         genreDB.insertGenre(genre)
+    }
+
+    suspend fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
+        recommendationDB.insertRecommendation(recommendation)
+    }
+
+    suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
+        similarDB.insertSimilar(similar)
     }
 }

@@ -7,6 +7,10 @@ import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
+import com.example.madeinbrasil.database.entities.season.SeasonEntity
+import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
 
@@ -19,6 +23,15 @@ class SerieDetailedRepository(val context: Context) {
     }
     private val genderDao by lazy {
         MadeInBrazilDatabase.getDatabase(context).genreDao()
+    }
+    private val seasonDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).seasonDao()
+    }
+    private val recommendationDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).recommendationDao()
+    }
+    private val similarDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).similarDao()
     }
 
     suspend fun getSerieRepository(serieId: Int): ResponseAPI{
@@ -59,4 +72,15 @@ class SerieDetailedRepository(val context: Context) {
         genderDao.insertGenre(genre)
     }
 
+    suspend fun insertSeason(season: SeasonEntity) {
+        seasonDB.insertSeason(season)
+    }
+
+    suspend fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
+        recommendationDB.insertRecommendation(recommendation)
+    }
+
+    suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
+        similarDB.insertSimilar(similar)
+    }
 }
