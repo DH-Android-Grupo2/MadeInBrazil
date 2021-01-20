@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 data class SeasonEntity (
         @PrimaryKey
-        val id: Int?,
+        val id: Int,
         val serieId: Int,
         var name: String?,
         var overview: String?,

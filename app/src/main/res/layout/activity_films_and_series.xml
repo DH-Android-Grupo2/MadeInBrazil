@@ -30,7 +30,7 @@
                 android:alpha="0.2"
                 android:contentDescription="BackDrop"
                 android:scaleType="centerCrop"
-                android:src="@drawable/auto_da_compadecida_capa" />
+                android:src="@drawable/logo_made_in_brasil" />
 
         </com.github.florent37.shapeofview.shapes.ArcView>
 
@@ -52,14 +52,14 @@
             app:layout_constraintStart_toStartOf="@id/ivArrowBackFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/ivArrowBackFilmsSeries"
             android:scaleType="centerCrop"
-            android:src="@drawable/auto_da_compadecida_capa"/>
+            android:src="@drawable/logo_made_in_brasil"/>
 
         <TextView
             android:id="@+id/tvNameFilmsSeries"
             android:layout_width="210sp"
             android:layout_height="wrap_content"
             style="@style/TextViewFilmsSeriesDefault"
-            tools:text="O Auto da Compadecida"
+            android:text="Made In Brasil"
             android:textSize="16sp"
             android:layout_marginStart="15dp"
             app:layout_constraintStart_toEndOf="@id/ivBannerFilmsSeries"
@@ -69,7 +69,7 @@
         <TextView
             android:id="@+id/tvYearFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            tools:text="(2000)"
+            android:text="(0000)"
             android:textColor="@color/colorAccentOpaque"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorAccent"
             android:layout_marginStart="10dp"
-            tools:text="50min"
+            android:text="0min"
             app:layout_constraintStart_toEndOf="@id/tvYearFilmsSeries"
             app:layout_constraintTop_toTopOf="@id/tvYearFilmsSeries"
             app:layout_constraintBottom_toBottomOf="@+id/tvYearFilmsSeries" />
@@ -90,7 +90,7 @@
         <TextView
             android:id="@+id/tvGenderFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="O"
+            android:text="Não encontrado"
             android:textSize="14sp"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
@@ -108,7 +108,7 @@
             android:isIndicator="true"
             app:mrb_fillBackgroundStars="false"
             android:stepSize="0.5"
-            android:rating="4.5"
+            android:rating="0"
             app:mrb_progressTint="@color/colorNotes"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvGenderFilmsSeries"
@@ -119,7 +119,7 @@
         <TextView
             android:id="@+id/tvNoteFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            tools:text="4,5"
+            android:text="0"
             android:textSize="18sp"
             android:textColor="@color/colorNotes"
             android:layout_marginStart="10dp"
@@ -228,7 +228,7 @@
             android:layout_marginEnd="20dp"
             android:textSize="15sp"
             android:layout_marginTop="5dp"
-            tools:text="O Auto da Compadecida: As aventuras dos nordestinos João Grilo (Matheus Natchergaele), um sertanejo pobre e mentiroso, e Chicó (Selton Mello), o mais covarde dos homens. Ambos lutam pelo pão de cada dia e atravessam por vários episódios enganando a todos do pequeno vilarejo de Taperoá, no sertão da Paraíba. A salvação da dupla acontece com a aparição da Nossa Senhora (Fernanda Montenegro). Adaptação da obra de Ariano Suassuna."
+            android:text="Sinopse não Encontrada"
             app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitleFilmsSeries"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -244,6 +244,19 @@
             app:layout_constraintTop_toBottomOf="@id/tvDescriptionTextFilmsSeries"
             />
 
+        <TextView
+            android:id="@+id/tvMessageCast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/string_cast_not_found"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
+            app:layout_constraintTop_toBottomOf="@id/tvCastTitleFilmsSeries"
+            app:layout_constraintBottom_toTopOf="@id/firstView"/>
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListActors"
             android:layout_width="wrap_content"
@@ -257,6 +270,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvCastTitleFilmsSeries"/>
 
         <View
+            android:id="@+id/firstView"
             app:layout_constraintTop_toBottomOf="@id/rvCardsListActors"
             app:layout_constraintBottom_toTopOf="@id/tvRecomendacoesTitleFilmsSeries"
             app:layout_constraintStart_toStartOf="parent"
@@ -276,7 +290,7 @@
             android:textStyle="bold"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListActors"
+            app:layout_constraintTop_toBottomOf="@id/firstView"
             />
         <TextView
             android:id="@+id/tvMessageRecomendation"

@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
@@ -18,11 +19,17 @@ import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.*
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.cast.CastEntity
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.cast.MidiaCastCrossRef
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
+import com.example.madeinbrasil.database.entities.season.SeasonEntity
+import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.result.MovieDetailed
@@ -33,6 +40,8 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY_OFF
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
 import com.example.madeinbrasil.viewModel.*
@@ -91,19 +100,23 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val minutos = movie.runtime?.rem(60)
                         binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                         binding.tvYearFilmsSeries.text = "(${movie?.release_date?.getFirst4Chars()})"
-                        binding.rvCardsListActors.apply {
-                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                            adapter = movie?.credits.cast?.let { it1 ->
-                                MovieCreditsAdapter(it1) {
-                                    val castClicked = it
-                                    castClicked?.let { result ->
-                                        val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
-                                        intent.putExtra(BASE_ACTOR_KEY, result)
-                                        intent.putExtra(VALUE, 1)
-                                        startActivity(intent)
+
+                        if(movie.credits.cast?.size != 0) {
+                            binding.rvCardsListActors.apply {
+                                layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                adapter = movie?.credits.cast?.let { it1 ->
+                                    MovieCreditsAdapter(it1) {
+                                        val castClicked = it
+                                        castClicked?.let { result ->
+                                            val intent = Intent(this@FilmsAndSeriesActivity, PeopleActivity::class.java)
+                                            intent.putExtra(BASE_ACTOR_KEY, result)
+                                            intent.putExtra(VALUE, 1)
+                                            startActivity(intent)
+                                        }
                                     }
                                 }
                             }
+                            binding.tvMessageCast.isVisible = false
                         }
 
                         Glide.with(this)
@@ -142,6 +155,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         if (movie.recommendations?.results?.size != 0) {
+                            movie.recommendations?.results?.forEach {
+                                val recommendation = it.title?.let { it1 -> RecommendationMidiaCrossRef(movie.id, it.id, 1, it1, it.posterPath) }
+                                if (recommendation != null) {
+                                    viewModelMovie.insertRecommendation(recommendation)
+                                }
+                            }
+
                             binding.rvCardsListRecomendacoes.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie.recommendations?.let { it1 ->
@@ -160,6 +180,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         if (movie.similar?.results?.size != 0) {
+                            movie.similar?.results?.forEach {
+                                val similar = it.title?.let { it1 -> SimilarMidiaCrossRef(movie.id, it.id, 1, it1, it.posterPath) }
+                                if (similar != null) {
+                                    viewModelMovie.insertSimilar(similar)
+                                }
+                            }
+
                             binding.rvCardsListSimilares.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie.similar?.let { it1 ->
@@ -194,15 +221,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         filmDetailed = movie
 
                         binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
-                            val favMovie = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
-                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
-                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
-                                    "", midiaType = 1)
-
                             val fav = Favorites(movie.id, movie.id, isChecked)
 
                             if(isChecked) {
-                                viewModelMovie.insertMidia(favMovie)
                                 viewModelMovie.insertFavorite(fav)
                             }else {
                                 viewModelMovie.deleteByIdFavorites(movie.id)
@@ -210,14 +231,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
-                            val favWatched = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
-                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
-                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
-                                    "", midiaType = 1)
                             val watched = Watched(movie.id, movie.id, isChecked)
 
                             if(isChecked) {
-                                viewModelMovie.insertMidia(favWatched)
                                 viewModelMovie.insertWatched(watched)
                             }else {
                                 viewModelMovie.deleteByIdWatched(movie.id)
@@ -225,8 +241,23 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         lifecycleScope.launch {
-                            val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
+                            val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
                             val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                            val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
+                            val dbPeople = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+
+
+                            movie.credits.cast?.forEach {
+                                val people = MidiaCastCrossRef(movie.id, it.id, it.name, it.profilePath, it.order)
+                                dbPeople.insertPeople(people)
+                            }
+
+                            val midia = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
+                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
+                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
+                                    "", midiaType = 1)
+
+                            dbMidia.insertMidia(midia)
 
                             dbFav.getMidiaWithFavorites().forEach {
                                 if(it.midia.id == movie.id) {
@@ -247,28 +278,69 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                viewModelMovie.movieError.observe(this) {midia ->
+                    onApiErrorMovie(midia)
+                    lifecycleScope.launch {
+                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
+                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                        val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
+                        val dbCast = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+                        val dbRecommendation = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).recommendationDao()
+                        val dbSimilar = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).similarDao()
+                        var gender = ""
 
-                    dbFav.getMidiaWithFavorites().forEach {
-                        viewModelMovie.movieError.observe(this@FilmsAndSeriesActivity) { midia ->
-                            onApiErrorMovie(midia)
+                        films?.id?.let {
+                            dbGender.getGenreById(it).forEach {
+                                val re = Regex("[^A-Za-z0-9 ãõçéíêá]")
+                                var save: String = ""
+                                it.split(",").forEach { save += "$it " }
+                                save = re.replace(save, "")
+                                gender += save
+                            }
+                        }
+
+                        dbFav.getMidiaWithFavorites().forEach {
                             if(it.midia.id == films?.id) {
                                 it.favorites.forEach {fav ->
                                     binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
                                 }
                             }
                         }
-                    }
 
-                    dbWatched.getMidiaWithWatched().forEach {
-                        viewModelMovie.movieError.observe(this@FilmsAndSeriesActivity) { midia ->
-                            onApiErrorMovie(midia)
+                        dbWatched.getMidiaWithWatched().forEach {
                             if(it.midia.id == films?.id) {
                                 it.watched.forEach {watched ->
                                     binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
                                 }
+                            }
+                        }
+
+                        binding.tvGenderFilmsSeries.text = gender
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            films?.let {
+                                if(dbCast.getPeopleWithMidia(it.id).isNotEmpty()) {
+                                    adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it.id))
+                                    binding.tvMessageCast.isVisible = false
+                                }
+                            }
+                        }
+
+                        films?.let {
+                            if(dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
+                                binding.rvCardsListRecomendacoes.apply {
+                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = RecommendationDataBaseAdapter(dbRecommendation.getRecommendations(it.id))
+                                }
+                                binding.tvMessageRecomendation.isVisible = false
+                            }
+
+                            if(dbSimilar.getSimilar(it.id).isNotEmpty()) {
+                                binding.rvCardsListSimilares.apply {
+                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = SimilarDataBaseAdapter(dbSimilar.getSimilar(it.id))
+                                }
+                                binding.tvMessageSimilar.isVisible = false
                             }
                         }
                     }
@@ -361,15 +433,26 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                         }
+                        binding.tvMessageCast.isVisible = false
                     }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {
+                        serie?.seasons?.forEach {
+                            val seasonDB = SeasonEntity(it.id, serie.id, it.name, it.overview, it.posterPath, it.season_number)
+                            viewModelSerie.insertSeason(seasonDB)
+                        }
+
                         val intent = Intent(this, SeasonsActivity::class.java)
-                        intent.putExtra("season", serie)
+                        intent.putExtra(SEASON_KEY, serie)
                         startActivity(intent)
                     }
 
                     if (serie.recommendations?.results?.size != 0) {
+                        serie.recommendations?.results?.forEach {
+                            val recommendation = RecommendationMidiaCrossRef(serie.id, it.id, 2, it.name, it.posterPath)
+                            viewModelSerie.insertRecommendation(recommendation)
+                        }
+
                         binding.rvCardsListRecomendacoes.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = serie.recommendations?.let { it1 ->
@@ -387,6 +470,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     if (serie.similar?.results?.size != 0) {
+                        serie.similar?.results?.forEach {
+                            val similar = SimilarMidiaCrossRef(serie.id, it.id, 2, it.name, it.posterPath)
+                            viewModelSerie.insertSimilar(similar)
+                        }
+
                         binding.rvCardsListSimilares.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = serie.similar?.let { it1 ->
@@ -404,15 +492,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
-                        val favSerie = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
                         val fav = Favorites(serie.id, serie.id, isChecked)
 
                         if(isChecked) {
-                            viewModelSerie.insertMidia(favSerie)
                             viewModelSerie.insertFavorite(fav)
                         }else {
                             viewModelSerie.deleteByIdFavorites(serie.id)
@@ -420,25 +502,33 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
-                        val favSerie = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
                         val watched = Watched(serie.id, serie.id, isChecked)
 
                         if(isChecked) {
-                            viewModelSerie.insertMidia(favSerie)
                             viewModelSerie.insertWatched(watched)
                         }else {
                             viewModelSerie.deleteByIdWatched(serie.id)
                         }
                     }
 
-                    lifecycleScope.launch {
-                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
-                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
 
+                    lifecycleScope.launch {
+                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
+                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                        val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
+                        val dbPeople = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+
+                        serie.credits?.cast?.forEach {
+                            val people = MidiaCastCrossRef(serie.id, it.id, it.name, it.profilePath, it.order)
+                            dbPeople.insertPeople(people)
+                        }
+
+                        val midia = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
+                                "", serie.overview, 0.0, serie.posterPath, "",
+                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
+                                serie.name, midiaType = 2)
+
+                        dbMidia.insertMidia(midia)
                         dbFav.getMidiaWithFavorites().forEach {
                             if(it.midia.id == serie.id) {
                                 it.favorites.forEach {fav ->
@@ -457,28 +547,73 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteMidiaDao()
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                viewModelSerie.serieDetailedError.observe(this) {midia ->
+                    onApiErrorSerie(midia)
+                    lifecycleScope.launch {
+                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
+                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
+                        val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
+                        val dbCast = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+                        val dbRecommendation = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).recommendationDao()
+                        val dbSimilar = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).similarDao()
+                        var gender = ""
 
-                    dbFav.getMidiaWithFavorites().forEach {
-                        viewModelSerie.serieDetailedError.observe(this@FilmsAndSeriesActivity) { midia ->
-                            onApiErrorSerie(midia)
+                        series?.id?.let {
+                            dbGender.getGenreById(it).forEach {
+                                val re = Regex("[^A-Za-z0-9 ãõçéíêá]")
+                                var save: String = ""
+                                it.split(",").forEach { save += "$it " }
+                                save = re.replace(save, "")
+                                gender += save
+                            }
+                        }
+
+                        dbFav.getMidiaWithFavorites().forEach {
                             if(it.midia.id == series?.id) {
                                 it.favorites.forEach {fav ->
                                     binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
                                 }
                             }
                         }
-                    }
 
-                    dbWatched.getMidiaWithWatched().forEach {
-                        viewModelSerie.serieDetailedError.observe(this@FilmsAndSeriesActivity) { midia ->
-                            onApiErrorSerie(midia)
+                        dbWatched.getMidiaWithWatched().forEach {
                             if(it.midia.id == series?.id) {
                                 it.watched.forEach {watched ->
                                     binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
                                 }
+                            }
+                        }
+                        binding.tvGenderFilmsSeries.text = gender
+                        binding.rvCardsListActors.apply {
+                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                            series?.id?.let {
+                                if(dbCast.getPeopleWithMidia(it).isNotEmpty()) {
+                                    adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it))
+                                    binding.tvMessageCast.isVisible = false
+                                }
+                            }
+                        }
+                        binding.btSeasonsFilmsSeries.setOnClickListener {
+                            val intent = Intent(this@FilmsAndSeriesActivity, SeasonsActivity::class.java)
+                            intent.putExtra(SEASON_KEY_OFF, series?.id)
+                            startActivity(intent)
+                        }
+
+                        series?.let {
+                            if(dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
+                                binding.rvCardsListRecomendacoes.apply {
+                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = RecommendationDataBaseAdapter(dbRecommendation.getRecommendations(it.id))
+                                }
+                                binding.tvMessageRecomendation.isVisible = false
+                            }
+
+                            if(dbSimilar.getSimilar(it.id).isNotEmpty()) {
+                                binding.rvCardsListSimilares.apply {
+                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = SimilarDataBaseAdapter(dbSimilar.getSimilar(it.id))
+                                }
+                                binding.tvMessageSimilar.isVisible = false
                             }
                         }
                     }
@@ -508,7 +643,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         .load(R.drawable.logo_made_in_brasil)
                         .into(binding.ivBackDropFilmSeries)
 
-                it?.episodeRunTime?.forEach {
+                it.episodeRunTime?.forEach {
                     if (it > 60) {
                         val horas = listOf(it.div(60))
                         val min = listOf(it.rem(60))
@@ -526,8 +661,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.ratingBarFilmsSeries.stepSize = .5f
                 }
                 binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
+                binding.btStreamingFilmsSeries.isVisible = false
             }
         }
+        Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
     private fun onApiErrorMovie(movie: List<MidiaEntity>) {
@@ -557,8 +694,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 val minutos = it.runtime?.rem(60)
                 binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                 binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
+                binding.btStreamingFilmsSeries.isVisible = false
             }
         }
+        Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
 //    private fun tutorialImplementation() {
@@ -628,32 +767,48 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private fun setupObservables() {
         var generosText = ""
+        val listId = mutableListOf<Int>()
+        val listName = mutableListOf<String>()
         viewModel.onResultGenres.observe(this) {
             it?.let { generos ->
                 films?.genreIds?.forEach { genreFilm ->
                     generos.genres.forEach { genre ->
                         if (genre.id == genreFilm) {
                             generosText += "${genre.name}  "
+                            listId.add(genre.id)
+                            listName.add(genre.name)
                         }
                     }
                 }
             }
+            films?.id?.let {
+                it1 -> val gender = GenreEntity(listId, listName, it1)
+                viewModel.insertGenre(gender)}
+
             binding.tvGenderFilmsSeries.text = generosText
         }
     }
 
     private fun setupObservablesSeries() {
         var generosText = ""
+        val listId = mutableListOf<Int>()
+        val listName = mutableListOf<String>()
         viewModelGenderSeries.onResultGenresSeries.observe(this) {
             it?.let { generos ->
                 series?.genreIds?.forEach { genreSerie ->
                     generos.genres.forEach { genre ->
                         if (genre.id == genreSerie) {
                             generosText += "${genre.name}  "
+                            listId.add(genre.id)
+                            listName.add(genre.name)
                         }
                     }
                 }
             }
+            series?.id?.let {
+                it1 -> val gender = GenreEntity(listId, listName, it1)
+                viewModelGenderSeries.insertGenre(gender)}
+
             binding.tvGenderFilmsSeries.text = generosText
         }
     }

@@ -10,6 +10,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class MoviesTVFromPerson(
         val cast: List<Result>?,
-        val crew: List<Crew>?,
         val id: Int
 ): Parcelable

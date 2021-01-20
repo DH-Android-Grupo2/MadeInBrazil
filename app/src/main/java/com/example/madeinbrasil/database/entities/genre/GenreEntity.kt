@@ -6,12 +6,13 @@ import com.example.madeinbrasil.model.upcoming.GenreConverter
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "genre")
+@Entity(tableName = "genre_entity")
 data class GenreEntity (
-        @PrimaryKey
         @ColumnInfo(name = "id_genre")
-        val id: Int,
-        val name: String?,
         @TypeConverters(GenreConverter::class)
-        val serieId: List<Int>
+        val id: List<Int>,
+        @TypeConverters(GenreConverter::class)
+        val name: List<String>?,
+        @PrimaryKey
+        val midiaId: Int
 ): Parcelable

@@ -33,7 +33,7 @@
         android:layout_height="125dp"
         android:layout_margin="10dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/auto_da_compadecida_capa"
+        android:src="@drawable/logo_made_in_brasil"
         app:layout_constraintEnd_toEndOf="@id/ticketView"
         app:layout_constraintStart_toStartOf="@id/ticketView"
         app:layout_constraintTop_toTopOf="@+id/ticketView" />
@@ -49,7 +49,7 @@
         android:textAlignment="center"
         android:textSize="24sp"
         android:layout_height="wrap_content"
-        android:text="O Auto da Compadecida"
+        android:text="Made In Brasil"
         android:textColor="@color/colorAccent"/>
 
     <CheckBox

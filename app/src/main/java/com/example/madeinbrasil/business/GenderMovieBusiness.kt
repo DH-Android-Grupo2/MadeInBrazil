@@ -1,14 +1,16 @@
 package com.example.madeinbrasil.business
 
+import android.content.Context
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.model.gender.GenderMovie
 import com.example.madeinbrasil.model.upcoming.Upcoming
 import com.example.madeinbrasil.repository.GenderMovieRepository
 import com.example.madeinbrasil.utils.Constants
 
-class GenderMovieBusiness {
+class GenderMovieBusiness(val context: Context) {
     private val repository by lazy {
-        GenderMovieRepository()
+        GenderMovieRepository(context)
     }
 
     suspend fun getGenres(): ResponseAPI {
@@ -19,5 +21,8 @@ class GenderMovieBusiness {
         } else {
             response
         }
+    }
+    suspend fun insertGenre(genre: GenreEntity) {
+        repository.insertGenre(genre)
     }
 }

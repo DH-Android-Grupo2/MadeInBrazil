@@ -79,17 +79,7 @@
             android:textColor="@color/colorAccentOpaque"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/tvNameFilmsSeries"
-            app:layout_constraintBottom_toTopOf="@id/tvGenderFilmsSeries"/>
-
-        <TextView
-            android:id="@+id/tvGenderFilmsSeries"
-            style="@style/TextViewFilmsSeriesDefault"
-            android:text=""
-            android:textSize="14sp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/tvYearFilmsSeries"/>
+            app:layout_constraintTop_toBottomOf="@id/tvNameFilmsSeries" />
 
         <TextView
             android:id="@+id/tvDescriptionTitleFilmsSeries"

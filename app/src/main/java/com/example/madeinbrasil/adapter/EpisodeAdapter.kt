@@ -33,13 +33,13 @@ class EpisodeAdapter(
 
         fun bind(episode: Episode) = with(binding) {
             Glide.with(itemView.context)
-                    .load(episode?.still_path)
+                    .load(episode.still_path)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.logo_made_in_brasil)
                     .into(cvImageSeason)
 
-            tvSeasonName.text = episode?.name
-            tvSeasonOverview.text = episode?.overview
+            tvSeasonName.text = episode.name
+            tvSeasonOverview.text = episode.overview
         }
     }
 }

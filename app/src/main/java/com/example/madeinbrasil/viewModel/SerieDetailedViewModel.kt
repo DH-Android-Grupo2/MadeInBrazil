@@ -10,6 +10,10 @@ import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationEntity
+import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
+import com.example.madeinbrasil.database.entities.season.SeasonEntity
+import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
@@ -19,8 +23,8 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
     val serieDetailedSucess: MutableLiveData<SerieDetailed> = MutableLiveData()
     val serieDetailedError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
 
-    private val favoriteMidiaDB by lazy {
-        MadeInBrazilDatabase.getDatabase(application).favoriteMidiaDao()
+    private val midiaDB by lazy {
+        MadeInBrazilDatabase.getDatabase(application).midiaDao()
     }
 
     private val businessDetailed by lazy {
@@ -34,15 +38,9 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
                     serieDetailedSucess.postValue(response.data as SerieDetailed)
                 }
                 is ResponseAPI.Error -> {
-                    serieDetailedError.postValue(favoriteMidiaDB.getMidiaFavorite())
+                    serieDetailedError.postValue(midiaDB.getMidia())
                 }
             }
-        }
-    }
-
-    fun insertMidia(midia: MidiaEntity) {
-        viewModelScope.launch {
-            businessDetailed.insertMidia(midia)
         }
     }
 
@@ -70,5 +68,27 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
+    fun insertGenre(genre: GenreEntity) {
+        viewModelScope.launch {
+            businessDetailed.insertGenre(genre)
+        }
+    }
 
+    fun insertSeason(season: SeasonEntity) {
+        viewModelScope.launch {
+            businessDetailed.insertSeason(season)
+        }
+    }
+
+    fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
+        viewModelScope.launch {
+            businessDetailed.insertRecommendation(recommendation)
+        }
+    }
+
+    fun insertSimilar(similar: SimilarMidiaCrossRef) {
+        viewModelScope.launch {
+            businessDetailed.insertSimilar(similar)
+        }
+    }
 }
