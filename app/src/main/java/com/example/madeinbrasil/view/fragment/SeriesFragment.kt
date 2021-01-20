@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -46,7 +47,8 @@ class SeriesFragment : Fragment() {
         binding?.ivProfileSeries?.setOnClickListener {
             this.context?.let { it1 -> startUserActivity(it1) }
         }
-        setUpSearchView()
+        var application = getActivity()?.applicationContext
+        setUpSearchView(application as Application)
         activity?.let {
             viewModel = ViewModelProvider(this).get(SerieViewModel::class.java)
             setUpRecyclerView()
@@ -76,12 +78,12 @@ class SeriesFragment : Fragment() {
         }
     }
 
-    private fun setUpSearchView() {
+    private fun setUpSearchView(application: Application) {
         val searchView = binding?.tilSearchSeries
 
         searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean {
-                viewModel.setQuerySerie(query)
+                viewModel.setQuerySerie(application,query)
                 binding?.tvMessageSeries?.isVisible = query != ""
                 binding?.animationSeries?.isVisible = query != ""
                 setUpRecyclerView()
@@ -90,7 +92,7 @@ class SeriesFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                viewModel.setQuerySerie(newText)
+                viewModel.setQuerySerie(application,newText)
                 binding?.tvMessageSeries?.isVisible = newText == ""
                 binding?.animationSeries?.isVisible = newText == ""
                 setUpRecyclerView()

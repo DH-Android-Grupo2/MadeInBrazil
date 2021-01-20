@@ -41,10 +41,26 @@ class GenreConverter {
     @TypeConverter
     fun jsonToList(value: String): List<String>? {
 
-        val objects = Gson().fromJson(value, Array<String>::class.java) as Array<String>
+        val objects = Gson().fromJson(value, Array<String>::class.java) as Array<String>?
+        val list = objects?.toList()
+        return list
+    }
+
+
+  @TypeConverter
+  fun listGenreToJson(value: List<Genre>) : String {
+
+      return Gson().toJson(value)
+  }
+
+
+    fun jsonToListGenre(value: String) : List<Genre> {
+
+        val objects = Gson().fromJson(value, Array<Genre>::class.java) as Array<Genre>
         val list = objects.toList()
         return list
     }
+
 
     }
 

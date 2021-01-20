@@ -1,16 +1,20 @@
-package com.example.madeinbrasil.model.upcoming
+package com.example.madeinbrasil.model.search.movie
 
 import android.os.Parcelable
-import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.madeinbrasil.model.upcoming.GenreConverter
+import com.example.madeinbrasil.model.upcoming.Result
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
+
 
 @Parcelize
-@Entity(tableName = "movies_home", primaryKeys = ["id", "type"])
- class Result (
+@Entity(tableName = "movies_search")
+data class SearchResult(
         val adult: Boolean?,
         @SerializedName("backdrop_path")
         @ColumnInfo(name ="backdrop_path")
@@ -19,7 +23,8 @@ import kotlinx.android.parcel.RawValue
         @SerializedName("genre_ids")
         @TypeConverters(GenreConverter::class)
         val genreIds: MutableList<Int>,
-        var id: Int,
+        @PrimaryKey
+        val id: Int,
         @ColumnInfo(name ="first_air_date")
         @SerializedName("first_air_date")
         var firstAirDate: String?,
@@ -54,14 +59,7 @@ import kotlinx.android.parcel.RawValue
         @SerializedName("vote_count")
         val voteCount: Int?,
         var type: Int
-
-        //Now playing =1
-        //upcoming = 2
-        //discover = 3
-        //searchMovie = 0
-
-
-        ) : Parcelable {
+) : Parcelable {
 
     companion object {
         var DIFF_CALLBACK: DiffUtil.ItemCallback<Result> = object : DiffUtil.ItemCallback<Result>() {

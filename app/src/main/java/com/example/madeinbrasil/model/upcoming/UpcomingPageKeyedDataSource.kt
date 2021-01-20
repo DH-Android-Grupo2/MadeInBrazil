@@ -87,9 +87,8 @@ class UpcomingPageKeyedDataSource(
                     callback.onResult(data.results, page + 1)
                 }
                 is ResponseAPI.Error -> {
-                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
-                    val movies = upcomingDB.getUpcoming()
-                    callback.onResult(movies, page + 1)
+
+                    callback.onResult(mutableListOf(), page + 1)
                 }
             }
         }
@@ -127,8 +126,7 @@ class UpcomingPageKeyedDataSource(
                     callback.onResult(data.results, page - 1)
                 }
                 is ResponseAPI.Error -> {
-                    val upcomingDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
-                    upcomingDB.getUpcoming()
+
                     callback.onResult(mutableListOf(), page - 1)
                 }
             }

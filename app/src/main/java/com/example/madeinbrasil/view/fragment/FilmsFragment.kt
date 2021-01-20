@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.icu.text.IDNA
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
 import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -26,10 +28,13 @@ import com.example.madeinbrasil.view.activity.UserActivity
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import kotlinx.android.synthetic.main.fragment_films.*
+import java.lang.Appendable
 import java.util.*
 
 
-class FilmsFragment : Fragment() {
+class FilmsFragment(
+
+) : Fragment() {
     private var binding: FragmentFilmsBinding? = null
     private lateinit var viewModel: FilmsViewModel
 
@@ -47,11 +52,12 @@ class FilmsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(view,savedInstanceState)
         binding?.ivProfileFilms?.setOnClickListener {
             this.context?.let { it1 -> startUserActivity(it1) }
         }
-        SetupSearchView()
+       var application = getActivity()?.applicationContext
+        SetupSearchView(application as Application)
         activity?.let{
             viewModel = ViewModelProvider(this).get(FilmsViewModel::class.java)
             setupRecyclerView()
@@ -106,12 +112,12 @@ class FilmsFragment : Fragment() {
 
     }
 
-    private fun SetupSearchView() {
+    private fun SetupSearchView(application: Application) {
 
         val searchView:SearchView? = binding?.tilSearchFilms
         searchView?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query:String):Boolean {
-                viewModel.setQuery(query)
+                viewModel.setQuery(application,query)
                 Log.i("Query","${viewModel.getQuery()}")
                 binding?.tvMessageFilms?.isVisible = query != ""
                 binding?.animationFilms?.isVisible = query != ""
@@ -119,8 +125,12 @@ class FilmsFragment : Fragment() {
                 loadContentSearchMovie()
                 return true
             }
-            override fun onQueryTextChange(newText: String):Boolean{
-                viewModel.setQuery(newText)
+
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    viewModel.setQuery(application,newText)
+                }
                 Log.i("Query","${viewModel.getQuery()}")
                 binding?.tvMessageFilms?.isVisible = newText == ""
                 binding?.animationFilms?.isVisible = newText == ""

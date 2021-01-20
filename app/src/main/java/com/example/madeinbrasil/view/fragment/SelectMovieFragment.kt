@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.app.Application
 import android.app.Dialog
 import android.content.res.Resources
 import android.os.Bundle
@@ -40,8 +41,8 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        SetupSearchView()
+        var application = getActivity()?.applicationContext
+        SetupSearchView(application as Application)
         setupRecyclerView()
         activity?.let{
             viewModel = ViewModelProvider(it).get(SelectMovieViewModel::class.java)
@@ -58,13 +59,15 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
 
     }
 
-    private fun SetupSearchView() {
+    private fun SetupSearchView(
+            application : Application
+    ) {
 
         val searchView: SearchView = binding.searchField
 
         searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query:String):Boolean {
-                viewModel.setQuery(query)
+                viewModel.setQuery(application,query)
                 loadContentSearch()
                 binding.tvMessageFilmsAdd.isVisible = query == ""
                 binding.animationFilmsAdd.isVisible = query == ""
@@ -72,7 +75,7 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
             }
 
             override fun onQueryTextChange(newText: String):Boolean{
-                viewModel.setQuery(newText)
+                viewModel.setQuery(application,newText)
                 loadContentSearch()
                 binding.tvMessageFilmsAdd.isVisible = newText == ""
                 binding.animationFilmsAdd.isVisible = newText == ""

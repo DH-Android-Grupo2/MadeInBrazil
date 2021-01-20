@@ -1,5 +1,7 @@
 package com.example.madeinbrasil.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +12,9 @@ import com.example.madeinbrasil.model.search.movie.searchMovieDataSourceFactory
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
 
-class SelectMovieViewModel: ViewModel() {
+class SelectMovieViewModel(
+        application: Application
+): AndroidViewModel(application) {
     var searchMoviePagedList: LiveData<PagedList<Result>>? = null
     private var searchMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var query = ""
@@ -18,17 +22,19 @@ class SelectMovieViewModel: ViewModel() {
     var clickedMovieItem: MutableLiveData<Result> = MutableLiveData()
 
     init {
-        searchData()
+        searchData(application)
     }
 
-    fun setQuery(newQuery:String){
+    fun setQuery(
+            application: Application,
+            newQuery:String){
         this.query = newQuery
-        searchData()
+        searchData(application)
     }
 
-    fun searchData(){
+    fun searchData(application: Application){
 
-        val tmdbDataSourceFactory = searchMovieDataSourceFactory(query)
+        val tmdbDataSourceFactory = searchMovieDataSourceFactory(application,query)
 
         searchMovieLiveDataSource = tmdbDataSourceFactory.getSearchLiveDataSource()
 

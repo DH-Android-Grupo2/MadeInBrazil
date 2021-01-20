@@ -23,4 +23,8 @@ interface UpcomingDao {
     @Query("SELECT * FROM movies_home WHERE type == 3")
     suspend fun getDiscover(): List<Result>
 
+    @Query("SELECT * FROM movies_home WHERE type == 0")
+    suspend fun getSearchMovies() : List<Result>
+
+
 }

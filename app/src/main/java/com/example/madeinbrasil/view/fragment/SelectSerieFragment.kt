@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.app.Application
 import android.app.Dialog
 import android.content.res.Resources
 import android.os.Bundle
@@ -38,8 +39,8 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        SetupSearchView()
+        var application = getActivity()?.applicationContext
+        SetupSearchView(application as Application)
         setupRecyclerView()
         activity?.let{
             viewModel = ViewModelProvider(it).get(SelectSerieViewModel::class.java)
@@ -56,13 +57,15 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
 
     }
 
-    private fun SetupSearchView() {
+    private fun SetupSearchView(
+            application: Application
+    ) {
 
         val searchView: SearchView = binding.searchField
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query:String):Boolean {
-                viewModel.setQuerySerie(query)
+                viewModel.setQuerySerie(application,query)
                 loadContentSearch()
                 binding.tvMessageSeriesAdd.isVisible = query == ""
                 binding.animationSeriesAdd.isVisible = query == ""
@@ -70,7 +73,7 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
             }
 
             override fun onQueryTextChange(newText: String):Boolean{
-                viewModel.setQuerySerie(newText)
+                viewModel.setQuerySerie(application,newText)
                 loadContentSearch()
                 binding.tvMessageSeriesAdd.isVisible = newText == ""
                 binding.animationSeriesAdd.isVisible = newText == ""

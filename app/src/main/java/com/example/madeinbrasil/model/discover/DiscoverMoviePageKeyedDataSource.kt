@@ -94,10 +94,9 @@ class DiscoverMoviePageKeyedDataSource(
                     callback.onResult(data.results, page + 1)
                 }
                 is ResponseAPI.Error -> {
-                    val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
-                    val movies =  DiscoverMovieDB.getDiscover()
 
-                    callback.onResult(movies, page + 1)
+
+                    callback.onResult(mutableListOf(), page + 1)
                 }
             }
         }
@@ -135,10 +134,9 @@ class DiscoverMoviePageKeyedDataSource(
                     callback.onResult(data.results, page - 1)
                 }
                 is ResponseAPI.Error -> {
-                    val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
-                    val movies =  DiscoverMovieDB.getDiscover()
 
-                    callback.onResult(movies, page - 1)
+
+                    callback.onResult(mutableListOf(), page - 1)
                 }
             }
         }

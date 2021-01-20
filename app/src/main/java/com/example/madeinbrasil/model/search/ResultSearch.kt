@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "home_discover")
+@Entity(tableName = "home_discover", primaryKeys = ["id", "type"])
 data class ResultSearch(
     val adult: Boolean,
     @SerializedName("backdrop_path")
@@ -24,7 +24,6 @@ data class ResultSearch(
     @SerializedName("genre_ids")
     @TypeConverters(GenreConverter::class)
     val genreIds: List<Int>,
-    @PrimaryKey
     val id: Int,
     @SerializedName("media_type")
     @ColumnInfo(name = "media_type")
@@ -58,8 +57,15 @@ data class ResultSearch(
     val voteAverage: Double,
     @ColumnInfo(name = "vote_count")
     @SerializedName("vote_count")
-    val voteCount: Int
+    val voteCount: Int,
+    var type: Int
+
+    //type = 0 DiscoverTV
+    //type = 1 SearchTV
+
+
 ): Parcelable {
+
 
     companion object {
         var DIFF_CALLBACK: DiffUtil.ItemCallback<ResultSearch> = object : DiffUtil.ItemCallback<ResultSearch>() {

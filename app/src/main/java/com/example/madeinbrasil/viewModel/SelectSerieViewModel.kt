@@ -1,5 +1,7 @@
 package com.example.madeinbrasil.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +12,9 @@ import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.search.serie.SearchSerieDataSourceFactory
 import com.example.madeinbrasil.utils.Constants
 
-class SelectSerieViewModel: ViewModel() {
+class SelectSerieViewModel(
+        application: Application
+): AndroidViewModel(application) {
     var searchSeriePagedList: LiveData<PagedList<ResultSearch>>? = null
     private var searchSerieLiveDataSource: LiveData<PageKeyedDataSource<Int, ResultSearch>>? = null
     var query = " "
@@ -19,17 +23,17 @@ class SelectSerieViewModel: ViewModel() {
 
 
     init {
-        searchSerieData()
+        searchSerieData(application)
     }
 
-    fun setQuerySerie(newQuerySerie: String) {
+    fun setQuerySerie(application: Application,newQuerySerie: String) {
         this.query = newQuerySerie
-        searchSerieData()
+        searchSerieData(application)
     }
 
-    private fun searchSerieData() {
+    private fun searchSerieData(application: Application) {
 
-        val tmdbSourceFactory = SearchSerieDataSourceFactory(query)
+        val tmdbSourceFactory = SearchSerieDataSourceFactory(application,query)
         searchSerieLiveDataSource = tmdbSourceFactory.getSearchSerieLiveDataSource()
 
         val pagedListConfig = PagedList.Config.Builder()

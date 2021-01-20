@@ -14,6 +14,16 @@ interface DiscoverTvDao {
     suspend fun insertDiscover(tv: List<ResultSearch>)
 
 
-    @Query("SELECT * FROM home_discover")
+    @Query("SELECT * FROM home_discover WHERE type == 0")
     suspend fun getDiscover() : List<ResultSearch>
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSearchTV(tv: List<ResultSearch>)
+
+
+    @Query("SELECT * FROM home_discover WHERE type == 1")
+    suspend fun getSearchTV() : List<ResultSearch>
+
+
 }

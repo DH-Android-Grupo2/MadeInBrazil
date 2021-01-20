@@ -1,7 +1,9 @@
 package com.example.madeinbrasil.model.search.serie
 
+import android.content.Context
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.repository.SerieRepository
@@ -10,7 +12,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
-class SearchSeriePageKeyedDataSource(var query: String): PageKeyedDataSource<Int, ResultSearch>() {
+class SearchSeriePageKeyedDataSource(
+        private val context: Context,
+        var query: String): PageKeyedDataSource<Int, ResultSearch>() {
+
+
+
     private val repository by lazy {
         SerieRepository()
     }
@@ -37,10 +44,26 @@ class SearchSeriePageKeyedDataSource(var query: String): PageKeyedDataSource<Int
                         }
                     }
 
+                    data.results.forEach {
+                        it.type = 1
+                    }
+
+                    if(query.length > 3){
+
+                    val searchTVDB = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                    searchTVDB.insertSearchTV(data.results)
+                    }
+
+
                     callback.onResult(data.results, null, FIRST_PAGE + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), null, FIRST_PAGE + 1)
+
+                    val searchTV = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                   val tv =  searchTV.getSearchTV()
+
+
+                    callback.onResult(tv, null, FIRST_PAGE + 1)
                 }
             }
         }

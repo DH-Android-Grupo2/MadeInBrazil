@@ -1,7 +1,9 @@
 package com.example.madeinbrasil.model.search.movie
 
+import android.content.Context
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.repository.FilmsRepository
@@ -10,7 +12,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<Int, Result>() {
+class searchMoviePageKeyedDataSource (
+        private val context : Context,
+        var query:String) : PageKeyedDataSource<Int, Result>() {
+
 
     private val repository by lazy {
         FilmsRepository()
@@ -23,7 +28,7 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
         CoroutineScope(Dispatchers.IO).launch {
             when (val response = repository.searchMovies(Constants.Paging.FIRST_PAGE, query)) {
                 is ResponseAPI.Success -> {
-                    val data = response?.let{
+                    val data = response.let{
                         it.data as SearchMovie
                     }
                     data.results = data.results.filter { it.originalLanguage.equals("pt") }
@@ -35,10 +40,26 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
                             result.backdropPath = result.posterPath
                         }
                     }
+
+
+                    if (query.length > 3){
+
+                    val searchMovieDB = MadeInBrazilDatabase.getDatabase(context).FilmsFragmentDao()
+                    searchMovieDB.insertSearchMovies(data.results)
+                    }
+
+
+
+
                     callback.onResult(data.results, null, Constants.Paging.FIRST_PAGE + 1)
                 }
                 is ResponseAPI.Error -> {
-                    callback.onResult(mutableListOf(), null, Constants.Paging.FIRST_PAGE + 1)
+
+
+                    val searchMovie = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                    val movie = searchMovie.getSearchMovies()
+
+                    callback.onResult(movie, null, Constants.Paging.FIRST_PAGE + 1)
                 }
             }
         }
@@ -65,6 +86,13 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
                             result.backdropPath = result.posterPath
                         }
                     }
+
+                    if (query.length > 3){
+
+                        val searchMovieDB = MadeInBrazilDatabase.getDatabase(context).FilmsFragmentDao()
+                        searchMovieDB.insertSearchMovies(data.results) }
+
+
                     callback.onResult(data.results, page + 1)
                 }
                 is ResponseAPI.Error -> {
@@ -83,7 +111,7 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
         CoroutineScope(Dispatchers.IO).launch {
             when (val response = repository.searchMovies(page,query)) {
                 is ResponseAPI.Success -> {
-                    val data = response?.let{
+                    val data = response.let{
                         it.data as SearchMovie
                     }
                     data.results = data.results.filter { it.originalLanguage.equals("pt") }
@@ -97,6 +125,14 @@ class searchMoviePageKeyedDataSource (var query:String) : PageKeyedDataSource<In
                             result.backdropPath = result.posterPath
                         }
                     }
+
+
+                    if (query.length > 3){
+
+                        val searchMovieDB = MadeInBrazilDatabase.getDatabase(context).FilmsFragmentDao()
+                        searchMovieDB.insertSearchMovies(data.results) }
+
+
                     callback.onResult(data.results, page - 1)
                 }
                 is ResponseAPI.Error -> {

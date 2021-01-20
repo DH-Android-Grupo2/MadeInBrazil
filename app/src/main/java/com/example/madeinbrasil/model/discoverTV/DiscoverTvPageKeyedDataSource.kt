@@ -95,10 +95,8 @@ class DiscoverTvPageKeyedDataSource(
                     callback.onResult(data.results, page + 1)
                 }
                 is ResponseAPI.Error -> {
-                    val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
-                    val movies = discoverTvDb.getDiscover()
 
-                    callback.onResult(movies, page + 1)
+                    callback.onResult(mutableListOf(), page + 1)
                 }
             }
         }
@@ -134,10 +132,9 @@ class DiscoverTvPageKeyedDataSource(
                     callback.onResult(data.results, page - 1)
                 }
                 is ResponseAPI.Error -> {
-                    val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
-                    val movies = discoverTvDb.getDiscover()
 
-                    callback.onResult(movies, page - 1)
+
+                    callback.onResult(mutableListOf(), page - 1)
                 }
             }
         }
