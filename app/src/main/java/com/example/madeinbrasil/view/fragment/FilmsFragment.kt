@@ -26,6 +26,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.FilmsAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
 import com.example.madeinbrasil.model.upcoming.Result
@@ -178,10 +179,18 @@ class FilmsFragment : Fragment() {
             dialog.cbFavorite.setOnCheckedChangeListener { _, isChecked ->
                 lifecycleScope.launch {
                     val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
+                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
+
                     value?.let {
                         val fav = Favorites(it.id, it.id, isChecked)
+                        val midia = MidiaEntity(value.id, value.backdropPath, "", value.originalLanguage,
+                                value.originalTitle, value.overview, value.popularity, value.posterPath, value.releaseDate,
+                                0, value.title, value.voteAverage?.toDouble(), value.voteCount, listOf(0), "",
+                                "", midiaType = 1)
+
                         if(isChecked) {
                             dbFav.insertFavorite(fav)
+                            dbMidia.insertMidia(midia)
                         }else {
                             dbFav.deleteByIdFavorites(it.id)
                         }
@@ -192,10 +201,18 @@ class FilmsFragment : Fragment() {
             dialog.cbWatched.setOnCheckedChangeListener { _, isChecked ->
                 lifecycleScope.launch {
                     val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
+                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
+
                     value?.let {
                         val watched = Watched(it.id, it.id, isChecked)
+                        val midia = MidiaEntity(value.id, value.backdropPath, "", value.originalLanguage,
+                                value.originalTitle, value.overview, value.popularity, value.posterPath, value.releaseDate,
+                                0, value.title, value.voteAverage?.toDouble(), value.voteCount, listOf(0), "",
+                                "", midiaType = 1)
+
                         if(isChecked) {
                             dbWatched.insertWatched(watched)
+                            dbMidia.insertMidia(midia)
                         }else {
                             dbWatched.deleteByIdWatched(it.id)
                         }

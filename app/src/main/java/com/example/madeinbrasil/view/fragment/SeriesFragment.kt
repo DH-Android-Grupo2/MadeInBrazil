@@ -26,6 +26,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.SerieAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.databinding.FragmentSeriesBinding
 import com.example.madeinbrasil.model.search.ResultSearch
@@ -148,10 +149,18 @@ class SeriesFragment : Fragment() {
             dialog.cbFavorite.setOnCheckedChangeListener { _, isChecked ->
                 lifecycleScope.launch {
                     val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
+                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
+
                     value?.let {
                         val fav = Favorites(it.id, it.id, isChecked)
+                        val midia = MidiaEntity(value.id, value.backdropPath, "", "",
+                                "", value.overview, 0.0, value.posterPath, "",
+                                0, "", value.voteAverage, 0, listOf(), value.firstAirDate,
+                                value.name, midiaType = 2)
+
                         if(isChecked) {
                             dbFav.insertFavorite(fav)
+                            dbMidia.insertMidia(midia)
                         }else {
                             dbFav.deleteByIdFavorites(it.id)
                         }
@@ -162,10 +171,18 @@ class SeriesFragment : Fragment() {
             dialog.cbWatched.setOnCheckedChangeListener { _, isChecked ->
                 lifecycleScope.launch {
                     val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
+                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
+
                     value?.let {
                         val watched = Watched(it.id, it.id, isChecked)
+                        val midia = MidiaEntity(value.id, value.backdropPath, "", "",
+                            "", value.overview, 0.0, value.posterPath, "",
+                            0, "", value.voteAverage, 0, listOf(), value.firstAirDate,
+                                value.name, midiaType = 2)
+
                         if(isChecked) {
                             dbWatched.insertWatched(watched)
+                            dbMidia.insertMidia(midia)
                         }else {
                             dbWatched.deleteByIdWatched(it.id)
                         }
