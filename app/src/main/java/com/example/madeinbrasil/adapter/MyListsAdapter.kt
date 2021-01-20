@@ -46,7 +46,7 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>): RecyclerView.Ada
             } else if (mediaSize < 4) {
                     for (i in 0 until mediaSize) {
                         val imageView = ImageView(containerView.context)
-                        val lp = LinearLayout.LayoutParams(convertDp(0, containerView.context), LinearLayout.LayoutParams.MATCH_PARENT)
+                        val lp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT)
                         lp.weight = 1F
                         imageView.layoutParams = lp
                         Glide.with(containerView).load(list.media[i].backdropPath).into(imageView)
@@ -66,11 +66,6 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>): RecyclerView.Ada
             }
 
             tvListName.text = list.list.name
-        }
-
-        private fun convertDp(num: Int, context: Context): Int {
-            val scale: Float = context.resources.displayMetrics.density
-            return (num * scale + 0.5f).toInt()
         }
 
     }
