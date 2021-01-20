@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.adapter.SelectedShowsAdapter
 import com.example.madeinbrasil.databinding.ActivityCreateListBinding
+import com.example.madeinbrasil.model.customLists.CustomList
+import com.example.madeinbrasil.model.customLists.ListMovieItem
+import com.example.madeinbrasil.model.customLists.ListSerieItem
+import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
-import com.example.madeinbrasil.view.fragment.MyListsFragment.Companion.CODE
 import com.example.madeinbrasil.view.fragment.SelectMovieFragment
 import com.example.madeinbrasil.view.fragment.SelectSerieFragment
 import com.example.madeinbrasil.viewModel.CustomListViewModel
@@ -127,20 +130,21 @@ class CreateListActivity : AppCompatActivity() {
 
     private fun saveListDataToDB() {
 
-//        val movieList = mutableListOf<ListMovieItem>()
-//        val serieList = mutableListOf<ListSerieItem>()
-//
-//        selectedShowsAdapter.list.forEach {
-//            if (selectedSeries.contains(it.id))
-//                serieList.add(ListSerieItem(it.id, it.title, it.backdropPath, it.originalTitle))
-//            else
-//                movieList.add(ListMovieItem(it.id, it.title, it.backdropPath, it.originalTitle))
-//        }
-//
-//        customListViewModel.createCustomList(ListWithMedia(
-//                CustomList(0, binding.teetName.text.toString(), binding.teetDescription.text.toString(), 0),
-//                movieList,
-//                serieList))
+        val movieList = mutableListOf<ListMovieItem>()
+        val serieList = mutableListOf<ListSerieItem>()
+
+        selectedShowsAdapter.list.forEach {
+            if (selectedSeries.contains(it.id))
+                serieList.add(ListSerieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+            else
+                movieList.add(ListMovieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+        }
+
+        customListViewModel.createCustomList(ListWithMedia(
+            CustomList(0, binding.teetName.text.toString(), binding.teetDescription.text.toString(), 0),
+                movieList,
+                serieList)
+        )
 
         setResult(RESULT_OK)
         finish()
