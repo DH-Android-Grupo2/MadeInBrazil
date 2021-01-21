@@ -53,7 +53,7 @@ class SelectSerieAdapter(var selectedItems: MutableList<Long>) : PagedListAdapte
                         .placeholder(R.drawable.logo_made_in_brasil)
                         .into(cvImageCard)
 
-                tvNameRecyclerView.text = serie.name
+                tvNameMedia.text = serie.name
 
                 if(selectedItems.contains(serie.id.toLong())) {
                     tvSelectionIcon.setImageResource(R.drawable.remove_item)

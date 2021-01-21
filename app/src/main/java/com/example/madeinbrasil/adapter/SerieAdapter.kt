@@ -36,7 +36,7 @@ class SerieAdapter(
                 .placeholder(R.drawable.logo_made_in_brasil)
                 .into(cvImageCard)
 
-            tvNameRecyclerView.text = serie?.name
+            tvNameMedia.text = serie?.name
 
             itemView.setOnClickListener {
                 onSerieClicked(serie)

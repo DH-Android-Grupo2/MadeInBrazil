@@ -1,6 +1,5 @@
 package com.example.madeinbrasil.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,7 +13,8 @@ import com.example.madeinbrasil.databinding.MainMyListRecyclerviewBinding
 import com.example.madeinbrasil.model.customLists.ListWithMediaUni
 
 
-class MyListsAdapter(private val list: List<ListWithMediaUni>): RecyclerView.Adapter<MyListsAdapter.ViewHolder>() {
+class MyListsAdapter(private val list: List<ListWithMediaUni>,
+                             val onClick: (Long) -> Unit): RecyclerView.Adapter<MyListsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -22,7 +22,7 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>): RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position], onClick)
     }
 
     override fun getItemCount(): Int = list.size
@@ -30,11 +30,12 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>): RecyclerView.Ada
     inner class ViewHolder(val binding: MainMyListRecyclerviewBinding) : RecyclerView.ViewHolder(
             binding.root
     ) {
-        fun bind(list: ListWithMediaUni) = with(binding) {
+        fun bind(list: ListWithMediaUni, onClick: (Long) -> Unit) = with(binding) {
             val mediaSize = list.media.size
             if (mediaSize == 0) {
                 val textView = TextView(containerView.context)
-                textView.text = "Vazia"
+                textView.text = containerView.context.getString(R.string.label_vazia)
+                textView.textSize = 20F
                 textView.setTextColor(
                         ResourcesCompat.getColor(
                                 containerView.context.resources,
@@ -66,6 +67,10 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>): RecyclerView.Ada
             }
 
             tvListName.text = list.list.name
+
+            root.setOnClickListener {
+                onClick(list.list.listId)
+            }
         }
 
     }

@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "custom_lists")
 data class CustomList(
     @PrimaryKey(autoGenerate = true)
-    val listId: Int,
+    val listId: Long,
     var name: String,
-    var description: String,
+    var description: String?,
     @ColumnInfo(name = "user_owner_id")
     val userOwnerId: Int
 )

@@ -37,16 +37,6 @@ class SelectedShowsAdapter(val onCloseClick: ((ListMediaItem) -> Unit)): Recycle
 
     inner class ViewHolder(val binding: SelectedCardsBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(show: ListMediaItem) = with(binding) {
-//            when(show) {
-//                is Result -> {
-//                    Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
-//                    tvShowName.text = show.title
-//                }
-//                is ResultSearch -> {
-//                    Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
-//                    tvShowName.text = show.name
-//                }
-//            }
 
             Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
             tvShowName.text = show.title

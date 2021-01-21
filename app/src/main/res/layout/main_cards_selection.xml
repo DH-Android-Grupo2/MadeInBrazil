@@ -31,7 +31,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tvNameRecyclerView"/>
+                app:layout_constraintBottom_toTopOf="@id/tvNameMedia"/>
 
             <ImageView
                 android:id="@+id/tvSelectionCover"
@@ -44,7 +44,7 @@
                 app:layout_constraintStart_toStartOf="@id/cvImageCard"/>
 
             <TextView
-                android:id="@+id/tvNameRecyclerView"
+                android:id="@+id/tvNameMedia"
                 style="@style/TextViewFilmsSeriesDefault"
                 tools:text="O auto da Compadecida"
                 android:layout_margin="10dp"

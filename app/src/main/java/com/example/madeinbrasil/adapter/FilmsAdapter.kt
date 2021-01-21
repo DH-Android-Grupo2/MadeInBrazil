@@ -46,7 +46,7 @@ class FilmsAdapter(
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(cvImageCard)
 
-            tvNameRecyclerView.text = movie?.title
+            tvNameMedia.text = movie?.title
 
             itemView.setOnClickListener {
                 onMovieClicked(movie)

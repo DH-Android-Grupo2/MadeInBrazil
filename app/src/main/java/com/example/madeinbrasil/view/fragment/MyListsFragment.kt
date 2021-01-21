@@ -15,6 +15,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.MyListsAdapter
 import com.example.madeinbrasil.databinding.FragmentMyListsBinding
 import com.example.madeinbrasil.view.activity.CreateListActivity
+import com.example.madeinbrasil.view.activity.CustomListDetailsActivity
 import com.example.madeinbrasil.viewModel.CustomListViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -46,7 +47,11 @@ class MyListsFragment : Fragment() {
 
             binding.rvMyLists.apply {
                 layoutManager = LinearLayoutManager(this@MyListsFragment.context)
-                adapter = MyListsAdapter(it)
+                adapter = MyListsAdapter(it) { id ->
+                    val intent = Intent(this@MyListsFragment.context, CustomListDetailsActivity::class.java)
+                    intent.putExtra(LIST_ID, id)
+                    startActivity(intent)
+                }
             }
         })
 
@@ -55,7 +60,7 @@ class MyListsFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentMyListsBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -82,5 +87,6 @@ class MyListsFragment : Fragment() {
 
     companion object {
         const val CODE = 888
+        const val LIST_ID = "list_id"
     }
 }

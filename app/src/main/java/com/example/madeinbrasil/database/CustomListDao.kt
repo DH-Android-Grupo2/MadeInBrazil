@@ -21,4 +21,8 @@ interface CustomListDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun saveCustomListCrossrefSerie(list: List<ListSerieCrossRef>)
+
+    @Transaction
+    @Query("SELECT * from custom_lists WHERE listId = :id")
+    suspend fun getListUni(id: Long): ListWithMedia
 }

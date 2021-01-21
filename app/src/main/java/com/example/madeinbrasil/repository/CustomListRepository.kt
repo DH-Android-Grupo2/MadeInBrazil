@@ -1,7 +1,6 @@
 package com.example.madeinbrasil.repository
 
 import android.content.Context
-import android.util.Log
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.model.customLists.*
 import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
@@ -47,6 +46,10 @@ class CustomListRepository(context: Context) {
 
     suspend fun getLists(): List<ListWithMedia> {
         return customListDao.getListWithMedia()
+    }
+
+    suspend fun getListUni(id: Long): ListWithMedia {
+        return customListDao.getListUni(id)
     }
 
 }

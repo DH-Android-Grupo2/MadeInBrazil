@@ -11,6 +11,8 @@
         android:layout_height="56dp"
         android:layout_margin="10dp"
         app:cardCornerRadius="5dp"
+        app:strokeColor="@color/white"
+        app:strokeWidth="0.5dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,6 +22,8 @@
                 android:id="@+id/containerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/ocean_blue"
+                android:gravity="center"
                 android:orientation="horizontal"/>
 
     </com.google.android.material.card.MaterialCardView>
@@ -30,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         tools:text="Filmes do Babu"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toEndOf="@id/cvCovers"
         app:layout_constraintTop_toTopOf="@id/cvCovers"
@@ -44,7 +48,8 @@
         android:src="@drawable/ic_baseline_delete_20"
         app:layout_constraintTop_toTopOf="@id/cvCovers"
         app:layout_constraintBottom_toBottomOf="@id/cvCovers"
-        app:layout_constraintEnd_toStartOf="@id/ivCreateIcon"/>
+        app:layout_constraintEnd_toStartOf="@id/ivCreateIcon"
+        android:contentDescription="@string/delete_icon_description" />
 
     <ImageView
         android:id="@+id/ivCreateIcon"
@@ -54,6 +59,7 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintTop_toTopOf="@id/cvCovers"
         app:layout_constraintBottom_toBottomOf="@id/cvCovers"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/edit_icon_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

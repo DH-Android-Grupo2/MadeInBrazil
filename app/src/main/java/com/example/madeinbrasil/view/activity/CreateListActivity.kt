@@ -35,10 +35,8 @@ class CreateListActivity : AppCompatActivity() {
 
     private val selectedShowsAdapter by lazy {
         SelectedShowsAdapter() {
-//            when(it) {
-//                is Result -> selectedMovies.remove(it.id)
-//                is ResultSearch -> selectedSeries.remove(it.id)
-//            }
+            // checa se o array de ids da série contém o id em questão, caso não
+            // tenha, então, se trata de um filme
             if (selectedSeries.contains(it.id))
                 selectedSeries.remove(it.id)
             else

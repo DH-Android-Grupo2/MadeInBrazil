@@ -1,14 +1,9 @@
 package com.example.madeinbrasil.view.activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.madeinbrasil.R
 import com.example.madeinbrasil.view.classes.Item
 import com.example.madeinbrasil.view.classes.Lista
-import com.example.madeinbrasil.view.fragment.ListDetailsFragment
 
 class ListDetailActivity : AppCompatActivity() {
 

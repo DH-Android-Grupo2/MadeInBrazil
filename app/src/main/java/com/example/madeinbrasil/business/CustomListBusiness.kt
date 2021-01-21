@@ -1,7 +1,6 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
-import com.example.madeinbrasil.model.customLists.CustomList
 import com.example.madeinbrasil.model.customLists.ListMediaItem
 import com.example.madeinbrasil.model.customLists.ListWithMediaUni
 import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
@@ -38,5 +37,20 @@ class CustomListBusiness(context: Context) {
         }
 
         return uniLists
+    }
+
+    suspend fun getListUni(id: Long): ListWithMediaUni {
+        val list = customListRepository.getListUni(id)
+        val media: MutableList<ListMediaItem> = mutableListOf()
+
+        list.movies.forEach {
+            media.add(ListMediaItem(it.movieId, it.title, it.backdropPath, it.originalTitle))
+        }
+
+        list.series.forEach {
+            media.add(ListMediaItem(it.serieId, it.title, it.backdropPath, it.originalTitle))
+        }
+
+        return ListWithMediaUni(list.list, media)
     }
 }
