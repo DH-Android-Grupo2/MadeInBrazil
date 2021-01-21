@@ -9,9 +9,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -46,6 +48,7 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_films_and_series.*
+import kotlinx.android.synthetic.main.choose_list_popup.*
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -53,6 +56,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var viewModelGenderSeries: GenderSerieViewModel
     private lateinit var viewModelMovie: MovieDetailedViewModel
     private lateinit var viewModelSerie: SerieDetailedViewModel
+    private lateinit var customListViewModel: CustomListViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
     private var films: Result? = null
@@ -83,7 +87,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModel.getGenres()
-
+                customListViewModel = ViewModelProvider(this).get(CustomListViewModel::class.java)
                 binding.btSeasonsFilmsSeries.isVisible = false
                 setupObservables()
 
@@ -106,6 +110,24 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                     }
                                 }
                             }
+                        }
+
+                        // ADDED 21/01
+                        binding.cbListFilmsSeries.setOnClickListener {
+                            val dialog = Dialog(this)
+                            dialog.setContentView(R.layout.choose_list_popup)
+                            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            customListViewModel.getCustomLists()
+
+                            customListViewModel.customLists.observe(this){
+                                dialog.rvCustomLists.apply {
+                                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+                                    adapter = ChooseListAdapter(it) {
+                                        
+                                    }
+                                }
+                            }
+                            dialog.show()
                         }
 
                         Glide.with(this)

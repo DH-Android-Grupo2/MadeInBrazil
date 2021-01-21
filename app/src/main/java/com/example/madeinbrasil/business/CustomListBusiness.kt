@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
+import com.example.madeinbrasil.model.customLists.CustomList
 import com.example.madeinbrasil.model.customLists.ListMediaItem
 import com.example.madeinbrasil.model.customLists.ListWithMediaUni
 import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
@@ -52,5 +53,9 @@ class CustomListBusiness(context: Context) {
         }
 
         return ListWithMediaUni(list.list, media)
+    }
+
+    suspend fun getCustomLists(): List<CustomList> {
+        return customListRepository.getCustomLists()
     }
 }

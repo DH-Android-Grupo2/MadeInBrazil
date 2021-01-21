@@ -52,4 +52,8 @@ class CustomListRepository(context: Context) {
         return customListDao.getListUni(id)
     }
 
+    suspend fun getCustomLists(): List<CustomList> {
+        return customListDao.getCustomLists()
+    }
+
 }
