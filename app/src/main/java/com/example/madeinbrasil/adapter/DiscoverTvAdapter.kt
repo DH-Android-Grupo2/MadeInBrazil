@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +20,7 @@ import com.example.madeinbrasil.model.search.ResultSearch
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 
 class DiscoverTvAdapter (
-        private val onSerieClicked: (ResultSearch?) -> Unit,
+        private val onSerieClicked: (ResultSearch?, ImageView?) -> Unit,
         private val onSerieLongClicked: (ResultSearch?) -> Unit
 ) : PagedListAdapter<ResultSearch, DiscoverTvAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK) {
 
@@ -40,7 +41,7 @@ class DiscoverTvAdapter (
             binding.root
     ) {
 
-        fun bind(serie: ResultSearch?, onSerieClicked: (ResultSearch?) -> Unit, onSerieLongClicked: (ResultSearch?) -> Unit) = with(binding) {
+        fun bind(serie: ResultSearch?, onSerieClicked: (ResultSearch?, ImageView?) -> Unit, onSerieLongClicked: (ResultSearch?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                     .load(serie?.posterPath)
                     .placeholder(R.drawable.logo_made_in_brasil)
@@ -48,7 +49,7 @@ class DiscoverTvAdapter (
             tvNameRecyclerViewMenu.text = serie?.name
 
             itemView.setOnClickListener {
-                onSerieClicked(serie)
+                onSerieClicked(serie, cvImageCardMenu)
             }
 
             itemView.setOnLongClickListener {

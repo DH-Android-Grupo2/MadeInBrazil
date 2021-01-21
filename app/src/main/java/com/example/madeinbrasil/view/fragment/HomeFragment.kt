@@ -108,12 +108,14 @@ class HomeFragment : Fragment() {
     }
 
     private val homeAdapter4 : DiscoverTvAdapter by lazy {
-        DiscoverTvAdapter ({ result ->
+        DiscoverTvAdapter ({ result, imageView ->
             result?.let {
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
                 intent.putExtra(Constants.ConstantsFilms.BASE_SERIE_KEY, result)
                 intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 2)
-                startActivity(intent)
+
+                val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
+                startActivity(intent,options.toBundle())
             }
         }, {serie ->
             setLongClickDialogSerie(serie)
