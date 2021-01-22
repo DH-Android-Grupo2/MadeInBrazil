@@ -15,6 +15,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.adapter.SelectSerieAdapter
 import com.example.madeinbrasil.databinding.FragmentSelectSerieBinding
+import com.example.madeinbrasil.model.customLists.ListMediaItem
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
 import com.example.madeinbrasil.viewModel.SelectSerieViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -27,7 +28,7 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: SelectSerieViewModel
 
     private val selectSerieAdapter by lazy {
-        arguments?.getIntArray(SELECTED_SERIES)?.let{ SelectSerieAdapter(it.toMutableList()) }
+        arguments?.getLongArray(SELECTED_SERIES)?.let{ SelectSerieAdapter(it.toMutableList()) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +49,8 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
         }
 
         selectSerieAdapter?.onItemClick = {
-            viewModel.postClikedItem(it)
+            val media = ListMediaItem(it.id.toLong(), it.name, it.backdropPath, it.originalTitle)
+            viewModel.postClickedItem(media)
         }
 
         binding.btnClose.setOnClickListener {

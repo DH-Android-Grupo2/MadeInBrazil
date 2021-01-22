@@ -2,6 +2,7 @@ package com.example.madeinbrasil.database
 
 import android.content.Context
 import androidx.room.*
+import com.example.madeinbrasil.model.customLists.*
 import com.example.madeinbrasil.database.dao.*
 import com.example.madeinbrasil.database.entities.cast.CastEntity
 import com.example.madeinbrasil.database.entities.cast.MidiaPeople
@@ -29,7 +30,7 @@ object MadeInBrazilDatabase {
         MidiaEntity::class, Favorites::class, Watched::class, SeasonEntity::class,
         EpisodeEntity::class, CastEntity::class, MidiaPeople::class, MidiaCastCrossRef::class,
         RecommendationEntity::class, RecommendationMidiaCrossRef::class, SimilarEntity::class,SearchResult::class,
-        SimilarMidiaCrossRef::class], version = 2,exportSchema = false)
+        SimilarMidiaCrossRef::class, CustomList::class, ListSerieItem::class, ListMovieItem::class, ListMovieCrossRef::class, ListSerieCrossRef::class], version = 2,exportSchema = false)
 
     @TypeConverters(GenreConverter::class)
     abstract class MadeInBrazilRoomDatabase : RoomDatabase() {  
@@ -45,6 +46,9 @@ object MadeInBrazilDatabase {
         abstract fun recommendationDao(): RecommendationDao
         abstract fun similarDao(): SimilarDao
         abstract fun FilmsFragmentDao(): FilmsFragmentDao
+        abstract fun customListDao(): CustomListDao
+        abstract fun listMovieItemDao(): ListMovieItemDao
+        abstract fun listSerieItemDao(): ListSerieItemDao
     }
 
     fun getDatabase(context: Context) : MadeInBrazilRoomDatabase{

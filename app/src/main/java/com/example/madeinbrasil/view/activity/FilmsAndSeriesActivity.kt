@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -54,6 +55,11 @@ import kotlinx.android.synthetic.main.youtube_popup.*
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
 import kotlinx.coroutines.launch
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import kotlinx.android.synthetic.main.activity_films_and_series.*
+import kotlinx.android.synthetic.main.choose_list_popup.*
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -61,6 +67,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var viewModelGenderSeries: GenderSerieViewModel
     private lateinit var viewModelMovie: MovieDetailedViewModel
     private lateinit var viewModelSerie: SerieDetailedViewModel
+    private lateinit var customListViewModel: CustomListViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
     private var films: Result? = null
@@ -91,7 +98,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModel.getGenres()
-
+                customListViewModel = ViewModelProvider(this).get(CustomListViewModel::class.java)
                 binding.btSeasonsFilmsSeries.isVisible = false
                 setupObservables()
 
@@ -118,6 +125,27 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                             binding.tvMessageCast.isVisible = false
+                        }
+
+                        // ADDED 21/01
+                        binding.cbListFilmsSeries.setOnClickListener {
+                            val dialog = Dialog(this)
+                            dialog.setContentView(R.layout.choose_list_popup)
+                            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            customListViewModel.getCustomLists()
+
+                            customListViewModel.customLists.observe(this){ list ->
+                                if(list.isEmpty())
+                                    dialog.tvEmptyList.visibility = View.VISIBLE
+                                else
+                                    dialog.rvCustomLists.apply {
+                                        layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+                                        adapter = ChooseListAdapter(list) {
+
+                                        }
+                                    }
+                            }
+                            dialog.show()
                         }
 
                         Glide.with(this)
@@ -369,7 +397,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                 viewModelSerie.getSerieDetailed(series?.id)
                 viewModel.getGenres()
-
+                customListViewModel = ViewModelProvider(this).get(CustomListViewModel::class.java)
                 viewModelSerie.serieDetailedSucess.observe(this) { serie ->
                     serieDetailed = serie
                     setupObservablesSeries()
@@ -442,6 +470,27 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             }
                         }
                         binding.tvMessageCast.isVisible = false
+                    }
+
+                    // ADDED 21/01
+                    binding.cbListFilmsSeries.setOnClickListener {
+                        val dialog = Dialog(this)
+                        dialog.setContentView(R.layout.choose_list_popup)
+                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        customListViewModel.getCustomLists()
+
+                        customListViewModel.customLists.observe(this){ list ->
+                            if(list.isEmpty())
+                                dialog.tvEmptyList.visibility = View.VISIBLE
+                            else
+                                dialog.rvCustomLists.apply {
+                                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+                                    adapter = ChooseListAdapter(list) {
+
+                                    }
+                                }
+                        }
+                        dialog.show()
                     }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {

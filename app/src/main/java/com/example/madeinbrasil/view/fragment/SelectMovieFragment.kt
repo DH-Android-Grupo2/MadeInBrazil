@@ -15,6 +15,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.adapter.SelectMovieAdapter
 import com.example.madeinbrasil.databinding.FragmentSelectMovieBinding
+import com.example.madeinbrasil.model.customLists.ListMediaItem
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.viewModel.SelectMovieViewModel
@@ -29,7 +30,7 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: SelectMovieViewModel
 
     private val selectMovieAdapter by lazy {
-        arguments?.getIntArray(SELECTED_MOVIES)?.let {SelectMovieAdapter(it.toMutableList())}
+        arguments?.getLongArray(SELECTED_MOVIES)?.let {SelectMovieAdapter(it.toMutableList())}
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +51,8 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
         }
 
         selectMovieAdapter?.onItemClick = {
-            viewModel.postClickedItem(it)
+            val media = ListMediaItem(it.id.toLong(), it.title, it.backdropPath, it.originalTitle)
+            viewModel.postClickedItem(media)
         }
 
         binding.btnClose.setOnClickListener {

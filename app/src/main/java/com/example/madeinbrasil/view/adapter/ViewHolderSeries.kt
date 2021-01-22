@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.main_cards.view.*
 class ViewHolderSeries(view: View): RecyclerView.ViewHolder(view) {
     fun bind(serie: Series, position: (Int) -> Unit) = with(itemView) {
         val image = findViewById<ImageView>(R.id.cvImageCard)
-        val nameSerieCardView = findViewById<TextView>(R.id.tvNameRecyclerView)
+        val nameSerieCardView = findViewById<TextView>(R.id.tvNameMedia)
 
         Glide.with(itemView.context)
             .load(serie.img)

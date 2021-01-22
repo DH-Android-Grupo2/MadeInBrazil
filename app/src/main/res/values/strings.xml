@@ -117,6 +117,13 @@
     <string name="string_my_favorites_tutorial_description">Aqui será listado todos os seus filmes favoritos e você pode clicar para ver uma lista mais completa</string>
     <string name="string_my_lists_tutorial_title">Minhas listas</string>
     <string name="string_my_lists_tutorial_description">Clicando aqui, você terá acesso as suas listas!</string>
+    <string name="created_list_success">Lista criada com sucesso!</string>
+    <string name="label_vazia">Vazia</string>
+    <string name="delete_icon_description">Delete icon</string>
+    <string name="edit_icon_description">Edit icon</string>
+    <string name="sem_descricao_label">Nenhuma descrição</string>
+    <string name="sem_itens_label">Sem itens</string>
+    <string name="Nenhuma_lista_criada_label">Nenhuma lista criada ainda.</string>
     <string name="string_cast_not_found">Elenco não encontrado</string>
 
 </resources>

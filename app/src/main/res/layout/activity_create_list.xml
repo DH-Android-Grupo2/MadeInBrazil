@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvPagetitle">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/teetNAme"
+                android:id="@+id/teetName"
                 style="@style/FormTextEdit"
                 android:inputType="textPersonName"
                 android:layout_width="match_parent"
@@ -127,19 +127,20 @@
             app:layout_constraintTop_toBottomOf="@id/imAddSerie"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCreateList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_margin="40dp"
-            android:background="@drawable/save_button"
+            android:background="@drawable/save_button_selector"
             android:text="@string/string_create_list_button"
             android:textStyle="bold"
+            android:enabled="false"
             android:textColor="@color/colorAccent"
             app:layout_constraintTop_toBottomOf="@id/tvButtonLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
