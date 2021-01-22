@@ -234,7 +234,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                 viewModelSerie.getSerieDetailed(series?.id)
                 viewModel.getGenres()
-
+                customListViewModel = ViewModelProvider(this).get(CustomListViewModel::class.java)
                 viewModelSerie.serieDetailedSucess.observe(this) { serie ->
                     serieDetailed = serie
                     setupObservablesSeries()
@@ -305,6 +305,24 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                         }
+                    }
+
+                    // ADDED 21/01
+                    binding.cbListFilmsSeries.setOnClickListener {
+                        val dialog = Dialog(this)
+                        dialog.setContentView(R.layout.choose_list_popup)
+                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        customListViewModel.getCustomLists()
+
+                        customListViewModel.customLists.observe(this){
+                            dialog.rvCustomLists.apply {
+                                layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+                                adapter = ChooseListAdapter(it) {
+
+                                }
+                            }
+                        }
+                        dialog.show()
                     }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {

@@ -2,12 +2,15 @@ package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.adapter.MyListsAdapter
 import com.example.madeinbrasil.databinding.ActivityCustomListDetailsBinding
+import com.example.madeinbrasil.model.customLists.ListMediaItem
 import com.example.madeinbrasil.view.adapter.ListDetailsAdapter
 import com.example.madeinbrasil.view.fragment.MyListsFragment.Companion.LIST_ID
 import com.example.madeinbrasil.viewModel.CustomListViewModel
@@ -16,6 +19,12 @@ class CustomListDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCustomListDetailsBinding
     private lateinit var customListViewMovel: CustomListViewModel
+    private var actionMode: ActionMode? = null
+    private val listDetailsAdapter by lazy {
+        ListDetailsAdapter(mutableListOf()) {
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +33,38 @@ class CustomListDetailsActivity : AppCompatActivity() {
 
         customListViewMovel = ViewModelProvider(this).get(CustomListViewModel::class.java)
         intent?.getLongExtra(LIST_ID, 1)?.let { getListUni(it) }
+
+        listDetailsAdapter.onMediaClick = {
+            enableActionMode(it)
+        }
+
+        listDetailsAdapter.onMediaLongClick = {
+            enableActionMode(it)
+        }
     }
+
+    private fun enableActionMode(position: Int) {
+        if (actionMode == null)
+            startSupportActionMode(object : ActionMode.Callback {
+                override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                    return false
+                }
+
+                override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                    return false
+                }
+
+                override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                    return false
+                }
+
+                override fun onDestroyActionMode(mode: ActionMode?) {
+                }
+
+            })
+        listDetailsAdapter.tooglePosition(position)
+    }
+
 
     private fun getListUni(listId: Long) {
         customListViewMovel.getListUni(listId)
@@ -44,11 +84,11 @@ class CustomListDetailsActivity : AppCompatActivity() {
                 if (media.isNotEmpty())
                 rvListItems.apply {
                     layoutManager = GridLayoutManager(this@CustomListDetailsActivity, 2)
-                    adapter = ListDetailsAdapter(media) {
-
+                    listDetailsAdapter.list = media as MutableList<ListMediaItem>
+                    adapter = listDetailsAdapter
                     }
-                } else
-                    tvEmptyMessage.visibility = View.VISIBLE
+                    else
+                        tvEmptyMessage.visibility = View.VISIBLE
             }
         }
 
