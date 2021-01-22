@@ -45,9 +45,10 @@ class CustomListDetailsActivity : AppCompatActivity() {
 
     private fun enableActionMode(position: Int) {
         if (actionMode == null)
-            startSupportActionMode(object : ActionMode.Callback {
+            actionMode = startSupportActionMode(object : ActionMode.Callback {
                 override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                    return false
+                    mode?.menuInflater?.inflate(R.menu.menu_delete, menu)
+                    return true
                 }
 
                 override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -55,14 +56,28 @@ class CustomListDetailsActivity : AppCompatActivity() {
                 }
 
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                    return false
+                    return true
                 }
 
                 override fun onDestroyActionMode(mode: ActionMode?) {
+                    listDetailsAdapter.let {
+                        it.selectedPositions.clear()
+                        it.selectedItems.clear()
+                        it.notifyDataSetChanged()
+                    }
+
+                    actionMode = null
                 }
 
             })
         listDetailsAdapter.tooglePosition(position)
+        val size = listDetailsAdapter.selectedItems.size
+        if (size == 0) {
+            actionMode?.finish()
+        } else {
+            actionMode?.title = size.toString()
+            actionMode?.invalidate()
+        }
     }
 
 
