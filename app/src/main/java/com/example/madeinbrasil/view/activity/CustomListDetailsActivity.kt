@@ -20,6 +20,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCustomListDetailsBinding
     private lateinit var customListViewMovel: CustomListViewModel
     private var actionMode: ActionMode? = null
+    private var selectedMovies: List<Long>? = null
     private val listDetailsAdapter by lazy {
         ListDetailsAdapter(mutableListOf()) {
 
@@ -56,7 +57,12 @@ class CustomListDetailsActivity : AppCompatActivity() {
                 }
 
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                    return true
+                    if (item?.itemId == R.id.action_delete) {
+                        listDetailsAdapter.deleteMedia()
+                        mode?.finish()
+                        return true
+                    }
+                    return false
                 }
 
                 override fun onDestroyActionMode(mode: ActionMode?) {
@@ -104,6 +110,12 @@ class CustomListDetailsActivity : AppCompatActivity() {
                     }
                     else
                         tvEmptyMessage.visibility = View.VISIBLE
+            }
+
+            customListViewMovel.getCustomListMovieIds(list.list.listId)
+
+            customListViewMovel.customListMovieIds.observe(this) {
+                selectedMovies = it
             }
         }
 

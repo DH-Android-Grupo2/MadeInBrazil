@@ -56,4 +56,8 @@ class CustomListRepository(context: Context) {
         return customListDao.getCustomLists()
     }
 
+    suspend fun getCustomListMovieIds(listId: Long): List<Long> {
+        return listMovieItemDao.getCustomListMovieIds(listId)
+    }
+
 }

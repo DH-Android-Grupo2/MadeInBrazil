@@ -58,4 +58,8 @@ class CustomListBusiness(context: Context) {
     suspend fun getCustomLists(): List<CustomList> {
         return customListRepository.getCustomLists()
     }
+
+    suspend fun getCustomListMovieIds(listId: Long): List<Long> {
+        return customListRepository.getCustomListMovieIds(listId)
+    }
 }

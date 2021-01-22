@@ -53,6 +53,17 @@ class ListDetailsAdapter(var list: MutableList<ListMediaItem>,
         notifyItemChanged(position)
     }
 
+    fun deleteMedia() {
+        list.removeAll(
+            list.filter {
+                selectedItems.contains(it.id)
+            }
+        )
+        selectedItems.clear()
+        selectedPositions.clear()
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(val binding: MyListCardItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mediaItem: ListMediaItem, selectedItems: List<Long>) = with(binding) {

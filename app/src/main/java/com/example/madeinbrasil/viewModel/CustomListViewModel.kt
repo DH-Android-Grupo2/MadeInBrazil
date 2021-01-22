@@ -16,6 +16,7 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
     val uniLists: MutableLiveData<List<ListWithMediaUni>> = MutableLiveData()
     val uniList: MutableLiveData<ListWithMediaUni> = MutableLiveData()
     val customLists: MutableLiveData<List<CustomList>> = MutableLiveData()
+    val customListMovieIds: MutableLiveData<List<Long>> = MutableLiveData()
 
     private val customListBusinnes: CustomListBusiness by lazy {
         CustomListBusiness(application)
@@ -53,6 +54,14 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
         viewModelScope.launch {
             customLists.postValue(
                     customListBusinnes.getCustomLists()
+            )
+        }
+    }
+
+    fun getCustomListMovieIds(listId: Long) {
+        viewModelScope.launch {
+            customListMovieIds.postValue(
+                customListBusinnes.getCustomListMovieIds(listId)
             )
         }
     }
