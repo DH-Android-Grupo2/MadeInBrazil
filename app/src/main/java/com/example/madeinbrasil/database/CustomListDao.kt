@@ -26,6 +26,12 @@ interface CustomListDao {
     @Query("SELECT * from custom_lists WHERE listId = :id")
     suspend fun getListUni(id: Long): ListWithMedia
 
-    @Query("SELECT * from custom_lists WHERE listId = 200")
+    @Query("SELECT * from custom_lists")
     suspend fun getCustomLists(): List<CustomList>
+
+    @Delete
+    suspend fun deleteMoviesFromList(items: List<ListMovieCrossRef>)
+
+    @Delete
+    suspend fun deleteSeriesFromList(items: List<ListSerieCrossRef>)
 }

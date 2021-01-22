@@ -60,4 +60,12 @@ class CustomListRepository(context: Context) {
         return listMovieItemDao.getCustomListMovieIds(listId)
     }
 
+    suspend fun deleteMoviesFromList(items: List<ListMovieCrossRef>) {
+        return customListDao.deleteMoviesFromList(items)
+    }
+
+    suspend fun deleteSeriesFromList(items: List<ListSerieCrossRef>) {
+        return customListDao.deleteSeriesFromList(items)
+    }
+
 }

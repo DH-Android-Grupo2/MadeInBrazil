@@ -66,4 +66,16 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
+    fun deleteMoviesFromList(listId: Long, moviesId: List<Long>) {
+        viewModelScope.launch {
+            customListBusinnes.deleteMoviesFromList(listId, moviesId)
+        }
+    }
+
+    fun deleteSeriesFromList(listId: Long, seriesId: List<Long>) {
+        viewModelScope.launch {
+            customListBusinnes.deleteSeriesFromList(listId, seriesId)
+        }
+    }
+
 }

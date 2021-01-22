@@ -1,9 +1,7 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
-import com.example.madeinbrasil.model.customLists.CustomList
-import com.example.madeinbrasil.model.customLists.ListMediaItem
-import com.example.madeinbrasil.model.customLists.ListWithMediaUni
+import com.example.madeinbrasil.model.customLists.*
 import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
 import com.example.madeinbrasil.repository.CustomListRepository
 
@@ -61,5 +59,21 @@ class CustomListBusiness(context: Context) {
 
     suspend fun getCustomListMovieIds(listId: Long): List<Long> {
         return customListRepository.getCustomListMovieIds(listId)
+    }
+
+    suspend fun deleteMoviesFromList(id: Long, listId: List<Long>) {
+        val items = mutableListOf<ListMovieCrossRef>()
+        listId.forEach {
+            items.add(ListMovieCrossRef(id, it))
+        }
+        return customListRepository.deleteMoviesFromList(items)
+    }
+
+    suspend fun deleteSeriesFromList(id: Long, listId: List<Long>) {
+        val items = mutableListOf<ListSerieCrossRef>()
+        listId.forEach {
+            items.add(ListSerieCrossRef(id, it))
+        }
+        return customListRepository.deleteSeriesFromList(items)
     }
 }

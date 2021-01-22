@@ -2,6 +2,7 @@ package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
     private lateinit var customListViewMovel: CustomListViewModel
     private var actionMode: ActionMode? = null
     private var selectedMovies: List<Long>? = null
+    private var listID: Long? = null
     private val listDetailsAdapter by lazy {
         ListDetailsAdapter(mutableListOf()) {
 
@@ -58,7 +60,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
 
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                     if (item?.itemId == R.id.action_delete) {
-                        deleteItemsDb(listDetailsAdapter.selectedItems)
+                       deleteItemsDb(listDetailsAdapter.selectedItems)
                         listDetailsAdapter.deleteMedia()
                         mode?.finish()
                         return true
@@ -92,6 +94,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
         customListViewMovel.getListUni(listId)
 
         customListViewMovel.uniList.observe(this) { list ->
+            listID = list.list.listId
             with(binding) {
                 tvListName.text = list.list.name
                 list.list.description
@@ -117,12 +120,34 @@ class CustomListDetailsActivity : AppCompatActivity() {
 
             customListViewMovel.customListMovieIds.observe(this) {
                 selectedMovies = it
+                Log.i("MoviesId", it.toString())
             }
         }
 
     }
 
-    private fun deleteItemsDb(selectedItems: List<Long>) {
+    private fun deleteItemsDb(selectedItems: MutableList<Long>) {
+        var selectedSeriesId = mutableListOf<Long>()
+        var selectedMoviesId = mutableListOf<Long>()
+
+        selectedMovies?.let { listMoviesId ->
+            if (listMoviesId.isNotEmpty()) {
+                selectedItems.forEach {
+                    if (!listMoviesId.contains(it)) {
+                        selectedItems.remove(it)
+                        selectedSeriesId.add(it)
+                    }
+                }
+                selectedMoviesId = selectedItems
+            } else {
+                selectedSeriesId = selectedItems
+            }
+        }
+
+            if (selectedSeriesId.isNotEmpty())
+                listID?.let {customListViewMovel.deleteSeriesFromList(it, selectedSeriesId)}
+            if (selectedMoviesId.isNotEmpty())
+                listID?.let {customListViewMovel.deleteMoviesFromList(it, selectedMoviesId)}
 
     }
 }
