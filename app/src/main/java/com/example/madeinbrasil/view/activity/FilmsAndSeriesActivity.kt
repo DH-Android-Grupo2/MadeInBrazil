@@ -34,6 +34,7 @@ import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
+import com.example.madeinbrasil.model.search.movie.SearchResult
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
@@ -279,15 +280,22 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
 
                 viewModelMovie.movieError.observe(this) {midia ->
-                    onApiErrorMovie(midia)
                     lifecycleScope.launch {
                         val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
+                        val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
                         val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
                         val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
                         val dbCast = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
                         val dbRecommendation = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).recommendationDao()
                         val dbSimilar = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).similarDao()
+                        val dbSearch = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).FilmsFragmentDao()
                         var gender = ""
+
+                        if(dbMidia.getMidia().any { it.id == films?.id }) {
+                            onApiErrorMovie(midia, null)
+                        }else {
+                            onApiErrorMovie(null, dbSearch.getResults())
+                        }
 
                         films?.id?.let {
                             dbGender.getGenreById(it).forEach {
@@ -548,15 +556,23 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
 
                 viewModelSerie.serieDetailedError.observe(this) {midia ->
-                    onApiErrorSerie(midia)
+
                     lifecycleScope.launch {
                         val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
+                        val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
                         val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
                         val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
                         val dbCast = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
                         val dbRecommendation = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).recommendationDao()
                         val dbSimilar = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).similarDao()
+                        val dbSearch = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).FilmsFragmentDao()
                         var gender = ""
+
+                        if(dbMidia.getMidia().any { it.id == series?.id }) {
+                            onApiErrorSerie(midia, null)
+                        }else {
+                            onApiErrorSerie(null, dbSearch.getSearchResult())
+                        }
 
                         series?.id?.let {
                             dbGender.getGenreById(it).forEach {
@@ -627,76 +643,137 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
     }
 
-    private fun onApiErrorSerie(serie: List<MidiaEntity>) {
-        serie.forEach {
-            if (it.id == series?.id) {
-                Glide.with(binding.root.context)
-                        .load(it.posterPath)
-                        .placeholder(R.drawable.logo_made_in_brasil)
-                        .into(binding.ivBannerFilmsSeries)
-                it.backdropPath?.let { it1 ->
+    private fun onApiErrorSerie(serie: List<MidiaEntity>?, serie2: List<ResultSearch>?) {
+        if(serie != null) {
+            serie.forEach {
+                if (it.id == series?.id) {
                     Glide.with(binding.root.context)
-                            .load(it.backdropPath)
+                            .load(it.posterPath)
                             .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBannerFilmsSeries)
+                    it.backdropPath?.let { it1 ->
+                        Glide.with(binding.root.context)
+                                .load(it.backdropPath)
+                                .placeholder(R.drawable.logo_made_in_brasil)
+                                .into(binding.ivBackDropFilmSeries)
+                    } ?: Glide.with(this)
+                            .load(R.drawable.logo_made_in_brasil)
                             .into(binding.ivBackDropFilmSeries)
-                } ?: Glide.with(this)
-                        .load(R.drawable.logo_made_in_brasil)
-                        .into(binding.ivBackDropFilmSeries)
 
-                it.episodeRunTime?.forEach {
-                    if (it > 60) {
-                        val horas = listOf(it.div(60))
-                        val min = listOf(it.rem(60))
-                        binding.tvTimeFilmsSeries.text = "${horas[0]}h${min[0]}min"
-                    } else {
-                        binding.tvTimeFilmsSeries.text = "$it min"
+                    it.episodeRunTime?.forEach {
+                        if (it > 60) {
+                            val horas = listOf(it.div(60))
+                            val min = listOf(it.rem(60))
+                            binding.tvTimeFilmsSeries.text = "${horas[0]}h${min[0]}min"
+                        } else {
+                            binding.tvTimeFilmsSeries.text = "$it min"
+                        }
                     }
-                }
 
-                binding.tvDescriptionTextFilmsSeries.text = it.overview
-                binding.tvNameFilmsSeries.text = it.name
-                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
-                it.voteAverage?.let {
-                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
-                    binding.ratingBarFilmsSeries.stepSize = .5f
+                    binding.tvDescriptionTextFilmsSeries.text = it.overview
+                    binding.tvNameFilmsSeries.text = it.name
+                    binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                    it.voteAverage?.let {
+                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                        binding.ratingBarFilmsSeries.stepSize = .5f
+                    }
+                    binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
+                    binding.btStreamingFilmsSeries.isVisible = false
                 }
-                binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
-                binding.btStreamingFilmsSeries.isVisible = false
+            }
+        } else {
+            serie2?.forEach {
+                if (it.id == series?.id) {
+                    Glide.with(binding.root.context)
+                            .load(it.posterPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBannerFilmsSeries)
+                    it.backdropPath?.let { it1 ->
+                        Glide.with(binding.root.context)
+                                .load(it.backdropPath)
+                                .placeholder(R.drawable.logo_made_in_brasil)
+                                .into(binding.ivBackDropFilmSeries)
+                    } ?: Glide.with(this)
+                            .load(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+
+                    binding.tvDescriptionTextFilmsSeries.text = it.overview
+                    binding.tvNameFilmsSeries.text = it.name
+                    binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                    it.voteAverage?.let {
+                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                        binding.ratingBarFilmsSeries.stepSize = .5f
+                    }
+                    binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
+                    binding.btStreamingFilmsSeries.isVisible = false
+                }
             }
         }
+
         Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
-    private fun onApiErrorMovie(movie: List<MidiaEntity>) {
-        movie.forEach {
-            if (it.id == films?.id) {
-                Glide.with(binding.root.context)
-                        .load(it.posterPath)
-                        .placeholder(R.drawable.logo_made_in_brasil)
-                        .into(binding.ivBannerFilmsSeries)
-                it.backdropPath?.let { it1 ->
-                    Glide.with(binding.root.context)
-                            .load(it.backdropPath)
-                            .placeholder(R.drawable.logo_made_in_brasil)
-                            .into(binding.ivBackDropFilmSeries)
-                } ?: Glide.with(this)
-                        .load(R.drawable.logo_made_in_brasil)
-                        .into(binding.ivBackDropFilmSeries)
+    private fun onApiErrorMovie(movie: List<MidiaEntity>?, movie2: List<Result>?) {
 
-                binding.tvDescriptionTextFilmsSeries.text = it.overview
-                binding.tvNameFilmsSeries.text = it.title
-                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
-                it.voteAverage?.let {
-                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
-                    binding.ratingBarFilmsSeries.stepSize = .5f
+        if(movie != null) {
+            movie.forEach {
+                if (it.id == films?.id) {
+                    Glide.with(binding.root.context)
+                            .load(it.posterPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBannerFilmsSeries)
+                    it.backdropPath?.let { it1 ->
+                        Glide.with(binding.root.context)
+                                .load(it.backdropPath)
+                                .placeholder(R.drawable.logo_made_in_brasil)
+                                .into(binding.ivBackDropFilmSeries)
+                    } ?: Glide.with(this)
+                            .load(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+
+                    binding.tvDescriptionTextFilmsSeries.text = it.overview
+                    binding.tvNameFilmsSeries.text = it.title
+                    binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                    it.voteAverage?.let {
+                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                        binding.ratingBarFilmsSeries.stepSize = .5f
+                    }
+                    val horas = it.runtime?.div(60)
+                    val minutos = it.runtime?.rem(60)
+                    binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
+                    binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
+                    binding.btStreamingFilmsSeries.isVisible = false
                 }
-                val horas = it.runtime?.div(60)
-                val minutos = it.runtime?.rem(60)
-                binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
-                binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
-                binding.btStreamingFilmsSeries.isVisible = false
+            }
+        }else {
+            movie2?.forEach {
+                if (it.id == films?.id) {
+                    Glide.with(binding.root.context)
+                            .load(it.posterPath)
+                            .placeholder(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBannerFilmsSeries)
+                    it.backdropPath?.let { it1 ->
+                        Glide.with(binding.root.context)
+                                .load(it.backdropPath)
+                                .placeholder(R.drawable.logo_made_in_brasil)
+                                .into(binding.ivBackDropFilmSeries)
+                    } ?: Glide.with(this)
+                            .load(R.drawable.logo_made_in_brasil)
+                            .into(binding.ivBackDropFilmSeries)
+
+                    binding.tvDescriptionTextFilmsSeries.text = it.overview
+                    binding.tvNameFilmsSeries.text = it.title
+                    binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                    it.voteAverage?.let {
+                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                        binding.ratingBarFilmsSeries.stepSize = .5f
+                    }
+                    binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
+                    binding.btStreamingFilmsSeries.isVisible = false
+                }
             }
         }
+
         Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
