@@ -26,6 +26,6 @@ interface CustomListDao {
     @Query("SELECT * from custom_lists WHERE listId = :id")
     suspend fun getListUni(id: Long): ListWithMedia
 
-    @Query("SELECT * from custom_lists")
+    @Query("SELECT * from custom_lists WHERE listId = 200")
     suspend fun getCustomLists(): List<CustomList>
 }

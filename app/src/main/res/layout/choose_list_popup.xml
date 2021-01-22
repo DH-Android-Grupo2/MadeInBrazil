@@ -37,4 +37,19 @@
         app:layout_constraintStart_toStartOf="@id/ticketView"
         app:layout_constraintBottom_toBottomOf="@id/ticketView"/>
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvEmptyList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:text="@string/Nenhuma_lista_criada_label"
+        android:textColor="@color/colorAccent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="28sp"
+        app:layout_constraintTop_toTopOf="@id/ticketView"
+        app:layout_constraintEnd_toEndOf="@id/ticketView"
+        app:layout_constraintStart_toStartOf="@id/ticketView"
+        app:layout_constraintBottom_toBottomOf="@id/ticketView"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

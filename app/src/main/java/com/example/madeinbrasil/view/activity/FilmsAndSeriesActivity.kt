@@ -119,13 +119,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                             customListViewModel.getCustomLists()
 
-                            customListViewModel.customLists.observe(this){
-                                dialog.rvCustomLists.apply {
-                                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
-                                    adapter = ChooseListAdapter(it) {
-                                        
+                            customListViewModel.customLists.observe(this){ list ->
+                                if(list.isEmpty())
+                                    dialog.tvEmptyList.visibility = View.VISIBLE
+                                else
+                                    dialog.rvCustomLists.apply {
+                                        layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+                                        adapter = ChooseListAdapter(list) {
+
+                                        }
                                     }
-                                }
                             }
                             dialog.show()
                         }
@@ -314,13 +317,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                         customListViewModel.getCustomLists()
 
-                        customListViewModel.customLists.observe(this){
-                            dialog.rvCustomLists.apply {
-                                layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
-                                adapter = ChooseListAdapter(it) {
+                        customListViewModel.customLists.observe(this){ list ->
+                            if(list.isEmpty())
+                                dialog.tvEmptyList.visibility = View.VISIBLE
+                            else
+                                dialog.rvCustomLists.apply {
+                                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+                                    adapter = ChooseListAdapter(list) {
 
+                                    }
                                 }
-                            }
                         }
                         dialog.show()
                     }

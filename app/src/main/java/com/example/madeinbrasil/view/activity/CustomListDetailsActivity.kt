@@ -58,6 +58,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
 
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                     if (item?.itemId == R.id.action_delete) {
+                        deleteItemsDb(listDetailsAdapter.selectedItems)
                         listDetailsAdapter.deleteMedia()
                         mode?.finish()
                         return true
@@ -118,6 +119,10 @@ class CustomListDetailsActivity : AppCompatActivity() {
                 selectedMovies = it
             }
         }
+
+    }
+
+    private fun deleteItemsDb(selectedItems: List<Long>) {
 
     }
 }

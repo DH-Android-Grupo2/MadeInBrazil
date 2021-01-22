@@ -123,5 +123,6 @@
     <string name="edit_icon_description">Edit icon</string>
     <string name="sem_descricao_label">Nenhuma descrição</string>
     <string name="sem_itens_label">Sem itens</string>
+    <string name="Nenhuma_lista_criada_label">Nenhuma lista criada ainda.</string>
 
 </resources>
