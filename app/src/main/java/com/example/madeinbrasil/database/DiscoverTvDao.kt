@@ -22,8 +22,9 @@ interface DiscoverTvDao {
     suspend fun insertSearchTV(tv: List<ResultSearch>)
 
 
-    @Query("SELECT * FROM home_discover WHERE type == 1")
-    suspend fun getSearchTV() : List<ResultSearch>
+    @Query("SELECT * FROM home_discover WHERE type == 1 AND name LIKE :query ")
+    suspend fun getSearchQueryTV(query : String) : List<ResultSearch>
+
 
 
 }

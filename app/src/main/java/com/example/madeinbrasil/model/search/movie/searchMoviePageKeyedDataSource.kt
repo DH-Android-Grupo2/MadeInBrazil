@@ -11,6 +11,7 @@ import com.example.madeinbrasil.utils.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 class searchMoviePageKeyedDataSource (
         private val context : Context,
@@ -56,10 +57,18 @@ class searchMoviePageKeyedDataSource (
                 is ResponseAPI.Error -> {
 
 
-                    val searchMovie = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
-                    val movie = searchMovie.getSearchMovies()
+                    val subQuery = query.trim()
+                    if (subQuery.isEmpty() || subQuery == "" ) {
+                        callback.onResult(mutableListOf(), null, Constants.Paging.FIRST_PAGE + 1)
+                    } else {
 
-                    callback.onResult(movie, null, Constants.Paging.FIRST_PAGE + 1)
+                        val searchMovie = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
+                        val stringQuery = StringBuilder()
+                        stringQuery.append("%").append(query).append("%")
+                        val movie = searchMovie.getSearchQueryMovie(stringQuery.toString())
+                        callback.onResult(movie, null, Constants.Paging.FIRST_PAGE + 1)
+
+                    }
                 }
             }
         }

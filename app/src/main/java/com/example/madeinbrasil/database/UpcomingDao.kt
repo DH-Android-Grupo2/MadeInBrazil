@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.database
 
 import androidx.room.*
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.GenreConverter
 import com.example.madeinbrasil.model.upcoming.Result
 
@@ -23,8 +24,11 @@ interface UpcomingDao {
     @Query("SELECT * FROM movies_home WHERE type == 3")
     suspend fun getDiscover(): List<Result>
 
-    @Query("SELECT * FROM movies_home WHERE type == 0")
-    suspend fun getSearchMovies() : List<Result>
+
+
+    @Query("SELECT * FROM movies_home WHERE type == 0 AND title LIKE :query")
+    suspend fun getSearchQueryMovie(query : String) : List<Result>
+
 
 
 }

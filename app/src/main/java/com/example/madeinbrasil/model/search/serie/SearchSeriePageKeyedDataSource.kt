@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.model.search.serie
 
 import android.content.Context
+import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
@@ -11,6 +12,7 @@ import com.example.madeinbrasil.utils.Constants.Paging.FIRST_PAGE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 class SearchSeriePageKeyedDataSource(
         private val context: Context,
@@ -59,12 +61,19 @@ class SearchSeriePageKeyedDataSource(
                 }
                 is ResponseAPI.Error -> {
 
-                    val searchTV = MadeInBrazilDatabase.getDatabase(context).discoverDao()
-                   val tv =  searchTV.getSearchTV()
-
-
-                    callback.onResult(tv, null, FIRST_PAGE + 1)
+                    val subQuery = query.trim()
+                    Log.d("TAGQuery",query)
+                    if (subQuery.isEmpty() || subQuery == "" ) {
+                        callback.onResult(mutableListOf(), null, FIRST_PAGE + 1)
+                    } else {
+                        val searchTV = MadeInBrazilDatabase.getDatabase(context).discoverDao()
+                        val stringQuery = StringBuilder()
+                        stringQuery.append("%").append(query).append("%")
+                        val tv =  searchTV.getSearchQueryTV(stringQuery.toString())
+                        callback.onResult(tv, null, FIRST_PAGE + 1)
+                    }
                 }
+
             }
         }
     }
