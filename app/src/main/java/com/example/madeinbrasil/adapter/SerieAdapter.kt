@@ -12,7 +12,8 @@ import com.example.madeinbrasil.model.search.ResultSearch
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 
 class SerieAdapter(
-    private val onSerieClicked: (ResultSearch?) -> Unit
+    private val onSerieClicked: (ResultSearch?) -> Unit,
+    private val onSerieLongClicked: (ResultSearch?) -> Unit
 ):PagedListAdapter<ResultSearch, SerieAdapter.ViewHolder>(ResultSearch.DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,14 +23,14 @@ class SerieAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onSerieClicked)
+        holder.bind(getItem(position), onSerieClicked, onSerieLongClicked)
     }
 
     class ViewHolder(
         val binding: MainCardsBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(serie: ResultSearch?, onSerieClicked: (ResultSearch?) -> Unit) = with(binding) {
+        fun bind(serie: ResultSearch?, onSerieClicked: (ResultSearch?) -> Unit, onSerieLongClicked: (ResultSearch?) -> Unit) = with(binding) {
             Glide.with(itemView.context)
                 .load(serie?.posterPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -43,19 +44,7 @@ class SerieAdapter(
             }
 
             itemView.setOnLongClickListener {
-                val dialog = android.app.Dialog(it.context)
-                dialog.setContentView(R.layout.filmsseries_popup)
-                dialog.window?.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
-
-                Glide.with(it.context)
-                    .load(serie?.posterPath)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.logo_made_in_brasil)
-                    .into(dialog.ivDialogPoster)
-
-                dialog.tvDialogName.text = serie?.name
-                dialog.show()
-
+                onSerieLongClicked(serie)
                 return@setOnLongClickListener true
             }
         }

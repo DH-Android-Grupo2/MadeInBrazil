@@ -7,16 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.view.ActionMode
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.FragmentFavoritesBinding
-import com.example.madeinbrasil.model.home.FilmRepository
-import com.example.madeinbrasil.view.adapter.MainAdapterFilm
+import kotlinx.coroutines.launch
 
-class FavoritesFragment : Fragment() {
+class FavoritesFragment() : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
-    private val listFilms = FilmRepository().setFilms()
     var actionMode: ActionMode? = null
 
     override fun onCreateView(
@@ -31,9 +31,14 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.findViewById<RecyclerView>(R.id.rvCardsListFavorites)?.apply {
-            layoutManager = GridLayoutManager(activity, 2)
-            adapter = MainAdapterFilm(listFilms) {
+        activity?.let {activity ->
+            val db = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
+
+            lifecycleScope.launch {
+                binding.rvCardsListFavorites.apply {
+                    layoutManager = GridLayoutManager(activity, 2)
+                    adapter = FavoriteMidiaAdapter(db.getMidiaWithFavorites())
+                }
 
             }
         }
@@ -51,7 +56,6 @@ class FavoritesFragment : Fragment() {
                     setDropDownViewResource(R.layout.custom_spinner_dropdown)
                 }
             }
-
         }
     }
 

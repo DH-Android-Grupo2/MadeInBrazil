@@ -12,7 +12,6 @@ import androidx.core.widget.doOnTextChanged
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.ActivityLogInBinding
-import com.example.madeinbrasil.model.users.Users
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -24,7 +23,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_log_in.*
-import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

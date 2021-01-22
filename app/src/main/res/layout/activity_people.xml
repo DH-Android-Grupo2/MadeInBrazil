@@ -30,7 +30,7 @@
                 android:scaleType="centerCrop"
                 android:alpha="0.2"
                 android:contentDescription="BackDrop"
-                android:src="@drawable/auto_da_compadecida_capa"/>
+                android:src="@drawable/logo_made_in_brasil"/>
 
         </com.github.florent37.shapeofview.shapes.ArcView>
 
@@ -56,7 +56,7 @@
                 android:layout_width="150dp"
                 android:layout_height="250dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/auto_da_compadecida_capa"/>
+                android:src="@drawable/logo_made_in_brasil"/>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -65,7 +65,7 @@
             android:layout_width="210sp"
             android:layout_height="wrap_content"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="O Auto da Compadecida"
+            android:text="Made In Brasil"
             android:textSize="16sp"
             android:layout_marginStart="15dp"
             app:layout_constraintStart_toEndOf="@id/cvFilmsSeries"
@@ -75,21 +75,11 @@
         <TextView
             android:id="@+id/tvYearFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="(2000)"
+            android:text="(0000)"
             android:textColor="@color/colorAccentOpaque"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/tvNameFilmsSeries"
-            app:layout_constraintBottom_toTopOf="@id/tvGenderFilmsSeries"/>
-
-        <TextView
-            android:id="@+id/tvGenderFilmsSeries"
-            style="@style/TextViewFilmsSeriesDefault"
-            android:text=""
-            android:textSize="14sp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
-            app:layout_constraintTop_toBottomOf="@id/tvYearFilmsSeries"/>
+            app:layout_constraintTop_toBottomOf="@id/tvNameFilmsSeries" />
 
         <TextView
             android:id="@+id/tvDescriptionTitleFilmsSeries"

@@ -33,6 +33,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/logoMadeInBrasil"
@@ -47,7 +48,7 @@
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
             app:layout_constraintTop_toBottomOf="@id/tvLancamentosRecycler"/>
 
         <TextView
@@ -59,7 +60,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
             app:layout_constraintTop_toBottomOf="@id/rvCardsListLancamentos"
             />
 
@@ -72,7 +73,7 @@
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
             app:layout_constraintTop_toBottomOf="@id/tvFuturosLancamentosRecycler"/>
 
         <TextView
@@ -84,7 +85,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
             app:layout_constraintTop_toBottomOf="@id/rvCardsListFuturosLancamentos"
             />
 
@@ -97,7 +98,7 @@
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
             app:layout_constraintTop_toBottomOf="@id/tvSugestoesRecycler"/>
 
         <TextView
@@ -109,7 +110,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
             app:layout_constraintTop_toBottomOf="@id/rvCardsListMovies"
             />
 
@@ -121,7 +122,7 @@
             tools:listitem="@layout/main_cards_menu"
             tools:itemCount="1"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
             app:layout_constraintTop_toBottomOf="@id/tvCardListSeries"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

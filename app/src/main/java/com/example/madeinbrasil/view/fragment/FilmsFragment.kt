@@ -1,8 +1,11 @@
 package com.example.madeinbrasil.view.fragment
 
 import android.app.Application
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.icu.text.IDNA
 import android.os.Bundle
 import android.util.Log
@@ -12,14 +15,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
 import android.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.airbnb.lottie.LottieAnimationView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.FilmsAdapter
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.favorites.Favorites
+import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
+import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
@@ -27,8 +39,10 @@ import com.example.madeinbrasil.viewModel.FilmsViewModel
 import com.example.madeinbrasil.view.activity.UserActivity
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import kotlinx.android.synthetic.main.filmsseries_popup.*
 import kotlinx.android.synthetic.main.fragment_films.*
 import java.lang.Appendable
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -39,7 +53,7 @@ class FilmsFragment(
     private lateinit var viewModel: FilmsViewModel
 
     private val filmsAdapter : FilmsAdapter by lazy {
-        FilmsAdapter {
+        FilmsAdapter ({
             val movieClicked = it
             movieClicked?.let{result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
@@ -47,8 +61,7 @@ class FilmsFragment(
                 intent.putExtra(ID_FRAGMENTS, 1)
                 startActivity(intent)
             }
-
-        }
+        }, {value -> setLongClickDialog(value) })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -146,5 +159,100 @@ class FilmsFragment(
         startActivity(intent)
     }
 
+    private fun setLongClickDialog(value: Result?) {
+        activity?.let {activity ->
+            val dialog = Dialog(activity)
+            dialog.setContentView(R.layout.filmsseries_popup)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            Glide.with(activity)
+                .load(value?.posterPath)
+                .placeholder(R.drawable.logo_made_in_brasil)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(dialog.ivDialogPoster)
+
+            dialog.tvDialogName.text = value?.title
+            dialog.cbShare.setOnClickListener {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+
+                    putExtra(Intent.EXTRA_TEXT, "Filme: ${value?.title} by MadeInBrasil")
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TITLE, "Filme: ${value?.title} \nShared by MadeInBrasil")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                }
+                val shareIntent = Intent.createChooser(sendIntent, "null")
+                ContextCompat.startActivity(it.context, shareIntent, null)
+            }
+
+            dialog.cbFavorite.setOnCheckedChangeListener { _, isChecked ->
+                lifecycleScope.launch {
+                    val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
+                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
+
+                    value?.let {
+                        val fav = Favorites(it.id, it.id, isChecked)
+                        val midia = MidiaEntity(value.id, value.backdropPath, "", value.originalLanguage,
+                                value.originalTitle, value.overview, value.popularity, value.posterPath, value.releaseDate,
+                                0, value.title, value.voteAverage?.toDouble(), value.voteCount, listOf(0), "",
+                                "", midiaType = 1)
+
+                        if(isChecked) {
+                            dbFav.insertFavorite(fav)
+                            dbMidia.insertMidia(midia)
+                        }else {
+                            dbFav.deleteByIdFavorites(it.id)
+                        }
+                    }
+                }
+            }
+
+            dialog.cbWatched.setOnCheckedChangeListener { _, isChecked ->
+                lifecycleScope.launch {
+                    val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
+                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
+
+                    value?.let {
+                        val watched = Watched(it.id, it.id, isChecked)
+                        val midia = MidiaEntity(value.id, value.backdropPath, "", value.originalLanguage,
+                                value.originalTitle, value.overview, value.popularity, value.posterPath, value.releaseDate,
+                                0, value.title, value.voteAverage?.toDouble(), value.voteCount, listOf(0), "",
+                                "", midiaType = 1)
+
+                        if(isChecked) {
+                            dbWatched.insertWatched(watched)
+                            dbMidia.insertMidia(midia)
+                        }else {
+                            dbWatched.deleteByIdWatched(it.id)
+                        }
+                    }
+                }
+            }
+
+            lifecycleScope.launch {
+                val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
+                val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
+
+                dbFav.getMidiaWithFavorites().forEach {
+                    if(it.midia.id == value?.id) {
+                        it.favorites.forEach {
+                            dialog.cbFavorite.isChecked = it.isChecked
+                        }
+                    }
+                }
+
+                dbWatched.getMidiaWithWatched().forEach {
+                    if(it.midia.id == value?.id) {
+                        it.watched.forEach {
+                            dialog.cbWatched.isChecked = it.isChecked
+                        }
+                    }
+                }
+            }
+
+            dialog.show()
+        }
+    }
 }
 

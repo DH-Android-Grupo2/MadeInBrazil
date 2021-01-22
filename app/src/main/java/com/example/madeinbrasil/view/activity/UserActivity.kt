@@ -1,23 +1,37 @@
 package com.example.madeinbrasil.view.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
+import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.ActivityUserBinding
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
+import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
+    private val ACTIVITY_CALLBACK = 1
+    private var reviewInfo: ReviewInfo? = null
+    private lateinit var reviewManager: ReviewManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +41,7 @@ class UserActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btLogOut.setOnClickListener {
+//            setUpAvaliation()
             startLoginActivity(this@UserActivity)
         }
 
@@ -44,6 +59,32 @@ class UserActivity : AppCompatActivity() {
 
         binding.tvListasRecycler.setOnClickListener {
             startMyProfileOptionsActivity(this@UserActivity)
+        }
+
+        lifecycleScope.launch {
+            val db = MadeInBrazilDatabase.getDatabase(this@UserActivity).favoriteDao()
+            val dbWatched = MadeInBrazilDatabase.getDatabase(this@UserActivity).watchedDao()
+            var countMovie = 0
+            var countSerie = 0
+
+            binding.rvCardsListFavorites.apply {
+                layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = FavoriteMidiaAdapter(db.getMidiaWithFavorites())
+            }
+
+            dbWatched.getMidiaWithWatched().forEach {
+                when(it.midia.midiaType) {
+                    1 -> {
+                        countMovie++
+                    }
+                    2 -> {
+                        countSerie++
+                    }
+                }
+            }
+
+            binding.tvNumMovies.text = countMovie.toString()
+            binding.tvNumSeries.text = countSerie.toString()
         }
 
         setupUser()
@@ -122,4 +163,24 @@ class UserActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
         }
     }
+
+//    private fun setUpAvaliation() {
+//        val manager = ReviewManagerFactory.create(this)
+//        val request = manager.requestReviewFlow()
+//        var reviewInfo: ReviewInfo? = null
+//
+//        request.addOnCompleteListener { request ->
+//            if (request.isSuccessful) {
+//                reviewInfo = request.result
+//            }else {
+//                reviewInfo = null
+//            }
+//        }
+//        reviewInfo?.let {
+//            val flow = manager.launchReviewFlow(this@UserActivity, it)
+//            flow.addOnCompleteListener {  }
+//                    .addOnFailureListener {  }
+//                    .addOnSuccessListener {  }
+//        }
+//    }
 }

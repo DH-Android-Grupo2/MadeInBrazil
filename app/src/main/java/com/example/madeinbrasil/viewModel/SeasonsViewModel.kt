@@ -1,19 +1,27 @@
 package com.example.madeinbrasil.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.business.SeasonsBusiness
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.season.EpisodeEntity
+import com.example.madeinbrasil.database.entities.season.SeasonEntity
 import com.example.madeinbrasil.model.seasons.Seasons
 import kotlinx.coroutines.launch
 
-class SeasonsViewModel: ViewModel() {
-
+class SeasonsViewModel(application: Application): AndroidViewModel(application) {
     val seasonSucess: MutableLiveData<Seasons> = MutableLiveData()
     val seasonError: MutableLiveData<String> = MutableLiveData()
+    private val seasonDB by lazy {
+        MadeInBrazilDatabase.getDatabase(application).seasonDao()
+    }
+
     private val businessDetailed by lazy {
-        SeasonsBusiness()
+        SeasonsBusiness(application)
     }
 
     fun getSeasons(serieId: Int?, seasonId: Int?) {
@@ -26,6 +34,12 @@ class SeasonsViewModel: ViewModel() {
                     seasonError.postValue(response.message)
                 }
             }
+        }
+    }
+
+    fun insertEpisode(ep: EpisodeEntity) {
+        viewModelScope.launch {
+            businessDetailed.insertEpisode(ep)
         }
     }
 }
