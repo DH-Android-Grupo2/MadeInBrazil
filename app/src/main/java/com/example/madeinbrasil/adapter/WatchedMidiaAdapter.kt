@@ -32,11 +32,11 @@ class WatchedMidiaAdapter(
             when(watched.midia.midiaType) {
                 1 -> {
                     Glide.with(itemView.context).load(watched.midia.posterPath).into(cvImageCard)
-                    tvNameRecyclerView.text = watched.midia.title
+                    tvNameMedia.text = watched.midia.title
                 }
                 2 -> {
                     Glide.with(itemView.context).load(watched.midia.posterPath).into(cvImageCard)
-                    tvNameRecyclerView.text = watched.midia.name
+                    tvNameMedia.text = watched.midia.name
                 }
             }
         }

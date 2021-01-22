@@ -33,11 +33,11 @@ class FavoriteMidiaAdapter(
             when(favorite.midia.midiaType) {
                 1 -> {
                     Glide.with(itemView.context).load(favorite.midia.posterPath).into(cvImageCard)
-                    tvNameRecyclerView.text = favorite.midia.title
+                    tvNameMedia.text = favorite.midia.title
                 }
                 2 -> {
                     Glide.with(itemView.context).load(favorite.midia.posterPath).into(cvImageCard)
-                    tvNameRecyclerView.text = favorite.midia.name
+                    tvNameMedia.text = favorite.midia.name
                 }
             }
         }
