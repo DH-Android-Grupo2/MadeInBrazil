@@ -25,7 +25,8 @@ class SplashActivity : AppCompatActivity() {
     private val providers by lazy {
         arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build()
+            AuthUI.IdpConfig.GoogleBuilder().build(),
+            AuthUI.IdpConfig.FacebookBuilder().build()
         )
     }
 
@@ -85,6 +86,7 @@ class SplashActivity : AppCompatActivity() {
             val customLayout = AuthMethodPickerLayout.Builder(R.layout.activity_initial)
                 .setEmailButtonId(R.id.btLoginInitial)
                 .setGoogleButtonId(R.id.btGoogleInitial)
+                .setFacebookButtonId(R.id.btFaceInitial)
                 .build()
 
             startActivityForResult(
