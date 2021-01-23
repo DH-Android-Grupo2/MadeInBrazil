@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import com.example.madeinbrasil.R
 import com.firebase.ui.auth.AuthMethodPickerLayout
@@ -75,17 +76,12 @@ class SplashActivity : AppCompatActivity() {
                             Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
                         }
                 }
-
-
-            } else {
-                Toast.makeText(this,"Login não foi bem Sucedido",Toast.LENGTH_SHORT).show()
-            }
+            } else Toast.makeText(this,"Login não foi bem Sucedido",Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun changeToLogin(){
-        Handler().postDelayed({
-
+        Handler(Looper.getMainLooper()).postDelayed({
             val customLayout = AuthMethodPickerLayout.Builder(R.layout.activity_initial)
                 .setEmailButtonId(R.id.btLoginInitial)
                 .setGoogleButtonId(R.id.btGoogleInitial)
@@ -101,13 +97,6 @@ class SplashActivity : AppCompatActivity() {
                     .build(),
                 RC_SIGN_IN
             )
-        }, 1000)
-    }
-
-    private fun changeToMain(){
-        val intent = Intent(this, MenuActivity::class.java)
-        Handler().postDelayed({
-            intent.change()
         }, 1000)
     }
 
