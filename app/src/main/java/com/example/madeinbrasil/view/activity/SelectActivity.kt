@@ -73,7 +73,7 @@ class SelectActivity : AppCompatActivity() {
     }
 
     private fun signIn() {
-        startActivity(Intent(this, InitialActivity::class.java))
+        startActivity(Intent(this, SplashActivity::class.java))
         finish()
     }
 
