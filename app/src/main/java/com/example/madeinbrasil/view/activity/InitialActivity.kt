@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityInitialBinding
+import com.example.madeinbrasil.model.gender.GenreSelected
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -29,6 +31,9 @@ class InitialActivity : AppCompatActivity() {
 
     private val firebaseAuth by lazy {
         Firebase.auth
+    }
+    private val db by lazy {
+        Firebase.firestore
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,12 +60,31 @@ class InitialActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        var selectedGenres = mutableListOf<String>()
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == Activity.RESULT_OK) {
-                val intent = Intent(this, SelectActivity::class.java)
-                startActivity(intent)
-                finish()
+                val user = firebaseAuth.currentUser
+                val intentFirstTime = Intent(this, SelectActivity::class.java)
+                val intent = Intent(this, MenuActivity::class.java)
+                user?.let{ it ->
+                    val documentReference = db.collection(FIREBASE_COLLECTION_USERS).document(user.uid)
+                    documentReference.get()
+                            .addOnSuccessListener { snapshot ->
+                                snapshot?.data?.let {dataSnapshot->
+                                    startActivity(intent)
+                                    finish()
+                                } ?: run {
+                                    startActivity(intentFirstTime)
+                                    finish()
+                                }
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
+                            }
+                    //finish()
+                }
+
+
             } else {
                 Toast.makeText(this,"Login não foi bem Sucedido",Toast.LENGTH_SHORT).show()
             }
@@ -69,6 +93,11 @@ class InitialActivity : AppCompatActivity() {
 
     companion object {
         private const val RC_SIGN_IN = 999
+        private const val FIREBASE_COLLECTION_USERS = "users"
+    }
+
+    fun usuarioOk(){
+
     }
 }
 

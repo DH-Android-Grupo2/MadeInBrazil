@@ -24,6 +24,8 @@ import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 
@@ -41,8 +43,8 @@ class UserActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btLogOut.setOnClickListener {
-//            setUpAvaliation()
-            startLoginActivity(this@UserActivity)
+            Firebase.auth.signOut()
+            signIn()
         }
 
         binding.imBackButton.setOnClickListener {
@@ -141,6 +143,11 @@ class UserActivity : AppCompatActivity() {
     private fun startLoginActivity(context: Context) {
         val intent = Intent(context, LogInActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun signIn() {
+        startActivity(Intent(this, InitialActivity::class.java))
+        finish()
     }
 
     private fun setupUser(){
