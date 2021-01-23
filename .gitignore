@@ -310,3 +310,4 @@ Thumbs.db
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,android,androidstudio,kotlin
+/app/google-services.json
