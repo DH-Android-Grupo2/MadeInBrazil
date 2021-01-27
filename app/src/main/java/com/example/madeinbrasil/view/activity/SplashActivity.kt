@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.example.madeinbrasil.R
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -32,17 +33,8 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        firebaseAuth.currentUser?.let {
-            val documentReference = db.collection(FIREBASE_COLLECTION_USERS).document(it.uid)
-            documentReference.get()
-                .addOnSuccessListener { snapshot ->
-                    val intent = Intent(this, MenuActivity::class.java)
-
-                    startActivity(intent)
-                    finish()
-                }.addOnFailureListener {
-                    Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
-                }
+        firebaseAuth.currentUser?.let { user->
+            temBanco(user)
         }?: run {
             changeToLogin()
         }
@@ -59,23 +51,8 @@ class SplashActivity : AppCompatActivity() {
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == Activity.RESULT_OK) {
                 val user = firebaseAuth.currentUser
-                val intentFirstTime = Intent(this, SelectActivity::class.java)
-                val intent = Intent(this, MenuActivity::class.java)
                 user?.let{ it ->
-                    val documentReference = db.collection(FIREBASE_COLLECTION_USERS).document(user.uid)
-                    documentReference.get()
-                        .addOnSuccessListener { snapshot ->
-                            snapshot?.data?.let {dataSnapshot->
-                                startActivity(intent)
-                                finish()
-                            } ?: run {
-                                startActivity(intentFirstTime)
-                                finish()
-                            }
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
-                        }
+                    temBanco(user)
                 }
             } else Toast.makeText(this,"Login não foi bem Sucedido",Toast.LENGTH_SHORT).show()
         }
@@ -105,6 +82,26 @@ class SplashActivity : AppCompatActivity() {
     private fun Intent.change(){
         startActivity(this)
         finish()
+    }
+
+    private fun temBanco(user:FirebaseUser){
+        val intentFirstTime = Intent(this, SelectActivity::class.java)
+        val intent = Intent(this, MenuActivity::class.java)
+
+        val documentReference = db.collection(FIREBASE_COLLECTION_USERS).document(user.uid)
+        documentReference.get()
+                .addOnSuccessListener { snapshot ->
+                    snapshot.data?.let {
+                        startActivity(intent)
+                        finish()
+                    } ?: run {
+                        startActivity(intentFirstTime)
+                        finish()
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
+                }
     }
 
     companion object {

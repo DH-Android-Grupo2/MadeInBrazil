@@ -1,33 +1,26 @@
 package com.example.madeinbrasil.view.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.ActivityUserBinding
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
+import java.io.File
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
@@ -35,15 +28,22 @@ class UserActivity : AppCompatActivity() {
     private var reviewInfo: ReviewInfo? = null
     private lateinit var reviewManager: ReviewManager
 
+    private val auth by lazy {
+        Firebase.auth
+    }
+    private val storageRef by lazy {
+        Firebase.storage.reference
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
-
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.tvNomeProfile.text = auth.currentUser?.displayName
+
         binding.btLogOut.setOnClickListener {
-            Firebase.auth.signOut()
+            auth.signOut()
             signIn()
         }
 

@@ -28,16 +28,20 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btGoogleInitial"
-        style="@style/ButtonWatchedFragment"
-        android:text="Google"
+        style="@style/ButtonSocialFragment"
+        android:drawableStart="@drawable/google"
+        android:height="50sp"
+        android:width="50sp"
+        android:padding="10sp"
         app:layout_constraintEnd_toStartOf="@id/btFaceInitial"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btLoginInitial" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btFaceInitial"
-        style="@style/ButtonWatchedFragment"
-        android:text="Facebook"
+        style="@style/ButtonSocialFragment"
+        android:drawableStart="@drawable/facebook"
+        android:padding="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btGoogleInitial"
         app:layout_constraintTop_toBottomOf="@id/btLoginInitial" />
