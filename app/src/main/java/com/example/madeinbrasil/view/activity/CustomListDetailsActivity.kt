@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityCustomListDetailsBinding
@@ -15,6 +16,7 @@ import com.example.madeinbrasil.model.customLists.ListMediaItem
 import com.example.madeinbrasil.view.adapter.ListDetailsAdapter
 import com.example.madeinbrasil.view.fragment.MyListsFragment.Companion.LIST_ID
 import com.example.madeinbrasil.viewModel.CustomListViewModel
+import kotlinx.coroutines.launch
 
 class CustomListDetailsActivity : AppCompatActivity() {
 
@@ -105,7 +107,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
                     tvListDescription.text = desc
 
                 val media = list.media
-
+                Log.i("listMedia", media.toString())
                 if (media.isNotEmpty())
                 rvListItems.apply {
                     layoutManager = GridLayoutManager(this@CustomListDetailsActivity, 2)
@@ -133,21 +135,21 @@ class CustomListDetailsActivity : AppCompatActivity() {
         selectedMovies?.let { listMoviesId ->
             if (listMoviesId.isNotEmpty()) {
                 selectedItems.forEach {
-                    if (!listMoviesId.contains(it)) {
-                        selectedItems.remove(it)
+                    if (!listMoviesId.contains(it))
                         selectedSeriesId.add(it)
-                    }
+                    else
+                        selectedMoviesId.add(it)
                 }
-                selectedMoviesId = selectedItems
             } else {
                 selectedSeriesId = selectedItems
             }
         }
 
             if (selectedSeriesId.isNotEmpty())
-                listID?.let {customListViewMovel.deleteSeriesFromList(it, selectedSeriesId)}
+                listID?.let { customListViewMovel.deleteSeriesFromList(it, selectedSeriesId) }
+
             if (selectedMoviesId.isNotEmpty())
-                listID?.let {customListViewMovel.deleteMoviesFromList(it, selectedMoviesId)}
+                listID?.let { customListViewMovel.deleteMoviesFromList(it, selectedMoviesId) }
 
     }
 }
