@@ -171,7 +171,7 @@ class LogInActivity : AppCompatActivity() {
 
 
     private fun passwordLength(count: Int) {
-        if (count >= 5) {
+        if (count >= 6) {
             validationPassword = true
             tilLoginPassword.isErrorEnabled = false
         } else {

@@ -55,11 +55,11 @@ class UserActivity : AppCompatActivity() {
             startFriendsActivity(this@UserActivity)
         }
 
-        binding.tvFavoritesRecycler.setOnClickListener {
+        binding.favoritesCardView.setOnClickListener {
             startMyProfileOptionsActivity(this@UserActivity)
         }
 
-        binding.tvListasRecycler.setOnClickListener {
+        binding.listsCardView.setOnClickListener {
             startMyProfileOptionsActivity(this@UserActivity)
         }
 

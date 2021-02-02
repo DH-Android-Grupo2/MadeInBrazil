@@ -13,6 +13,16 @@ import com.example.madeinbrasil.database.entities.season.SeasonEntity
 import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
+import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_FAVORITES
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USER
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_WATCHED
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.tasks.await
 
 class SerieDetailedRepository(val context: Context) {
     private val watchedDao by lazy {
@@ -33,6 +43,15 @@ class SerieDetailedRepository(val context: Context) {
     private val similarDB by lazy {
         MadeInBrazilDatabase.getDatabase(context).similarDao()
     }
+    private val auth by lazy {
+        Firebase.auth
+    }
+    private val favoritesFirebase by lazy {
+        Firebase.firestore.collection(DATABASE_USER).document(auth.currentUser?.uid ?: "").collection(DATABASE_FAVORITES)
+    }
+    private val watchedFirebase by lazy {
+        Firebase.firestore.collection(DATABASE_USER).document(auth.currentUser?.uid ?: "").collection(DATABASE_WATCHED)
+    }
 
     suspend fun getSerieRepository(serieId: Int): ResponseAPI{
         return try {
@@ -50,6 +69,10 @@ class SerieDetailedRepository(val context: Context) {
         } catch (exception: Exception) {
             ResponseAPI.Error("Erro ao carregar os dados")
         }
+    }
+
+    suspend fun setFavoriteFireBase(id: Int, infos: SerieDetailed) {
+        favoritesFirebase.document("$id").set(infos, SetOptions.merge()).await()
     }
 
     suspend fun insertFavorite(fav: Favorites) {

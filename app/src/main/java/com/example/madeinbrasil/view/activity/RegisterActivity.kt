@@ -121,7 +121,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun passwordLength(count: Int) {
-        if (count >= 5) {
+        if (count >= 6) {
             validationPassword = true
             tilRegisterPassword.isErrorEnabled = false
         } else {

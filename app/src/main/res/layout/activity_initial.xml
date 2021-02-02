@@ -30,10 +30,9 @@
         android:id="@+id/btGoogleInitial"
         style="@style/ButtonSocialFragment"
         android:drawableStart="@drawable/google"
-        android:height="50sp"
-        android:width="50sp"
-        android:padding="10sp"
-        app:layout_constraintEnd_toStartOf="@id/btFaceInitial"
+        android:text="@string/string_login_with_google"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btLoginInitial" />
 
@@ -41,9 +40,10 @@
         android:id="@+id/btFaceInitial"
         style="@style/ButtonSocialFragment"
         android:drawableStart="@drawable/facebook"
-        android:padding="10sp"
+        android:text="@string/string_login_with_facebook"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btGoogleInitial"
-        app:layout_constraintTop_toBottomOf="@id/btLoginInitial" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btGoogleInitial" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

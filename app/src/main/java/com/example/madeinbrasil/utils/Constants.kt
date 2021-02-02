@@ -44,4 +44,10 @@ class Constants {
         const val PAGE_SIZE = 20
         const val FIRST_PAGE = 1
     }
+
+    object Firebase {
+        const val DATABASE_USER = "users"
+        const val DATABASE_FAVORITES = "favorites"
+        const val DATABASE_WATCHED = "watched"
+    }
 }

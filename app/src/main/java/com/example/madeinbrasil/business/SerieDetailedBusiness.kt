@@ -15,7 +15,9 @@ import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.repository.SerieDetailedRepository
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class SerieDetailedBusiness (val context: Context) {
     private val repository: SerieDetailedRepository by lazy {
@@ -68,6 +70,9 @@ class SerieDetailedBusiness (val context: Context) {
         }
     }
 
+    suspend fun setFavoriteFireBase(id: Int, infos: SerieDetailed) {
+        repository.setFavoriteFireBase(id, infos)
+    }
 
     suspend fun insertFavorite(fav: Favorites) {
         repository.insertFavorite(fav)

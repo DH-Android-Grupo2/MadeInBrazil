@@ -32,7 +32,7 @@
 
     <string name="errorMessage">O campo %1$s é obrigatório</string>
     <string name="validationEmail">O email deve ser válido</string>
-    <string name="validationPassword">A senha deve ter ao menos 5 caracteres</string>
+    <string name="validationPassword">A senha deve ter ao menos 6 caracteres</string>
     <string name="validationName">O nome deve ter ao menos 2 caracteres</string>
 
     <string name="name_hint">Nome</string>
@@ -127,5 +127,9 @@
     <string name="sem_itens_label">Sem itens</string>
     <string name="Nenhuma_lista_criada_label">Nenhuma lista criada ainda.</string>
     <string name="string_cast_not_found">Elenco não encontrado</string>
+    <string name="string_login_with_google">Entrar com o Google</string>
+    <string name="string_login_with_facebook">Entrar com o Facebook</string>
+    <string name="string_go_to_favorites">Ir para os Favoritos</string>
+    <string name="string_go_to_lists">Ir para as Listas</string>
 
 </resources>

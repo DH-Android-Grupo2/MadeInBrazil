@@ -44,6 +44,12 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
+    fun setFavoriteFireBase(id: Int, infos: SerieDetailed) {
+        viewModelScope.launch {
+            businessDetailed.setFavoriteFireBase(id, infos)
+        }
+    }
+
     fun insertFavorite(fav: Favorites) {
         viewModelScope.launch {
             businessDetailed.insertFavorite(fav)

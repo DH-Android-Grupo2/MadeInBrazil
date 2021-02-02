@@ -552,6 +552,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val fav = Favorites(serie.id, serie.id, isChecked)
 
                         if(isChecked) {
+                            viewModelSerie.setFavoriteFireBase(serie.id, serie)
                             viewModelSerie.insertFavorite(fav)
                         }else {
                             viewModelSerie.deleteByIdFavorites(serie.id)
