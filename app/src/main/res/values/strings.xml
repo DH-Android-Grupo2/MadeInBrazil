@@ -77,8 +77,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="string_seasons">Temporadas</string>
     <string name="string_streaming">Streaming</string>
-    <string name="facebook_app_id">406621940578073</string>
-    <string name="fb_login_protocol_scheme">fb406621940578073</string>
+
+    <string name="facebook_application_id" translatable="false">4209544899075330</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb4209544899075330</string>
+
     <string name="string_recomendation_not_found">Recomendações não encontradas</string>
     <string name="string_similars_not_found">Similares não encontrados</string>
     <string name="string_similars">Similares</string>
