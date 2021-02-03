@@ -111,20 +111,6 @@ class LogInActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        val account = GoogleSignIn.getLastSignedInAccount(this)
-//
-//        val accessToken = AccessToken.getCurrentAccessToken()
-//        val isLoggedIn = accessToken != null && !accessToken.isExpired
-//
-//        if (isLoggedIn) {
-//            binding.btFaceLogin.isVisible = false
-//        } else {
-////            binding.btFaceLogin.setPermissions("email")
-//        }
-//    }
-
     override fun onStart() {
         super.onStart()
         viewModelLogin.login.observe(this) {
