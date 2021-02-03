@@ -25,9 +25,9 @@ class LogInViewModel: ViewModel() {
         }
     }
 
-    fun logInWithGoogle(idToken: String?) {
+    fun logInWithGoogle(idToken: String?, user: HashMap<String, String?>?) {
         viewModelScope.launch {
-            repository.logInWithGoogle(idToken)?.let {
+            repository.logInWithGoogle(idToken, user)?.let {
 //                loginGoogle.postValue(it)
                 login.postValue(it)
             }?: run {
@@ -37,9 +37,9 @@ class LogInViewModel: ViewModel() {
         }
     }
 
-    fun logInWithFacebook(idToken: AccessToken) {
+    fun logInWithFacebook(idToken: AccessToken, user: HashMap<String, String?>?) {
         viewModelScope.launch {
-            repository.logInWithFacebook(idToken)?.let {
+            repository.logInWithFacebook(idToken, user)?.let {
                 login.postValue(it)
             }?: run {
                 login.postValue(null)

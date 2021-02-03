@@ -55,11 +55,11 @@ class UserActivity : AppCompatActivity() {
             startFriendsActivity(this@UserActivity)
         }
 
-        binding.favoritesCardView.setOnClickListener {
+        binding.btGoToFavorites.setOnClickListener {
             startMyProfileOptionsActivity(this@UserActivity)
         }
 
-        binding.listsCardView.setOnClickListener {
+        binding.btGoToLists.setOnClickListener {
             startMyProfileOptionsActivity(this@UserActivity)
         }
 

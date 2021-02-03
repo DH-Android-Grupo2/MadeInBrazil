@@ -191,37 +191,15 @@
             app:layout_constraintTop_toBottomOf="@id/avBGProfile"
             />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/favoritesCardView"
-            style="@style/CardViewDefault"
-            android:layout_width="139dp"
-            android:layout_height="220dp"
-            app:cardBackgroundColor="@color/colorAccentOpaque"
-            android:layout_marginTop="30dp"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btGoToFavorites"
+            android:text="@string/string_go_to_favorites"
+            style="@style/ButtonWatchedFragment"
             android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/rvCardsListFavorites"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvFavoritesRecycler">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimary"
-                    android:textStyle="bold"
-                    android:text="@string/string_go_to_favorites"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListFavorites" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListFavorites"
@@ -231,7 +209,7 @@
             tools:listitem="@layout/main_cards"
             tools:itemCount="1"
             android:orientation="horizontal"
-            app:layout_constraintStart_toEndOf="@+id/favoritesCardView"
+            app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
             app:layout_constraintTop_toBottomOf="@id/tvFavoritesRecycler"/>
 
         <TextView
@@ -244,42 +222,8 @@
             android:textStyle="bold"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListFavorites"
+            app:layout_constraintTop_toBottomOf="@id/btGoToFavorites"
             />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/listsCardView"
-            style="@style/CardViewDefault"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:cardBackgroundColor="@color/colorAccentOpaque"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/rvCardsListLists"
-            app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvListasRecycler"
-            app:layout_constraintBottom_toTopOf="@+id/btLogOut">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimary"
-                    android:textStyle="bold"
-                    android:text="@string/string_go_to_lists"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListLists"
@@ -289,21 +233,33 @@
             tools:listitem="@layout/user_lists_recyclerview"
             tools:itemCount="1"
             android:orientation="horizontal"
-            app:layout_constraintStart_toEndOf="@+id/listsCardView"
-            app:layout_constraintTop_toTopOf="@+id/listsCardView"
-            app:layout_constraintBottom_toBottomOf="@+id/listsCardView"/>
+            app:layout_constraintStart_toStartOf="@id/tvFavoritesRecycler"
+            app:layout_constraintTop_toBottomOf="@+id/tvListasRecycler"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btGoToLists"
+            android:text="@string/string_go_to_lists"
+            style="@style/ButtonWatchedFragment"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
+            app:layout_constraintTop_toBottomOf="@id/rvCardsListLists"
+            app:layout_constraintBottom_toTopOf="@id/btLogOut"/>
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btLogOut"
             android:text="@string/encerrar_sessao"
             style="@style/ButtonWatchedFragment"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvFavoritesRecycler"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/listsCardView"
+            app:layout_constraintTop_toBottomOf="@id/btGoToLists"
             />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

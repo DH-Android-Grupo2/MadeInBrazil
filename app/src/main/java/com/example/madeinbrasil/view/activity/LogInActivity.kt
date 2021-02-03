@@ -30,6 +30,8 @@ import kotlinx.android.synthetic.main.activity_log_in.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.HashMap
 
 //184980070731-6dpbve1t4asg125d9b69c5qk9tor0n39.apps.googleusercontent.com
 //viCv12wGxwi56K9f-IMhJKoM
@@ -43,7 +45,6 @@ class LogInActivity : AppCompatActivity() {
     private val callbackManager by lazy {
         CallbackManager.Factory.create()
     }
-    private var loginNumber = 1
     private lateinit var signInClient: GoogleSignInClient
     private val RC_SIGN_IN = 999
 
@@ -58,16 +59,7 @@ class LogInActivity : AppCompatActivity() {
         textChangeDefault(tietLoginPassword, tilLoginPassword, R.string.string_password)
 
         binding.btSaveLogin.setOnClickListener {
-            loginNumber = 1
             signInAuthentication(binding.tietLoginEmail.text.toString(), binding.tietLoginPassword.text.toString())
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val userDao = MadeInBrazilDatabase.getDatabase(this@LogInActivity).userDao()
-//                val userInDatabase = userDao.login(tietLoginEmail.text.toString(),tietLoginPassword.text.toString())
-//
-//                userInDatabase?.let {
-//                    startSelectActivity(this@LogInActivity)
-//                }
-//            }
         }
 
         binding.ivArrowBackLogin.setOnClickListener {
@@ -75,41 +67,47 @@ class LogInActivity : AppCompatActivity() {
         }
 
         //login google
-//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestEmail()
-//            .build()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         signInClient = GoogleSignIn.getClient(this, gso)
 
         binding.btGoogleLogin.setOnClickListener {
-            loginNumber = 2
             val signInIntent: Intent = signInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
 
+        binding.btFaceLogin.isEnabled = true
         binding.btFaceLogin.setOnClickListener {
-            LoginManager.getInstance().registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult?> {
-                    override fun onSuccess(loginResult: LoginResult?) {
-                        loginResult?.accessToken?.let { it1 -> firebaseAuthWithfacebook(it1) }
-                        val request = GraphRequest.newMeRequest(
-                            loginResult?.accessToken
-                        ) { jsonResponse, response ->
-                            jsonResponse
-                            response
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+            LoginManager.getInstance().registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
+                override fun onSuccess(loginResult: LoginResult?) {
+                    if (loginResult != null) {
+                        val request = GraphRequest.newMeRequest(loginResult.accessToken)
+                        { jsonResponse, response ->
+                            val user = hashMapOf(
+                                "email" to jsonResponse.getString("email"),
+                                "name" to jsonResponse.getString("name")
+                            )
+                            firebaseAuthWithfacebook(loginResult.accessToken, user)
                         }
                         val parameters = Bundle()
                         parameters.putString("fields", "id,name,link,email")
                         request.parameters = parameters
                         request.executeAsync()
+                    } else {
+                        updateUI(null)
                     }
+                }
+                override fun onCancel() {
+                    updateUI(null)
+                }
+                override fun onError(error: FacebookException?) {
+                    updateUI(null)
+                }
 
-                    override fun onCancel(){  }
-
-                    override fun onError(exception: FacebookException) {  }
-                })
+            })
         }
     }
 
@@ -132,72 +130,46 @@ class LogInActivity : AppCompatActivity() {
         viewModelLogin.login.observe(this) {
             updateUI(it)
         }
-//        when(loginNumber) {
-//            1 -> {
-//                viewModelLogin.login.observe(this) {
-//                    updateUI(it)
-//                }
-//            }
-//            2 -> {
-//                viewModelLogin.loginGoogle.observe(this) {
-//                    updateUI(it)
-//                }
-//            }
-//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == RC_SIGN_IN) {
-//            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            handleSignInResult(task)
-//        }
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
                 account?.idToken?.let {
-                    firebaseAuthWithGoogle(it)
+                    val user = hashMapOf(
+                        "email" to account.email,
+                        "name" to account.displayName
+                    )
+                    firebaseAuthWithGoogle(it, user)
                 }?: run {
-                    firebaseAuthWithGoogle(null)
+                    firebaseAuthWithGoogle(null, null)
                 }
             } catch (e: ApiException) {
                 e.statusCode
             }
-        }else {
-            callbackManager.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    private fun firebaseAuthWithfacebook(idToken: AccessToken) {
-        viewModelLogin.logInWithFacebook(idToken)
+    private fun firebaseAuthWithfacebook(idToken: AccessToken?, user: HashMap<String, String?>?) {
+        if (idToken != null) {
+            viewModelLogin.logInWithFacebook(idToken, user)
+        }
         viewModelLogin.login.observe(this) {
-            updateUI(it)
+            updateUIFromSocialMidia(it)
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String?) {
-        viewModelLogin.logInWithGoogle(idToken)
+    private fun firebaseAuthWithGoogle(idToken: String?, user: HashMap<String, String?>?) {
+        viewModelLogin.logInWithGoogle(idToken, user)
         viewModelLogin.login.observe(this) {
-            updateUI(it)
+            updateUIFromSocialMidia(it)
         }
-//        viewModelLogin.loginGoogle.observe(this) {
-//            updateUI(it)
-//        }
     }
-
-//    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-//        try {
-//            val account = completedTask.getResult(ApiException::class.java)
-//            // Signed in successfully, show authenticated UI.
-//            binding.btGoogleLogin.isVisible = false
-//        } catch (e: ApiException) {
-//            // The ApiException status code indicates the detailed failure reason.
-//            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-//            Log.w("TAG", "signInResult:failed code=" + e.statusCode)
-//        }
-//    }
 
     private fun signInAuthentication(email: String, password: String) {
         if(!activatingButton()){
@@ -211,6 +183,12 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
+        if(user != null) {
+            startMenuActivity(this)
+        }
+    }
+
+    private fun updateUIFromSocialMidia(user: FirebaseUser?) {
         if(user != null) {
             startSelectActivity(this)
         }
@@ -282,12 +260,15 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun startSelectActivity(context: Context) {
+        val intent = Intent(context, SelectActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun startMenuActivity(context: Context) {
         val intent = Intent(context, MenuActivity::class.java)
         startActivity(intent)
         finish()
-//        val intent = Intent(context, SelectActivity::class.java)
-//        startActivity(intent)
-//        finish()
     }
 
     private fun startInitialActivity(context: Context) {
