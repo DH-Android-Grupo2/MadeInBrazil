@@ -15,7 +15,7 @@ import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_FAVORITES
-import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USER
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_WATCHED
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
@@ -47,10 +47,10 @@ class SerieDetailedRepository(val context: Context) {
         Firebase.auth
     }
     private val favoritesFirebase by lazy {
-        Firebase.firestore.collection(DATABASE_USER).document(auth.currentUser?.uid ?: "").collection(DATABASE_FAVORITES)
+        Firebase.firestore.collection(DATABASE_USERS).document(auth.currentUser?.uid ?: "").collection(DATABASE_FAVORITES)
     }
     private val watchedFirebase by lazy {
-        Firebase.firestore.collection(DATABASE_USER).document(auth.currentUser?.uid ?: "").collection(DATABASE_WATCHED)
+        Firebase.firestore.collection(DATABASE_USERS).document(auth.currentUser?.uid ?: "").collection(DATABASE_WATCHED)
     }
 
     suspend fun getSerieRepository(serieId: Int): ResponseAPI{

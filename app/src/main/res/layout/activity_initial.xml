@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,29 +22,46 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btLoginInitial"
         style="@style/ButtonWatchedFragment"
+        android:layout_marginTop="20dp"
         android:text="@string/string_logIn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btGoogleInitial" />
+        app:layout_constraintEnd_toEndOf="@+id/ivLogoInitial"
+        app:layout_constraintStart_toStartOf="@+id/ivLogoInitial"
+        app:layout_constraintTop_toBottomOf="@id/ivLogoInitial"
+       />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btGoogleInitial"
-        style="@style/ButtonSocialFragment"
-        android:drawableStart="@drawable/google"
-        android:text="@string/string_login_with_google"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btLoginInitial" />
+    <Button
+        android:id="@+id/btRegisterInitial"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        android:text="@string/string_button_register"
+        android:textColor="@color/colorAccent"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@id/ivLogoInitial"
+        app:layout_constraintEnd_toEndOf="@id/ivLogoInitial"
+        app:layout_constraintTop_toBottomOf="@id/btLoginInitial"
+        />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btFaceInitial"
-        style="@style/ButtonSocialFragment"
-        android:drawableStart="@drawable/facebook"
-        android:text="@string/string_login_with_facebook"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btGoogleInitial" />
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/btGoogleInitial"-->
+<!--        style="@style/ButtonSocialFragment"-->
+<!--        android:drawableStart="@drawable/google"-->
+<!--        android:text="@string/string_login_with_google"-->
+<!--        android:padding="10dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btLoginInitial" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/btFaceInitial"-->
+<!--        style="@style/ButtonSocialFragment"-->
+<!--        android:drawableStart="@drawable/facebook"-->
+<!--        android:text="@string/string_login_with_facebook"-->
+<!--        android:padding="10dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btGoogleInitial" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

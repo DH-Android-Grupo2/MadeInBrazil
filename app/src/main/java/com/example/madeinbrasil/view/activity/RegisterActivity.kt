@@ -7,15 +7,19 @@ import android.util.Patterns
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.databinding.ActivityRegisterBinding
 import com.example.madeinbrasil.model.users.Users
+import com.example.madeinbrasil.viewModel.RegisterViewModel
 import com.facebook.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +28,7 @@ import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var viewModelRegister: RegisterViewModel
     private var isNameOk = false
     private var isEmailOk = false
     private var isPasswordOk = false
@@ -43,6 +48,8 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModelRegister = ViewModelProvider(this).get(RegisterViewModel::class.java)
+
         textChangeDefault(tietRegisterName, tilRegisterName, R.string.string_name)
         textChangeDefault(tietRegisterEmail, tilRegisterEmail, R.string.string_email)
         textChangeDefault(tietRegisterPassword, tilRegisterPassword, R.string.string_password)
@@ -50,34 +57,58 @@ class RegisterActivity : AppCompatActivity() {
 
         setActionBar()
 
-        btSaveRegister.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val userDao = MadeInBrazilDatabase.getDatabase(this@RegisterActivity).userDao()
-                val usersInDatabase = userDao.getAllUsers()
-                val newUser = Users(0,tietRegisterName.text.toString(),tietRegisterEmail.text.toString(),tietRegisterPassword.text.toString(),"PICTURE")
-
-                if(!usersInDatabase.contains(newUser)) {
-                    userDao.insertUser(newUser)
-                    startSelectActivity(this@RegisterActivity)
-                }else {
-
-                }
-            }
+        binding.btSaveRegister.setOnClickListener {
+            createNewUser(binding.tietRegisterEmail.text.toString(), binding.tietRegisterPassword.text.toString())
+//            CoroutineScope(Dispatchers.IO).launch {
+//                val userDao = MadeInBrazilDatabase.getDatabase(this@RegisterActivity).userDao()
+//                val usersInDatabase = userDao.getAllUsers()
+//                val newUser = Users(0,tietRegisterName.text.toString(),tietRegisterEmail.text.toString(),tietRegisterPassword.text.toString(),"PICTURE")
+//
+//                if(!usersInDatabase.contains(newUser)) {
+//                    userDao.insertUser(newUser)
+//                    startSelectActivity(this@RegisterActivity)
+//                }else {
+//
+//                }
+//            }
         }
 
-
-        ivArrowBackRegister.setOnClickListener {
+        binding.ivArrowBackRegister.setOnClickListener {
             startInitialActivity(this)
         }
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        val account = GoogleSignIn.getLastSignedInAccount(this)
-        val accessToken = AccessToken.getCurrentAccessToken()
-        val isRegistered = accessToken != null && !accessToken.isExpired
+    override fun onStart() {
+        super.onStart()
+        viewModelRegister.register.observe(this) {
+            updateUi(it)
+        }
+    }
+//    override fun onResume() {
+//        super.onResume()
+//        val account = GoogleSignIn.getLastSignedInAccount(this)
+//        val accessToken = AccessToken.getCurrentAccessToken()
+//        val isRegistered = accessToken != null && !accessToken.isExpired
+//
+//    }
 
+    private fun createNewUser(email: String, password: String) {
+        val user = hashMapOf<String, String>(
+            "email" to binding.tietRegisterEmail.text.toString(),
+            "name" to binding.tietRegisterName.text.toString()
+        )
+
+        viewModelRegister.createNewUser(email, password, user)
+        viewModelRegister.register.observe(this) {
+            updateUi(it)
+        }
+    }
+
+    private fun updateUi(user: FirebaseUser?) {
+        if(user != null) {
+            startSelectActivity(this)
+        }
     }
 
     private fun setActionBar() {
@@ -101,9 +132,6 @@ class RegisterActivity : AppCompatActivity() {
             }
             if (editText.tag == getString(R.string.string_password)) {
                 passwordLength(start + 1)
-            }
-            if (editText.tag == getString(R.string.string_name)) {
-                nameLength(count)
             }
             activatingButton()
         }
@@ -129,16 +157,6 @@ class RegisterActivity : AppCompatActivity() {
             tilRegisterPassword.error = getString(R.string.validationPassword)
 
         }
-    }
-
-    private fun nameLength(count: Int) {
-      /*  if (count >= 2) {
-            validationName = true
-            tilRegisterName.isErrorEnabled = false
-        } else {
-            validationName = false
-            tilRegisterName.error = getString(R.string.validationName)
-        }*/
     }
 
     private fun validatingEmail(email: String) {
@@ -178,14 +196,13 @@ class RegisterActivity : AppCompatActivity() {
     private fun startSelectActivity(context: Context){
         val intent = Intent(context, SelectActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
 
     private fun startInitialActivity(context: Context) {
         val intent = Intent(context, InitialActivity::class.java)
         startActivity(intent)
+        finish()
     }
-
-
-
 }

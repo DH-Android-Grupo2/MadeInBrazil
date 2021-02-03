@@ -9,12 +9,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.get
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivitySelectBinding
 import com.example.madeinbrasil.model.discoverTV.Result
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.Genre
+import com.example.madeinbrasil.viewModel.SelectViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.firebase.auth.ktx.auth
@@ -26,8 +28,8 @@ import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 
 class SelectActivity : AppCompatActivity() {
     var selectedGenres = mutableListOf<String>()
-    var genres:String? = ""
-
+    var genres: String? = ""
+    private lateinit var viewModelSelect: SelectViewModel
 
     private val db by lazy {
         Firebase.firestore
@@ -44,6 +46,8 @@ class SelectActivity : AppCompatActivity() {
         binding = ActivitySelectBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModelSelect = ViewModelProvider(this).get(SelectViewModel::class.java)
+
         binding.btContinueGender.setOnClickListener {
             val selectedButtons = binding.tags.selectedButtons
             selectedGenres.clear()
@@ -51,33 +55,33 @@ class SelectActivity : AppCompatActivity() {
                 selectedGenres.add("${it.tag} ,")
                 genres+="${it.tag} ,"
             }
-            registerDB()
+            registerDB(genres)
             startMenuActivity(this@SelectActivity)
         }
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        firebaseAuth.currentUser?.let {
-            val documentReference = db.collection(FIREBASE_COLLECTION_USERS).document(it.uid)
-            documentReference.get()
-                    .addOnSuccessListener { snapshot ->
+//    override fun onResume() {
+//        super.onResume()
+//        firebaseAuth.currentUser?.let {
+//            val documentReference = db.collection(FIREBASE_COLLECTION_USERS).document(it.uid)
+//            documentReference.get()
+//                    .addOnSuccessListener { snapshot ->
+//
+//                    }.addOnFailureListener {
+//                        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
+//                    }
+//        } ?: run {
+//            signIn()
+//        }
+//    }
+//
+//    private fun signIn() {
+//        startActivity(Intent(this, SplashActivity::class.java))
+//        finish()
+//    }
 
-                    }.addOnFailureListener {
-                        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
-                    }
-        } ?: run {
-            signIn()
-        }
-    }
-
-    private fun signIn() {
-        startActivity(Intent(this, SplashActivity::class.java))
-        finish()
-    }
-
-    fun startMenuActivity(context: Context) {
+    private fun startMenuActivity(context: Context) {
         val intent = Intent(context, MenuActivity::class.java)
         intent.putExtra("genreList",GenreSelected(selectedGenres))
         startActivity(intent)
@@ -85,25 +89,29 @@ class SelectActivity : AppCompatActivity() {
     }
 
 
-    private fun registerDB() {
-        firebaseAuth.currentUser?.let { user->
-            val userData = hashMapOf(
-                    "name" to (user.displayName ?: ""),
-                    "email" to (user.email ?: ""),
-                    "phone" to (user.phoneNumber ?: ""),
-                    "genresSelected" to (genres ?: "")
-            )
-
-            db.collection(FIREBASE_COLLECTION_USERS)
-                    .document(user.uid ?: "")
-                    .set(userData)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Dados salvos com sucesso", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
-                    }
-        }
+    private fun registerDB(genre: String?) {
+        val genres = hashMapOf<String, String?>(
+            "genresSelected" to genre
+        )
+        viewModelSelect.setUserGenres(genres)
+//        firebaseAuth.currentUser?.let { user->
+//            val userData = hashMapOf(
+//                    "name" to (user.displayName ?: ""),
+//                    "email" to (user.email ?: ""),
+//                    "phone" to (user.phoneNumber ?: ""),
+//                    "genresSelected" to (genres ?: "")
+//            )
+//
+//            db.collection(FIREBASE_COLLECTION_USERS)
+//                    .document(user.uid ?: "")
+//                    .set(userData)
+//                    .addOnSuccessListener {
+//                        Toast.makeText(this, "Dados salvos com sucesso", Toast.LENGTH_SHORT).show()
+//                    }
+//                    .addOnFailureListener {
+//                        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
+//                    }
+//        }
     }
 
     companion object {

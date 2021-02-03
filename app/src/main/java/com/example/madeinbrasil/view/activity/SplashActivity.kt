@@ -9,8 +9,8 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import com.example.madeinbrasil.R
-import com.firebase.ui.auth.AuthMethodPickerLayout
-import com.firebase.ui.auth.AuthUI
+//import com.firebase.ui.auth.AuthMethodPickerLayout
+//import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -23,13 +23,13 @@ class SplashActivity : AppCompatActivity() {
     private val db by lazy {
         Firebase.firestore
     }
-    private val providers by lazy {
-        arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build(),
-            AuthUI.IdpConfig.FacebookBuilder().build()
-        )
-    }
+//    private val providers by lazy {
+//        arrayListOf(
+//            AuthUI.IdpConfig.EmailBuilder().build(),
+//            AuthUI.IdpConfig.GoogleBuilder().build(),
+//            AuthUI.IdpConfig.FacebookBuilder().build()
+//        )
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -39,6 +39,7 @@ class SplashActivity : AppCompatActivity() {
             changeToLogin()
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -60,22 +61,25 @@ class SplashActivity : AppCompatActivity() {
 
     private fun changeToLogin(){
         Handler(Looper.getMainLooper()).postDelayed({
-            val customLayout = AuthMethodPickerLayout.Builder(R.layout.activity_initial)
-                .setEmailButtonId(R.id.btLoginInitial)
-                .setGoogleButtonId(R.id.btGoogleInitial)
-                .setFacebookButtonId(R.id.btFaceInitial)
-                .build()
-
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setTheme(R.style.AppTheme)
-                    .setAuthMethodPickerLayout(customLayout)
-                    .setAvailableProviders(providers)
-                    .setIsSmartLockEnabled(false)
-                    .build(),
-                RC_SIGN_IN
-            )
+            val intent = Intent(this, InitialActivity::class.java)
+            startActivity(intent)
+            finish()
+//            val customLayout = AuthMethodPickerLayout.Builder(R.layout.activity_initial)
+//                .setEmailButtonId(R.id.btLoginInitial)
+////                .setGoogleButtonId(R.id.btGoogleInitial)
+////                .setFacebookButtonId(R.id.btFaceInitial)
+//                .build()
+//
+//            startActivityForResult(
+//                AuthUI.getInstance()
+//                    .createSignInIntentBuilder()
+//                    .setTheme(R.style.AppTheme)
+//                    .setAuthMethodPickerLayout(customLayout)
+//                    .setAvailableProviders(providers)
+//                    .setIsSmartLockEnabled(false)
+//                    .build(),
+//                RC_SIGN_IN
+//            )
         }, 1000)
     }
 

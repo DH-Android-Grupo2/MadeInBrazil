@@ -46,7 +46,7 @@ class Constants {
     }
 
     object Firebase {
-        const val DATABASE_USER = "users"
+        const val DATABASE_USERS = "users"
         const val DATABASE_FAVORITES = "favorites"
         const val DATABASE_WATCHED = "watched"
     }

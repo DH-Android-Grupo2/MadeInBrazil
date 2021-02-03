@@ -146,7 +146,7 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun signIn() {
-        startActivity(Intent(this, SplashActivity::class.java))
+        startActivity(Intent(this, InitialActivity::class.java))
         finish()
     }
 
