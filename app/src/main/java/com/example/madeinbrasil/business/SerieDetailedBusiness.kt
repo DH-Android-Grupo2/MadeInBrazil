@@ -1,23 +1,24 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.entities.User
+import com.example.madeinbrasil.database.entities.cast.CastFirebase
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.recommendations.RecommendationEntity
+import com.example.madeinbrasil.database.entities.genre.GenreFirebase
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
 import com.example.madeinbrasil.database.entities.season.SeasonEntity
+import com.example.madeinbrasil.database.entities.season.SeasonFirebase
 import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.serieDetailed.Genre
+import com.example.madeinbrasil.model.serieDetailed.Season
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.repository.SerieDetailedRepository
-import com.google.firebase.firestore.SetOptions
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.DocumentSnapshot
 
 class SerieDetailedBusiness (val context: Context) {
     private val repository: SerieDetailedRepository by lazy {
@@ -70,8 +71,24 @@ class SerieDetailedBusiness (val context: Context) {
         }
     }
 
-    suspend fun setFavoriteFireBase(id: Int, infos: SerieDetailed) {
-        repository.setFavoriteFireBase(id, infos)
+    suspend fun setMidiaFireBase(id: Int, infos: MidiaFirebase) {
+        repository.setMidiaFireBase(id, infos)
+    }
+
+    suspend fun setGenreFireBase(id: Int, infos: GenreFirebase) {
+        repository.setGenreFireBase(id, infos)
+    }
+
+    suspend fun setCastFireBase(id: Int, infos: CastFirebase) {
+        repository.setCastFireBase(id, infos)
+    }
+
+    suspend fun setSeasonFireBase(id: Int, infos: SeasonFirebase) {
+        repository.setSeasonFireBase(id, infos)
+    }
+
+    suspend fun updateUser(user: User) {
+        repository.updateUser(user)
     }
 
     suspend fun insertFavorite(fav: Favorites) {

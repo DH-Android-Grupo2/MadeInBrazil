@@ -1,18 +1,22 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
+import com.example.madeinbrasil.database.entities.User
+import com.example.madeinbrasil.database.entities.cast.CastFirebase
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.genre.GenreFirebase
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
 import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.model.result.Genre
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.repository.MovieDetailedRepository
-import kotlinx.coroutines.launch
+import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.tasks.await
 
 class MovieDetailedBusiness(val context: Context)  {
 
@@ -52,6 +56,23 @@ class MovieDetailedBusiness(val context: Context)  {
             response
         }
     }
+
+    suspend fun setMidiaFireBase(id: Int, infos: MidiaFirebase) {
+        repository.setMidiaFireBase(id, infos)
+    }
+
+    suspend fun setGenreFireBase(id: Int, infos: GenreFirebase) {
+        repository.setGenreFireBase(id, infos)
+    }
+
+    suspend fun setCastFireBase(id: Int, infos: CastFirebase) {
+        repository.setCastFireBase(id, infos)
+    }
+
+    suspend fun updateUser(user: User) {
+        repository.updateUser(user)
+    }
+
     suspend fun insertFavorite(fav: Favorites) {
         repository.insertFavorite(fav)
     }

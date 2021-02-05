@@ -133,5 +133,6 @@
     <string name="string_login_with_facebook">Entrar com o Facebook</string>
     <string name="string_go_to_favorites">Ir para os Favoritos</string>
     <string name="string_go_to_lists">Ir para as Listas</string>
+    <string name="string_gender_not_found">Não encontrado</string>
 
 </resources>

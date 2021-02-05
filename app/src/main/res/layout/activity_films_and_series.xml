@@ -90,7 +90,7 @@
         <TextView
             android:id="@+id/tvGenderFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="Não encontrado"
+            android:text="@string/string_gender_not_found"
             android:textSize="14sp"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"

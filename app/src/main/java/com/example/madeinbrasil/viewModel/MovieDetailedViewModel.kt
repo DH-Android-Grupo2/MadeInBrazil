@@ -7,18 +7,25 @@ import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.business.MovieDetailedBusiness
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.User
+import com.example.madeinbrasil.database.entities.cast.CastFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.database.entities.genre.GenreEntity
+import com.example.madeinbrasil.database.entities.genre.GenreFirebase
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
 import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
+import com.example.madeinbrasil.model.result.Genre
 import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.view.activity.MenuActivity
 import kotlinx.coroutines.launch
 
 class MovieDetailedViewModel(application: Application): AndroidViewModel(application) {
     val movieSucess: MutableLiveData<MovieDetailed> = MutableLiveData()
-    val movieError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
+//    val movieError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
+    val movieError: MutableLiveData<List<MidiaFirebase>> = MutableLiveData()
 
     private val midiaDB by lazy {
         MadeInBrazilDatabase.getDatabase(application).midiaDao()
@@ -34,9 +41,34 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
                     movieSucess.postValue(response.data as MovieDetailed)
                 }
                 is ResponseAPI.Error -> {
-                    movieError.postValue(midiaDB.getMidia())
+//                    movieError.postValue(midiaDB.getMidia())
+                    movieError.postValue(MenuActivity.MIDIA)
                 }
             }
+        }
+    }
+
+    fun setMidiaFireBase(id: Int, infos: MidiaFirebase) {
+        viewModelScope.launch {
+            detailed.setMidiaFireBase(id, infos)
+        }
+    }
+
+    fun setGenreFireBase(id: Int, infos: GenreFirebase) {
+        viewModelScope.launch {
+            detailed.setGenreFireBase(id, infos)
+        }
+    }
+
+    fun setCastFireBase(id: Int, infos: CastFirebase) {
+        viewModelScope.launch {
+            detailed.setCastFireBase(id, infos)
+        }
+    }
+
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            detailed.updateUser(user)
         }
     }
 
