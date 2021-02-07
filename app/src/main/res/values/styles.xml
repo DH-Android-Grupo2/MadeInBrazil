@@ -8,6 +8,10 @@
         <item name="android:windowBackground">@color/colorPrimary</item>
     </style>
 
+    <style name="splashScreenTheme" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="menuIcons">
         <item name="itemIconTint">@drawable/icons_nav_bar_selector</item>
         <item name="itemTextColor">@drawable/icons_nav_bar_selector</item>
