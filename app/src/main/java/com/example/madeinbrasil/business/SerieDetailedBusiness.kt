@@ -105,4 +105,5 @@ class SerieDetailedBusiness (val context: Context) {
     suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
         repository.insertSimilar(similar)
     }
+
 }

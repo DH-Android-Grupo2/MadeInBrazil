@@ -53,6 +53,8 @@ class SerieDetailedRepository(val context: Context) {
         Firebase.firestore.collection(DATABASE_USERS).document(auth.currentUser?.uid ?: "").collection(DATABASE_WATCHED)
     }
 
+
+
     suspend fun getSerieRepository(serieId: Int): ResponseAPI{
         return try {
             val response = APIService.tmdbApiMovieDetailed.serieDetails(serieId)
@@ -106,4 +108,6 @@ class SerieDetailedRepository(val context: Context) {
     suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
         similarDB.insertSimilar(similar)
     }
+
+
 }

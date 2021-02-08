@@ -10,6 +10,11 @@ import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
 import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
+import com.example.madeinbrasil.model.classe.CommentFirebase
+import com.example.madeinbrasil.utils.Constants
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MovieDetailedRepository(context: Context){
     private val watchedDao by lazy {
@@ -26,6 +31,10 @@ class MovieDetailedRepository(context: Context){
     }
     private val similarDB by lazy {
         MadeInBrazilDatabase.getDatabase(context).similarDao()
+    }
+
+    private val firebaseComments by lazy {
+        Firebase.firestore.collection("comments")
     }
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
@@ -73,4 +82,9 @@ class MovieDetailedRepository(context: Context){
     suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
         similarDB.insertSimilar(similar)
     }
+
+    suspend fun postComment(comment: CommentFirebase) {
+        firebaseComments.document().set(comment)
+    }
+
 }

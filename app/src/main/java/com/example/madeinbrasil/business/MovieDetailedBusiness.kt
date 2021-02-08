@@ -10,6 +10,7 @@ import com.example.madeinbrasil.database.entities.recommendations.Recommendation
 import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.repository.MovieDetailedRepository
 import kotlinx.coroutines.launch
@@ -78,5 +79,9 @@ class MovieDetailedBusiness(val context: Context)  {
 
     suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
         repository.insertSimilar(similar)
+    }
+
+    suspend fun postComment(comment: CommentFirebase){
+        repository.postComment(comment)
     }
 }

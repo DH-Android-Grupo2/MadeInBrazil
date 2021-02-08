@@ -13,6 +13,7 @@ import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
 import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
+import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.result.MovieDetailed
 import kotlinx.coroutines.launch
 
@@ -77,6 +78,12 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
     fun insertSimilar(similar: SimilarMidiaCrossRef) {
         viewModelScope.launch {
             detailed.insertSimilar(similar)
+        }
+    }
+
+    fun postComment(comment: CommentFirebase){
+        viewModelScope.launch {
+            detailed.postComment(comment)
         }
     }
 
