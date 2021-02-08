@@ -7,12 +7,12 @@ import com.example.madeinbrasil.model.customLists.firebase.CustomList
 import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.utils.Constants.CustomLists.CUSTOM_LIST_MEDIA_ITEM
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_CREATE_LIST
+import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_DELETE_ITEMS
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_GET_LISTS
 import com.example.madeinbrasil.utils.Constants.CustomLists.LISTS
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
@@ -136,6 +136,27 @@ class CustomListRepository(context: Context? = null) {
         return resp
     }
 
+    suspend fun resetListMedia(listId: String, moviesId: List<String>, seriesId: List<String>): FirebaseResponse {
+        lateinit var resp: FirebaseResponse
+
+        try {
+            db.collection(LISTS).document(listId)
+                    .update(hashMapOf<String, Any>(
+                            "movies" to moviesId,
+                            "series" to seriesId
+                        )).addOnCompleteListener {
+                            if(it.isSuccessful)
+                                resp = FirebaseResponse.OnSucess("")
+                            else
+                                resp = FirebaseResponse.OnFailure(it.exception?.localizedMessage ?: ERROR_DELETE_ITEMS)
+                    }.await()
+        } catch (e: Exception) {
+            resp = FirebaseResponse.OnFailure(e.localizedMessage ?: ERROR_DELETE_ITEMS)
+        }
+
+        return resp
+    }
+
      private suspend fun getUserListsSize(id: String): Int {
         var size = 0
         db.collection("lists").whereEqualTo("userId", id).get()
@@ -144,6 +165,7 @@ class CustomListRepository(context: Context? = null) {
             }.await()
         return size
     }
+
 
 //    private val customListDao by lazy {
 //        MadeInBrazilDatabase.getDatabase(context).customListDao()

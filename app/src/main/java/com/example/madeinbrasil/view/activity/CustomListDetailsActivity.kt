@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,8 +22,9 @@ class CustomListDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCustomListDetailsBinding
     private lateinit var customListViewMovel: CustomListViewModel
     private var actionMode: ActionMode? = null
-    private var selectedMovies: List<Long>? = null
-    private var listID: Long? = null
+    private var selectedMovies: List<String>? = null
+    private var selectedSeries: List<String>? = null
+    private lateinit var listID: String
     private val listDetailsAdapter by lazy {
         ListDetailsAdapter(mutableListOf()) {
 
@@ -37,6 +39,9 @@ class CustomListDetailsActivity : AppCompatActivity() {
         customListViewMovel = ViewModelProvider(this).get(CustomListViewModel::class.java)
         intent?.getParcelableExtra<ListWithMedia>(LIST)?.let {
             loadListInfo(it)
+            listID = it.list.id
+            selectedMovies = it.list.movies
+            selectedSeries = it.list.series
         }
 
         listDetailsAdapter.onMediaClick = {
@@ -66,7 +71,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
                     }
                     else
                         tvEmptyMessage.visibility = View.VISIBLE
-            }
+    }
 
     private fun enableActionMode(position: Int) {
         if (actionMode == null)
@@ -83,6 +88,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                     if (item?.itemId == R.id.action_delete) {
 //                       deleteItemsDb(listDetailsAdapter.selectedItems)
+                        deleteItemsFromCloud(listDetailsAdapter.selectedItems)
                         listDetailsAdapter.deleteMedia()
                         mode?.finish()
                         return true
@@ -109,6 +115,34 @@ class CustomListDetailsActivity : AppCompatActivity() {
             actionMode?.title = size.toString()
             actionMode?.invalidate()
         }
+    }
+
+    private fun deleteItemsFromCloud(selectedIds: List<String>) {
+        val moviesId = selectedMovies as MutableList<String>
+        val seriesId = selectedSeries as MutableList<String>
+
+        selectedMovies?.let { movies ->
+            selectedIds.forEach {
+                if (movies.contains(it))
+                    moviesId.remove(it)
+                else
+                    seriesId.remove(it)
+            }
+        }
+
+        customListViewMovel.resetListMedia(listID, moviesId, seriesId)
+
+        customListViewMovel.listSucess.observe(this, {
+
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            selectedMovies = moviesId
+            selectedSeries = seriesId
+        })
+
+        customListViewMovel.listSucess.observe(this, {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+
     }
 
 

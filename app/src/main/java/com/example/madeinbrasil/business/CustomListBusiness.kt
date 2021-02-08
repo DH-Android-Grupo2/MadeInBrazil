@@ -2,11 +2,10 @@ package com.example.madeinbrasil.business
 
 import android.content.Context
 import com.example.madeinbrasil.api.firebase.FirebaseResponse
-import com.example.madeinbrasil.model.customLists.*
 import com.example.madeinbrasil.model.customLists.firebase.CustomList
 import com.example.madeinbrasil.model.customLists.firebase.Media
-import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
 import com.example.madeinbrasil.repository.CustomListRepository
+import com.example.madeinbrasil.utils.Constants.CustomLists.DELETE_TASK_OK
 
 class CustomListBusiness(context: Context? = null) {
 
@@ -20,6 +19,15 @@ class CustomListBusiness(context: Context? = null) {
 
     suspend fun getListsWithMedia(): FirebaseResponse {
         return customListRepository.getListWithMedia()
+    }
+
+    suspend fun resetMediaList(listId: String, moviesId: List<String>, seriesId: List<String>): FirebaseResponse {
+        return when (val response = customListRepository.resetListMedia(listId, moviesId, seriesId)) {
+            is FirebaseResponse.OnSucess ->
+                FirebaseResponse.OnSucess(DELETE_TASK_OK)
+            is FirebaseResponse.OnFailure ->
+                response
+        }
     }
 //
 //    suspend fun createList(list: ListWithMedia) {

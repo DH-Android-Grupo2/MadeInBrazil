@@ -54,7 +54,8 @@ class Constants {
     object CustomLists {
         const val ERROR_CREATE_LIST = "Erro ao criar a lista."
         const val ERROR_GET_LISTS = "Erro ao recuperar as listas."
-        const val NONE_LIST = "Nenhuma lista adicionada."
+        const val ERROR_DELETE_ITEMS = "Erro ao excluir itens."
+        const val DELETE_TASK_OK = "Remoção realizada!"
         const val LISTS = "lists"
         const val LIST = "list"
         const val LIST_ID = "listId"
