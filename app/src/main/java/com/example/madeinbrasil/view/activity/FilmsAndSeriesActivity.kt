@@ -60,9 +60,12 @@ import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
 import kotlinx.coroutines.launch
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_films_and_series.*
@@ -78,9 +81,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var viewModelSerie: SerieDetailedViewModel
     private lateinit var customListViewModel: CustomListViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
-
+    var listComments = mutableListOf<CommentFirebase?>()
     private var films: Result? = null
-    private var filmDetailed: MovieDetailed?  = null
+    private var filmDetailed: MovieDetailed? = null
     private var serieDetailed: SerieDetailed? = null
     private var series: ResultSearch? = null
     private var comments = CommentRepository().setComments()
@@ -129,7 +132,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                         binding.tvYearFilmsSeries.text = "(${movie?.release_date?.getFirst4Chars()})"
 
-                        if(movie.credits.cast?.size != 0) {
+                        if (movie.credits.cast?.size != 0) {
                             binding.rvCardsListActors.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie?.credits.cast?.let { it1 ->
@@ -154,8 +157,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                             customListViewModel.getCustomLists()
 
-                            customListViewModel.customLists.observe(this){ list ->
-                                if(list.isEmpty())
+                            customListViewModel.customLists.observe(this) { list ->
+                                if (list.isEmpty())
                                     dialog.tvEmptyList.visibility = View.VISIBLE
                                 else
                                     dialog.rvCustomLists.apply {
@@ -272,9 +275,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
                             val fav = Favorites(movie.id, movie.id, isChecked)
 
-                            if(isChecked) {
+                            if (isChecked) {
                                 viewModelMovie.insertFavorite(fav)
-                            }else {
+                            } else {
                                 viewModelMovie.deleteByIdFavorites(movie.id)
                             }
                         }
@@ -282,9 +285,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
                             val watched = Watched(movie.id, movie.id, isChecked)
 
-                            if(isChecked) {
+                            if (isChecked) {
                                 viewModelMovie.insertWatched(watched)
-                            }else {
+                            } else {
                                 viewModelMovie.deleteByIdWatched(movie.id)
                             }
                         }
@@ -309,16 +312,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             dbMidia.insertMidia(midia)
 
                             dbFav.getMidiaWithFavorites().forEach {
-                                if(it.midia.id == movie.id) {
-                                    it.favorites.forEach {fav ->
+                                if (it.midia.id == movie.id) {
+                                    it.favorites.forEach { fav ->
                                         binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
                                     }
                                 }
                             }
 
                             dbWatched.getMidiaWithWatched().forEach {
-                                if(it.midia.id == movie.id) {
-                                    it.watched.forEach {watched ->
+                                if (it.midia.id == movie.id) {
+                                    it.watched.forEach { watched ->
                                         binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
                                     }
                                 }
@@ -327,7 +330,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                viewModelMovie.movieError.observe(this) {midia ->
+                viewModelMovie.movieError.observe(this) { midia ->
                     lifecycleScope.launch {
                         val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
                         val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
@@ -339,9 +342,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val dbSearch = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).FilmsFragmentDao()
                         var gender = ""
 
-                        if(dbMidia.getMidia().any { it.id == films?.id }) {
+                        if (dbMidia.getMidia().any { it.id == films?.id }) {
                             onApiErrorMovie(midia, null)
-                        }else {
+                        } else {
                             onApiErrorMovie(null, dbSearch.getResults())
                         }
 
@@ -356,16 +359,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         dbFav.getMidiaWithFavorites().forEach {
-                            if(it.midia.id == films?.id) {
-                                it.favorites.forEach {fav ->
+                            if (it.midia.id == films?.id) {
+                                it.favorites.forEach { fav ->
                                     binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
                                 }
                             }
                         }
 
                         dbWatched.getMidiaWithWatched().forEach {
-                            if(it.midia.id == films?.id) {
-                                it.watched.forEach {watched ->
+                            if (it.midia.id == films?.id) {
+                                it.watched.forEach { watched ->
                                     binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
                                 }
                             }
@@ -375,7 +378,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             films?.let {
-                                if(dbCast.getPeopleWithMidia(it.id).isNotEmpty()) {
+                                if (dbCast.getPeopleWithMidia(it.id).isNotEmpty()) {
                                     adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it.id))
                                     binding.tvMessageCast.isVisible = false
                                 }
@@ -383,7 +386,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         films?.let {
-                            if(dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
+                            if (dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
                                 binding.rvCardsListRecomendacoes.apply {
                                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                     adapter = RecommendationDataBaseAdapter(dbRecommendation.getRecommendations(it.id))
@@ -391,7 +394,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 binding.tvMessageRecomendation.isVisible = false
                             }
 
-                            if(dbSimilar.getSimilar(it.id).isNotEmpty()) {
+                            if (dbSimilar.getSimilar(it.id).isNotEmpty()) {
                                 binding.rvCardsListSimilares.apply {
                                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                     adapter = SimilarDataBaseAdapter(dbSimilar.getSimilar(it.id))
@@ -402,10 +405,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
-                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
-                    adapter = MainAdapterComments(comments)
-                }
+           //     findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
+           //         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+          //          adapter = MainAdapterComments(comments)
+           //     }
             }
 
             2 -> {
@@ -499,8 +502,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                         customListViewModel.getCustomLists()
 
-                        customListViewModel.customLists.observe(this){ list ->
-                            if(list.isEmpty())
+                        customListViewModel.customLists.observe(this) { list ->
+                            if (list.isEmpty())
                                 dialog.tvEmptyList.visibility = View.VISIBLE
                             else
                                 dialog.rvCustomLists.apply {
@@ -573,10 +576,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
                         val fav = Favorites(serie.id, serie.id, isChecked)
 
-                        if(isChecked) {
+                        if (isChecked) {
                             viewModelSerie.setFavoriteFireBase(serie.id, serie)
                             viewModelSerie.insertFavorite(fav)
-                        }else {
+                        } else {
                             viewModelSerie.deleteByIdFavorites(serie.id)
                         }
                     }
@@ -584,9 +587,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.cbWatchedFilmsSeries.setOnCheckedChangeListener { buttonView, isChecked ->
                         val watched = Watched(serie.id, serie.id, isChecked)
 
-                        if(isChecked) {
+                        if (isChecked) {
                             viewModelSerie.insertWatched(watched)
-                        }else {
+                        } else {
                             viewModelSerie.deleteByIdWatched(serie.id)
                         }
                     }
@@ -610,16 +613,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                         dbMidia.insertMidia(midia)
                         dbFav.getMidiaWithFavorites().forEach {
-                            if(it.midia.id == serie.id) {
-                                it.favorites.forEach {fav ->
+                            if (it.midia.id == serie.id) {
+                                it.favorites.forEach { fav ->
                                     binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
                                 }
                             }
                         }
 
                         dbWatched.getMidiaWithWatched().forEach {
-                            if(it.midia.id == serie.id) {
-                                it.watched.forEach {watched ->
+                            if (it.midia.id == serie.id) {
+                                it.watched.forEach { watched ->
                                     binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
                                 }
                             }
@@ -627,7 +630,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                viewModelSerie.serieDetailedError.observe(this) {midia ->
+                viewModelSerie.serieDetailedError.observe(this) { midia ->
 
                     lifecycleScope.launch {
                         val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
@@ -640,9 +643,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         val dbSearch = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).FilmsFragmentDao()
                         var gender = ""
 
-                        if(dbMidia.getMidia().any { it.id == series?.id }) {
+                        if (dbMidia.getMidia().any { it.id == series?.id }) {
                             onApiErrorSerie(midia, null)
-                        }else {
+                        } else {
                             onApiErrorSerie(null, dbSearch.getSearchResult())
                         }
 
@@ -657,16 +660,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         dbFav.getMidiaWithFavorites().forEach {
-                            if(it.midia.id == series?.id) {
-                                it.favorites.forEach {fav ->
+                            if (it.midia.id == series?.id) {
+                                it.favorites.forEach { fav ->
                                     binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
                                 }
                             }
                         }
 
                         dbWatched.getMidiaWithWatched().forEach {
-                            if(it.midia.id == series?.id) {
-                                it.watched.forEach {watched ->
+                            if (it.midia.id == series?.id) {
+                                it.watched.forEach { watched ->
                                     binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
                                 }
                             }
@@ -675,7 +678,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             series?.id?.let {
-                                if(dbCast.getPeopleWithMidia(it).isNotEmpty()) {
+                                if (dbCast.getPeopleWithMidia(it).isNotEmpty()) {
                                     adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it))
                                     binding.tvMessageCast.isVisible = false
                                 }
@@ -688,7 +691,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         series?.let {
-                            if(dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
+                            if (dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
                                 binding.rvCardsListRecomendacoes.apply {
                                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                     adapter = RecommendationDataBaseAdapter(dbRecommendation.getRecommendations(it.id))
@@ -696,7 +699,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 binding.tvMessageRecomendation.isVisible = false
                             }
 
-                            if(dbSimilar.getSimilar(it.id).isNotEmpty()) {
+                            if (dbSimilar.getSimilar(it.id).isNotEmpty()) {
                                 binding.rvCardsListSimilares.apply {
                                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                     adapter = SimilarDataBaseAdapter(dbSimilar.getSimilar(it.id))
@@ -707,16 +710,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-                findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
-                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
-                    adapter = MainAdapterComments(comments)
-                }
+             //   findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
+             //       layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+              //      adapter = MainAdapterComments(comments)
+             //   }
             }
         }
     }
 
     private fun onApiErrorSerie(serie: List<MidiaEntity>?, serie2: List<ResultSearch>?) {
-        if(serie != null) {
+        if (serie != null) {
             serie.forEach {
                 if (it.id == series?.id) {
                     Glide.with(binding.root.context)
@@ -787,7 +790,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private fun onApiErrorMovie(movie: List<MidiaEntity>?, movie2: List<Result>?) {
 
-        if(movie != null) {
+        if (movie != null) {
             movie.forEach {
                 if (it.id == films?.id) {
                     Glide.with(binding.root.context)
@@ -817,7 +820,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.btStreamingFilmsSeries.isVisible = false
                 }
             }
-        }else {
+        } else {
             movie2?.forEach {
                 if (it.id == films?.id) {
                     Glide.with(binding.root.context)
@@ -930,9 +933,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
             }
-            films?.id?.let {
-                it1 -> val gender = GenreEntity(listId, listName, it1)
-                viewModel.insertGenre(gender)}
+            films?.id?.let { it1 ->
+                val gender = GenreEntity(listId, listName, it1)
+                viewModel.insertGenre(gender)
+            }
 
             binding.tvGenderFilmsSeries.text = generosText
         }
@@ -954,9 +958,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
             }
-            series?.id?.let {
-                it1 -> val gender = GenreEntity(listId, listName, it1)
-                viewModelGenderSeries.insertGenre(gender)}
+            series?.id?.let { it1 ->
+                val gender = GenreEntity(listId, listName, it1)
+                viewModelGenderSeries.insertGenre(gender)
+            }
 
             binding.tvGenderFilmsSeries.text = generosText
         }
@@ -973,7 +978,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             key = it.key
         }
         lifecycle.addObserver(dialog.youtubePlayerDialog)
-        dialog.youtubePlayerDialog.initialize(object: AbstractYouTubePlayerListener() {
+        dialog.youtubePlayerDialog.initialize(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 youTubePlayer.loadOrCueVideo(lifecycle, key, 0.0f)
             }
@@ -993,7 +998,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             key = trailer.key
         }
         lifecycle.addObserver(dialog.youtubePlayerDialog)
-        dialog.youtubePlayerDialog.initialize(object: AbstractYouTubePlayerListener() {
+        dialog.youtubePlayerDialog.initialize(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 key?.let { youTubePlayer.loadOrCueVideo(lifecycle, it, 0.0f) }
             }
@@ -1003,16 +1008,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     }
 
 
-
-    private fun commentsObservables(){
+    private fun commentsObservables() {
 
         binding.btAddCommentFilmsSeries.setOnClickListener {
 
             var docId: Int?
 
-            if(films?.id != null){
+            if (films?.id != null) {
                 docId = films?.id
-            } else{
+            } else {
                 docId = series?.id
             }
 
@@ -1029,13 +1033,64 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
             commentDoc.set(comment)
                     .addOnSuccessListener {
-                        Toast.makeText(this,"Comentário feito com sucesso",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Comentário feito com sucesso", Toast.LENGTH_SHORT).show()
                         binding.tilCommentFilmsSeries.editText?.text = asEditableComment
                     }.addOnFailureListener {
-                        Toast.makeText(this,it.localizedMessage,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
                     }
 
 
+        }
+
+
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+
+        getComments()?.addOnCompleteListener {
+            if (it.isSuccessful){
+                listComments = it.result?.toObjects(CommentFirebase::class.java) ?: mutableListOf()
+                binding.rvCommentsUsers.apply {
+                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+                    adapter = MainAdapterComments(listComments)
+                }
+            } else{
+
+        }
+        }
+    }
+
+
+
+
+
+
+
+
+    fun getComments(): Task<QuerySnapshot>? {
+
+        var docId: Int?
+
+
+        if (films?.id != null) {
+            docId = films?.id
+        } else {
+            docId = series?.id
+        }
+
+        val docRef = firebaseFirestore.collection("commentsByMedia").document(docId.toString()).collection("comments")
+
+        return docRef.get().addOnSuccessListener {
+            it.documents.forEach {
+                val comment = it.toObject<CommentFirebase>()
+                listComments.add(comment)
+                return@addOnSuccessListener
+            }
+        }.addOnFailureListener {
+            it.localizedMessage
         }
     }
 

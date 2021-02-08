@@ -5,5 +5,6 @@ data class CommentFirebase (
         val userName: String? = null,
         val userImage: String? = null,
         val commentText: String? = null,
-        val commentId: String? = null
+        val commentId: String? = null,
+        val midiaId: Long? = null
         )

@@ -110,4 +110,5 @@ class SerieDetailedRepository(val context: Context) {
     }
 
 
+
 }
