@@ -43,19 +43,24 @@ class CustomListRepository(context: Context? = null) {
                         ownerName = user.getString("name") ?: ""
                     }).await()
 
-                val batch = db.batch()
-                val customListMediaItemRef = db.collection(CUSTOM_LIST_MEDIA_ITEM)
-                mediaList.forEach {
-                    val docRef = customListMediaItemRef.document(it.id)
-                    batch.set(docRef, it)
-                }
+                if (mediaList.isNotEmpty()) {
+                    val batch = db.batch()
+                    val customListMediaItemRef = db.collection(CUSTOM_LIST_MEDIA_ITEM)
+                    mediaList.forEach {
+                        val docRef = customListMediaItemRef.document(it.id)
+                        batch.set(docRef, it)
+                    }
 
-                batch.commit().addOnCompleteListener {
-                    if(it.isSuccessful)
-                        resp = FirebaseResponse.OnSucess("")
-                    else
-                        resp = FirebaseResponse.OnFailure(it.exception?.localizedMessage ?: ERROR_CREATE_LIST)
-                }.await()
+                    batch.commit().addOnCompleteListener {
+                        if (it.isSuccessful)
+                            resp = FirebaseResponse.OnSucess("")
+                        else
+                            resp = FirebaseResponse.OnFailure(it.exception?.localizedMessage
+                                    ?: ERROR_CREATE_LIST)
+                    }.await()
+                    return resp
+                }
+                resp = FirebaseResponse.OnSucess("")
             }
         } catch (e: Exception) {
             resp = FirebaseResponse.OnFailure(e.localizedMessage ?: ERROR_CREATE_LIST)

@@ -12,13 +12,14 @@ import com.example.madeinbrasil.databinding.MainCardsBinding
 import com.example.madeinbrasil.databinding.MainCardsSelectionBinding
 import com.example.madeinbrasil.databinding.MyListCardItemBinding
 import com.example.madeinbrasil.model.customLists.ListMediaItem
+import com.example.madeinbrasil.model.customLists.firebase.Media
 
-class ListDetailsAdapter(var list: MutableList<ListMediaItem>,
-                         val onItemClick: (Long) -> Unit) : RecyclerView.Adapter<ListDetailsAdapter.ViewHolder>() {
+class ListDetailsAdapter(var list: MutableList<Media>,
+                         val onItemClick: (String) -> Unit) : RecyclerView.Adapter<ListDetailsAdapter.ViewHolder>() {
 
     var onMediaClick: ((Int) -> Unit)? = null
     var onMediaLongClick: ((Int) -> Unit)? = null
-    val selectedItems: MutableList<Long> = mutableListOf()
+    val selectedItems: MutableList<String> = mutableListOf()
     var selectedPositions = SparseBooleanArray()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListDetailsAdapter.ViewHolder {
@@ -66,9 +67,9 @@ class ListDetailsAdapter(var list: MutableList<ListMediaItem>,
 
     inner class ViewHolder(val binding: MyListCardItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(mediaItem: ListMediaItem, selectedItems: List<Long>) = with(binding) {
+        fun bind(mediaItem: Media, selectedItems: List<String>) = with(binding) {
             Glide.with(binding.root).load(mediaItem.backdropPath).placeholder(R.drawable.logo_made_in_brasil).into(cvImageCard)
-            tvNameMedia.text = mediaItem.title
+            tvNameMedia.text = mediaItem.title ?: mediaItem.name
 
             if (selectedItems.contains(mediaItem.id)) {
                 tvSelectionIcon.visibility = View.VISIBLE

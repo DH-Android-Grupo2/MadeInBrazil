@@ -1,5 +1,9 @@
 package com.example.madeinbrasil.model.customLists.firebase
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Media(
     val id: String,
     var backdropPath: String?,
@@ -14,7 +18,7 @@ data class Media(
     val voteCount: Int?,
     var firstAirDate: String?,
     var name: String?,
-) {
+):Parcelable {
     constructor(): this(
             "",
             "",

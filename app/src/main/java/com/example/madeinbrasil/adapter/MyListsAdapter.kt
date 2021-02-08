@@ -15,7 +15,7 @@ import com.example.madeinbrasil.model.customLists.ListWithMediaUni
 
 
 class MyListsAdapter(private val list: List<ListWithMedia>,
-                     val onClick: (String) -> Unit): RecyclerView.Adapter<MyListsAdapter.ViewHolder>() {
+                     val onClick: (ListWithMedia) -> Unit): RecyclerView.Adapter<MyListsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -31,7 +31,7 @@ class MyListsAdapter(private val list: List<ListWithMedia>,
     inner class ViewHolder(val binding: MainMyListRecyclerviewBinding) : RecyclerView.ViewHolder(
             binding.root
     ) {
-        fun bind(list: ListWithMedia, onClick: (String) -> Unit) = with(binding) {
+        fun bind(list: ListWithMedia, onClick: (ListWithMedia) -> Unit) = with(binding) {
             val mediaSize = list.mediaList.size
             if (mediaSize == 0) {
                 val textView = TextView(containerView.context)
@@ -70,7 +70,7 @@ class MyListsAdapter(private val list: List<ListWithMedia>,
             tvListName.text = list.list.name
 
             root.setOnClickListener {
-                onClick(list.list.id)
+                onClick(list)
             }
         }
 

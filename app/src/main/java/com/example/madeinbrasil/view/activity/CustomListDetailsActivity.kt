@@ -4,10 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityCustomListDetailsBinding
+import com.example.madeinbrasil.model.customLists.ListWithMedia
+import com.example.madeinbrasil.model.customLists.firebase.Media
+import com.example.madeinbrasil.utils.Constants.CustomLists.LIST
 import com.example.madeinbrasil.view.adapter.ListDetailsAdapter
 import com.example.madeinbrasil.viewModel.CustomListViewModel
 
@@ -30,7 +35,9 @@ class CustomListDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         customListViewMovel = ViewModelProvider(this).get(CustomListViewModel::class.java)
-//        intent?.getLongExtra(LIST_ID, 1)?.let { getListUni(it) }
+        intent?.getParcelableExtra<ListWithMedia>(LIST)?.let {
+            loadListInfo(it)
+        }
 
         listDetailsAdapter.onMediaClick = {
             enableActionMode(it)
@@ -40,6 +47,26 @@ class CustomListDetailsActivity : AppCompatActivity() {
             enableActionMode(it)
         }
     }
+
+    private fun loadListInfo(list: ListWithMedia) = with(binding) {
+        tvListName.text = list.list.name
+                list.list.description
+                val desc = list.list.description
+                if (desc == "")
+                    tvListDescription.text = getString(R.string.sem_descricao_label)
+                else
+                    tvListDescription.text = desc
+
+                val media = list.mediaList
+                if (media.isNotEmpty())
+                rvListItems.apply {
+                    layoutManager = GridLayoutManager(this@CustomListDetailsActivity, 2)
+                    listDetailsAdapter.list = media as MutableList<Media>
+                    adapter = listDetailsAdapter
+                    }
+                    else
+                        tvEmptyMessage.visibility = View.VISIBLE
+            }
 
     private fun enableActionMode(position: Int) {
         if (actionMode == null)

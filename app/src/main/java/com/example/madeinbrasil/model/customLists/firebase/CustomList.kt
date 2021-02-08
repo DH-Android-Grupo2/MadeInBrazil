@@ -1,5 +1,9 @@
 package com.example.madeinbrasil.model.customLists.firebase
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class CustomList(
     val name: String,
     val description: String?,
@@ -8,7 +12,7 @@ data class CustomList(
     var id: String = "",
     var userId: String = "",
     var ownerName: String = ""
-) {
+): Parcelable {
     constructor(): this(
             "",
             "",
