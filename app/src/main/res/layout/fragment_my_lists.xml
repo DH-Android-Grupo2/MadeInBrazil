@@ -19,6 +19,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
+        <TextView
+            android:id="@+id/tvEmptyListMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Nenhuma_lista_criada_label"
+            android:textSize="30sp"
+            android:textColor="@color/colorAccent"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMyLists"
             android:layout_width="match_parent"

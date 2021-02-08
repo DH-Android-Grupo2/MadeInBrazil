@@ -43,13 +43,15 @@ class MyListsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+
         customListViewMovel.getListWithMedia()
 
         customListViewMovel.getListsSuccess.observe(this, { list ->
 
             if(list.isEmpty()) {
-
+                binding.tvEmptyListMessage.visibility = View.VISIBLE
             } else {
+                binding.tvEmptyListMessage.visibility = View.GONE
                 setupRecyclerView(list)
             }
 
