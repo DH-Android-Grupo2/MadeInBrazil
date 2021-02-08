@@ -8,4 +8,14 @@ data class CustomList(
     var id: String = "",
     var userId: String = "",
     var ownerName: String = ""
-)
+) {
+    constructor(): this(
+            "",
+            "",
+            listOf(),
+            listOf(),
+            "",
+            "",
+            ""
+    )
+}

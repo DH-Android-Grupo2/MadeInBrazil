@@ -2,12 +2,17 @@ package com.example.madeinbrasil.repository
 
 import android.content.Context
 import com.example.madeinbrasil.api.firebase.FirebaseResponse
+import com.example.madeinbrasil.model.customLists.ListWithMedia
 import com.example.madeinbrasil.model.customLists.firebase.CustomList
 import com.example.madeinbrasil.model.customLists.firebase.Media
+import com.example.madeinbrasil.utils.Constants.CustomLists.CUSTOM_LIST_MEDIA_ITEM
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_CREATE_LIST
+import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_GET_LISTS
+import com.example.madeinbrasil.utils.Constants.CustomLists.LISTS
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
@@ -31,7 +36,7 @@ class CustomListRepository(context: Context? = null) {
             auth.currentUser?.let {
                 val listSize = getUserListsSize(it.uid)
                 val user = db.collection(DATABASE_USERS).document(it.uid).get().await()
-                db.collection("lists").document("${auth.currentUser?.uid}${listSize + 1}")
+                db.collection(LISTS).document("${auth.currentUser?.uid}${listSize + 1}")
                     .set(customList.apply {
                         id = "${auth.currentUser?.uid}${listSize + 1}"
                         userId = it.uid
@@ -39,7 +44,7 @@ class CustomListRepository(context: Context? = null) {
                     }).await()
 
                 val batch = db.batch()
-                val customListMediaItemRef = db.collection("customListMediaItem")
+                val customListMediaItemRef = db.collection(CUSTOM_LIST_MEDIA_ITEM)
                 mediaList.forEach {
                     val docRef = customListMediaItemRef.document(it.id)
                     batch.set(docRef, it)
@@ -60,7 +65,58 @@ class CustomListRepository(context: Context? = null) {
 
     }
 
-    suspend fun getUserListsSize(id: String): Int {
+    suspend fun getListWithMedia(): FirebaseResponse {
+        lateinit var resp: FirebaseResponse
+        var customLists: List<CustomList>? = null
+        try {
+            auth.currentUser?.let {
+                db.collection(LISTS).whereEqualTo("userId", it.uid).get()
+                    .addOnCompleteListener {
+                        if(it.isSuccessful)
+                            customLists = it.result.toObjects(CustomList::class.java)
+                        else
+                            throw Exception(ERROR_GET_LISTS)
+                    }.await()
+            }
+        val listWithMedia = mutableListOf<ListWithMedia>()
+        val customListsItemRef =  db.collection(CUSTOM_LIST_MEDIA_ITEM)
+        customLists?.forEach { cl ->
+
+            var movies: List<Media>? = null
+            var series: List<Media>? = null
+
+            customListsItemRef.whereIn("id", cl.movies?.toMutableList() ?: mutableListOf()).get()
+                .addOnCompleteListener {
+                    if(it.isSuccessful)
+                        movies = it.result.toObjects(Media::class.java)
+                }.await()
+
+            customListsItemRef.whereIn("id", cl.series?.toMutableList() ?: mutableListOf()).get()
+                .addOnCompleteListener {
+                    if(it.isSuccessful)
+                        series = it.result.toObjects(Media::class.java)
+                }.await()
+
+            val items = mutableListOf<Media>()
+            movies?.forEach {
+                items.add(it)
+            }
+            series?.forEach {
+                items.add(it)
+            }
+
+            listWithMedia.add(ListWithMedia(cl, items))
+
+        }
+            resp = FirebaseResponse.OnSucess(listWithMedia)
+        } catch (e: Exception) {
+            resp = FirebaseResponse.OnFailure(e.localizedMessage ?: ERROR_GET_LISTS)
+        }
+
+        return resp
+    }
+
+     private suspend fun getUserListsSize(id: String): Int {
         var size = 0
         db.collection("lists").whereEqualTo("userId", id).get()
             .addOnSuccessListener {

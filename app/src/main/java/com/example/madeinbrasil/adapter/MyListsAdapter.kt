@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainMyListRecyclerviewBinding
+import com.example.madeinbrasil.model.customLists.ListWithMedia
 import com.example.madeinbrasil.model.customLists.ListWithMediaUni
 
 
-class MyListsAdapter(private val list: List<ListWithMediaUni>,
-                             val onClick: (Long) -> Unit): RecyclerView.Adapter<MyListsAdapter.ViewHolder>() {
+class MyListsAdapter(private val list: List<ListWithMedia>,
+                     val onClick: (String) -> Unit): RecyclerView.Adapter<MyListsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -30,8 +31,8 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>,
     inner class ViewHolder(val binding: MainMyListRecyclerviewBinding) : RecyclerView.ViewHolder(
             binding.root
     ) {
-        fun bind(list: ListWithMediaUni, onClick: (Long) -> Unit) = with(binding) {
-            val mediaSize = list.media.size
+        fun bind(list: ListWithMedia, onClick: (String) -> Unit) = with(binding) {
+            val mediaSize = list.mediaList.size
             if (mediaSize == 0) {
                 val textView = TextView(containerView.context)
                 textView.text = containerView.context.getString(R.string.label_vazia)
@@ -50,7 +51,7 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>,
                         val lp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT)
                         lp.weight = 1F
                         imageView.layoutParams = lp
-                        Glide.with(containerView).load(list.media[i].backdropPath).into(imageView)
+                        Glide.with(containerView).load(list.mediaList[i].backdropPath).into(imageView)
                         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                         containerView.addView(imageView)
                         }
@@ -60,7 +61,7 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>,
                             val lp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT)
                             lp.weight = 1F
                             imageView.layoutParams = lp
-                            Glide.with(containerView).load(list.media[i].backdropPath).into(imageView)
+                            Glide.with(containerView).load(list.mediaList[i].backdropPath).into(imageView)
                             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                             containerView.addView(imageView)
                         }
@@ -69,7 +70,7 @@ class MyListsAdapter(private val list: List<ListWithMediaUni>,
             tvListName.text = list.list.name
 
             root.setOnClickListener {
-                onClick(list.list.listId)
+                onClick(list.list.id)
             }
         }
 

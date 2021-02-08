@@ -17,6 +17,10 @@ class CustomListBusiness(context: Context? = null) {
     suspend fun createList(customList: CustomList, mediaList: List<Media>): FirebaseResponse {
         return customListRepository.createList(customList, mediaList)
     }
+
+    suspend fun getListsWithMedia(): FirebaseResponse {
+        return customListRepository.getListWithMedia()
+    }
 //
 //    suspend fun createList(list: ListWithMedia) {
 //        customListRepository.createList(list)

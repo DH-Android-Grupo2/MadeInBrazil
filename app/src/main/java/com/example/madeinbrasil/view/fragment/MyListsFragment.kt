@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.MyListsAdapter
 import com.example.madeinbrasil.databinding.FragmentMyListsBinding
+import com.example.madeinbrasil.model.customLists.ListWithMedia
+import com.example.madeinbrasil.utils.Constants.CustomLists.LIST_ID
 import com.example.madeinbrasil.view.activity.CreateListActivity
 import com.example.madeinbrasil.view.activity.CustomListDetailsActivity
 import com.example.madeinbrasil.viewModel.CustomListViewModel
@@ -41,6 +43,18 @@ class MyListsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        customListViewMovel.getListWithMedia()
+
+        customListViewMovel.getListsSuccess.observe(this, { list ->
+
+            if(list.isEmpty()) {
+
+            } else {
+                setupRecyclerView(list)
+            }
+
+        })
+
 //        customListViewMovel.getListsUni()
 //
 //        customListViewMovel.uniLists.observe(viewLifecycleOwner, {
@@ -55,6 +69,18 @@ class MyListsFragment : Fragment() {
 //            }
 //        })
 
+    }
+
+    private fun setupRecyclerView(list: List<ListWithMedia>) {
+        binding.rvMyLists.apply {
+            layoutManager = LinearLayoutManager(this@MyListsFragment.context)
+            adapter = MyListsAdapter(list) { id ->
+                val intent =
+                    Intent(this@MyListsFragment.context, CustomListDetailsActivity::class.java)
+                intent.putExtra(LIST_ID, id)
+                startActivity(intent)
+            }
+        }
     }
 
     override fun onCreateView(

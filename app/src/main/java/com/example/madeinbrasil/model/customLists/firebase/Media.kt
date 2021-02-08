@@ -14,4 +14,20 @@ data class Media(
     val voteCount: Int?,
     var firstAirDate: String?,
     var name: String?,
-)
+) {
+    constructor(): this(
+            "",
+            "",
+            "",
+            "",
+            "",
+            0.0,
+            "",
+            "",
+            "",
+            0.0,
+            0,
+            "",
+            ""
+    )
+}

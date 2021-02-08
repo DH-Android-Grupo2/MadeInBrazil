@@ -53,5 +53,10 @@ class Constants {
 
     object CustomLists {
         const val ERROR_CREATE_LIST = "Erro ao criar a lista."
+        const val ERROR_GET_LISTS = "Erro ao recuperar as listas."
+        const val NONE_LIST = "Nenhuma lista adicionada."
+        const val LISTS = "lists"
+        const val LIST_ID = "listId"
+        const val CUSTOM_LIST_MEDIA_ITEM = "customListMediaItem"
     }
 }

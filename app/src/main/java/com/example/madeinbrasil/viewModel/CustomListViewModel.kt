@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.firebase.FirebaseResponse
 import com.example.madeinbrasil.business.CustomListBusiness
+import com.example.madeinbrasil.model.customLists.ListWithMedia
 import com.example.madeinbrasil.model.customLists.firebase.CustomList
 import com.example.madeinbrasil.model.customLists.firebase.Media
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
 //    val customListMovieIds: MutableLiveData<List<Long>> = MutableLiveData()
 //
 
+    val getListsSuccess: MutableLiveData<List<ListWithMedia>> = MutableLiveData()
     val listSucess: MutableLiveData<String> = MutableLiveData()
     val listFailure: MutableLiveData<String> = MutableLiveData()
 
@@ -34,6 +36,21 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
                 is FirebaseResponse.OnSucess ->
                     listSucess.postValue(
                         ""
+                    )
+                is FirebaseResponse.OnFailure ->
+                    listFailure.postValue(
+                        response.message
+                    )
+            }
+        }
+    }
+
+    fun getListWithMedia() {
+        viewModelScope.launch {
+            when(val response = customListBusinnes.getListsWithMedia()) {
+                is FirebaseResponse.OnSucess ->
+                    getListsSuccess.postValue(
+                        response.data as? List<ListWithMedia>
                     )
                 is FirebaseResponse.OnFailure ->
                     listFailure.postValue(
