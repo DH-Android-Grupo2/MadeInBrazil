@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.adapter.SelectMovieAdapter
 import com.example.madeinbrasil.databinding.FragmentSelectMovieBinding
 import com.example.madeinbrasil.model.customLists.ListMediaItem
+import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.viewModel.SelectMovieViewModel
@@ -30,7 +31,7 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: SelectMovieViewModel
 
     private val selectMovieAdapter by lazy {
-        arguments?.getLongArray(SELECTED_MOVIES)?.let {SelectMovieAdapter(it.toMutableList())}
+        arguments?.getStringArray(SELECTED_MOVIES)?.let {SelectMovieAdapter(it.toMutableList())}
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +43,7 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var application = getActivity()?.applicationContext
+        var application = activity?.applicationContext
         SetupSearchView(application as Application)
         setupRecyclerView()
         activity?.let{
@@ -51,7 +52,10 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
         }
 
         selectMovieAdapter?.onItemClick = {
-            val media = ListMediaItem(it.id.toLong(), it.title, it.backdropPath, it.originalTitle)
+            //val media = ListMediaItem(it.id.toLong(), it.title, it.backdropPath, it.originalTitle)
+            val media = Media(it.id.toString(), it.backdropPath, it.originalLanguage, it.originalTitle, it.overview,
+                                it.popularity, it.posterPath, it.releaseDate, it.title, it.voteAverage?.toDouble(),
+                                    it.voteCount, it.firstAirDate, it.name)
             viewModel.postClickedItem(media)
         }
 

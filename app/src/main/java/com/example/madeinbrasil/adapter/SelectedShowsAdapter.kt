@@ -7,11 +7,12 @@ import com.bumptech.glide.Glide
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.databinding.SelectedCardsBinding
 import com.example.madeinbrasil.model.customLists.ListMediaItem
+import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.model.search.ResultSearch
 
-class SelectedShowsAdapter(val onCloseClick: ((ListMediaItem) -> Unit)): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
+class SelectedShowsAdapter(val onCloseClick: ((Media) -> Unit)): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
 
-    val list: MutableList<ListMediaItem> = mutableListOf()
+    val list: MutableList<Media> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,21 +26,21 @@ class SelectedShowsAdapter(val onCloseClick: ((ListMediaItem) -> Unit)): Recycle
 
     override fun getItemCount(): Int = list.size
 
-    fun deleteItem(it: ListMediaItem) {
+    fun deleteItem(it: Media) {
         list.remove(it)
         notifyDataSetChanged()
     }
 
-    fun addItem(it: ListMediaItem) {
+    fun addItem(it: Media) {
         list.add(it)
         notifyItemInserted(list.size - 1)
     }
 
     inner class ViewHolder(val binding: SelectedCardsBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(show: ListMediaItem) = with(binding) {
+        fun bind(show: Media) = with(binding) {
 
             Glide.with(itemView.context).load(show.backdropPath).into(tvShowCover)
-            tvShowName.text = show.title
+            tvShowName.text = show.name ?: show.title
 
             imDeleteShow.setOnClickListener {
                 onCloseClick(show)

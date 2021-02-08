@@ -9,6 +9,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PageKeyedDataSource
 import androidx.paging.PagedList
 import com.example.madeinbrasil.model.customLists.ListMediaItem
+import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.model.search.movie.searchMovieDataSourceFactory
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
@@ -20,7 +21,7 @@ class SelectMovieViewModel(
     private var searchMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var query = ""
 
-    var clickedMovieItem: MutableLiveData<ListMediaItem> = MutableLiveData()
+    var clickedMovieItem: MutableLiveData<Media> = MutableLiveData()
 
     init {
         searchData(application)
@@ -48,7 +49,7 @@ class SelectMovieViewModel(
                 .build()
     }
 
-    fun postClickedItem(movie: ListMediaItem) {
+    fun postClickedItem(movie: Media) {
         clickedMovieItem.postValue(movie)
     }
 

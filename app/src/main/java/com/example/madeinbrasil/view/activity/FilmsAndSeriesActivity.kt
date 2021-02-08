@@ -128,25 +128,25 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         // ADDED 21/01
-                        binding.cbListFilmsSeries.setOnClickListener {
-                            val dialog = Dialog(this)
-                            dialog.setContentView(R.layout.choose_list_popup)
-                            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                            customListViewModel.getCustomLists()
-
-                            customListViewModel.customLists.observe(this){ list ->
-                                if(list.isEmpty())
-                                    dialog.tvEmptyList.visibility = View.VISIBLE
-                                else
-                                    dialog.rvCustomLists.apply {
-                                        layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
-                                        adapter = ChooseListAdapter(list) {
-
-                                        }
-                                    }
-                            }
-                            dialog.show()
-                        }
+//                        binding.cbListFilmsSeries.setOnClickListener {
+//                            val dialog = Dialog(this)
+//                            dialog.setContentView(R.layout.choose_list_popup)
+//                            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//                            customListViewModel.getCustomLists()
+//
+//                            customListViewModel.customLists.observe(this){ list ->
+//                                if(list.isEmpty())
+//                                    dialog.tvEmptyList.visibility = View.VISIBLE
+//                                else
+//                                    dialog.rvCustomLists.apply {
+//                                        layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+//                                        adapter = ChooseListAdapter(list) {
+//
+//                                        }
+//                                    }
+//                            }
+//                            dialog.show()
+//                        }
 
                         Glide.with(this)
                                 .load(movie.poster_path)
@@ -473,25 +473,25 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     // ADDED 21/01
-                    binding.cbListFilmsSeries.setOnClickListener {
-                        val dialog = Dialog(this)
-                        dialog.setContentView(R.layout.choose_list_popup)
-                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        customListViewModel.getCustomLists()
-
-                        customListViewModel.customLists.observe(this){ list ->
-                            if(list.isEmpty())
-                                dialog.tvEmptyList.visibility = View.VISIBLE
-                            else
-                                dialog.rvCustomLists.apply {
-                                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
-                                    adapter = ChooseListAdapter(list) {
-
-                                    }
-                                }
-                        }
-                        dialog.show()
-                    }
+//                    binding.cbListFilmsSeries.setOnClickListener {
+//                        val dialog = Dialog(this)
+//                        dialog.setContentView(R.layout.choose_list_popup)
+//                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//                        customListViewModel.getCustomLists()
+//
+//                        customListViewModel.customLists.observe(this){ list ->
+//                            if(list.isEmpty())
+//                                dialog.tvEmptyList.visibility = View.VISIBLE
+//                            else
+//                                dialog.rvCustomLists.apply {
+//                                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+//                                    adapter = ChooseListAdapter(list) {
+//
+//                                    }
+//                                }
+//                        }
+//                        dialog.show()
+//                    }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {
                         serie?.seasons?.forEach {

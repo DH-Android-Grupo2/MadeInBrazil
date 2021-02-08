@@ -3,6 +3,7 @@ package com.example.madeinbrasil.view.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
+import android.widget.Toast
 
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
@@ -11,10 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madeinbrasil.adapter.SelectedShowsAdapter
 import com.example.madeinbrasil.databinding.ActivityCreateListBinding
-import com.example.madeinbrasil.model.customLists.CustomList
-import com.example.madeinbrasil.model.customLists.ListMovieItem
-import com.example.madeinbrasil.model.customLists.ListSerieItem
-import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
+import com.example.madeinbrasil.model.customLists.firebase.CustomList
+import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
 import com.example.madeinbrasil.view.fragment.SelectMovieFragment
@@ -30,8 +29,8 @@ class CreateListActivity : AppCompatActivity() {
     private lateinit var selectSerieViewModel: SelectSerieViewModel
     private lateinit var selectMovieViewModel: SelectMovieViewModel
     private lateinit var customListViewModel: CustomListViewModel
-    private var selectedMovies: MutableList<Long> = mutableListOf()
-    private var selectedSeries: MutableList<Long> = mutableListOf()
+    private var selectedMovies: MutableList<String> = mutableListOf()
+    private var selectedSeries: MutableList<String> = mutableListOf()
 
     private val selectedShowsAdapter by lazy {
         SelectedShowsAdapter() {
@@ -73,7 +72,7 @@ class CreateListActivity : AppCompatActivity() {
         binding.imAddMovie.setOnClickListener {
             val fragment = SelectMovieFragment()
             fragment.arguments = Bundle().apply {
-                putLongArray(SELECTED_MOVIES, selectedMovies.toLongArray())
+                putStringArray(SELECTED_MOVIES, selectedMovies.toTypedArray())
             }
             fragment.show(supportFragmentManager, null)
         }
@@ -81,18 +80,20 @@ class CreateListActivity : AppCompatActivity() {
         binding.imAddSerie.setOnClickListener {
             val fragment = SelectSerieFragment()
             fragment.arguments = Bundle().apply {
-                putLongArray(SELECTED_SERIES, selectedSeries.toLongArray())
+                putStringArray(SELECTED_SERIES, selectedSeries.toTypedArray())
             }
             fragment.show(supportFragmentManager, null)
         }
 
         binding.btnCreateList.setOnClickListener {
-            saveListDataToDB()
+//            saveListDataToDB()
+                saveList()
         }
     }
 
     private fun setupShowClickListeners() {
-        selectMovieViewModel.clickedMovieItem.observe(this) {
+
+        selectMovieViewModel.clickedMovieItem.observe(this, {
             if (selectedMovies.contains(it.id)) {
                 selectedMovies.remove(it.id)
                 selectedShowsAdapter.deleteItem(it)
@@ -100,7 +101,7 @@ class CreateListActivity : AppCompatActivity() {
                 selectedMovies.add(it.id)
                 selectedShowsAdapter.addItem(it)
             }
-        }
+        })
 
         selectSerieViewModel.clickedSerieItem.observe(this) {
             if (selectedSeries.contains(it.id)) {
@@ -126,26 +127,44 @@ class CreateListActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveListDataToDB() {
+    private fun saveList() = with(binding) {
 
-        val movieList = mutableListOf<ListMovieItem>()
-        val serieList = mutableListOf<ListSerieItem>()
+        val movieList = mutableListOf<Media>()
+        val serieList = mutableListOf<Media>()
 
-        selectedShowsAdapter.list.forEach {
-            if (selectedSeries.contains(it.id))
-                serieList.add(ListSerieItem(it.id, it.title, it.backdropPath, it.originalTitle))
-            else
-                movieList.add(ListMovieItem(it.id, it.title, it.backdropPath, it.originalTitle))
-        }
+        val customList = CustomList(teetName.text.toString(), teetDescription.text.toString(), selectedMovies, selectedSeries)
+        customListViewModel.createList(customList, selectedShowsAdapter.list)
 
-        customListViewModel.createCustomList(ListWithMedia(
-            CustomList(0, binding.teetName.text.toString(), binding.teetDescription.text.toString(), 0),
-                movieList,
-                serieList)
-        )
+        customListViewModel.listSucess.observe(this@CreateListActivity, {
+            finish()
+        })
 
-        setResult(RESULT_OK)
-        finish()
+        customListViewModel.listFailure.observe(this@CreateListActivity, {
+            Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
+        })
+
     }
+
+//    private fun saveListDataToDB() {
+//
+//        val movieList = mutableListOf<ListMovieItem>()
+//        val serieList = mutableListOf<ListSerieItem>()
+//
+//        selectedShowsAdapter.list.forEach {
+//            if (selectedSeries.contains(it.id))
+//                serieList.add(ListSerieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+//            else
+//                movieList.add(ListMovieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+//        }
+//
+//        customListViewModel.createCustomList(ListWithMedia(
+//            CustomList(0, binding.teetName.text.toString(), binding.teetDescription.text.toString(), 0),
+//                movieList,
+//                serieList)
+//        )
+//
+//        setResult(RESULT_OK)
+//        finish()
+//    }
 
 }

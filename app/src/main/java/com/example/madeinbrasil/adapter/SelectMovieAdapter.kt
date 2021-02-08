@@ -10,7 +10,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.databinding.MainCardsSelectionBinding
 
-class SelectMovieAdapter(private var selectedItems: MutableList<Long>): PagedListAdapter<Result, SelectMovieAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
+class SelectMovieAdapter(private var selectedItems: MutableList<String>): PagedListAdapter<Result, SelectMovieAdapter.ViewHolder>(Result.DIFF_CALLBACK) {
 
     var onItemClick: ((Result) -> Unit)? = null
 
@@ -35,10 +35,10 @@ class SelectMovieAdapter(private var selectedItems: MutableList<Long>): PagedLis
 
     private fun tooglePosition(movie: Result?) {
         movie?.let {
-            if (selectedItems.contains(it.id.toLong()))
-                selectedItems.remove(it.id.toLong())
+            if (selectedItems.contains(it.id.toString()))
+                selectedItems.remove(it.id.toString())
             else
-                selectedItems.add(it.id.toLong())
+                selectedItems.add(it.id.toString())
         }
     }
 
@@ -47,7 +47,7 @@ class SelectMovieAdapter(private var selectedItems: MutableList<Long>): PagedLis
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
-        fun bind(movie: Result?, selectedItems: List<Long>) = with(binding) {
+        fun bind(movie: Result?, selectedItems: List<String>) = with(binding) {
             movie?.let {
 
                 Glide.with(itemView.context)
@@ -57,7 +57,7 @@ class SelectMovieAdapter(private var selectedItems: MutableList<Long>): PagedLis
 
                 tvNameMedia.text = movie.title
 
-                if(selectedItems.contains(movie.id.toLong())) {
+                if(selectedItems.contains(movie.id.toString())) {
                     tvSelectionIcon.setImageResource(R.drawable.remove_item)
                     tvSelectionCover.visibility = View.INVISIBLE
                 }

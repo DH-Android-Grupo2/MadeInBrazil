@@ -50,4 +50,8 @@ class Constants {
         const val DATABASE_FAVORITES = "favorites"
         const val DATABASE_WATCHED = "watched"
     }
+
+    object CustomLists {
+        const val ERROR_CREATE_LIST = "Erro ao criar a lista."
+    }
 }

@@ -41,19 +41,19 @@ class MyListsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        customListViewMovel.getListsUni()
-
-        customListViewMovel.uniLists.observe(viewLifecycleOwner, {
-
-            binding.rvMyLists.apply {
-                layoutManager = LinearLayoutManager(this@MyListsFragment.context)
-                adapter = MyListsAdapter(it) { id ->
-                    val intent = Intent(this@MyListsFragment.context, CustomListDetailsActivity::class.java)
-                    intent.putExtra(LIST_ID, id)
-                    startActivity(intent)
-                }
-            }
-        })
+//        customListViewMovel.getListsUni()
+//
+//        customListViewMovel.uniLists.observe(viewLifecycleOwner, {
+//
+//            binding.rvMyLists.apply {
+//                layoutManager = LinearLayoutManager(this@MyListsFragment.context)
+//                adapter = MyListsAdapter(it) { id ->
+//                    val intent = Intent(this@MyListsFragment.context, CustomListDetailsActivity::class.java)
+//                    intent.putExtra(LIST_ID, id)
+//                    startActivity(intent)
+//                }
+//            }
+//        })
 
     }
 
