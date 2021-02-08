@@ -85,24 +85,39 @@ class CustomListRepository(context: Context? = null) {
             var movies: List<Media>? = null
             var series: List<Media>? = null
 
-            customListsItemRef.whereIn("id", cl.movies?.toMutableList() ?: mutableListOf()).get()
-                .addOnCompleteListener {
-                    if(it.isSuccessful)
-                        movies = it.result.toObjects(Media::class.java)
-                }.await()
+            customLists?.let {
+                cl.movies?.let { moviesId ->
+                    if (moviesId.isNotEmpty())
+                        customListsItemRef.whereIn("id", moviesId.toMutableList()).get()
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful)
+                                        movies = it.result.toObjects(Media::class.java)
+                                }.await()
+                }
 
-            customListsItemRef.whereIn("id", cl.series?.toMutableList() ?: mutableListOf()).get()
-                .addOnCompleteListener {
-                    if(it.isSuccessful)
-                        series = it.result.toObjects(Media::class.java)
-                }.await()
+                cl.series?.let { seriesId ->
+                    if (seriesId.isNotEmpty())
+                    customListsItemRef.whereIn("id", seriesId.toMutableList()).get()
+                            .addOnCompleteListener {
+                                if (it.isSuccessful)
+                                    series = it.result.toObjects(Media::class.java)
+                            }.await()
+                }
+            }
 
             val items = mutableListOf<Media>()
-            movies?.forEach {
-                items.add(it)
+
+            movies?.let { list ->
+                if (list.isNotEmpty())
+                    list.forEach {
+                        items.add(it)
+                    }
             }
-            series?.forEach {
-                items.add(it)
+            series?.let { list ->
+                if (list.isNotEmpty())
+                    list.forEach {
+                        items.add(it)
+                    }
             }
 
             listWithMedia.add(ListWithMedia(cl, items))

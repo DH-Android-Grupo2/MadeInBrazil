@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ import com.example.madeinbrasil.view.activity.CreateListActivity
 import com.example.madeinbrasil.view.activity.CustomListDetailsActivity
 import com.example.madeinbrasil.viewModel.CustomListViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_my_lists.*
 
 
 class MyListsFragment : Fragment() {
@@ -42,11 +44,14 @@ class MyListsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        binding.tvEmptyListMessage.visibility = View.GONE
 
 
         customListViewMovel.getListWithMedia()
 
         customListViewMovel.getListsSuccess.observe(this, { list ->
+
+            pbGettingLists.visibility = View.GONE
 
             if(list.isEmpty()) {
                 binding.tvEmptyListMessage.visibility = View.VISIBLE
@@ -54,6 +59,14 @@ class MyListsFragment : Fragment() {
                 binding.tvEmptyListMessage.visibility = View.GONE
                 setupRecyclerView(list)
             }
+
+        })
+
+        customListViewMovel.listFailure.observe(this, { message ->
+
+            pbGettingLists.visibility = View.GONE
+
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
 
         })
 
