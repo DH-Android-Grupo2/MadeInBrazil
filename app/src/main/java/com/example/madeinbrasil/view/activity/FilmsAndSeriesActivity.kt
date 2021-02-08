@@ -1007,14 +1007,24 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private fun commentsObservables(){
 
         binding.btAddCommentFilmsSeries.setOnClickListener {
+
+            var docId: Int?
+
+            if(films?.id != null){
+                docId = films?.id
+            } else{
+                docId = series?.id
+            }
+
             var asEditableComment = Editable.Factory.getInstance().newEditable("")
-            val commentDoc = firebaseFirestore.collection("comments").document()
+            val commentDoc = firebaseFirestore.collection("commentsByMedia").document(docId.toString()).collection("comments").document()
             val comment = hashMapOf(
                     "userId" to firebaseAuth.currentUser?.uid,
                     "userName" to firebaseAuth.currentUser?.displayName,
                     "userImage" to firebaseAuth.currentUser?.photoUrl.toString(),
                     "commentText" to binding.tilCommentFilmsSeries.editText?.text.toString(),
-                    "commentId" to commentDoc.id
+                    "commentId" to commentDoc.id,
+                    "midiaId" to docId
             )
 
             commentDoc.set(comment)
