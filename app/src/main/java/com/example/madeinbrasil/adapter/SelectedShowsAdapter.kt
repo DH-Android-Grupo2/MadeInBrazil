@@ -12,7 +12,7 @@ import com.example.madeinbrasil.model.search.ResultSearch
 
 class SelectedShowsAdapter(val onCloseClick: ((Media) -> Unit)): RecyclerView.Adapter<SelectedShowsAdapter.ViewHolder>() {
 
-    val list: MutableList<Media> = mutableListOf()
+    var list: MutableList<Media> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

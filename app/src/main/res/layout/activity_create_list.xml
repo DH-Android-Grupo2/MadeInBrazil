@@ -133,7 +133,6 @@
             android:layout_marginStart="40dp"
             android:layout_margin="40dp"
             android:background="@drawable/save_button_selector"
-            android:text="@string/string_create_list_button"
             android:textStyle="bold"
             android:enabled="false"
             android:textColor="@color/colorAccent"

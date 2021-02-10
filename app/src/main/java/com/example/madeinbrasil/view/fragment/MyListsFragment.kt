@@ -1,6 +1,5 @@
 package com.example.madeinbrasil.view.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +18,6 @@ import com.example.madeinbrasil.utils.Constants.CustomLists.LIST
 import com.example.madeinbrasil.view.activity.CreateListActivity
 import com.example.madeinbrasil.view.activity.CustomListDetailsActivity
 import com.example.madeinbrasil.viewModel.CustomListViewModel
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_my_lists.*
 
 
@@ -56,13 +53,6 @@ class MyListsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == CODE) {
-            makeToast()
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         customListViewMovel =  ViewModelProvider(this).get(CustomListViewModel::class.java)
@@ -72,7 +62,7 @@ class MyListsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btNewList.setOnClickListener {
-            this.context?.let { it1 -> startCreateListActivity(it1) }
+            startCreateEditActivity()
         }
     }
 
@@ -137,6 +127,9 @@ class MyListsFragment : Fragment() {
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                     when(item?.itemId) {
                         R.id.action_edit -> {
+                            val list = myListsAdapter.getItem()
+                            startCreateEditActivity(list)
+                            mode?.finish()
                             return true
                         }
                         R.id.action_delete -> {
@@ -172,11 +165,6 @@ class MyListsFragment : Fragment() {
 
     }
 
-    private fun startCreateListActivity(context: Context) {
-        val intent = Intent(context, CreateListActivity::class.java)
-        startActivityForResult(intent, CODE)
-    }
-
     private fun setupRecyclerView(list: List<ListWithMedia>) {
         binding.rvMyLists.apply {
             layoutManager = LinearLayoutManager(this@MyListsFragment.context)
@@ -191,11 +179,14 @@ class MyListsFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun makeToast() {
-        Snackbar.make(binding.root, R.string.created_list_success, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ResourcesCompat.getColor(resources, R.color.colorAccent, null))
-                .show()
+    private fun startCreateEditActivity(list: ListWithMedia? = null) {
+        val intent = Intent(context, CreateListActivity::class.java)
+        list?.let {
+            intent.putExtra(LIST, it)
+        }
+        startActivity(intent)
     }
+
 
     private fun deleteLists(selectedItems: List<String>) {
         customListViewMovel.deleteLists(selectedItems)

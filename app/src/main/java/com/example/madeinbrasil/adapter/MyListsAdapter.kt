@@ -67,6 +67,12 @@ class MyListsAdapter(val onClick: (ListWithMedia) -> Unit): RecyclerView.Adapter
         notifyDataSetChanged()
     }
 
+    fun getItem(): ListWithMedia {
+        return list.filter {
+            it.list.id == selectedItems[0]
+        }.first()
+    }
+
     inner class ViewHolder(val binding: MainMyListRecyclerviewBinding) : RecyclerView.ViewHolder(
             binding.root
     ) {

@@ -62,6 +62,7 @@
     <string name="string_create_list_page_title">Crie sua lista</string>
     <string name="string_description_hint">Descrição</string>
     <string name="string_create_list_button">Criar lista</string>
+    <string name="string_update_list_button">Atualizar lista</string>
     <string name="string_friends">Amigos</string>
     <string name="string_ask_friend">Pesquisar algum Amigo</string>
     <string name="string_logIn">Entrar</string>
@@ -133,5 +134,6 @@
     <string name="string_login_with_facebook">Entrar com o Facebook</string>
     <string name="string_go_to_favorites">Ir para os Favoritos</string>
     <string name="string_go_to_lists">Ir para as Listas</string>
+    <string name="add_new_list_description">Add new List</string>
 
 </resources>

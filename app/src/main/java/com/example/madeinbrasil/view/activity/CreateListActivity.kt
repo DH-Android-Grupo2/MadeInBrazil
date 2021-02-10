@@ -2,6 +2,7 @@ package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.widget.EditText
 import android.widget.Toast
 
@@ -10,12 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.SelectedShowsAdapter
 import com.example.madeinbrasil.databinding.ActivityCreateListBinding
+import com.example.madeinbrasil.model.customLists.ListWithMedia
 import com.example.madeinbrasil.model.customLists.firebase.CustomList
 import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
+import com.example.madeinbrasil.utils.Constants.CustomLists.LIST
 import com.example.madeinbrasil.view.fragment.SelectMovieFragment
 import com.example.madeinbrasil.view.fragment.SelectSerieFragment
 import com.example.madeinbrasil.viewModel.CustomListViewModel
@@ -55,6 +59,13 @@ class CreateListActivity : AppCompatActivity() {
         setupButtonListeners()
         setupShowClickListeners()
         setupFormFieldsListeners()
+
+        intent.getParcelableExtra<ListWithMedia>(LIST)?.let {
+            populateListInfo(it)
+            binding.btnCreateList.text = getString(R.string.string_update_list_button)
+        } ?: run {
+            binding.btnCreateList.text = getString(R.string.string_create_list_button)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -125,6 +136,18 @@ class CreateListActivity : AppCompatActivity() {
                 createListBtn.isEnabled = it.trim().isNotEmpty()
             }
         }
+    }
+
+    private fun populateListInfo(list: ListWithMedia) = with(binding) {
+        with(list.list) {
+            teetName.text = Editable.Factory.getInstance().newEditable(name)
+            teetDescription.text = Editable.Factory.getInstance().newEditable(description)
+
+            selectedMovies = movies as MutableList<String>
+            selectedSeries = series as MutableList<String>
+        }
+
+        selectedShowsAdapter.list = list.mediaList as MutableList<Media>
     }
 
     private fun saveList() = with(binding) {
