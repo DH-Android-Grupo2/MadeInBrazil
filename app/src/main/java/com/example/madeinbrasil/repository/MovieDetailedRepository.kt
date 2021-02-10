@@ -12,9 +12,13 @@ import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.utils.Constants
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
 class MovieDetailedRepository(context: Context){
     private val watchedDao by lazy {
@@ -34,7 +38,7 @@ class MovieDetailedRepository(context: Context){
     }
 
     private val firebaseComments by lazy {
-        Firebase.firestore.collection("comments")
+        Firebase.firestore
     }
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
@@ -83,8 +87,25 @@ class MovieDetailedRepository(context: Context){
         similarDB.insertSimilar(similar)
     }
 
-    suspend fun postComment(comment: CommentFirebase) {
-        firebaseComments.document().set(comment)
+    suspend fun postComment(hashMap: Any,id: Int) {
+        firebaseComments.collection("commentsByMedia").document(id.toString()).collection("comments").document().set(hashMap).await()
+    }
+
+    suspend fun getComment(id: Int): MutableList<CommentFirebase?> {
+        val docRef = firebaseComments.collection("commentsByMedia").document(id.toString()).collection("comments")
+
+        return try {
+           val documments =  docRef.get().await()
+            val commentList = mutableListOf<CommentFirebase?>()
+            documments.toObjects(CommentFirebase::class.java)
+            documments.forEach {
+                commentList.add(it.toObject())
+            }
+            return commentList
+        } catch (e:Exception){
+            return mutableListOf()
+        }
+
     }
 
 }

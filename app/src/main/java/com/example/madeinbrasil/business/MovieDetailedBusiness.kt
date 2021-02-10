@@ -81,7 +81,6 @@ class MovieDetailedBusiness(val context: Context)  {
         repository.insertSimilar(similar)
     }
 
-    suspend fun postComment(comment: CommentFirebase){
-        repository.postComment(comment)
-    }
+
+
 }

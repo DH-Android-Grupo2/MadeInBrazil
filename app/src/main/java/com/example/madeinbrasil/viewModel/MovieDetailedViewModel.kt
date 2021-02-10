@@ -15,6 +15,7 @@ import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.repository.MovieDetailedRepository
 import kotlinx.coroutines.launch
 
 class MovieDetailedViewModel(application: Application): AndroidViewModel(application) {
@@ -27,6 +28,12 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
     private val detailed by lazy {
         MovieDetailedBusiness(application)
     }
+
+    private val detailedRepository by lazy {
+        MovieDetailedRepository(application)
+    }
+
+    val onGetComments: MutableLiveData<MutableList<CommentFirebase?>> = MutableLiveData()
 
     fun getMovie(movieId: Int?) {
         viewModelScope.launch {
@@ -81,9 +88,16 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
-    fun postComment(comment: CommentFirebase){
+    fun postComment(hashMap: Any, id: Int){
         viewModelScope.launch {
-            detailed.postComment(comment)
+            detailedRepository.postComment(hashMap,id)
+       }
+   }
+
+    fun getComment(id: Int){
+        viewModelScope.launch {
+           val docs =  detailedRepository.getComment(id)
+            onGetComments.postValue(docs)
         }
     }
 

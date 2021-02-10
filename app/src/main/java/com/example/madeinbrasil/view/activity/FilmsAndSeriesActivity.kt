@@ -405,10 +405,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-           //     findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
-           //         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
-          //          adapter = MainAdapterComments(comments)
-           //     }
+                //     findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
+                //         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+                //          adapter = MainAdapterComments(comments)
+                //     }
             }
 
             2 -> {
@@ -710,10 +710,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
 
-             //   findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
-             //       layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
-              //      adapter = MainAdapterComments(comments)
-             //   }
+                //   findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
+                //       layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+                //      adapter = MainAdapterComments(comments)
+                //   }
             }
         }
     }
@@ -1019,8 +1019,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             } else {
                 docId = series?.id
             }
-
-            var asEditableComment = Editable.Factory.getInstance().newEditable("")
             val commentDoc = firebaseFirestore.collection("commentsByMedia").document(docId.toString()).collection("comments").document()
             val comment = hashMapOf(
                     "userId" to firebaseAuth.currentUser?.uid,
@@ -1030,15 +1028,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     "commentId" to commentDoc.id,
                     "midiaId" to docId
             )
+            val teste = comment
+            val intent = Intent(this, FilmsAndSeriesActivity::class.java)
+            var asEditableEmpty = Editable.Factory.getInstance().newEditable("")
 
-            commentDoc.set(comment)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Comentário feito com sucesso", Toast.LENGTH_SHORT).show()
-                        binding.tilCommentFilmsSeries.editText?.text = asEditableComment
-                    }.addOnFailureListener {
-                        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
-                    }
 
+            if (docId != null) {
+                viewModelMovie.postComment(teste,docId)
+                binding.tilCommentFilmsSeries.editText?.text = asEditableEmpty
+                getComments()
+            }
 
         }
 
@@ -1050,30 +1049,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         super.onResume()
 
 
-        getComments()?.addOnCompleteListener {
-            if (it.isSuccessful){
-                listComments = it.result?.toObjects(CommentFirebase::class.java) ?: mutableListOf()
-                binding.rvCommentsUsers.apply {
-                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
-                    adapter = MainAdapterComments(listComments)
-                }
-            } else{
+        getComments()
 
-        }
-        }
     }
 
 
-
-
-
-
-
-
-    fun getComments(): Task<QuerySnapshot>? {
+    fun getComments() {
 
         var docId: Int?
-
 
         if (films?.id != null) {
             docId = films?.id
@@ -1081,17 +1064,16 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             docId = series?.id
         }
 
-        val docRef = firebaseFirestore.collection("commentsByMedia").document(docId.toString()).collection("comments")
-
-        return docRef.get().addOnSuccessListener {
-            it.documents.forEach {
-                val comment = it.toObject<CommentFirebase>()
-                listComments.add(comment)
-                return@addOnSuccessListener
-            }
-        }.addOnFailureListener {
-            it.localizedMessage
+        if (docId != null) {
+            viewModelMovie.getComment(docId)
         }
-    }
+        viewModelMovie.onGetComments.observe(this,{
+            listComments = it
+            binding.rvCommentsUsers.apply {
+                layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
+                adapter = MainAdapterComments(listComments)
+            }
+        })
 
+    }
 }
