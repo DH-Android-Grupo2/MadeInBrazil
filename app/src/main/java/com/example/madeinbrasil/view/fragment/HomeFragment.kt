@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -38,6 +39,7 @@ import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.example.madeinbrasil.view.activity.MenuActivity
 import com.example.madeinbrasil.viewModel.HomeViewModel
 import com.google.android.gms.cast.framework.media.MediaUtils.getImageUri
 import kotlinx.android.synthetic.main.filmsseries_popup.*
@@ -48,7 +50,7 @@ import java.io.File
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
-    private var binding: FragmentHomeBinding? = null
+    private lateinit var binding: FragmentHomeBinding
     var movieComplete: MovieDetailed? = null
     private  var selected: GenreSelected? = null
     private var discover: DiscoverMovie? = null
@@ -211,28 +213,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        binding?.rvCardsListLancamentos?.apply {
+        binding.rvCardsListLancamentos.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentNowPlaying()
             adapter = homeAdapter
-
         }
 
-        binding?.rvCardsListFuturosLancamentos?.apply {
+        binding.rvCardsListFuturosLancamentos.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentUpcoming()
-
             adapter = homeAdapter2
         }
 
-       binding?.rvCardsListMovies?.apply {
-         layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
-           loadContentDiscoverMovie()
-           adapter = homeAdapter3
-         }
+        binding.rvCardsListMovies.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
+            loadContentDiscoverMovie()
+            adapter = homeAdapter3
+        }
 
-        binding?.rvCardListSeries?.apply {
-           layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvCardListSeries.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentDiscoverTv()
             adapter = homeAdapter4
         }
@@ -271,68 +271,36 @@ class HomeFragment : Fragment() {
                 ContextCompat.startActivity(it.context, shareIntent, null)
             }
 
+            serie?.let {
+                if(MenuActivity.USER.favorites.contains(it.id)) {
+                    dialog.cbFavorite.isChecked = true
+                }
+                if(MenuActivity.USER.watched.contains(it.id)) {
+                    dialog.cbWatched.isChecked = true
+                }
+            }
+
             dialog.cbFavorite.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    serie?.let {
-                        val fav = Favorites(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(serie.id, serie.backdropPath, "", "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, listOf(), serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
-                        if(isChecked) {
-                            dbFav.insertFavorite(fav)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbFav.deleteByIdFavorites(it.id)
-                        }
+                serie?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.favorites.add(it.id)
+                    }else {
+                        MenuActivity.USER.favorites.remove(it.id)
                     }
+
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 
             dialog.cbWatched.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    serie?.let {
-                        val watched = Watched(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(serie.id, serie.backdropPath, "", "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, listOf(), serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
-                        if(isChecked) {
-                            dbWatched.insertWatched(watched)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbWatched.deleteByIdWatched(it.id)
-                        }
+                serie?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.watched.add(it.id)
+                    }else {
+                        MenuActivity.USER.watched.remove(it.id)
                     }
-                }
-            }
 
-            lifecycleScope.launch {
-                val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-
-                dbFav.getMidiaWithFavorites().forEach {
-                    if(it.midia.id == serie?.id) {
-                        it.favorites.forEach {
-                            dialog.cbFavorite.isChecked = it.isChecked
-                        }
-                    }
-                }
-
-                dbWatched.getMidiaWithWatched().forEach {
-                    if(it.midia.id == serie?.id) {
-                        it.watched.forEach {
-                            dialog.cbWatched.isChecked = it.isChecked
-                        }
-                    }
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 
@@ -368,68 +336,36 @@ class HomeFragment : Fragment() {
                 ContextCompat.startActivity(it.context, shareIntent, null)
             }
 
+            movie?.let {
+                if(MenuActivity.USER.favorites.contains(it.id)) {
+                    dialog.cbFavorite.isChecked = true
+                }
+                if(MenuActivity.USER.watched.contains(it.id)) {
+                    dialog.cbWatched.isChecked = true
+                }
+            }
+
             dialog.cbFavorite.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    movie?.let {
-                        val fav = Favorites(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(movie.id, movie.backdropPath, "", movie.originalLanguage,
-                                movie.originalTitle, movie.overview, movie.popularity, movie.posterPath, movie.releaseDate,
-                                0, movie.title, movie.voteAverage?.toDouble(), movie.voteCount, listOf(0), "",
-                                "", midiaType = 1)
-
-                        if(isChecked) {
-                            dbFav.insertFavorite(fav)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbFav.deleteByIdFavorites(it.id)
-                        }
+                movie?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.favorites.add(it.id)
+                    }else {
+                        MenuActivity.USER.favorites.remove(it.id)
                     }
+
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 
             dialog.cbWatched.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    movie?.let {
-                        val watched = Watched(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(movie.id, movie.backdropPath, "", movie.originalLanguage,
-                                movie.originalTitle, movie.overview, movie.popularity, movie.posterPath, movie.releaseDate,
-                                0, movie.title, movie.voteAverage?.toDouble(), movie.voteCount, listOf(0), "",
-                                "", midiaType = 1)
-
-                        if(isChecked) {
-                            dbWatched.insertWatched(watched)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbWatched.deleteByIdWatched(it.id)
-                        }
+                movie?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.watched.add(it.id)
+                    }else {
+                        MenuActivity.USER.watched.remove(it.id)
                     }
-                }
-            }
 
-            lifecycleScope.launch {
-                val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-
-                dbFav.getMidiaWithFavorites().forEach {
-                    if(it.midia.id == movie?.id) {
-                        it.favorites.forEach {
-                            dialog.cbFavorite.isChecked = it.isChecked
-                        }
-                    }
-                }
-
-                dbWatched.getMidiaWithWatched().forEach {
-                    if(it.midia.id == movie?.id) {
-                        it.watched.forEach {
-                            dialog.cbWatched.isChecked = it.isChecked
-                        }
-                    }
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 

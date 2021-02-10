@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.repository
 
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_CAST
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_GENRE
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_MIDIA
@@ -36,12 +37,15 @@ class MenuRepository {
        return userFirebase.get().await()
     }
 
-    suspend fun getMidia(): QuerySnapshot {
-        return midiaFirebase.get().await()
+//    suspend fun getMidia(): QuerySnapshot {
+//        return midiaFirebase.limit(50).get().await()
+//    }
+    suspend fun getMidia(id: Int): DocumentSnapshot? {
+        return midiaFirebase.document("$id").get().await()
     }
 
     suspend fun getCast(): QuerySnapshot {
-        return castFirebase.get().await()
+        return castFirebase.limit(20).get().await()
     }
 
     suspend fun getSeason(): QuerySnapshot {

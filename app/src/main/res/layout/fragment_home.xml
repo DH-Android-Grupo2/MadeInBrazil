@@ -44,12 +44,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             tools:listitem="@layout/main_cards_menu"
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvLancamentosRecycler"/>
+            app:layout_constraintTop_toBottomOf="@id/tvLancamentosRecycler"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/tvFuturosLancamentosRecycler"
@@ -69,12 +71,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             tools:listitem="@layout/main_cards_menu"
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvFuturosLancamentosRecycler"/>
+            app:layout_constraintTop_toBottomOf="@id/tvFuturosLancamentosRecycler"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/tvSugestoesRecycler"
@@ -94,12 +98,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             tools:listitem="@layout/main_cards_menu"
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvSugestoesRecycler"/>
+            app:layout_constraintTop_toBottomOf="@id/tvSugestoesRecycler"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/tvCardListSeries"
@@ -119,10 +125,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             tools:listitem="@layout/main_cards_menu"
             tools:itemCount="1"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvCardListSeries"/>
+            app:layout_constraintTop_toBottomOf="@id/tvCardListSeries"
+            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

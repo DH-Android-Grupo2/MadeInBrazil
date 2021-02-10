@@ -75,6 +75,30 @@ class SerieDetailedBusiness (val context: Context) {
         repository.setMidiaFireBase(id, infos)
     }
 
+    suspend fun getMidiaFireBase(id: Int): DocumentSnapshot? {
+        repository.getMidiaFireBase(id)?.let {
+            return it
+        }?: run {
+            return null
+        }
+    }
+
+    suspend fun getCast(id: Int): DocumentSnapshot? {
+        repository.getCast(id)?.let {
+            return it
+        }?: run {
+            return null
+        }
+    }
+
+    suspend fun getSeason(id: Int): DocumentSnapshot? {
+        repository.getSeason(id)?.let {
+            return it
+        }?: run {
+            return null
+        }
+    }
+
     suspend fun setGenreFireBase(id: Int, infos: GenreFirebase) {
         repository.setGenreFireBase(id, infos)
     }
@@ -90,6 +114,7 @@ class SerieDetailedBusiness (val context: Context) {
     suspend fun updateUser(user: User) {
         repository.updateUser(user)
     }
+
 
     suspend fun insertFavorite(fav: Favorites) {
         repository.insertFavorite(fav)

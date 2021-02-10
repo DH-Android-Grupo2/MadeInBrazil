@@ -1,5 +1,9 @@
 package com.example.madeinbrasil.database.entities.midia
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class MidiaFirebase(
         var id: Int = 0,
         var backdropPath: String? = "",
@@ -15,4 +19,6 @@ data class MidiaFirebase(
         var seasons: List<Int>? = listOf(),
         var similar: List<Int>? = listOf(),
         var voteAverage: Double? = 0.0,
-)
+        var origin: Int = 0,
+        var midiaType: Int = 0
+): Parcelable

@@ -15,6 +15,7 @@ import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.result.Genre
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.repository.MovieDetailedRepository
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 
@@ -54,6 +55,22 @@ class MovieDetailedBusiness(val context: Context)  {
             ResponseAPI.Success(movie)
         } else {
             response
+        }
+    }
+
+    suspend fun getMidiaFireBase(id: Int): DocumentSnapshot? {
+        repository.getMidiaFireBase(id)?.let {
+            return it
+        }?: run {
+            return null
+        }
+    }
+
+    suspend fun getCast(id: Int): DocumentSnapshot? {
+        repository.getCast(id)?.let {
+            return it
+        }?: run {
+            return null
         }
     }
 

@@ -20,12 +20,16 @@ import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.model.result.Genre
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.view.activity.MenuActivity
+import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.launch
 
 class MovieDetailedViewModel(application: Application): AndroidViewModel(application) {
     val movieSucess: MutableLiveData<MovieDetailed> = MutableLiveData()
-//    val movieError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
     val movieError: MutableLiveData<List<MidiaFirebase>> = MutableLiveData()
+    val midia: MutableLiveData<MutableList<MidiaFirebase?>> = MutableLiveData()
+    val cast: MutableLiveData<MutableList<DocumentSnapshot>> = MutableLiveData()
+    var listMidia = mutableListOf<MidiaFirebase?>()
+    var listCast = mutableListOf<DocumentSnapshot>()
 
     private val midiaDB by lazy {
         MadeInBrazilDatabase.getDatabase(application).midiaDao()
@@ -44,6 +48,28 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
 //                    movieError.postValue(midiaDB.getMidia())
                     movieError.postValue(MenuActivity.MIDIA)
                 }
+            }
+        }
+    }
+
+    fun getMidiaFireBase(id: Int) {
+        viewModelScope.launch {
+            detailed.getMidiaFireBase(id)?.let {
+                listMidia.add(it.toObject(MidiaFirebase::class.java))
+                midia.postValue(listMidia)
+            }?: run {
+                midia.postValue(null)
+            }
+        }
+    }
+
+    fun getCast(id: Int) {
+        viewModelScope.launch {
+            detailed.getCast(id)?.let {
+                listCast.add(it)
+                cast.postValue(listCast)
+            }?: run {
+                cast.postValue(null)
             }
         }
     }
@@ -71,6 +97,29 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
             detailed.updateUser(user)
         }
     }
+//    fun addUserFavorite(id: Int) {
+//        viewModelScope.launch {
+//            detailed.addUserFavorite(id)
+//        }
+//    }
+//
+//    fun addUserWatched(id: Int) {
+//        viewModelScope.launch {
+//            detailed.addUserWatched(id)
+//        }
+//    }
+//
+//    fun removeUserFavorite(id: Int) {
+//        viewModelScope.launch {
+//            detailed.removeUserFavorite(id)
+//        }
+//    }
+//
+//    fun removeUserWatched(id: Int) {
+//        viewModelScope.launch {
+//            detailed.removeUserWatched(id)
+//        }
+//    }
 
     fun insertFavorite(fav: Favorites) {
         viewModelScope.launch {

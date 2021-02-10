@@ -1,17 +1,16 @@
 package com.example.madeinbrasil.viewModel
 
 import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PageKeyedDataSource
 import androidx.paging.PagedList
+import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.model.search.movie.searchMovieDataSourceFactory
 import com.example.madeinbrasil.model.upcoming.Result
+import com.example.madeinbrasil.repository.FragmentsRepository
 import com.example.madeinbrasil.utils.Constants
+import kotlinx.coroutines.launch
 
 
 class FilmsViewModel(
@@ -22,6 +21,9 @@ class FilmsViewModel(
     var searchMoviePagedList: LiveData<PagedList<Result>>? = null
     private var searchMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var query = ""
+    private val repository by lazy {
+        FragmentsRepository()
+    }
 
     init {
         searchData(application)
@@ -52,4 +54,9 @@ class FilmsViewModel(
             .build()
     }
 
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            repository.updateUser(user)
+        }
+    }
 }

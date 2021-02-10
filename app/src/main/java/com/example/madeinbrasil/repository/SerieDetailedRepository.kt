@@ -22,8 +22,11 @@ import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_GENRE
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_MIDIA
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_SEASON
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
+import com.example.madeinbrasil.utils.Constants.Firebase.FIELD_FAVORITES
+import com.example.madeinbrasil.utils.Constants.Firebase.FIELD_WATCHED
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -63,7 +66,7 @@ class SerieDetailedRepository(val context: Context) {
     private val seasonFirebase by lazy {
         Firebase.firestore.collection(DATABASE_SEASON)
     }
-    private val favFirebase by lazy {
+    private val userFirebase by lazy {
         Firebase.firestore.collection(DATABASE_USERS).document(auth.currentUser?.uid ?: "")
     }
 
@@ -86,7 +89,7 @@ class SerieDetailedRepository(val context: Context) {
     }
 
     suspend fun updateUser(user: User) {
-        favFirebase.set(user, SetOptions.merge()).await()
+        userFirebase.set(user, SetOptions.merge()).await()
     }
 
     suspend fun setGenreFireBase(id: Int, infos: GenreFirebase) {
@@ -95,6 +98,18 @@ class SerieDetailedRepository(val context: Context) {
 
     suspend fun setMidiaFireBase(id: Int, infos: MidiaFirebase) {
         midiaFirebase.document("$id").set(infos, SetOptions.merge()).await()
+    }
+
+    suspend fun getMidiaFireBase(id: Int): DocumentSnapshot? {
+        return midiaFirebase.document("$id").get().await()
+    }
+
+    suspend fun getCast(id: Int): DocumentSnapshot? {
+        return castFirebase.document("$id").get().await()
+    }
+
+    suspend fun getSeason(id: Int): DocumentSnapshot? {
+        return seasonFirebase.document("$id").get().await()
     }
 
     suspend fun setCastFireBase(id: Int, infos: CastFirebase) {

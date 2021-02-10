@@ -18,7 +18,12 @@ import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_CAST
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_GENRE
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_MIDIA
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
+import com.example.madeinbrasil.utils.Constants.Firebase.FIELD_FAVORITES
+import com.example.madeinbrasil.utils.Constants.Firebase.FIELD_WATCHED
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -43,17 +48,20 @@ class MovieDetailedRepository(context: Context){
     private val midiaFirebase by lazy {
         Firebase.firestore.collection(DATABASE_MIDIA)
     }
-    private val auth by lazy {
-        Firebase.auth
-    }
     private val genreFirebase by lazy {
         Firebase.firestore.collection(DATABASE_GENRE)
     }
     private val castFirebase by lazy {
         Firebase.firestore.collection(DATABASE_CAST)
     }
-    private val favFirebase by lazy {
-        Firebase.firestore.collection(Constants.Firebase.DATABASE_USERS).document(auth.currentUser?.uid ?: "")
+    private val seasonFirebase by lazy {
+        Firebase.firestore.collection(Constants.Firebase.DATABASE_SEASON)
+    }
+    private val auth by lazy {
+        Firebase.auth
+    }
+    private val userFirebase by lazy {
+        Firebase.firestore.collection(DATABASE_USERS).document(auth.currentUser?.uid ?: "")
     }
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
@@ -75,7 +83,15 @@ class MovieDetailedRepository(context: Context){
     }
 
     suspend fun updateUser(user: User) {
-        favFirebase.set(user, SetOptions.merge()).await()
+        userFirebase.set(user, SetOptions.merge()).await()
+    }
+
+    suspend fun getMidiaFireBase(id: Int): DocumentSnapshot? {
+        return midiaFirebase.document("$id").get().await()
+    }
+
+    suspend fun getCast(id: Int): DocumentSnapshot? {
+        return castFirebase.document("$id").get().await()
     }
 
     suspend fun setMidiaFireBase(id: Int, infos: MidiaFirebase) {

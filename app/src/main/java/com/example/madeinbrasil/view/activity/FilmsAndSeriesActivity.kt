@@ -46,6 +46,7 @@ import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_MIDIA_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY
@@ -60,6 +61,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrC
 import kotlinx.android.synthetic.main.youtube_popup.*
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
+import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.launch
 import kotlinx.android.synthetic.main.choose_list_popup.*
 import kotlin.math.absoluteValue
@@ -71,6 +73,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var viewModelGenderSeries: GenderSerieViewModel
     private lateinit var viewModelMovie: MovieDetailedViewModel
     private lateinit var viewModelSerie: SerieDetailedViewModel
+    private lateinit var viewModelObjects: FilmsAndSerieViewModel
     private lateinit var customListViewModel: CustomListViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
 
@@ -78,8 +81,17 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private var filmDetailed: MovieDetailed?  = null
     private var serieDetailed: SerieDetailed? = null
     private var series: ResultSearch? = null
+    private var midiaFirebase: MidiaFirebase? = null
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
+    private val handleListCast = mutableListOf<CastFirebase>()
+    private val handleListMidia = mutableListOf<MidiaFirebase>()
+    private val handleListSeason = mutableListOf<SeasonFirebase>()
+
+    companion object {
+        var CAST: MutableList<CastFirebase> = mutableListOf()
+        var SEASON: MutableList<SeasonFirebase> = mutableListOf()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,17 +100,25 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
         films = intent.getParcelableExtra(BASE_FILM_KEY)
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
+        midiaFirebase = intent.getParcelableExtra(BASE_MIDIA_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
+        viewModelObjects = ViewModelProvider(this).get(FilmsAndSerieViewModel::class.java)
 
         binding.ivArrowBackFilmsSeries.setOnClickListener {
             finish()
         }
+
+//        startObjects(films?.id, series?.id)
 //        tutorialImplementation()
 
         when (positionFragment) {
             1 -> {
                 viewModelMovie = ViewModelProvider(this).get(MovieDetailedViewModel::class.java)
-                viewModelMovie.getMovie(films?.id)
+                films?.let {
+                    viewModelMovie.getMovie(it.id)
+                }?: run {
+                    viewModelMovie.getMovie(midiaFirebase?.id)
+                }
 
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModel.getGenres()
@@ -262,11 +282,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                         binding.cbFavoriteFilmsSeries.setOnCheckedChangeListener { _, isChecked ->
                             if(isChecked) {
-                                MenuActivity.USER.watched.add(movie.id)
+                                MenuActivity.USER.favorites.add(movie.id)
                             }else {
-                                MenuActivity.USER.watched.remove(movie.id)
+                                MenuActivity.USER.favorites.remove(movie.id)
                             }
-
                             viewModelMovie.updateUser(MenuActivity.USER)
                         }
 
@@ -276,129 +295,61 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             }else {
                                 MenuActivity.USER.watched.remove(movie.id)
                             }
-
                             viewModelMovie.updateUser(MenuActivity.USER)
                         }
 
-                        lifecycleScope.launch {
-                            val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
-                            val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
-                            val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
-                            val dbPeople = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
+                        MenuActivity.MIDIA
+                        val hasMidia = MenuActivity.MIDIA.filter { it.id == movie.id }
+                        if(hasMidia.isNotEmpty()) {
+                            hasMidia.forEach {
+                                if(it.origin == 2) {
+                                    setMidiaFireBase(movie, null)
+                                }else {
+                                    movie.credits?.cast?.forEach { cast ->
+                                        castSetUp(cast, null)
+                                    }
+                                    movie.recommendations?.results?.forEach {
+                                        recommendationsAndSimilarSetUp(it, null)
+                                    }
+                                    movie.similar?.results?.forEach {
+                                        recommendationsAndSimilarSetUp(it, null)
+                                    }
 
-
-                            movie.credits.cast?.forEach {
-                                val people = MidiaCastCrossRef(movie.id, it.id, it.name, it.profilePath, it.order)
-                                dbPeople.insertPeople(people)
+                                    viewModelMovie.cast.observe(this) { cast ->
+                                        setCastAndSeason(cast, 3)
+                                    }
+                                    viewModelMovie.midia.observe(this) {midia ->
+                                        setRecommendationsAndSimilar(midia, 1)
+                                    }
+                                }
                             }
-
-                            val midia = MidiaEntity(movie.id, movie.backdrop_path, movie.homepage, movie.original_language,
-                                    movie.original_title, movie.overview, movie.popularity, movie.poster_path, movie.release_date,
-                                    movie.runtime, movie.title, movie.vote_average, movie.vote_count, listOf(0), "",
-                                    "", midiaType = 1)
-
-//                            dbMidia.insertMidia(midia)
-
-//                            dbFav.getMidiaWithFavorites().forEach {
-//                                if(it.midia.id == movie.id) {
-//                                    it.favorites.forEach {fav ->
-//                                        binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
-//                                    }
-//                                }
-//                            }
-//
-//                            dbWatched.getMidiaWithWatched().forEach {
-//                                if(it.midia.id == movie.id) {
-//                                    it.watched.forEach {watched ->
-//                                        binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
-//                                    }
-//                                }
-//                            }
+                        }else {
+                            viewModelMovie.getMidiaFireBase(movie.id)
+                            viewModelMovie.midia.observe(this) {midia ->
+                                midia?.forEach {doc ->
+                                    doc?.let {
+                                        MenuActivity.MIDIA.add(it)
+                                        movie.credits.cast?.forEach { cast ->
+                                            castSetUp(cast, null)
+                                        }
+                                        viewModelMovie.cast.observe(this) { cast ->
+                                            setCastAndSeason(cast, 3)
+                                        }
+                                    }?: run {
+                                        setMidiaFireBase(movie, null)
+                                    }
+                                }
+                            }
                         }
-                        setMidiaFireBase(movie, null)
                     }
                 }
 
                 viewModelMovie.movieError.observe(this) {midia ->
                     val film = midia.filter { it.id == films?.id }
                     if(film.isNotEmpty()) {
-                        onApiErrorMovie(film, null)
+                        onApiErrorMovie(film)
                     }
                 }
-//                viewModelMovie.movieError.observe(this) {midia ->
-//                    lifecycleScope.launch {
-//                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
-//                        val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
-//                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
-//                        val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
-//                        val dbCast = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
-//                        val dbRecommendation = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).recommendationDao()
-//                        val dbSimilar = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).similarDao()
-//                        val dbSearch = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).FilmsFragmentDao()
-//                        var gender = ""
-//
-//                        if(dbMidia.getMidia().any { it.id == films?.id }) {
-//                            onApiErrorMovie(midia, null)
-//                        }else {
-//                            onApiErrorMovie(null, dbSearch.getResults())
-//                        }
-//
-//                        films?.id?.let {
-//                            dbGender.getGenreById(it).forEach {
-//                                val re = Regex("[^A-Za-z0-9 ãõçéíêá]")
-//                                var save: String = ""
-//                                it.split(",").forEach { save += "$it " }
-//                                save = re.replace(save, "")
-//                                gender += save
-//                            }
-//                        }
-//
-//                        dbFav.getMidiaWithFavorites().forEach {
-//                            if(it.midia.id == films?.id) {
-//                                it.favorites.forEach {fav ->
-//                                    binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
-//                                }
-//                            }
-//                        }
-//
-//                        dbWatched.getMidiaWithWatched().forEach {
-//                            if(it.midia.id == films?.id) {
-//                                it.watched.forEach {watched ->
-//                                    binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
-//                                }
-//                            }
-//                        }
-//
-//                        binding.tvGenderFilmsSeries.text = gender
-//                        binding.rvCardsListActors.apply {
-//                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-//                            films?.let {
-//                                if(dbCast.getPeopleWithMidia(it.id).isNotEmpty()) {
-//                                    adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it.id))
-//                                    binding.tvMessageCast.isVisible = false
-//                                }
-//                            }
-//                        }
-//
-//                        films?.let {
-//                            if(dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
-//                                binding.rvCardsListRecomendacoes.apply {
-//                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-//                                    adapter = RecommendationDataBaseAdapter(dbRecommendation.getRecommendations(it.id))
-//                                }
-//                                binding.tvMessageRecomendation.isVisible = false
-//                            }
-//
-//                            if(dbSimilar.getSimilar(it.id).isNotEmpty()) {
-//                                binding.rvCardsListSimilares.apply {
-//                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-//                                    adapter = SimilarDataBaseAdapter(dbSimilar.getSimilar(it.id))
-//                                }
-//                                binding.tvMessageSimilar.isVisible = false
-//                            }
-//                        }
-//                    }
-//                }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
@@ -413,7 +364,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
                 viewModelSerie = ViewModelProvider(this).get(SerieDetailedViewModel::class.java)
 
-                viewModelSerie.getSerieDetailed(series?.id)
+                series?.let {
+                    viewModelSerie.getSerieDetailed(it?.id)
+                }?: run {
+                    viewModelSerie.getSerieDetailed(midiaFirebase?.id)
+                }
+
                 viewModel.getGenres()
                 customListViewModel = ViewModelProvider(this).get(CustomListViewModel::class.java)
                 viewModelSerie.serieDetailedSucess.observe(this) { serie ->
@@ -579,7 +535,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }else {
                             MenuActivity.USER.favorites.remove(serie.id)
                         }
-
                         viewModelSerie.updateUser(MenuActivity.USER)
                     }
 
@@ -589,135 +544,166 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }else {
                             MenuActivity.USER.watched.remove(serie.id)
                         }
-
                         viewModelSerie.updateUser(MenuActivity.USER)
                     }
 
+                    val hasMidia = MenuActivity.MIDIA.filter { it.id == serie.id }
+                    if(hasMidia.isNotEmpty()) {
+                        hasMidia.forEach {
+                            if(it.origin == 2) {
+                                setMidiaFireBase(null, serie)
+                            } else {
+                                serie.seasons?.forEach {season ->
+                                    seasonsSetUp(season)
+                                }
+                                serie.credits?.cast?.forEach { cast ->
+                                    castSetUp(null, cast)
+                                }
+                                serie.recommendations?.results?.forEach {rec ->
+                                    recommendationsAndSimilarSetUp(null, rec)
+                                }
+                                serie.similar?.results?.forEach { similar ->
+                                    recommendationsAndSimilarSetUp(null, similar)
+                                }
 
-                    lifecycleScope.launch {
-                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
-                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
-                        val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
-                        val dbPeople = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
-
-                        serie.credits?.cast?.forEach {
-                            val people = MidiaCastCrossRef(serie.id, it.id, it.name, it.profilePath, it.order)
-                            dbPeople.insertPeople(people)
+                                viewModelSerie.cast.observe(this) { cast ->
+                                    setCastAndSeason(cast, 1)
+                                }
+                                viewModelSerie.season.observe(this) {season ->
+                                    setCastAndSeason(season, 2)
+                                }
+                                viewModelSerie.midia.observe(this) {midia ->
+                                    setRecommendationsAndSimilar(midia, 2)
+                                }
+                            }
                         }
-
-                        val midia = MidiaEntity(serie.id, serie.backdropPath, serie.homepage, "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, serie.episodeRunTime, serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
-//                        dbMidia.insertMidia(midia)
-//                        dbFav.getMidiaWithFavorites().forEach {
-//                            if(it.midia.id == serie.id) {
-//                                it.favorites.forEach {fav ->
-//                                    binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
-//                                }
-//                            }
-//                        }
-//
-//                        dbWatched.getMidiaWithWatched().forEach {
-//                            if(it.midia.id == serie.id) {
-//                                it.watched.forEach {watched ->
-//                                    binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
-//                                }
-//                            }
-//                        }
+                    }else {
+                        viewModelSerie.getMidiaFireBase(serie.id)
+                        viewModelSerie.midia.observe(this) {midia ->
+                            midia?.forEach {
+                                it?.let { mid ->
+                                    MenuActivity.MIDIA.add(mid)
+                                    serie.seasons?.forEach {season ->
+                                        seasonsSetUp(season)
+                                    }
+                                    serie.credits?.cast?.forEach { cast ->
+                                        castSetUp(null, cast)
+                                    }
+                                    viewModelSerie.cast.observe(this) { cast ->
+                                        setCastAndSeason(cast, 1)
+                                    }
+                                    viewModelSerie.season.observe(this) {season ->
+                                        setCastAndSeason(season, 2)
+                                    }
+                                }?: run {
+                                    setMidiaFireBase(null, serie)
+                                }
+                            }
+                        }
                     }
-
-                    setMidiaFireBase(null, serie)
                 }
 
                 viewModelSerie.serieDetailedError.observe(this) {midia ->
                     val serie = midia.filter { it.id == series?.id }
                     if(serie.isNotEmpty()) {
-                        onApiErrorSerie(serie, null)
+                        onApiErrorSerie(serie)
                     }
-
-//                    lifecycleScope.launch {
-//                        val dbFav = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).favoriteDao()
-//                        val dbMidia = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).midiaDao()
-//                        val dbWatched = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).watchedDao()
-//                        val dbGender = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).genreDao()
-//                        val dbCast = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).peopleDao()
-//                        val dbRecommendation = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).recommendationDao()
-//                        val dbSimilar = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).similarDao()
-//                        val dbSearch = MadeInBrazilDatabase.getDatabase(this@FilmsAndSeriesActivity).FilmsFragmentDao()
-//                        var gender = ""
-//
-//                        if(dbMidia.getMidia().any { it.id == series?.id }) {
-//                            onApiErrorSerie(midia, null)
-//                        }else {
-//                            onApiErrorSerie(null, dbSearch.getSearchResult())
-//                        }
-//
-//                        series?.id?.let {
-//                            dbGender.getGenreById(it).forEach {
-//                                val re = Regex("[^A-Za-z0-9 ãõçéíêá]")
-//                                var save: String = ""
-//                                it.split(",").forEach { save += "$it " }
-//                                save = re.replace(save, "")
-//                                gender += save
-//                            }
-//                        }
-//
-//                        dbFav.getMidiaWithFavorites().forEach {
-//                            if(it.midia.id == series?.id) {
-//                                it.favorites.forEach {fav ->
-//                                    binding.cbFavoriteFilmsSeries.isChecked = fav.isChecked
-//                                }
-//                            }
-//                        }
-//
-//                        dbWatched.getMidiaWithWatched().forEach {
-//                            if(it.midia.id == series?.id) {
-//                                it.watched.forEach {watched ->
-//                                    binding.cbWatchedFilmsSeries.isChecked = watched.isChecked
-//                                }
-//                            }
-//                        }
-//                        binding.tvGenderFilmsSeries.text = gender
-//                        binding.rvCardsListActors.apply {
-//                            layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-//                            series?.id?.let {
-//                                if(dbCast.getPeopleWithMidia(it).isNotEmpty()) {
-//                                    adapter = MidiaCastAdapter(dbCast.getPeopleWithMidia(it))
-//                                    binding.tvMessageCast.isVisible = false
-//                                }
-//                            }
-//                        }
-//                        binding.btSeasonsFilmsSeries.setOnClickListener {
-//                            val intent = Intent(this@FilmsAndSeriesActivity, SeasonsActivity::class.java)
-//                            intent.putExtra(SEASON_KEY_OFF, series?.id)
-//                            startActivity(intent)
-//                        }
-//
-//                        series?.let {
-//                            if(dbRecommendation.getRecommendations(it.id).isNotEmpty()) {
-//                                binding.rvCardsListRecomendacoes.apply {
-//                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-//                                    adapter = RecommendationDataBaseAdapter(dbRecommendation.getRecommendations(it.id))
-//                                }
-//                                binding.tvMessageRecomendation.isVisible = false
-//                            }
-//
-//                            if(dbSimilar.getSimilar(it.id).isNotEmpty()) {
-//                                binding.rvCardsListSimilares.apply {
-//                                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-//                                    adapter = SimilarDataBaseAdapter(dbSimilar.getSimilar(it.id))
-//                                }
-//                                binding.tvMessageSimilar.isVisible = false
-//                            }
-//                        }
-//                    }
                 }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
                     layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)
                     adapter = MainAdapterComments(comments)
+                }
+            }
+        }
+    }
+    private fun setRecommendationsAndSimilar(element: MutableList<MidiaFirebase?>, pos: Int) {
+        when(pos) {
+            1 -> {
+                element.forEach {doc ->
+                    doc?.let {
+                        if(!MenuActivity.MIDIA.contains(it)) {
+                            MenuActivity.MIDIA.add(it)
+                            MenuActivity.MIDIA
+                        }
+                    }
+                }
+                handleListMidia.forEach { handle ->
+                    if(!MenuActivity.MIDIA.contains(handle)) {
+                        viewModelMovie.setMidiaFireBase(handle.id, handle)
+                    }
+                }
+            }
+            2 -> {
+                element.forEach {doc ->
+                    doc?.let {
+                        if(!MenuActivity.MIDIA.contains(it)) {
+                            MenuActivity.MIDIA.add(it)
+                            MenuActivity.MIDIA
+                        }
+                    }
+                }
+                handleListMidia.forEach { handle ->
+                    if(!MenuActivity.MIDIA.contains(handle)) {
+                        viewModelSerie.setMidiaFireBase(handle.id, handle)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setCastAndSeason(element: MutableList<DocumentSnapshot>?, pos: Int) {
+        when(pos) {
+            1 -> {
+                element?.let {doc ->
+                    doc.forEach {
+                        val obj = it.toObject(CastFirebase::class.java)
+                        obj?.let {
+                            if(!CAST.contains(it)) {
+                                CAST.add(it)
+                                CAST
+                            }
+                        }
+                    }
+                    handleListCast.forEach { handle ->
+                        if(!CAST.contains(handle)) {
+                            viewModelSerie.setCastFireBase(handle.id, handle)
+                        }
+                    }
+                }
+            }
+            2 -> {
+                element?.let {
+                    it.forEach {
+                        val obj = it.toObject(SeasonFirebase::class.java)
+                        obj?.let {
+                            if(!SEASON.contains(it)) {
+                                SEASON.add(it)
+                            }
+                        }
+                    }
+                    handleListSeason.forEach { handle ->
+                        if(!SEASON.contains(handle)) {
+                            viewModelSerie.setSeasonFireBase(handle.id, handle)
+                        }
+                    }
+                }
+            }
+            3 -> {
+                element?.let {doc ->
+                    doc.forEach {
+                        val obj = it.toObject(CastFirebase::class.java)
+                        obj?.let {
+                            if(!CAST.contains(it)) {
+                                CAST.add(it)
+                            }
+                        }
+                    }
+                    handleListCast.forEach { handle ->
+                        if(!CAST.contains(handle)) {
+                            viewModelMovie.setCastFireBase(handle.id, handle)
+                        }
+                    }
                 }
             }
         }
@@ -762,14 +748,18 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             val midia = MidiaFirebase(
                     movie.id, movie.backdrop_path, listCast, "${hours}h${minutes}min", movie.release_date?.getFirst4Chars(),
                     listGender, movie.homepage, movie.title, movie.overview, movie.poster_path, listRecommendations,null,
-                    listSimilar, movie.vote_average
+                    listSimilar, movie.vote_average, 1, 1
             )
+            val getMidia = MenuActivity.MIDIA.filter { it.id == midia.id }
+            getMidia.forEach {
+                MenuActivity.MIDIA.remove(it)
+                MenuActivity.MIDIA.add(midia)
+            }
             if(!MenuActivity.MIDIA.contains(midia)) {
                 MenuActivity.MIDIA.add(midia)
             }
-            MenuActivity.MIDIA.forEach {mid ->
-                viewModelMovie.setMidiaFireBase(mid.id, mid)
-            }
+
+            viewModelMovie.setMidiaFireBase(midia.id, midia)
         }
         serieDetailed?.let {serie ->
             var time: String? = ""
@@ -786,9 +776,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 listSeasons.add(season.id)
                 seasonsSetUp(season)
             }
-            serie.credits?.cast?.forEach {cast ->
-                listCast.add(cast.id)
-                castSetUp(null, cast)
+
+            serie.credits?.cast?.forEach{
+                castSetUp(null, it)
+                listCast.add(it.id)
             }
             serie.genres?.forEach {gender ->
                 listGender.add(gender.id)
@@ -812,14 +803,18 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             val midia = MidiaFirebase(
                     serie.id, serie.backdropPath, listCast, time, serie.firstAirDate?.getFirst4Chars(),
                     listGender, serie.homepage, serie.name, serie.overview, serie.posterPath, listRecommendations, listSeasons,
-                    listSimilar, serie.voteAverage
+                    listSimilar, serie.voteAverage, 1, 2
             )
+            val getMidia = MenuActivity.MIDIA.filter { it.id == midia.id }
+            getMidia.forEach {
+                MenuActivity.MIDIA.remove(it)
+                MenuActivity.MIDIA.add(midia)
+            }
             if(!MenuActivity.MIDIA.contains(midia)) {
                 MenuActivity.MIDIA.add(midia)
             }
-            MenuActivity.MIDIA.forEach { mid ->
-                viewModelSerie.setMidiaFireBase(mid.id, mid)
-            }
+
+            viewModelSerie.setMidiaFireBase(serie.id, midia)
         }
     }
 
@@ -834,13 +829,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             val midia = MidiaFirebase(
                     rec.id, rec.backdropPath?.getFullImagePath(), null, null, rec.releaseDate?.getFirst4Chars(),
                     listGender, null, rec.title, rec.overview, rec.posterPath, null,null,
-                    null, rec.voteAverage?.toDouble()
+                    null, rec.voteAverage?.toDouble(), 2, 1
             )
             if(!MenuActivity.MIDIA.contains(midia)) {
-                MenuActivity.MIDIA.add(midia)
-            }
-            MenuActivity.MIDIA.forEach {mid ->
-                viewModelMovie.setMidiaFireBase(mid.id, mid)
+                viewModelMovie.getMidiaFireBase(midia.id)
+                handleListMidia.add(midia)
             }
         }
         recSerie?.let {
@@ -851,13 +844,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             val midia = MidiaFirebase(
                     recSerie.id, recSerie.backdropPath?.getFullImagePath(), null, null, recSerie.releaseDate?.getFirst4Chars(),
                     listGender, null, recSerie.name, recSerie.overview, recSerie.posterPath, null,null,
-                    null, recSerie.voteAverage
+                    null, recSerie.voteAverage, 2, 2
             )
             if(!MenuActivity.MIDIA.contains(midia)) {
-                MenuActivity.MIDIA.add(midia)
-            }
-            MenuActivity.MIDIA.forEach {mid ->
-                viewModelSerie.setMidiaFireBase(mid.id, mid)
+                viewModelSerie.getMidiaFireBase(midia.id)
+                handleListMidia.add(midia)
             }
         }
     }
@@ -867,9 +858,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             val genre = GenreFirebase(it.id, it.name)
             if(!MenuActivity.GENRE.contains(genre)) {
                 MenuActivity.GENRE.add(genre)
-            }
-            MenuActivity.GENRE.forEach { gen ->
-                viewModelMovie.setGenreFireBase(gen.id, gen)
+                viewModelMovie.setGenreFireBase(genre.id, genre)
             }
         }
 
@@ -884,48 +873,48 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             val genre = GenreFirebase(it.id, it.name)
             if(!MenuActivity.GENRE.contains(genre)) {
                 MenuActivity.GENRE.add(genre)
-            }
-            MenuActivity.GENRE.forEach {gen ->
-                viewModelSerie.setGenreFireBase(gen.id, gen)
+                viewModelSerie.setGenreFireBase(genre.id, genre)
             }
         }
     }
 
     private fun castSetUp(castMovie: Cast?, castSerie: com.example.madeinbrasil.model.serieDetailed.Cast?) {
         castMovie?.let {
-            val cast = CastFirebase(it.id, it.name, it.profilePath)
-            if(!MenuActivity.CAST.contains(cast)) {
-                MenuActivity.CAST.add(cast)
-            }
-            MenuActivity.CAST.forEach {cas ->
-                viewModelMovie.setCastFireBase(cas.id, cas)
+            val casts = CastFirebase(it.id, it.name, it.profilePath)
+            if(!CAST.contains(casts)) {
+                viewModelMovie.getCast(it.id)
+                handleListCast.add(casts)
             }
         }
 
         castSerie?.let {
-            val cast = CastFirebase(it.id, it.name, it.profilePath)
-            if(!MenuActivity.CAST.contains(cast)) {
-                MenuActivity.CAST.add(cast)
-            }
-            MenuActivity.CAST.forEach { cas ->
-                viewModelSerie.setCastFireBase(cas.id, cas)
+            val casts = CastFirebase(it.id, it.name, it.profilePath)
+            if(!CAST.contains(casts)) {
+                viewModelSerie.getCast(it.id)
+                handleListCast.add(casts)
             }
         }
     }
 
     private fun seasonsSetUp(season: Season?) {
         season?.let {
-            val season = SeasonFirebase(it.air_date, it.episode_count, it.id, it.name, it.overview, it.posterPath, it.season_number)
-            if(!MenuActivity.SEASON.contains(season)) {
-                MenuActivity.SEASON.add(season)
+            val seasons = SeasonFirebase(it.air_date, it.episode_count, it.id, it.name, it.overview, it.posterPath, it.season_number)
+            if(!SEASON.contains(seasons)) {
+                viewModelSerie.getSeason(it.id)
+                handleListSeason.add(seasons)
             }
-            MenuActivity.SEASON.forEach {sea ->
-                viewModelSerie.setSeasonFireBase(sea.id, sea)
-            }
+//            if(!MenuActivity.SEASON.contains(season)) {
+//                MenuActivity.SEASON.add(season)
+//                viewModelSerie.setSeasonFireBase(season.id, season)
+//            }
+//            MenuActivity.SEASON.forEach {sea ->
+//                viewModelSerie.setSeasonFireBase(sea.id, sea)
+//            }
+//            viewModelSerie.setSeasonFireBase(season.id, season)
         }
     }
 
-    private fun onApiErrorSerie(/*serie: List<MidiaEntity>?*/serie: List<MidiaFirebase>?, serie2: List<ResultSearch>?) {
+    private fun onApiErrorSerie(serie: List<MidiaFirebase>?) {
         serie?.let {
             serie.forEach {
                 if (it.id == series?.id) {
@@ -955,102 +944,140 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     binding.cbFavoriteFilmsSeries.isChecked = confirmFavorite(it.id)
                     binding.cbWatchedFilmsSeries.isChecked = confirmFavorite(it.id)
                     binding.btStreamingFilmsSeries.isVisible = false
-                }
-            }
-        }?: run {
-            serie2?.forEach {
-                if (it.id == series?.id) {
-                    Glide.with(binding.root.context)
-                            .load(it.posterPath)
-                            .placeholder(R.drawable.logo_made_in_brasil)
-                            .into(binding.ivBannerFilmsSeries)
-                    it.backdropPath?.let { it1 ->
-                        Glide.with(binding.root.context)
-                                .load(it.backdropPath)
-                                .placeholder(R.drawable.logo_made_in_brasil)
-                                .into(binding.ivBackDropFilmSeries)
-                    } ?: Glide.with(this)
-                            .load(R.drawable.logo_made_in_brasil)
-                            .into(binding.ivBackDropFilmSeries)
 
-                    binding.tvDescriptionTextFilmsSeries.text = it.overview
-                    binding.tvNameFilmsSeries.text = it.name
-                    binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
-                    it.voteAverage?.let {
-                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
-                        binding.ratingBarFilmsSeries.stepSize = .5f
+                    binding.rvCardsListActors.apply {
+                        CAST
+                        val castList = mutableListOf<CastFirebase>()
+                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                        it.cast?.forEach { cast ->
+                            val filter = CAST.filter { it.id == cast }
+                            if(filter.isNotEmpty()) {
+                                filter.forEach { fil -> castList.add(fil) }
+                            }
+                        }
+                        if(castList.size > 0) {
+                            adapter = MidiaCastAdapter(castList)
+                            binding.tvMessageCast.isVisible = false
+                        }
                     }
-                    binding.tvYearFilmsSeries.text = "(${it?.firstAirDate?.getFirst4Chars()})"
-                    binding.btStreamingFilmsSeries.isVisible = false
+
+                    binding.rvCardsListRecomendacoes.apply {
+                        val recList = mutableListOf<MidiaFirebase>()
+                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                        it.recommendations?.forEach {rec ->
+                            val filter = MenuActivity.MIDIA.filter { it.id == rec }
+                            if(filter.isNotEmpty()) {
+                                filter.forEach {fil ->
+                                    recList.add(fil)
+                                }
+                            }
+                        }
+                        if(recList.size > 0) {
+                            adapter = RecommendationDataBaseAdapter(recList)
+                            binding.tvMessageRecomendation.isVisible = false
+                        }
+                    }
+
+                    binding.rvCardsListSimilares.apply {
+                        MenuActivity.MIDIA
+                        val simiList = mutableListOf<MidiaFirebase>()
+                        layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                        it.similar?.forEach { simi ->
+                            val filter = MenuActivity.MIDIA.filter { it.id == simi }
+                            if(filter.isNotEmpty()){
+                                filter.forEach { fil-> simiList.add(fil) }
+                            }
+                        }
+                        if(simiList.size > 0) {
+                            adapter = SimilarDataBaseAdapter(simiList)
+                            binding.tvMessageSimilar.isVisible = false
+                        }
+                    }
                 }
             }
         }
-
         Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
-    private fun onApiErrorMovie(movie: List<MidiaFirebase>?, movie2: List<Result>?) {
-
-        if(movie != null) {
-            movie.forEach {
-                if (it.id == films?.id) {
+    private fun onApiErrorMovie(movie: List<MidiaFirebase>?) {
+        movie?.forEach {
+            if (it.id == films?.id) {
+                Glide.with(binding.root.context)
+                        .load(it.posterPath)
+                        .placeholder(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBannerFilmsSeries)
+                it.backdropPath?.let { it1 ->
                     Glide.with(binding.root.context)
-                            .load(it.posterPath)
+                            .load(it.backdropPath)
                             .placeholder(R.drawable.logo_made_in_brasil)
-                            .into(binding.ivBannerFilmsSeries)
-                    it.backdropPath?.let { it1 ->
-                        Glide.with(binding.root.context)
-                                .load(it.backdropPath)
-                                .placeholder(R.drawable.logo_made_in_brasil)
-                                .into(binding.ivBackDropFilmSeries)
-                    } ?: Glide.with(this)
-                            .load(R.drawable.logo_made_in_brasil)
                             .into(binding.ivBackDropFilmSeries)
+                } ?: Glide.with(this)
+                        .load(R.drawable.logo_made_in_brasil)
+                        .into(binding.ivBackDropFilmSeries)
 
-                    binding.tvDescriptionTextFilmsSeries.text = it.overview
-                    binding.tvNameFilmsSeries.text = it.name
-                    binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
-                    it.voteAverage?.let {
-                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
-                        binding.ratingBarFilmsSeries.stepSize = .5f
-                    }
-                    binding.tvTimeFilmsSeries.text = it.episodeRunTime
-                    binding.tvYearFilmsSeries.text = it.firstAirDate
-                    binding.tvGenderFilmsSeries.text = getGendersNames(it.id)
-                    binding.cbFavoriteFilmsSeries.isChecked = confirmFavorite(it.id)
-                    binding.cbWatchedFilmsSeries.isChecked = confirmWatched(it.id)
-                    binding.btStreamingFilmsSeries.isVisible = false
+                binding.tvDescriptionTextFilmsSeries.text = it.overview
+                binding.tvNameFilmsSeries.text = it.name
+                binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
+                it.voteAverage?.let {
+                    binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
+                    binding.ratingBarFilmsSeries.stepSize = .5f
                 }
-            }
-        }else {
-            movie2?.forEach {
-                if (it.id == films?.id) {
-                    Glide.with(binding.root.context)
-                            .load(it.posterPath)
-                            .placeholder(R.drawable.logo_made_in_brasil)
-                            .into(binding.ivBannerFilmsSeries)
-                    it.backdropPath?.let { it1 ->
-                        Glide.with(binding.root.context)
-                                .load(it.backdropPath)
-                                .placeholder(R.drawable.logo_made_in_brasil)
-                                .into(binding.ivBackDropFilmSeries)
-                    } ?: Glide.with(this)
-                            .load(R.drawable.logo_made_in_brasil)
-                            .into(binding.ivBackDropFilmSeries)
+                binding.tvTimeFilmsSeries.text = it.episodeRunTime
+                binding.tvYearFilmsSeries.text = it.firstAirDate
+                binding.tvGenderFilmsSeries.text = getGendersNames(it.id)
+                binding.cbFavoriteFilmsSeries.isChecked = confirmFavorite(it.id)
+                binding.cbWatchedFilmsSeries.isChecked = confirmWatched(it.id)
+                binding.btStreamingFilmsSeries.isVisible = false
 
-                    binding.tvDescriptionTextFilmsSeries.text = it.overview
-                    binding.tvNameFilmsSeries.text = it.title
-                    binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
-                    it.voteAverage?.let {
-                        binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
-                        binding.ratingBarFilmsSeries.stepSize = .5f
+                binding.rvCardsListActors.apply {
+                    val castList = mutableListOf<CastFirebase>()
+                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                    it.cast?.forEach { cast ->
+                        val filter = CAST.filter { it.id == cast }
+                        if(filter.isNotEmpty()) {
+                            filter.forEach { fil -> castList.add(fil) }
+                        }
                     }
-                    binding.tvYearFilmsSeries.text = "(${it?.releaseDate?.getFirst4Chars()})"
-                    binding.btStreamingFilmsSeries.isVisible = false
+                    if(castList.size > 0) {
+                        adapter = MidiaCastAdapter(castList)
+                        binding.tvMessageCast.isVisible = false
+                    }
+                }
+
+                binding.rvCardsListRecomendacoes.apply {
+                    val recList = mutableListOf<MidiaFirebase>()
+                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                    it.recommendations?.forEach {rec ->
+                        val filter = MenuActivity.MIDIA.filter { it.id == rec }
+                        if(filter.isNotEmpty()) {
+                            filter.forEach {fil ->
+                                recList.add(fil)
+                            }
+                        }
+                    }
+                    if(recList.size > 0) {
+                        adapter = RecommendationDataBaseAdapter(recList)
+                        binding.tvMessageRecomendation.isVisible = false
+                    }
+                }
+
+                binding.rvCardsListSimilares.apply {
+                    MenuActivity.MIDIA
+                    val simiList = mutableListOf<MidiaFirebase>()
+                    layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
+                    it.similar?.forEach { simi ->
+                        val filter = MenuActivity.MIDIA.filter { it.id == simi }
+                        if(filter.isNotEmpty()){
+                            filter.forEach { fil-> simiList.add(fil) }
+                        }
+                    }
+                    if(simiList.size > 0) {
+                        adapter = SimilarDataBaseAdapter(simiList)
+                        binding.tvMessageSimilar.isVisible = false
+                    }
                 }
             }
         }
-
         Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 

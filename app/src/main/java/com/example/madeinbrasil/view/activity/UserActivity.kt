@@ -13,7 +13,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.databinding.ActivityUserBinding
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_MIDIA_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.firebase.auth.ktx.auth
@@ -27,6 +32,9 @@ class UserActivity : AppCompatActivity() {
     private val ACTIVITY_CALLBACK = 1
     private var reviewInfo: ReviewInfo? = null
     private lateinit var reviewManager: ReviewManager
+    private var favList = mutableListOf<MidiaFirebase>()
+    private var countMovie = 0
+    private var countSerie = 0
 
     private val auth by lazy {
         Firebase.auth
@@ -56,41 +64,71 @@ class UserActivity : AppCompatActivity() {
         }
 
         binding.btGoToFavorites.setOnClickListener {
-            startMyProfileOptionsActivity(this@UserActivity)
+            startFavoritesActivity(this@UserActivity)
         }
 
         binding.btGoToLists.setOnClickListener {
-            startMyProfileOptionsActivity(this@UserActivity)
+            startListsActivity(this@UserActivity)
         }
 
-        lifecycleScope.launch {
-            val db = MadeInBrazilDatabase.getDatabase(this@UserActivity).favoriteDao()
-            val dbWatched = MadeInBrazilDatabase.getDatabase(this@UserActivity).watchedDao()
-            var countMovie = 0
-            var countSerie = 0
+        filterWatchedAndFavorites()
 
-            binding.rvCardsListFavorites.apply {
-                layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
-                adapter = FavoriteMidiaAdapter(db.getMidiaWithFavorites())
-            }
-
-            dbWatched.getMidiaWithWatched().forEach {
-                when(it.midia.midiaType) {
+        binding.rvCardsListFavorites.apply {
+            layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = FavoriteMidiaAdapter(favList) {midia ->
+                when(midia.midiaType) {
                     1 -> {
-                        countMovie++
+                        val intent = Intent(this@UserActivity, FilmsAndSeriesActivity::class.java)
+                        intent.putExtra(BASE_MIDIA_KEY, midia)
+                        intent.putExtra(ID_FRAGMENTS, 1)
+                        startActivity(intent)
                     }
                     2 -> {
-                        countSerie++
+                        val intent = Intent(this@UserActivity, FilmsAndSeriesActivity::class.java)
+                        intent.putExtra(BASE_MIDIA_KEY, midia)
+                        intent.putExtra(ID_FRAGMENTS, 2)
+                        startActivity(intent)
                     }
                 }
             }
-
-            binding.tvNumMovies.text = countMovie.toString()
-            binding.tvNumSeries.text = countSerie.toString()
         }
+
+        binding.tvNumMovies.text = countMovie.toString()
+        binding.tvNumSeries.text = countSerie.toString()
 
         setupUser()
 //        tutorialImplementation()
+    }
+
+    private fun startListsActivity(context: Context) {
+        val intent = Intent(context, MyProfileOptionsActivity::class.java)
+        intent.putExtra(VALUE, 0)
+        startActivity(intent)
+    }
+
+    private fun startFavoritesActivity(context: Context) {
+        val intent = Intent(context, MyProfileOptionsActivity::class.java)
+        intent.putExtra(VALUE, 2)
+        startActivity(intent)
+    }
+
+    private fun filterWatchedAndFavorites() {
+        MenuActivity.USER.favorites.forEach {fav ->
+            val filter = MenuActivity.MIDIA.filter { it.id == fav }
+            filter.forEach {
+                favList.add(it)
+            }
+        }
+
+        MenuActivity.USER.watched.forEach {watched ->
+            val filter = MenuActivity.MIDIA.filter { it.id == watched }
+            filter.forEach {
+                when(it.midiaType) {
+                    1 -> countMovie++
+                    2 -> countSerie++
+                }
+            }
+        }
     }
 
 //    private fun tutorialImplementation() {
@@ -129,11 +167,6 @@ class UserActivity : AppCompatActivity() {
 //            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
 //        }).start()
 //    }
-
-    private fun startMyProfileOptionsActivity(context: Context) {
-        val intent = Intent(context, MyProfileOptionsActivity::class.java)
-        startActivity(intent)
-    }
 
     private fun startFriendsActivity(context: Context) {
         val intent = Intent(context, FriendsActivity::class.java)

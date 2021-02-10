@@ -1,12 +1,7 @@
 package com.example.madeinbrasil.view.activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.widget.Switch
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -23,15 +18,6 @@ import com.example.madeinbrasil.view.fragment.HomeFragment
 import com.example.madeinbrasil.view.fragment.ListsFragment
 import com.example.madeinbrasil.view.fragment.SeriesFragment
 import com.example.madeinbrasil.viewModel.MenuViewModel
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
-import com.google.firebase.storage.ktx.storage
 
 class MenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuBinding
@@ -40,9 +26,9 @@ class MenuActivity : AppCompatActivity() {
 
     companion object {
         lateinit var USER: User
-        lateinit var MIDIA: MutableList<MidiaFirebase>
-        lateinit var CAST: MutableList<CastFirebase>
-        lateinit var SEASON: MutableList<SeasonFirebase>
+        var MIDIA: MutableList<MidiaFirebase> = mutableListOf()
+//        lateinit var CAST: MutableList<CastFirebase>
+//        lateinit var SEASON: MutableList<SeasonFirebase>
         lateinit var GENRE: MutableList<GenreFirebase>
     }
 
@@ -55,54 +41,71 @@ class MenuActivity : AppCompatActivity() {
 
         startObjects()
 
-      intent?.let {
-       genreList = it.getParcelableExtra<GenreSelected>("genreList")
-     }
-            initFragmentsHome(HomeFragment(), genreList)
-
-        binding.bottomNavigation.setOnNavigationItemSelectedListener {
-            when(it.itemId) {
-                R.id.buttonHome -> {
-                    initFragmentsHome(HomeFragment(),genreList)
-                    true
-                }
-                R.id.buttonFilms -> {
-                    initFragments(FilmsFragment())
-                    true
-                }
-                R.id.buttonLists -> {
-                    initFragments(ListsFragment())
-                    true
-                }
-                R.id.buttonSeries -> {
-                    initFragments(SeriesFragment())
-                    true
-                }
-                else -> false
-            }
+        intent?.let {
+            genreList = it.getParcelableExtra<GenreSelected>("genreList")
         }
-
-        supportActionBar?.hide()
     }
 
     private fun startObjects() {
         viewModel.getUser()
-        viewModel.getMidia()
-        viewModel.getCast()
-        viewModel.getSeason()
+//        viewModel.getCast()
+//        viewModel.getSeason()
         viewModel.getGenre()
         viewModel.user.observe(this) {doc ->
             USER = doc
+            val listComplete : MutableList<Int> = USER.favorites
+
+            USER.watched.forEach {
+                if(!listComplete.contains(it)) {
+                    listComplete.add(it)
+                }
+            }
+
+            listComplete.forEach {
+                viewModel.getMidia(it)
+            }
+
+            initFragmentsHome(HomeFragment(), genreList)
+            binding.bottomNavigation.setOnNavigationItemSelectedListener {
+                when(it.itemId) {
+                    R.id.buttonHome -> {
+                        initFragmentsHome(HomeFragment(),genreList)
+                        true
+                    }
+                    R.id.buttonFilms -> {
+                        initFragments(FilmsFragment())
+                        true
+                    }
+                    R.id.buttonLists -> {
+                        initFragments(ListsFragment())
+                        true
+                    }
+                    R.id.buttonSeries -> {
+                        initFragments(SeriesFragment())
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
-        viewModel.midia.observe(this) {
-            MIDIA = it
+        viewModel.midia.observe(this) {midia ->
+            midia?.let {
+                it.forEach {doc ->
+                    val obj = doc.toObject(MidiaFirebase::class.java)
+                    obj?.let {
+                        if(!MIDIA.contains(it)){
+                            MIDIA.add(it)
+                        }
+                    }
+                }
+            }
         }
-        viewModel.cast.observe(this) {
-            CAST = it
-        }
-        viewModel.season.observe(this) {
-            SEASON = it
-        }
+//        viewModel.cast.observe(this) {
+//            CAST = it
+//        }
+//        viewModel.season.observe(this) {
+//            SEASON = it
+//        }
         viewModel.genre.observe(this) {
             GENRE = it
         }

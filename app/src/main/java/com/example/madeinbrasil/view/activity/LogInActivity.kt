@@ -113,6 +113,7 @@ class LogInActivity : AppCompatActivity() {
         super.onStart()
         viewModelLogin.login.observe(this) {
             updateUI(it)
+            it
         }
     }
 
@@ -189,11 +190,11 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?): Boolean {
-        if(user != null) {
-            return true
+        return if(user != null) {
             startMenuActivity(this)
+            true
         }else {
-            return false
+            false
         }
     }
 
