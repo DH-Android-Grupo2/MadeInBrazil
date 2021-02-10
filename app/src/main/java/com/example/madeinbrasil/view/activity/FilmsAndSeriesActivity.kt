@@ -921,7 +921,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private fun onApiErrorSerie(serie: List<MidiaFirebase>?) {
         serie?.let {
             serie.forEach {serie ->
-//                if (serie.id == series?.id) {
                     binding.btStreamingFilmsSeries.isVisible = false
 
                     Glide.with(binding.root.context)
@@ -1005,14 +1004,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         intent.putExtra(SEASON_KEY_OFF, serie.id)
                         startActivity(intent)
                     }
-//                }
             }
         }
     }
 
     private fun onApiErrorMovie(movie: List<MidiaFirebase>?) {
         movie?.forEach {
-//            if (it.id == films?.id) {
                 Glide.with(binding.root.context)
                         .load(it.posterPath)
                         .placeholder(R.drawable.logo_made_in_brasil)
@@ -1090,7 +1087,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.tvMessageSimilar.isVisible = true
                     }
                 }
-//            }
         }
     }
 
