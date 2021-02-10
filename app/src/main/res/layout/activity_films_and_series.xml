@@ -42,6 +42,8 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
 
+
+
         <com.rishabhharit.roundedimageview.RoundedImageView
             android:transitionName="sharedImgView"
             app:cornerRadius="25dp"

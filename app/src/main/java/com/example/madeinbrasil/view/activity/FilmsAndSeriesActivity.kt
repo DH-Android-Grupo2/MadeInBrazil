@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -61,6 +62,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrC
 import kotlinx.android.synthetic.main.youtube_popup.*
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.launch
 import kotlinx.android.synthetic.main.choose_list_popup.*
@@ -208,13 +210,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         if (movie.recommendations?.results?.size != 0) {
-                            movie.recommendations?.results?.forEach {
-                                val recommendation = it.title?.let { it1 -> RecommendationMidiaCrossRef(movie.id, it.id, 1, it1, it.posterPath) }
-                                if (recommendation != null) {
-                                    viewModelMovie.insertRecommendation(recommendation)
-                                }
-                            }
-
                             binding.rvCardsListRecomendacoes.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie.recommendations?.let { it1 ->
@@ -233,13 +228,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         if (movie.similar?.results?.size != 0) {
-                            movie.similar?.results?.forEach {
-                                val similar = it.title?.let { it1 -> SimilarMidiaCrossRef(movie.id, it.id, 1, it1, it.posterPath) }
-                                if (similar != null) {
-                                    viewModelMovie.insertSimilar(similar)
-                                }
-                            }
-
                             binding.rvCardsListSimilares.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                                 adapter = movie.similar?.let { it1 ->
@@ -349,6 +337,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     if(film.isNotEmpty()) {
                         onApiErrorMovie(film)
                     }
+                    Snackbar.make(binding.ivArrowBackFilmsSeries, R.string.string_you_are_offline, Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Entendido") {
+                                it.isVisible = false
+                            }.setActionTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                            .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                            .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary)).show()
                 }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
@@ -468,22 +462,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {
-                        serie?.seasons?.forEach {
-                            val seasonDB = SeasonEntity(it.id, serie.id, it.name, it.overview, it.posterPath, it.season_number)
-                            viewModelSerie.insertSeason(seasonDB)
-                        }
-
                         val intent = Intent(this, SeasonsActivity::class.java)
                         intent.putExtra(SEASON_KEY, serie)
                         startActivity(intent)
                     }
 
                     if (serie.recommendations?.results?.size != 0) {
-                        serie.recommendations?.results?.forEach {
-                            val recommendation = RecommendationMidiaCrossRef(serie.id, it.id, 2, it.name, it.posterPath)
-                            viewModelSerie.insertRecommendation(recommendation)
-                        }
-
                         binding.rvCardsListRecomendacoes.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = serie.recommendations?.let { it1 ->
@@ -501,11 +485,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     if (serie.similar?.results?.size != 0) {
-                        serie.similar?.results?.forEach {
-                            val similar = SimilarMidiaCrossRef(serie.id, it.id, 2, it.name, it.posterPath)
-                            viewModelSerie.insertSimilar(similar)
-                        }
-
                         binding.rvCardsListSimilares.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
                             adapter = serie.similar?.let { it1 ->
@@ -608,6 +587,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     if(serie.isNotEmpty()) {
                         onApiErrorSerie(serie)
                     }
+
+                    Snackbar.make(binding.ivArrowBackFilmsSeries, R.string.string_you_are_offline, Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Entendido") {
+                                it.isVisible = false
+                            }.setActionTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                            .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                            .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary)).show()
                 }
 
                 findViewById<RecyclerView>(R.id.rvCommentsUsers).apply {
@@ -617,6 +603,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun setRecommendationsAndSimilar(element: MutableList<MidiaFirebase?>, pos: Int) {
         when(pos) {
             1 -> {
@@ -661,7 +648,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         obj?.let {
                             if(!CAST.contains(it)) {
                                 CAST.add(it)
-                                CAST
                             }
                         }
                     }
@@ -955,7 +941,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 filter.forEach { fil -> castList.add(fil) }
                             }
                         }
-                        if(castList.size > 0) {
+                        if(castList.size != 0) {
                             adapter = MidiaCastAdapter(castList)
                             binding.tvMessageCast.isVisible = false
                         }
@@ -972,7 +958,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                        if(recList.size > 0) {
+                        if(recList.size != 0) {
                             adapter = RecommendationDataBaseAdapter(recList)
                             binding.tvMessageRecomendation.isVisible = false
                         }
@@ -988,7 +974,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 filter.forEach { fil-> simiList.add(fil) }
                             }
                         }
-                        if(simiList.size > 0) {
+                        if(simiList.size != 0) {
                             adapter = SimilarDataBaseAdapter(simiList)
                             binding.tvMessageSimilar.isVisible = false
                         }
@@ -996,7 +982,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
             }
         }
-        Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
     private fun onApiErrorMovie(movie: List<MidiaFirebase>?) {
@@ -1038,7 +1023,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             filter.forEach { fil -> castList.add(fil) }
                         }
                     }
-                    if(castList.size > 0) {
+                    if(castList.size != 0) {
                         adapter = MidiaCastAdapter(castList)
                         binding.tvMessageCast.isVisible = false
                     }
@@ -1055,7 +1040,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    if(recList.size > 0) {
+                    if(recList.size != 0) {
                         adapter = RecommendationDataBaseAdapter(recList)
                         binding.tvMessageRecomendation.isVisible = false
                     }
@@ -1071,14 +1056,13 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             filter.forEach { fil-> simiList.add(fil) }
                         }
                     }
-                    if(simiList.size > 0) {
+                    if(simiList.size != 0) {
                         adapter = SimilarDataBaseAdapter(simiList)
                         binding.tvMessageSimilar.isVisible = false
                     }
                 }
             }
         }
-        Toast.makeText(this, "Você está Offline", Toast.LENGTH_LONG).show()
     }
 
     private fun getGendersNames(id: Int): String {
