@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.adapter
 
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -11,11 +12,15 @@ import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MainMyListRecyclerviewBinding
 import com.example.madeinbrasil.model.customLists.ListWithMedia
-import com.example.madeinbrasil.model.customLists.ListWithMediaUni
 
 
-class MyListsAdapter(private val list: List<ListWithMedia>,
-                     val onClick: (ListWithMedia) -> Unit): RecyclerView.Adapter<MyListsAdapter.ViewHolder>() {
+class MyListsAdapter(val onClick: (ListWithMedia) -> Unit): RecyclerView.Adapter<MyListsAdapter.ViewHolder>() {
+
+    lateinit var list: MutableList<ListWithMedia>
+    var onItemLongClick: ((Int) -> Unit)? = null
+    var onItemClick: ((Int) -> Unit)? = null
+    val selectedPositions = SparseBooleanArray()
+    var selectedItems: MutableList<String> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -23,15 +28,50 @@ class MyListsAdapter(private val list: List<ListWithMedia>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(list[position], onClick)
+        holder.bind(list[position])
+        holder.itemView.setOnClickListener{
+            if (selectedItems.size > 0)
+                onItemClick?.invoke(position)
+            else
+                onClick(list[position])
+        }
+        holder.itemView.setOnLongClickListener {
+            onItemLongClick?.invoke(position)
+            return@setOnLongClickListener true
+        }
     }
 
     override fun getItemCount(): Int = list.size
 
+    fun tooglePosition(position: Int) {
+        if(selectedPositions[position, false]) {
+            selectedPositions.delete(position)
+            selectedItems.remove(list[position].list.id)
+        } else {
+            selectedPositions.put(position, true)
+            selectedItems.add(list[position].list.id)
+        }
+
+        notifyItemChanged(position)
+    }
+
+    fun deleteLists() {
+        list.removeAll(
+            list.filter {
+                selectedItems.contains(it.list.id)
+            }
+        )
+
+        selectedItems.clear()
+        selectedPositions.clear()
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(val binding: MainMyListRecyclerviewBinding) : RecyclerView.ViewHolder(
             binding.root
     ) {
-        fun bind(list: ListWithMedia, onClick: (ListWithMedia) -> Unit) = with(binding) {
+        fun bind(list: ListWithMedia) = with(binding) {
+            containerView.removeAllViews()
             val mediaSize = list.mediaList.size
             if (mediaSize == 0) {
                 val textView = TextView(containerView.context)
@@ -69,9 +109,14 @@ class MyListsAdapter(private val list: List<ListWithMedia>,
 
             tvListName.text = list.list.name
 
-            root.setOnClickListener {
-                onClick(list)
+            if(selectedItems.contains(list.list.id)) {
+                root.setBackgroundColor(ResourcesCompat.getColor(root.context.resources, R.color.colorAccent, null))
+                tvListName.setTextColor(ResourcesCompat.getColor(root.context.resources, R.color.colorPrimary, null))
+            } else {
+                root.setBackgroundColor(ResourcesCompat.getColor(root.context.resources, R.color.colorPrimary, null))
+                tvListName.setTextColor(ResourcesCompat.getColor(root.context.resources, R.color.colorAccent, null))
             }
+
         }
 
     }

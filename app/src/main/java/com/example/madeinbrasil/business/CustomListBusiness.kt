@@ -29,6 +29,15 @@ class CustomListBusiness(context: Context? = null) {
                 response
         }
     }
+
+    suspend fun deleteLists(selectedLists: List<String>): FirebaseResponse {
+        return when (val response = customListRepository.deleteLists(selectedLists)) {
+            is FirebaseResponse.OnSucess ->
+                FirebaseResponse.OnSucess(DELETE_TASK_OK)
+            is FirebaseResponse.OnFailure ->
+                response
+        }
+    }
 //
 //    suspend fun createList(list: ListWithMedia) {
 //        customListRepository.createList(list)

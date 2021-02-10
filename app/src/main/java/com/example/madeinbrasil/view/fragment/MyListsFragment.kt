@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,8 +26,42 @@ import kotlinx.android.synthetic.main.fragment_my_lists.*
 
 class MyListsFragment : Fragment() {
     private lateinit var binding: FragmentMyListsBinding
-
+    private var actionMode: ActionMode? = null
     private lateinit var customListViewMovel: CustomListViewModel
+
+    private val myListsAdapter by lazy {
+        MyListsAdapter { list ->
+            showListDetails(list)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        myListsAdapter.onItemClick = {
+            enableActionMode(it)
+        }
+
+        myListsAdapter.onItemLongClick = {
+            enableActionMode(it)
+        }
+    }
+
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        binding = FragmentMyListsBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == CODE) {
+            makeToast()
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -86,43 +120,93 @@ class MyListsFragment : Fragment() {
 
     }
 
-    private fun setupRecyclerView(list: List<ListWithMedia>) {
-        binding.rvMyLists.apply {
-            layoutManager = LinearLayoutManager(this@MyListsFragment.context)
-            adapter = MyListsAdapter(list) { list ->
-                val intent = Intent(this@MyListsFragment.context, CustomListDetailsActivity::class.java)
-                intent.putExtra(LIST, list)
-                startActivity(intent)
-            }
+    private fun enableActionMode(position: Int) {
+        if (actionMode == null)
+            actionMode = (activity as AppCompatActivity).startSupportActionMode(object : ActionMode.Callback {
+                override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                    mode?.menuInflater?.inflate(R.menu.menu_edit_delete, menu)
+                    return true
+                }
+
+                override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                    val item = menu?.findItem(R.id.action_edit)
+                    item?.isVisible = (myListsAdapter.selectedItems.size == 1)
+                    return true
+                }
+
+                override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                    when(item?.itemId) {
+                        R.id.action_edit -> {
+                            return true
+                        }
+                        R.id.action_delete -> {
+                            deleteLists(myListsAdapter.selectedItems)
+                            myListsAdapter.deleteLists()
+                            mode?.finish()
+                            return true
+                        }
+                    }
+                    return false
+                }
+
+                override fun onDestroyActionMode(mode: ActionMode?) {
+                    myListsAdapter.let {
+                        it.selectedPositions.clear()
+                        it.selectedItems.clear()
+                        it.notifyDataSetChanged()
+                    }
+
+                    actionMode = null
+                }
+
+            })
+
+        myListsAdapter.tooglePosition(position)
+        val size = myListsAdapter.selectedItems.size
+        if (size == 0) {
+            actionMode?.finish()
+        } else {
+            actionMode?.title = size.toString()
+            actionMode?.invalidate()
         }
-    }
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentMyListsBinding.inflate(layoutInflater, container, false)
-        return binding.root
     }
-
 
     private fun startCreateListActivity(context: Context) {
         val intent = Intent(context, CreateListActivity::class.java)
         startActivityForResult(intent, CODE)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == CODE) {
-            makeToast()
+    private fun setupRecyclerView(list: List<ListWithMedia>) {
+        binding.rvMyLists.apply {
+            layoutManager = LinearLayoutManager(this@MyListsFragment.context)
+            myListsAdapter.list = list as MutableList<ListWithMedia>
+            adapter = myListsAdapter
         }
+    }
+
+    private fun showListDetails(list: ListWithMedia) {
+        val intent = Intent(this@MyListsFragment.context, CustomListDetailsActivity::class.java)
+        intent.putExtra(LIST, list)
+        startActivity(intent)
     }
 
     private fun makeToast() {
         Snackbar.make(binding.root, R.string.created_list_success, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ResourcesCompat.getColor(resources, R.color.colorAccent, null))
                 .show()
+    }
+
+    private fun deleteLists(selectedItems: List<String>) {
+        customListViewMovel.deleteLists(selectedItems)
+
+        customListViewMovel.listSucess.observe(this, {
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+        })
+
+        customListViewMovel.listFailure.observe(this, {
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     companion object {

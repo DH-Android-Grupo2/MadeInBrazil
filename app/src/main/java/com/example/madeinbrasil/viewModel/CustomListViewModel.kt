@@ -13,8 +13,6 @@ import kotlinx.coroutines.launch
 
 class CustomListViewModel(application: Application): AndroidViewModel(application) {
 
-
-
 //    val lists: MutableLiveData<List<ListWithMedia>> = MutableLiveData()
 //    val uniLists: MutableLiveData<List<ListWithMediaUni>> = MutableLiveData()
 //    val uniList: MutableLiveData<ListWithMediaUni> = MutableLiveData()
@@ -63,6 +61,21 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
     fun resetListMedia(listId: String, moviesId: List<String>, seriesId: List<String>) {
         viewModelScope.launch {
             when(val response = customListBusinnes.resetMediaList(listId, moviesId, seriesId)) {
+                is FirebaseResponse.OnSucess ->
+                    listSucess.postValue(
+                            response.data as String
+                    )
+                is FirebaseResponse.OnFailure ->
+                    listFailure.postValue(
+                            response.message
+                    )
+            }
+        }
+    }
+
+    fun deleteLists(selectedLists: List<String>) {
+        viewModelScope.launch {
+            when(val response = customListBusinnes.deleteLists(selectedLists)) {
                 is FirebaseResponse.OnSucess ->
                     listSucess.postValue(
                             response.data as String

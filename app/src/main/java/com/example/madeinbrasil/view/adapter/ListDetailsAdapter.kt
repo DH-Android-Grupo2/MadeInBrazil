@@ -14,9 +14,9 @@ import com.example.madeinbrasil.databinding.MyListCardItemBinding
 import com.example.madeinbrasil.model.customLists.ListMediaItem
 import com.example.madeinbrasil.model.customLists.firebase.Media
 
-class ListDetailsAdapter(var list: MutableList<Media>,
-                         val onItemClick: (String) -> Unit) : RecyclerView.Adapter<ListDetailsAdapter.ViewHolder>() {
+class ListDetailsAdapter(val onItemClick: (String) -> Unit) : RecyclerView.Adapter<ListDetailsAdapter.ViewHolder>() {
 
+    lateinit var list: MutableList<Media>
     var onMediaClick: ((Int) -> Unit)? = null
     var onMediaLongClick: ((Int) -> Unit)? = null
     val selectedItems: MutableList<String> = mutableListOf()
@@ -38,7 +38,6 @@ class ListDetailsAdapter(var list: MutableList<Media>,
             onMediaLongClick?.invoke(holder.adapterPosition)
             return@setOnLongClickListener true
         }
-
     }
 
     override fun getItemCount(): Int = list.size

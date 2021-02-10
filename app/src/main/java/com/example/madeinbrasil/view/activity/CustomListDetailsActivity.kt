@@ -26,7 +26,7 @@ class CustomListDetailsActivity : AppCompatActivity() {
     private var selectedSeries: List<String>? = null
     private lateinit var listID: String
     private val listDetailsAdapter by lazy {
-        ListDetailsAdapter(mutableListOf()) {
+        ListDetailsAdapter() {
 
         }
     }
