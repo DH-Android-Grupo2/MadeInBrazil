@@ -322,13 +322,24 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
 
                 viewModelMovie.movieError.observe(this) {midia ->
-                    val film = midia.filter { it.id == films?.id }
-                    if(film.isNotEmpty()) {
-                        onApiErrorMovie(film)
-                    }else {
-                        binding.tvMessageCast.isVisible = true
-                        binding.tvMessageSimilar.isVisible = true
-                        binding.tvMessageRecomendation.isVisible = true
+                    midiaFirebase?.let {item ->
+                        val film = midia.filter { it.id == item.id }
+                        if(film.isNotEmpty()) {
+                            onApiErrorMovie(film)
+                        }else {
+                            binding.tvMessageCast.isVisible = true
+                            binding.tvMessageSimilar.isVisible = true
+                            binding.tvMessageRecomendation.isVisible = true
+                        }
+                    }?: run {
+                        val film = midia.filter { it.id == films?.id }
+                        if(film.isNotEmpty()) {
+                            onApiErrorMovie(film)
+                        }else {
+                            binding.tvMessageCast.isVisible = true
+                            binding.tvMessageSimilar.isVisible = true
+                            binding.tvMessageRecomendation.isVisible = true
+                        }
                     }
 
                     Snackbar.make(binding.ivArrowBackFilmsSeries, R.string.string_you_are_offline, Snackbar.LENGTH_INDEFINITE)
@@ -584,13 +595,24 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 }
 
                 viewModelSerie.serieDetailedError.observe(this) {midia ->
-                    val serie = midia.filter { it.id == series?.id }
-                    if(serie.isNotEmpty()) {
-                        onApiErrorSerie(serie)
-                    }else {
-                        binding.tvMessageCast.isVisible = true
-                        binding.tvMessageSimilar.isVisible = true
-                        binding.tvMessageRecomendation.isVisible = true
+                    midiaFirebase?.let {item ->
+                        val serie = midia.filter { it.id == item.id }
+                        if(serie.isNotEmpty()) {
+                            onApiErrorSerie(serie)
+                        }else {
+                            binding.tvMessageCast.isVisible = true
+                            binding.tvMessageSimilar.isVisible = true
+                            binding.tvMessageRecomendation.isVisible = true
+                        }
+                    }?: run {
+                        val serie = midia.filter { it.id == series?.id }
+                        if(serie.isNotEmpty()) {
+                            onApiErrorSerie(serie)
+                        }else {
+                            binding.tvMessageCast.isVisible = true
+                            binding.tvMessageSimilar.isVisible = true
+                            binding.tvMessageRecomendation.isVisible = true
+                        }
                     }
                     Snackbar.make(binding.ivArrowBackFilmsSeries, R.string.string_you_are_offline, Snackbar.LENGTH_INDEFINITE)
                             .setAction("Entendido") {
@@ -899,7 +921,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private fun onApiErrorSerie(serie: List<MidiaFirebase>?) {
         serie?.let {
             serie.forEach {serie ->
-                if (serie.id == series?.id) {
+//                if (serie.id == series?.id) {
                     binding.btStreamingFilmsSeries.isVisible = false
 
                     Glide.with(binding.root.context)
@@ -983,14 +1005,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         intent.putExtra(SEASON_KEY_OFF, serie.id)
                         startActivity(intent)
                     }
-                }
+//                }
             }
         }
     }
 
     private fun onApiErrorMovie(movie: List<MidiaFirebase>?) {
         movie?.forEach {
-            if (it.id == films?.id) {
+//            if (it.id == films?.id) {
                 Glide.with(binding.root.context)
                         .load(it.posterPath)
                         .placeholder(R.drawable.logo_made_in_brasil)
@@ -1068,7 +1090,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.tvMessageSimilar.isVisible = true
                     }
                 }
-            }
+//            }
         }
     }
 
