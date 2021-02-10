@@ -6,51 +6,40 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.icu.text.IDNA
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
-import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.FilmsAdapter
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.example.madeinbrasil.view.activity.MenuActivity
 import com.example.madeinbrasil.viewModel.FilmsViewModel
 import com.example.madeinbrasil.view.activity.UserActivity
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import kotlinx.android.synthetic.main.filmsseries_popup.*
-import kotlinx.android.synthetic.main.fragment_films.*
-import java.lang.Appendable
-import kotlinx.coroutines.launch
-import java.util.*
 
 
-class FilmsFragment(
-
-) : Fragment() {
+class FilmsFragment() : Fragment() {
     private var binding: FragmentFilmsBinding? = null
     private lateinit var viewModel: FilmsViewModel
+    private var tutorial: Int? = null
 
     private val filmsAdapter : FilmsAdapter by lazy {
         FilmsAdapter ({
@@ -66,6 +55,9 @@ class FilmsFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view,savedInstanceState)
+        val bundle = arguments
+
+        tutorial = bundle?.getInt(TUTORIAL)
         binding?.ivProfileFilms?.setOnClickListener {
             this.context?.let { it1 -> startUserActivity(it1) }
         }
@@ -76,7 +68,10 @@ class FilmsFragment(
             setupRecyclerView()
             loadContentSearchMovie()
         }
-//        tutorialImplementation()
+
+        if(tutorial == 0) {
+            tutorialImplementation()
+        }
     }
 
     override fun onCreateView(
@@ -88,28 +83,32 @@ class FilmsFragment(
         return binding?.root
     }
 
-//    private fun tutorialImplementation() {
-//        TapTargetSequence(activity).targets(
-//                TapTarget.forView(binding?.tilSearchFilms,
-//                        getString(R.string.string_search_tutorial_title),
-//                        getString(R.string.string_search_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(40),
-//                TapTarget.forView(binding?.ivProfileFilms,
-//                        getString(R.string.string_profile_tutorial_title),
-//                       getString(R.string.string_profile_tutotial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(40)
-//        ).listener(object: TapTargetSequence.Listener{
-//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-//            override fun onSequenceFinish() {}
-//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-//        }).start()
-//    }
+    private fun tutorialImplementation() {
+        TapTargetSequence(activity).targets(
+                TapTarget.forView(binding?.tilSearchFilms,
+                        getString(R.string.string_search_tutorial_title),
+                        getString(R.string.string_search_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(40),
+                TapTarget.forView(binding?.ivProfileFilms,
+                        getString(R.string.string_profile_tutorial_title),
+                       getString(R.string.string_profile_tutotial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(40)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {
+                val intent = Intent(activity, UserActivity::class.java)
+                intent.putExtra(TUTORIAL, 0)
+                startActivity(intent)
+            }
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
+    }
 
     private fun loadContentSearchMovie() {
         viewModel.searchMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
@@ -186,71 +185,38 @@ class FilmsFragment(
                 ContextCompat.startActivity(it.context, shareIntent, null)
             }
 
+            value?.let {
+                if(MenuActivity.USER.favorites.contains(it.id)) {
+                    dialog.cbFavorite.isChecked = true
+                }
+                if(MenuActivity.USER.watched.contains(it.id)) {
+                    dialog.cbWatched.isChecked = true
+                }
+            }
+
             dialog.cbFavorite.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    value?.let {
-                        val fav = Favorites(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(value.id, value.backdropPath, "", value.originalLanguage,
-                                value.originalTitle, value.overview, value.popularity, value.posterPath, value.releaseDate,
-                                0, value.title, value.voteAverage?.toDouble(), value.voteCount, listOf(0), "",
-                                "", midiaType = 1)
-
-                        if(isChecked) {
-                            dbFav.insertFavorite(fav)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbFav.deleteByIdFavorites(it.id)
-                        }
+                value?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.favorites.add(it.id)
+                    }else {
+                        MenuActivity.USER.favorites.remove(it.id)
                     }
+
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 
             dialog.cbWatched.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    value?.let {
-                        val watched = Watched(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(value.id, value.backdropPath, "", value.originalLanguage,
-                                value.originalTitle, value.overview, value.popularity, value.posterPath, value.releaseDate,
-                                0, value.title, value.voteAverage?.toDouble(), value.voteCount, listOf(0), "",
-                                "", midiaType = 1)
-
-                        if(isChecked) {
-                            dbWatched.insertWatched(watched)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbWatched.deleteByIdWatched(it.id)
-                        }
+                value?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.watched.add(it.id)
+                    }else {
+                        MenuActivity.USER.watched.remove(it.id)
                     }
+
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
-
-            lifecycleScope.launch {
-                val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-
-                dbFav.getMidiaWithFavorites().forEach {
-                    if(it.midia.id == value?.id) {
-                        it.favorites.forEach {
-                            dialog.cbFavorite.isChecked = it.isChecked
-                        }
-                    }
-                }
-
-                dbWatched.getMidiaWithWatched().forEach {
-                    if(it.midia.id == value?.id) {
-                        it.watched.forEach {
-                            dialog.cbWatched.isChecked = it.isChecked
-                        }
-                    }
-                }
-            }
-
             dialog.show()
         }
     }

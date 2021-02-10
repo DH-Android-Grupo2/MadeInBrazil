@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.databinding.ActivityLogInBinding
 import com.example.madeinbrasil.viewModel.LogInViewModel
 import com.facebook.*
@@ -33,8 +34,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.HashMap
 
-//184980070731-6dpbve1t4asg125d9b69c5qk9tor0n39.apps.googleusercontent.com
-//viCv12wGxwi56K9f-IMhJKoM
 class LogInActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLogInBinding
     private lateinit var viewModelLogin: LogInViewModel
@@ -80,16 +79,15 @@ class LogInActivity : AppCompatActivity() {
 
         binding.btFaceLogin.isEnabled = true
         binding.btFaceLogin.setOnClickListener {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", ""));
             LoginManager.getInstance().registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult?) {
                     if (loginResult != null) {
                         val request = GraphRequest.newMeRequest(loginResult.accessToken)
                         { jsonResponse, response ->
-                            val user = hashMapOf(
-                                "email" to jsonResponse.getString("email"),
-                                "name" to jsonResponse.getString("name")
-                            )
+                            val user = User(
+                                    jsonResponse.getString("email"), jsonResponse.getString("name"),
+                                    mutableListOf(), mutableListOf(), jsonResponse.getString(""))
                             firebaseAuthWithfacebook(loginResult.accessToken, user)
                         }
                         val parameters = Bundle()
@@ -115,8 +113,24 @@ class LogInActivity : AppCompatActivity() {
         super.onStart()
         viewModelLogin.login.observe(this) {
             updateUI(it)
+            it
         }
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        val account = GoogleSignIn.getLastSignedInAccount(this)
+//
+//        val accessToken = AccessToken.getCurrentAccessToken()
+//        var isLoggedIn: Boolean = false
+//        account?.let {
+//            isLoggedIn = accessToken != null && !accessToken.isExpired || account.isExpired
+//        }
+//
+//        if (isLoggedIn) {
+//            startMenuActivity(this)
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)
@@ -127,10 +141,9 @@ class LogInActivity : AppCompatActivity() {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
                 account?.idToken?.let {
-                    val user = hashMapOf(
-                        "email" to account.email,
-                        "name" to account.displayName
-                    )
+                    val user = User(account.email.toString(), account.displayName.toString(),
+                            mutableListOf(), mutableListOf(), account.photoUrl.toString())
+
                     firebaseAuthWithGoogle(it, user)
                 }?: run {
                     firebaseAuthWithGoogle(null, null)
@@ -141,19 +154,27 @@ class LogInActivity : AppCompatActivity() {
         }
     }
 
-    private fun firebaseAuthWithfacebook(idToken: AccessToken?, user: HashMap<String, String?>?) {
+    private fun firebaseAuthWithfacebook(idToken: AccessToken?, user: User?) {
         if (idToken != null) {
             viewModelLogin.logInWithFacebook(idToken, user)
         }
         viewModelLogin.login.observe(this) {
-            updateUIFromSocialMidia(it)
+            it.let {
+                updateUIFromSocialMidia(it)
+            }?: run {
+                updateUI(it)
+            }
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String?, user: HashMap<String, String?>?) {
+    private fun firebaseAuthWithGoogle(idToken: String?, user: User?) {
         viewModelLogin.logInWithGoogle(idToken, user)
         viewModelLogin.login.observe(this) {
-            updateUIFromSocialMidia(it)
+            it?.let {
+                updateUIFromSocialMidia(it)
+            }?: run {
+                updateUI(it)
+            }
         }
     }
 
@@ -168,9 +189,12 @@ class LogInActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI(user: FirebaseUser?) {
-        if(user != null) {
+    private fun updateUI(user: FirebaseUser?): Boolean {
+        return if(user != null) {
             startMenuActivity(this)
+            true
+        }else {
+            false
         }
     }
 
@@ -225,8 +249,7 @@ class LogInActivity : AppCompatActivity() {
         }
     }
 
-    private fun setByTag(tag: String,
-                         isOk: Boolean) {
+    private fun setByTag(tag: String, isOk: Boolean) {
         when (tag) {
             getString(R.string.string_email) -> isEmailOk = isOk
             getString(R.string.string_password) -> isPasswordOk = isOk

@@ -3,14 +3,9 @@ package com.example.madeinbrasil.repository
 import android.content.Context
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import java.lang.Exception
 
 class GenderSerieRepository(context: Context) {
-    private val genderDB by lazy {
-        MadeInBrazilDatabase.getDatabase(context).genreDao()
-    }
     suspend fun getGenderSeries(): ResponseAPI {
         return try {
             val response = APIService.tmdbApi.serieGenders()
@@ -27,9 +22,5 @@ class GenderSerieRepository(context: Context) {
         } catch (exception: Exception) {
             ResponseAPI.Error("Erro ao carregar os dados")
         }
-    }
-
-    suspend fun insertGenre(genre: GenreEntity) {
-        genderDB.insertGenre(genre)
     }
 }

@@ -6,12 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
-import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.databinding.MainCastRecyclerviewBinding
-import com.example.madeinbrasil.model.upcoming.Result
 
 class RecommendationDataBaseAdapter (
-        private var recommendationList: List<RecommendationMidiaCrossRef> = listOf(),
+//        private var recommendationList: List<RecommendationMidiaCrossRef> = listOf(),
+        private var recommendationList: List<MidiaFirebase> = listOf(),
 ): RecyclerView.Adapter<RecommendationDataBaseAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,14 +33,14 @@ class RecommendationDataBaseAdapter (
             binding.root
     ) {
 
-        fun bind(cast: RecommendationMidiaCrossRef) = with(binding) {
+        fun bind(recommendation: MidiaFirebase) = with(binding) {
             Glide.with(itemView.context)
-                    .load(cast.posterPath)
+                    .load(recommendation.posterPath)
                     .placeholder(R.drawable.logo_made_in_brasil)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(cvImageActors)
 
-            tvActorsName.text = cast.name
+            tvActorsName.text = recommendation.name
         }
 
     }

@@ -3,17 +3,20 @@ package com.example.madeinbrasil.viewModel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PageKeyedDataSource
 import androidx.paging.PagedList
+import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.model.discover.DiscoverMovieDataSourceFactory
 import com.example.madeinbrasil.model.discoverTV.DiscoverTvDataSourceFactory
 import com.example.madeinbrasil.model.nowPlaying.NowPlayingDataSourceFactory
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.model.upcoming.UpcomingDataSourceFactory
+import com.example.madeinbrasil.repository.FragmentsRepository
 import com.example.madeinbrasil.utils.Constants.Paging.PAGE_SIZE
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
         application: Application
@@ -27,13 +30,15 @@ class HomeViewModel(
     private var nowPlayingLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var discoverMovieLiveDataSource: LiveData<PageKeyedDataSource<Int, Result>>? = null
     private var discoverTvLiveDataSource: LiveData<PageKeyedDataSource<Int,ResultSearch>>? = null
+    private val repository by lazy {
+        FragmentsRepository()
+    }
 
     init {
         nowPlayingData(application)
         upcomingData(application)
         discoverMovieData(application)
         discoverTvData(application)
-
     }
 
     fun nowPlayingData(application: Application){
@@ -93,6 +98,9 @@ class HomeViewModel(
                 .build()
     }
 
-
-
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            repository.updateUser(user)
+        }
+    }
 }

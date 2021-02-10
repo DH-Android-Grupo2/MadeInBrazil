@@ -29,6 +29,7 @@ class Constants {
     object ConstantsFilms {
         const val BASE_FILM_KEY = "Film"
         const val BASE_FILM_DETAILED_KEY = "MovieDetailed"
+        const val BASE_MIDIA_KEY = "midiaFirebase"
         const val BASE_SERIE_KEY = "Serie"
         const val ID_FRAGMENTS = "idFragment"
         const val BASE_ACTOR_KEY = "Actor"
@@ -38,6 +39,7 @@ class Constants {
         const val VALUE = "position"
         const val SELECTED_MOVIES = "selected_movies"
         const val SELECTED_SERIES = "selected_series"
+        const val TUTORIAL = "tutorial"
     }
 
     object Paging {
@@ -47,7 +49,11 @@ class Constants {
 
     object Firebase {
         const val DATABASE_USERS = "users"
-        const val DATABASE_FAVORITES = "favorites"
-        const val DATABASE_WATCHED = "watched"
+        const val DATABASE_MIDIA = "midia"
+        const val DATABASE_GENRE = "genre"
+        const val DATABASE_CAST = "cast"
+        const val FIELD_FAVORITES = "favorites"
+        const val FIELD_WATCHED = "watched"
+        const val DATABASE_SEASON = "season"
     }
 }

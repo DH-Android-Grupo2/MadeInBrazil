@@ -2,7 +2,6 @@ package com.example.madeinbrasil.business
 
 import android.content.Context
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.database.entities.cast.MidiaCastCrossRef
 import com.example.madeinbrasil.extensions.getFirst4Chars
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.people.Person
@@ -36,12 +35,5 @@ class PersonBusiness(val context: Context) {
         } else {
             response
         }
-    }
-
-//    suspend fun insertPeople(people: CastEntity) {
-//        repository.insertPeople(people)
-//    }
-    suspend fun insertPeople(people: MidiaCastCrossRef) {
-        repository.insertPeople(people)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.repository
 
+import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
@@ -18,7 +19,7 @@ class RegisterRepository {
             .document(firebaseAuth.currentUser?.uid ?: "")
     }
 
-    suspend fun createNewUser(email: String, password: String, user: HashMap<String, String>): FirebaseUser? {
+    suspend fun createNewUser(email: String, password: String, user: User): FirebaseUser? {
         firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         db.set(user, SetOptions.merge()).await()
         return firebaseAuth.currentUser ?: throw FirebaseAuthException("", "")

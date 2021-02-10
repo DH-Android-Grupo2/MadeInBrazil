@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.databinding.ActivityRegisterBinding
 import com.example.madeinbrasil.model.users.Users
 import com.example.madeinbrasil.viewModel.RegisterViewModel
@@ -94,10 +95,7 @@ class RegisterActivity : AppCompatActivity() {
 //    }
 
     private fun createNewUser(email: String, password: String) {
-        val user = hashMapOf<String, String>(
-            "email" to binding.tietRegisterEmail.text.toString(),
-            "name" to binding.tietRegisterName.text.toString()
-        )
+        val user = User(binding.tietRegisterEmail.text.toString(), binding.tietRegisterName.text.toString(), mutableListOf(), mutableListOf(), "", 0)
 
         viewModelRegister.createNewUser(email, password, user)
         viewModelRegister.register.observe(this) {

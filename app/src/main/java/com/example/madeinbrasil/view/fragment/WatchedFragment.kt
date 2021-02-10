@@ -1,31 +1,52 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
 import com.example.madeinbrasil.adapter.WatchedMidiaAdapter
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.databinding.FragmentWatchedBinding
-import kotlinx.coroutines.launch
+import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.example.madeinbrasil.view.activity.MenuActivity
 
 
 class WatchedFragment : Fragment() {
     private lateinit var binding: FragmentWatchedBinding
+    private var watchedList = mutableListOf<MidiaFirebase>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {activity ->
-            lifecycleScope.launch {
-                val db = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
 
-                binding.rvCardsListWatched.apply {
-                    layoutManager = GridLayoutManager(activity, 2)
-                    adapter = WatchedMidiaAdapter(db.getMidiaWithWatched())
+        MenuActivity.USER.watched.forEach { watched ->
+            val filter = MenuActivity.MIDIA.filter { it.id == watched }
+            filter.forEach {
+                watchedList.add(it)
+            }
+        }
+
+        activity?.let {activity ->
+            binding.rvCardsListWatched.apply {
+                layoutManager = GridLayoutManager(activity, 2)
+                adapter = WatchedMidiaAdapter(watchedList) {midia ->
+                    when(midia.midiaType) {
+                        1 -> {
+                            val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                            intent.putExtra(Constants.ConstantsFilms.BASE_MIDIA_KEY, midia)
+                            intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                            startActivity(intent)
+                        }
+                        2 -> {
+                            val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                            intent.putExtra(Constants.ConstantsFilms.BASE_MIDIA_KEY, midia)
+                            intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 2)
+                            startActivity(intent)
+                        }
+                    }
                 }
             }
         }

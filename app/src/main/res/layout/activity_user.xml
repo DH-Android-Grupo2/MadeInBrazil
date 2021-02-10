@@ -206,11 +206,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             tools:listitem="@layout/main_cards"
             tools:itemCount="1"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@+id/tvFavoritesRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvFavoritesRecycler"/>
+            app:layout_constraintTop_toBottomOf="@id/tvFavoritesRecycler"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/tvListasRecycler"
@@ -230,11 +232,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             tools:listitem="@layout/user_lists_recyclerview"
             tools:itemCount="1"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@id/tvFavoritesRecycler"
-            app:layout_constraintTop_toBottomOf="@+id/tvListasRecycler"/>
+            app:layout_constraintTop_toBottomOf="@+id/tvListasRecycler"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btGoToLists"

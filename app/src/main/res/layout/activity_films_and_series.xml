@@ -42,6 +42,8 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
 
+
+
         <com.rishabhharit.roundedimageview.RoundedImageView
             android:transitionName="sharedImgView"
             app:cornerRadius="25dp"
@@ -90,7 +92,7 @@
         <TextView
             android:id="@+id/tvGenderFilmsSeries"
             style="@style/TextViewFilmsSeriesDefault"
-            android:text="Não encontrado"
+            android:text="@string/string_gender_not_found"
             android:textSize="14sp"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
@@ -166,6 +168,7 @@
             android:layout_marginEnd="5dp"
             android:text="@string/string_streaming"
             android:textColor="@color/colorAccent"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/tvNameFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/cbListFilmsSeries"
             app:layout_constraintBottom_toTopOf="@id/rvStreaming"
@@ -251,6 +254,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="@string/string_cast_not_found"
+            android:visibility="gone"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvCastTitleFilmsSeries"
@@ -299,6 +303,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="@string/string_recomendation_not_found"
+            android:visibility="gone"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvRecomendacoesTitleFilmsSeries"
@@ -336,6 +341,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="@string/string_similars_not_found"
+            android:visibility="gone"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="@id/ivBannerFilmsSeries"
             app:layout_constraintTop_toBottomOf="@id/tvSimilaresTitleFilmsSeries"

@@ -7,24 +7,24 @@ import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.business.MovieDetailedBusiness
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.genre.GenreEntity
-import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
-import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
-import com.example.madeinbrasil.database.entities.watched.Watched
+import com.example.madeinbrasil.database.entities.User
+import com.example.madeinbrasil.database.entities.cast.CastFirebase
+import com.example.madeinbrasil.database.entities.genre.GenreFirebase
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.view.activity.MenuActivity
+import com.google.firebase.firestore.DocumentSnapshot
 import com.example.madeinbrasil.repository.MovieDetailedRepository
 import kotlinx.coroutines.launch
 
 class MovieDetailedViewModel(application: Application): AndroidViewModel(application) {
     val movieSucess: MutableLiveData<MovieDetailed> = MutableLiveData()
-    val movieError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
-
-    private val midiaDB by lazy {
-        MadeInBrazilDatabase.getDatabase(application).midiaDao()
-    }
+    val movieError: MutableLiveData<List<MidiaFirebase>> = MutableLiveData()
+    val midia: MutableLiveData<MutableList<MidiaFirebase?>> = MutableLiveData()
+    val cast: MutableLiveData<MutableList<DocumentSnapshot>> = MutableLiveData()
+    var listMidia = mutableListOf<MidiaFirebase?>()
+    var listCast = mutableListOf<DocumentSnapshot>()
     private val detailed by lazy {
         MovieDetailedBusiness(application)
     }
@@ -42,63 +42,68 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
                     movieSucess.postValue(response.data as MovieDetailed)
                 }
                 is ResponseAPI.Error -> {
-                    movieError.postValue(midiaDB.getMidia())
+//                    movieError.postValue(midiaDB.getMidia())
+                    movieError.postValue(MenuActivity.MIDIA)
                 }
             }
         }
     }
 
-    fun insertFavorite(fav: Favorites) {
+    fun getMidiaFireBase(id: Int) {
         viewModelScope.launch {
-            detailed.insertFavorite(fav)
+            detailed.getMidiaFireBase(id)?.let {
+                listMidia.add(it.toObject(MidiaFirebase::class.java))
+                midia.postValue(listMidia)
+            }?: run {
+                midia.postValue(null)
+            }
         }
     }
 
-    fun insertWatched(watched: Watched) {
+    fun getCast(id: Int) {
         viewModelScope.launch {
-            detailed.insertWatched(watched)
+            detailed.getCast(id)?.let {
+                listCast.add(it)
+                cast.postValue(listCast)
+            }?: run {
+                cast.postValue(null)
+            }
         }
     }
 
-    fun deleteByIdFavorites(id: Int) {
+    fun setMidiaFireBase(id: Int, infos: MidiaFirebase) {
         viewModelScope.launch {
-            detailed.deleteByIdFavorites(id)
+            detailed.setMidiaFireBase(id, infos)
         }
     }
 
-    fun deleteByIdWatched(id: Int) {
+    fun setGenreFireBase(id: Int, infos: GenreFirebase) {
         viewModelScope.launch {
-            detailed.deleteByIdWatched(id)
-        }
-    }
-    fun insertGenre(genre: GenreEntity) {
-        viewModelScope.launch {
-            detailed.insertGenre(genre)
-        }
-    }
-    fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
-        viewModelScope.launch {
-            detailed.insertRecommendation(recommendation)
+            detailed.setGenreFireBase(id, infos)
         }
     }
 
-    fun insertSimilar(similar: SimilarMidiaCrossRef) {
+    fun setCastFireBase(id: Int, infos: CastFirebase) {
         viewModelScope.launch {
-            detailed.insertSimilar(similar)
+            detailed.setCastFireBase(id, infos)
         }
     }
 
-    fun postComment(hashMap: Any, id: Int){
+    fun updateUser(user: User) {
         viewModelScope.launch {
-            detailedRepository.postComment(hashMap,id)
-       }
-   }
-
-    fun getComment(id: Int){
-        viewModelScope.launch {
-           val docs =  detailedRepository.getComment(id)
-            onGetComments.postValue(docs)
+            detailed.updateUser(user)
         }
     }
-
+//    fun postComment(comment: CommentFirebase){
+//        viewModelScope.launch {
+//            detailedRepository.postComment(hashMap,id)
+//       }
+//   }
+//
+//    fun getComment(id: Int){
+//        viewModelScope.launch {
+//           val docs =  detailedRepository.getComment(id)
+//            onGetComments.postValue(docs)
+//        }
+//    }
 }

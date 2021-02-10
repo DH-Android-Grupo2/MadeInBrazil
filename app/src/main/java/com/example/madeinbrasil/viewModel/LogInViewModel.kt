@@ -3,6 +3,7 @@ package com.example.madeinbrasil.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.repository.LogInRepository
 import com.facebook.AccessToken
 import com.google.firebase.auth.FirebaseUser
@@ -25,7 +26,7 @@ class LogInViewModel: ViewModel() {
         }
     }
 
-    fun logInWithGoogle(idToken: String?, user: HashMap<String, String?>?) {
+    fun logInWithGoogle(idToken: String?, user: User?) {
         viewModelScope.launch {
             repository.logInWithGoogle(idToken, user)?.let {
 //                loginGoogle.postValue(it)
@@ -37,7 +38,7 @@ class LogInViewModel: ViewModel() {
         }
     }
 
-    fun logInWithFacebook(idToken: AccessToken, user: HashMap<String, String?>?) {
+    fun logInWithFacebook(idToken: AccessToken, user: User?) {
         viewModelScope.launch {
             repository.logInWithFacebook(idToken, user)?.let {
                 login.postValue(it)

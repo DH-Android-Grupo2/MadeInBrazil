@@ -2,15 +2,11 @@ package com.example.madeinbrasil.view.fragment
 
 import android.app.ActivityOptions
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +16,6 @@ import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -29,42 +24,44 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.DiscoverTvAdapter
 import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
 import com.example.madeinbrasil.model.discover.DiscoverMovie
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.example.madeinbrasil.view.activity.MenuActivity
 import com.example.madeinbrasil.viewModel.HomeViewModel
-import com.google.android.gms.cast.framework.media.MediaUtils.getImageUri
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.filmsseries_popup.*
-import kotlinx.android.synthetic.main.main_cards_menu.*
-import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
-import java.io.File
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
-    private var binding: FragmentHomeBinding? = null
+    private lateinit var binding: FragmentHomeBinding
     var movieComplete: MovieDetailed? = null
     private  var selected: GenreSelected? = null
+    private var tutorial: Int? = null
     private var discover: DiscoverMovie? = null
     companion object {
          var genre : GenreSelected? = null
     }
+
     private val homeAdapter : HomeAdapter by lazy {
         HomeAdapter ({ it: Result?, imageView: ImageView? ->
             val movieClicked = it
             movieClicked?.let{ result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                intent.putExtra(BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(BASE_FILM_KEY, result)
+                intent.putExtra(ID_FRAGMENTS, 1)
 
                 val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
                 startActivity(intent,options.toBundle())
@@ -79,9 +76,9 @@ class HomeFragment : Fragment() {
             val movieClicked = it
             movieClicked?.let{ result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                intent.putExtra(BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(BASE_FILM_KEY, result)
+                intent.putExtra(ID_FRAGMENTS, 1)
 
                 val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
                 startActivity(intent,options.toBundle())
@@ -97,9 +94,9 @@ class HomeFragment : Fragment() {
             val movieClicked = it
             movieClicked?.let { result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                intent.putExtra(BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(BASE_FILM_KEY, result)
+                intent.putExtra(ID_FRAGMENTS, 1)
 
                 val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
                 startActivity(intent,options.toBundle())
@@ -113,8 +110,8 @@ class HomeFragment : Fragment() {
         DiscoverTvAdapter ({ result, imageView ->
             result?.let {
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_SERIE_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 2)
+                intent.putExtra(BASE_SERIE_KEY, result)
+                intent.putExtra(ID_FRAGMENTS, 2)
 
                 val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
                 startActivity(intent,options.toBundle())
@@ -126,22 +123,31 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       selected = arguments?.getParcelable<GenreSelected>("Selected")
+        selected = arguments?.getParcelable<GenreSelected>("Selected")
         genre = selected
-
-
-
+        tutorial = arguments?.getInt(TUTORIAL)
 
        activity?.let{
             viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
+
+           if(tutorial == 0) {
+               MaterialAlertDialogBuilder(it)
+                       .setTitle("Tutorial")
+                       .setMessage("Gostaria de ver o tutorial?")
+                       .setNegativeButton("Não") { dialog, which ->
+                           dialog.dismiss()
+                           MenuActivity.USER.tutorial = 1
+                           viewModel.updateUser(MenuActivity.USER)
+                       }
+                       .setPositiveButton("Sim") { dialog, which ->
+                           tutorialImplementation()
+                       }
+                       .show()
+           }
         }
-//        tutorialImplementation()
 
         val userDao = context?.let { MadeInBrazilDatabase.getDatabase(it) }?.userDao()
-
-
-
     }
 
     override fun onCreateView(
@@ -150,31 +156,36 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
-//    private fun tutorialImplementation() {
-//        TapTargetSequence(activity).targets(
-//                TapTarget.forView(binding?.logoMadeInBrasil,
-//                        getString(R.string.string_welcome_tutorial_title),
-//                        getString(R.string.string_welcome_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(100),
-//                TapTarget.forView(binding?.rvCardsListLancamentos,
-//                        getString(R.string.string_cards_tutorial_title),
-//                getString(R.string.string_cards_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(220)
-//        ).listener(object: TapTargetSequence.Listener{
-//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-//            override fun onSequenceFinish() {}
-//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-//        }).start()
-//    }
+    private fun tutorialImplementation() {
+        TapTargetSequence(activity).targets(
+                TapTarget.forView(binding.logoMadeInBrasil,
+                        getString(R.string.string_welcome_tutorial_title),
+                        getString(R.string.string_welcome_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.rvCardsListLancamentos,
+                        getString(R.string.string_cards_tutorial_title),
+                getString(R.string.string_cards_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(220)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {
+                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                intent.putExtra(TUTORIAL, 89214)
+                intent.putExtra(ID_FRAGMENTS, 2)
+                startActivity(intent)
+            }
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
+    }
 
     private fun loadContentUpcoming() {
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
@@ -218,28 +229,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        binding?.rvCardsListLancamentos?.apply {
+        binding.rvCardsListLancamentos.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentNowPlaying()
             adapter = homeAdapter
-
         }
 
-        binding?.rvCardsListFuturosLancamentos?.apply {
+        binding.rvCardsListFuturosLancamentos.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentUpcoming()
-
             adapter = homeAdapter2
         }
 
-       binding?.rvCardsListMovies?.apply {
-         layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
-           loadContentDiscoverMovie()
-           adapter = homeAdapter3
-         }
+        binding.rvCardsListMovies.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
+            loadContentDiscoverMovie()
+            adapter = homeAdapter3
+        }
 
-        binding?.rvCardListSeries?.apply {
-           layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvCardListSeries.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             loadContentDiscoverTv()
             adapter = homeAdapter4
         }
@@ -278,68 +287,36 @@ class HomeFragment : Fragment() {
                 ContextCompat.startActivity(it.context, shareIntent, null)
             }
 
+            serie?.let {
+                if(MenuActivity.USER.favorites.contains(it.id)) {
+                    dialog.cbFavorite.isChecked = true
+                }
+                if(MenuActivity.USER.watched.contains(it.id)) {
+                    dialog.cbWatched.isChecked = true
+                }
+            }
+
             dialog.cbFavorite.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    serie?.let {
-                        val fav = Favorites(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(serie.id, serie.backdropPath, "", "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, listOf(), serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
-                        if(isChecked) {
-                            dbFav.insertFavorite(fav)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbFav.deleteByIdFavorites(it.id)
-                        }
+                serie?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.favorites.add(it.id)
+                    }else {
+                        MenuActivity.USER.favorites.remove(it.id)
                     }
+
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 
             dialog.cbWatched.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    serie?.let {
-                        val watched = Watched(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(serie.id, serie.backdropPath, "", "",
-                                "", serie.overview, 0.0, serie.posterPath, "",
-                                0, "", serie.voteAverage, 0, listOf(), serie.firstAirDate,
-                                serie.name, midiaType = 2)
-
-                        if(isChecked) {
-                            dbWatched.insertWatched(watched)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbWatched.deleteByIdWatched(it.id)
-                        }
+                serie?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.watched.add(it.id)
+                    }else {
+                        MenuActivity.USER.watched.remove(it.id)
                     }
-                }
-            }
 
-            lifecycleScope.launch {
-                val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-
-                dbFav.getMidiaWithFavorites().forEach {
-                    if(it.midia.id == serie?.id) {
-                        it.favorites.forEach {
-                            dialog.cbFavorite.isChecked = it.isChecked
-                        }
-                    }
-                }
-
-                dbWatched.getMidiaWithWatched().forEach {
-                    if(it.midia.id == serie?.id) {
-                        it.watched.forEach {
-                            dialog.cbWatched.isChecked = it.isChecked
-                        }
-                    }
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 
@@ -375,68 +352,36 @@ class HomeFragment : Fragment() {
                 ContextCompat.startActivity(it.context, shareIntent, null)
             }
 
+            movie?.let {
+                if(MenuActivity.USER.favorites.contains(it.id)) {
+                    dialog.cbFavorite.isChecked = true
+                }
+                if(MenuActivity.USER.watched.contains(it.id)) {
+                    dialog.cbWatched.isChecked = true
+                }
+            }
+
             dialog.cbFavorite.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    movie?.let {
-                        val fav = Favorites(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(movie.id, movie.backdropPath, "", movie.originalLanguage,
-                                movie.originalTitle, movie.overview, movie.popularity, movie.posterPath, movie.releaseDate,
-                                0, movie.title, movie.voteAverage?.toDouble(), movie.voteCount, listOf(0), "",
-                                "", midiaType = 1)
-
-                        if(isChecked) {
-                            dbFav.insertFavorite(fav)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbFav.deleteByIdFavorites(it.id)
-                        }
+                movie?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.favorites.add(it.id)
+                    }else {
+                        MenuActivity.USER.favorites.remove(it.id)
                     }
+
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 
             dialog.cbWatched.setOnCheckedChangeListener { _, isChecked ->
-                lifecycleScope.launch {
-                    val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-                    val dbMidia = MadeInBrazilDatabase.getDatabase(activity).midiaDao()
-
-                    movie?.let {
-                        val watched = Watched(it.id, it.id, isChecked)
-                        val midia = MidiaEntity(movie.id, movie.backdropPath, "", movie.originalLanguage,
-                                movie.originalTitle, movie.overview, movie.popularity, movie.posterPath, movie.releaseDate,
-                                0, movie.title, movie.voteAverage?.toDouble(), movie.voteCount, listOf(0), "",
-                                "", midiaType = 1)
-
-                        if(isChecked) {
-                            dbWatched.insertWatched(watched)
-                            dbMidia.insertMidia(midia)
-                        }else {
-                            dbWatched.deleteByIdWatched(it.id)
-                        }
+                movie?.let {
+                    if(isChecked) {
+                        MenuActivity.USER.watched.add(it.id)
+                    }else {
+                        MenuActivity.USER.watched.remove(it.id)
                     }
-                }
-            }
 
-            lifecycleScope.launch {
-                val dbFav = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-                val dbWatched = MadeInBrazilDatabase.getDatabase(activity).watchedDao()
-
-                dbFav.getMidiaWithFavorites().forEach {
-                    if(it.midia.id == movie?.id) {
-                        it.favorites.forEach {
-                            dialog.cbFavorite.isChecked = it.isChecked
-                        }
-                    }
-                }
-
-                dbWatched.getMidiaWithWatched().forEach {
-                    if(it.midia.id == movie?.id) {
-                        it.watched.forEach {
-                            dialog.cbWatched.isChecked = it.isChecked
-                        }
-                    }
+                    viewModel.updateUser(MenuActivity.USER)
                 }
             }
 

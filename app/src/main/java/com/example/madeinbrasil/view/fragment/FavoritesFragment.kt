@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,11 +13,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.databinding.FragmentFavoritesBinding
+import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
+import com.example.madeinbrasil.view.activity.MenuActivity
 import kotlinx.coroutines.launch
 
 class FavoritesFragment() : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
+    private var favList = mutableListOf<MidiaFirebase>()
     var actionMode: ActionMode? = null
 
     override fun onCreateView(
@@ -31,15 +37,32 @@ class FavoritesFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        MenuActivity.USER.favorites.forEach { fav ->
+            val filter = MenuActivity.MIDIA.filter { it.id == fav }
+            filter.forEach {
+                favList.add(it)
+            }
+        }
+
         activity?.let {activity ->
-            val db = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-
-            lifecycleScope.launch {
-                binding.rvCardsListFavorites.apply {
-                    layoutManager = GridLayoutManager(activity, 2)
-                    adapter = FavoriteMidiaAdapter(db.getMidiaWithFavorites())
+            binding.rvCardsListFavorites.apply {
+                layoutManager = GridLayoutManager(activity, 2)
+                adapter = FavoriteMidiaAdapter(favList) {midia ->
+                    when(midia.midiaType) {
+                        1 -> {
+                            val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                            intent.putExtra(Constants.ConstantsFilms.BASE_MIDIA_KEY, midia)
+                            intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                            startActivity(intent)
+                        }
+                        2 -> {
+                            val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                            intent.putExtra(Constants.ConstantsFilms.BASE_MIDIA_KEY, midia)
+                            intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 2)
+                            startActivity(intent)
+                        }
+                    }
                 }
-
             }
         }
 

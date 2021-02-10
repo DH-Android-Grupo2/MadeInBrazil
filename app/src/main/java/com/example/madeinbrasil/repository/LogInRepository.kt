@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.repository
 
+import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.utils.Constants
 import com.facebook.AccessToken
 import com.google.firebase.auth.FacebookAuthProvider
@@ -26,19 +27,19 @@ class LogInRepository {
         return firebaseAuth.currentUser ?: throw FirebaseAuthException("", "")
     }
 
-    suspend fun logInWithGoogle(idToken: String?, user: HashMap<String, String?>?): FirebaseUser? {
+    suspend fun logInWithGoogle(idToken: String?, user: User?): FirebaseUser? {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential).await()
-        if (user != null) {
+        user?.let {
             db.set(user, SetOptions.merge()).await()
         }
         return firebaseAuth.currentUser ?: throw FirebaseAuthException("", "")
     }
 
-    suspend fun logInWithFacebook(idToken: AccessToken, user: HashMap<String, String?>?): FirebaseUser? {
+    suspend fun logInWithFacebook(idToken: AccessToken, user: User?): FirebaseUser? {
         val credential = FacebookAuthProvider.getCredential(idToken.token)
         firebaseAuth.signInWithCredential(credential).await()
-        if (user != null) {
+        user?.let {
             db.set(user, SetOptions.merge()).await()
         }
         return firebaseAuth.currentUser ?: throw FirebaseAuthException("", "")

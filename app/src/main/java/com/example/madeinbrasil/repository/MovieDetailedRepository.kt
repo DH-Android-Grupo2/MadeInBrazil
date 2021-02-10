@@ -3,15 +3,16 @@ package com.example.madeinbrasil.repository
 import android.content.Context
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.genre.GenreEntity
-import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
-import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
-import com.example.madeinbrasil.database.entities.watched.Watched
-import com.example.madeinbrasil.model.classe.CommentFirebase
+import com.example.madeinbrasil.database.entities.User
+import com.example.madeinbrasil.database.entities.cast.CastFirebase
+import com.example.madeinbrasil.database.entities.genre.GenreFirebase
+import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_CAST
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_GENRE
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_MIDIA
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
@@ -19,22 +20,27 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.tasks.await
+import com.example.madeinbrasil.model.classe.CommentFirebase
 
 class MovieDetailedRepository(context: Context){
-    private val watchedDao by lazy {
-        MadeInBrazilDatabase.getDatabase(context).watchedDao()
+    private val midiaFirebase by lazy {
+        Firebase.firestore.collection(DATABASE_MIDIA)
     }
-    private val favoriteDao by lazy {
-        MadeInBrazilDatabase.getDatabase(context).favoriteDao()
+    private val genreFirebase by lazy {
+        Firebase.firestore.collection(DATABASE_GENRE)
     }
-    private val genreDB by lazy {
-        MadeInBrazilDatabase.getDatabase(context).genreDao()
+    private val castFirebase by lazy {
+        Firebase.firestore.collection(DATABASE_CAST)
     }
-    private val recommendationDB by lazy {
-        MadeInBrazilDatabase.getDatabase(context).recommendationDao()
+    private val seasonFirebase by lazy {
+        Firebase.firestore.collection(Constants.Firebase.DATABASE_SEASON)
     }
-    private val similarDB by lazy {
-        MadeInBrazilDatabase.getDatabase(context).similarDao()
+    private val auth by lazy {
+        Firebase.auth
+    }
+    private val userFirebase by lazy {
+        Firebase.firestore.collection(DATABASE_USERS).document(auth.currentUser?.uid ?: "")
     }
 
     private val firebaseComments by lazy {
@@ -59,32 +65,28 @@ class MovieDetailedRepository(context: Context){
         }
     }
 
-    suspend fun insertFavorite(fav: Favorites) {
-        favoriteDao.insertFavorite(fav)
+    suspend fun updateUser(user: User) {
+        userFirebase.set(user, SetOptions.merge()).await()
     }
 
-    suspend fun deleteByIdFavorites(id: Int) {
-        favoriteDao.deleteByIdFavorites(id)
+    suspend fun getMidiaFireBase(id: Int): DocumentSnapshot? {
+        return midiaFirebase.document("$id").get().await()
     }
 
-    suspend fun insertWatched(watched: Watched) {
-        watchedDao.insertWatched(watched)
+    suspend fun getCast(id: Int): DocumentSnapshot? {
+        return castFirebase.document("$id").get().await()
     }
 
-    suspend fun deleteByIdWatched(id: Int) {
-        watchedDao.deleteByIdWatched(id)
+    suspend fun setMidiaFireBase(id: Int, infos: MidiaFirebase) {
+        midiaFirebase.document("$id").set(infos, SetOptions.merge()).await()
     }
 
-    suspend fun insertGenre(genre: GenreEntity) {
-        genreDB.insertGenre(genre)
+    suspend fun setGenreFireBase(id: Int, infos: GenreFirebase) {
+        genreFirebase.document("$id").set(infos, SetOptions.merge()).await()
     }
 
-    suspend fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
-        recommendationDB.insertRecommendation(recommendation)
-    }
-
-    suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
-        similarDB.insertSimilar(similar)
+    suspend fun setCastFireBase(id: Int, infos: CastFirebase) {
+        castFirebase.document("$id").set(infos, SetOptions.merge()).await()
     }
 
     suspend fun postComment(hashMap: Any,id: Int) {
