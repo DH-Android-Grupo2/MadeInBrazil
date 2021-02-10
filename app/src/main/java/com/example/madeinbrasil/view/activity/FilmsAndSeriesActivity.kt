@@ -80,6 +80,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private lateinit var viewModelMovie: MovieDetailedViewModel
     private lateinit var viewModelSerie: SerieDetailedViewModel
     private lateinit var customListViewModel: CustomListViewModel
+    private lateinit var commentViewModel: CommentViewModel
     private lateinit var binding: ActivityFilmsAndSeriesBinding
     var listComments = mutableListOf<CommentFirebase?>()
     private var films: Result? = null
@@ -107,6 +108,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
 
+
         binding.ivArrowBackFilmsSeries.setOnClickListener {
             finish()
         }
@@ -117,6 +119,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         when (positionFragment) {
             1 -> {
                 viewModelMovie = ViewModelProvider(this).get(MovieDetailedViewModel::class.java)
+                commentViewModel = ViewModelProvider(this).get(CommentViewModel::class.java)
                 viewModelMovie.getMovie(films?.id)
 
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
@@ -413,6 +416,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
             2 -> {
                 viewModelGenderSeries = ViewModelProvider(this).get(GenderSerieViewModel::class.java)
+                commentViewModel = ViewModelProvider(this).get(CommentViewModel::class.java)
                 viewModelGenderSeries.getGenres()
 
                 viewModel = ViewModelProvider(this).get(GenderMovieViewModel::class.java)
@@ -1034,7 +1038,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
 
             if (docId != null) {
-                viewModelMovie.postComment(teste,docId)
+                commentViewModel.postComment(teste,docId)
                 binding.tilCommentFilmsSeries.editText?.text = asEditableEmpty
                 getComments()
             }
@@ -1065,9 +1069,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }
 
         if (docId != null) {
-            viewModelMovie.getComment(docId)
+            commentViewModel.getComment(docId)
         }
-        viewModelMovie.onGetComments.observe(this,{
+        commentViewModel.onGetComments.observe(this,{
             listComments = it
             binding.rvCommentsUsers.apply {
                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity)

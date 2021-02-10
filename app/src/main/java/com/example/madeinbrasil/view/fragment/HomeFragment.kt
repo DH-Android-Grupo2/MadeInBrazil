@@ -16,6 +16,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isEmpty
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -179,6 +181,8 @@ class HomeFragment : Fragment() {
             homeAdapter2.currentList?.clear()
             homeAdapter2.submitList(pagedList, null)
             homeAdapter2.notifyDataSetChanged()
+
+
         }
     }
 
@@ -187,6 +191,8 @@ class HomeFragment : Fragment() {
             homeAdapter.currentList?.clear()
             homeAdapter.submitList(pagedList, null)
             homeAdapter.notifyDataSetChanged()
+
+
         }
 
 
@@ -206,6 +212,7 @@ class HomeFragment : Fragment() {
             homeAdapter4.currentList?.clear()
             homeAdapter4.submitList(pagedList, null)
             homeAdapter4.notifyDataSetChanged()
+
 
         }
     }

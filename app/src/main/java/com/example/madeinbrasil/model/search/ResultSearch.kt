@@ -19,7 +19,7 @@ data class ResultSearch(
     var backdropPath: String?,
     @SerializedName("first_air_date")
     @ColumnInfo(name ="first_air_date")
-    val firstAirDate: String,
+    val firstAirDate: String?,
     @ColumnInfo(name ="genre_ids")
     @SerializedName("genre_ids")
     @TypeConverters(GenreConverter::class)
