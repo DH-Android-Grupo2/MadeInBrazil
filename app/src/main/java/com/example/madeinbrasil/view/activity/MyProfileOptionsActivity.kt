@@ -1,20 +1,15 @@
 package com.example.madeinbrasil.view.activity
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.ActivityMyProfileOptionsBinding
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.example.madeinbrasil.view.fragment.FavoritesFragment
-import com.example.madeinbrasil.view.fragment.HomeFragment
 import com.example.madeinbrasil.view.fragment.MyListsFragment
 import com.example.madeinbrasil.view.fragment.WatchedFragment
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_my_profile_options.*
 
 class MyProfileOptionsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyProfileOptionsBinding

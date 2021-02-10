@@ -73,21 +73,7 @@ class MenuActivity : AppCompatActivity() {
             }else {
                 initFragmentsHome(HomeFragment(), genreList, USER.tutorial)
             }
-//            if(USER.tutorial == 0) {
-//                MaterialAlertDialogBuilder(this)
-//                        .setTitle("Tutorial")
-//                        .setMessage("Gostaria de ver o tutorial?")
-//                        .setNegativeButton("Não") { dialog, which ->
-//                            initFragmentsHome(HomeFragment(), genreList, 1)
-//                            dialog.dismiss()
-//                        }
-//                        .setPositiveButton("Sim") { dialog, which ->
-//                            initFragmentsHome(HomeFragment(), genreList, 0)
-//                        }
-//                        .show()
-//            }else {
-//                initFragmentsHome(HomeFragment(), genreList, 1)
-//            }
+
             binding.bottomNavigation.setOnNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.buttonHome -> {

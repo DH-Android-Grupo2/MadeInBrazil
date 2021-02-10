@@ -39,7 +39,9 @@ import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
@@ -71,9 +73,9 @@ class HomeFragment : Fragment() {
             val movieClicked = it
             movieClicked?.let{ result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                intent.putExtra(BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(BASE_FILM_KEY, result)
+                intent.putExtra(ID_FRAGMENTS, 1)
 
                 val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
                 startActivity(intent,options.toBundle())
@@ -88,7 +90,7 @@ class HomeFragment : Fragment() {
             val movieClicked = it
             movieClicked?.let{ result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(BASE_FILM_DETAILED_KEY, movieComplete)
                 intent.putExtra(BASE_FILM_KEY, result)
                 intent.putExtra(ID_FRAGMENTS, 1)
 
@@ -106,9 +108,9 @@ class HomeFragment : Fragment() {
             val movieClicked = it
             movieClicked?.let { result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                intent.putExtra(BASE_FILM_DETAILED_KEY, movieComplete)
+                intent.putExtra(BASE_FILM_KEY, result)
+                intent.putExtra(ID_FRAGMENTS, 1)
 
                 val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
                 startActivity(intent,options.toBundle())
@@ -122,8 +124,8 @@ class HomeFragment : Fragment() {
         DiscoverTvAdapter ({ result, imageView ->
             result?.let {
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
-                intent.putExtra(Constants.ConstantsFilms.BASE_SERIE_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 2)
+                intent.putExtra(BASE_SERIE_KEY, result)
+                intent.putExtra(ID_FRAGMENTS, 2)
 
                 val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
                 startActivity(intent,options.toBundle())
@@ -149,6 +151,8 @@ class HomeFragment : Fragment() {
                        .setMessage("Gostaria de ver o tutorial?")
                        .setNegativeButton("Não") { dialog, which ->
                            dialog.dismiss()
+                           MenuActivity.USER.tutorial = 1
+                           viewModel.updateUser(MenuActivity.USER)
                        }
                        .setPositiveButton("Sim") { dialog, which ->
                            tutorialImplementation()

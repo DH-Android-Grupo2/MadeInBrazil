@@ -44,13 +44,6 @@ class UserActivity : AppCompatActivity() {
     private var countMovie = 0
     private var countSerie = 0
 
-    private val auth by lazy {
-        Firebase.auth
-    }
-    private val storageRef by lazy {
-        Firebase.storage.reference
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserBinding.inflate(layoutInflater)
@@ -59,7 +52,7 @@ class UserActivity : AppCompatActivity() {
         viewModelUser = ViewModelProvider(this).get(UserViewModel::class.java)
         tutorial = intent.getIntExtra(TUTORIAL, 1)
 
-        binding.tvNomeProfile.text = auth.currentUser?.displayName
+        binding.tvNomeProfile.text = MenuActivity.USER.name
 
         binding.btLogOut.setOnClickListener {
             viewModelUser.signOut()
