@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.Menu
 import android.view.View
@@ -28,6 +29,7 @@ import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.database.entities.season.SeasonFirebase
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.result.MovieDetailed
@@ -36,6 +38,7 @@ import com.example.madeinbrasil.model.serieDetailed.Genre
 import com.example.madeinbrasil.model.serieDetailed.Season
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.model.upcoming.Result
+import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_MIDIA_KEY
@@ -56,9 +59,17 @@ import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import kotlinx.android.synthetic.main.activity_films_and_series.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.android.synthetic.main.choose_list_popup.*
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -87,6 +98,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         var SEASON: MutableList<SeasonFirebase> = mutableListOf()
     }
 
+
+    private val firebaseAuth by lazy {
+        Firebase.auth
+    }
+
+    private val firebaseFirestore by lazy {
+        Firebase.firestore
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFilmsAndSeriesBinding.inflate(layoutInflater)
@@ -102,6 +122,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         binding.ivArrowBackFilmsSeries.setOnClickListener {
             finish()
         }
+
+        commentsObservables()
 
         when (positionFragment) {
             1 -> {
@@ -1266,4 +1288,42 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
+
+
+    private fun commentsObservables(){
+
+        binding.btAddCommentFilmsSeries.setOnClickListener {
+
+            var docId: Int?
+
+            if(films?.id != null){
+                docId = films?.id
+            } else{
+                docId = series?.id
+            }
+
+            var asEditableComment = Editable.Factory.getInstance().newEditable("")
+            val commentDoc = firebaseFirestore.collection("commentsByMedia").document(docId.toString()).collection("comments").document()
+            val comment = hashMapOf(
+                    "userId" to firebaseAuth.currentUser?.uid,
+                    "userName" to firebaseAuth.currentUser?.displayName,
+                    "userImage" to firebaseAuth.currentUser?.photoUrl.toString(),
+                    "commentText" to binding.tilCommentFilmsSeries.editText?.text.toString(),
+                    "commentId" to commentDoc.id,
+                    "midiaId" to docId
+            )
+
+            commentDoc.set(comment)
+                    .addOnSuccessListener {
+                        Toast.makeText(this,"Comentário feito com sucesso",Toast.LENGTH_SHORT).show()
+                        binding.tilCommentFilmsSeries.editText?.text = asEditableComment
+                    }.addOnFailureListener {
+                        Toast.makeText(this,it.localizedMessage,Toast.LENGTH_SHORT).show()
+                    }
+
+
+        }
+    }
+
 }

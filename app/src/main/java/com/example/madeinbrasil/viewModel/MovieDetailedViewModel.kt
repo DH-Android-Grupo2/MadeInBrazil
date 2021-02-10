@@ -11,6 +11,7 @@ import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.database.entities.cast.CastFirebase
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
+import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.view.activity.MenuActivity
 import com.google.firebase.firestore.DocumentSnapshot
@@ -86,4 +87,10 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
             detailed.updateUser(user)
         }
     }
+    fun postComment(comment: CommentFirebase){
+        viewModelScope.launch {
+            detailed.postComment(comment)
+        }
+    }
+
 }

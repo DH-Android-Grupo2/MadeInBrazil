@@ -18,6 +18,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import com.example.madeinbrasil.model.classe.CommentFirebase
 
 class MovieDetailedRepository(context: Context){
     private val midiaFirebase by lazy {
@@ -37,6 +38,10 @@ class MovieDetailedRepository(context: Context){
     }
     private val userFirebase by lazy {
         Firebase.firestore.collection(DATABASE_USERS).document(auth.currentUser?.uid ?: "")
+    }
+
+    private val firebaseComments by lazy {
+        Firebase.firestore.collection("comments")
     }
 
     suspend fun getMovie(movieId: Int): ResponseAPI {
@@ -80,4 +85,9 @@ class MovieDetailedRepository(context: Context){
     suspend fun setCastFireBase(id: Int, infos: CastFirebase) {
         castFirebase.document("$id").set(infos, SetOptions.merge()).await()
     }
+
+    suspend fun postComment(comment: CommentFirebase) {
+        firebaseComments.document().set(comment)
+    }
+
 }

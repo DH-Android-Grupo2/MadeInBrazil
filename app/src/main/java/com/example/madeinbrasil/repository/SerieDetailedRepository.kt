@@ -40,6 +40,8 @@ class SerieDetailedRepository(val context: Context) {
         Firebase.firestore.collection(DATABASE_USERS).document(auth.currentUser?.uid ?: "")
     }
 
+
+
     suspend fun getSerieRepository(serieId: Int): ResponseAPI{
         return try {
             val response = APIService.tmdbApiMovieDetailed.serieDetails(serieId)
@@ -89,4 +91,6 @@ class SerieDetailedRepository(val context: Context) {
     suspend fun setSeasonFireBase(id: Int, infos: SeasonFirebase) {
         seasonFirebase.document("$id").set(infos, SetOptions.merge()).await()
     }
+
+
 }

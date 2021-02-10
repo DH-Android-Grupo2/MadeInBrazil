@@ -7,6 +7,7 @@ import com.example.madeinbrasil.database.entities.cast.CastFirebase
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.repository.MovieDetailedRepository
 import com.google.firebase.firestore.DocumentSnapshot
@@ -80,5 +81,9 @@ class MovieDetailedBusiness(val context: Context)  {
 
     suspend fun updateUser(user: User) {
         repository.updateUser(user)
+    }
+
+    suspend fun postComment(comment: CommentFirebase){
+        repository.postComment(comment)
     }
 }

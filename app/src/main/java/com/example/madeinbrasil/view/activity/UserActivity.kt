@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,7 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.activity_user.*
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -43,6 +45,15 @@ class UserActivity : AppCompatActivity() {
     private var favList = mutableListOf<MidiaFirebase>()
     private var countMovie = 0
     private var countSerie = 0
+    private val pickImage = 100
+    private var imageUri: Uri? = null
+
+    private val auth by lazy {
+        Firebase.auth
+    }
+    private val storageRef by lazy {
+        Firebase.storage.reference
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +72,13 @@ class UserActivity : AppCompatActivity() {
 
         binding.imBackButton.setOnClickListener {
             finish()
+        }
+
+
+
+        binding.ivEditIcon.setOnClickListener {
+            val gallery = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery, pickImage)
         }
 
         binding.tvNumAmigos.setOnClickListener {
@@ -197,7 +215,8 @@ class UserActivity : AppCompatActivity() {
     private fun setupUser(){
         val image = "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
         Glide.with(this)
-            .load(image)
+            .load(auth.currentUser?.photoUrl)
+                .placeholder(R.drawable.profile_photo)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.ivProfile)
         Glide.with(this)
@@ -234,4 +253,12 @@ class UserActivity : AppCompatActivity() {
 //                    .addOnSuccessListener {  }
 //        }
 //    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == RESULT_OK && requestCode == pickImage){
+            imageUri = data?.data
+            binding.ivProfile.setImageURI(imageUri)
+        }
+    }
 }

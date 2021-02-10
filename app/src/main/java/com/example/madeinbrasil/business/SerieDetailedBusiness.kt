@@ -106,4 +106,5 @@ class SerieDetailedBusiness (val context: Context) {
     suspend fun updateUser(user: User) {
         repository.updateUser(user)
     }
+
 }
