@@ -135,6 +135,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         binding.tvTimeFilmsSeries.text = "${horas}h${minutos}min"
                         binding.tvYearFilmsSeries.text = "(${movie?.release_date?.getFirst4Chars()})"
 
+                        binding.tvMessageCast.isVisible = movie.credits.cast?.size == 0
                         if(movie.credits.cast?.size != 0) {
                             binding.rvCardsListActors.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -150,7 +151,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                            binding.tvMessageCast.isVisible = false
                         }
 
                         // ADDED 21/01
@@ -209,6 +209,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
 
+                        binding.tvMessageRecomendation.isVisible = movie.recommendations?.results?.size == 0
                         if (movie.recommendations?.results?.size != 0) {
                             binding.rvCardsListRecomendacoes.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -224,9 +225,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                            binding.tvMessageRecomendation.isVisible = false
                         }
 
+                        binding.tvMessageSimilar.isVisible = movie.similar?.results?.size == 0
                         if (movie.similar?.results?.size != 0) {
                             binding.rvCardsListSimilares.apply {
                                 layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -241,7 +242,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                            binding.tvMessageSimilar.isVisible = false
                         }
 
                         //binding.rvStreaming.isVisible = movie.homepage != ""
@@ -336,7 +336,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     val film = midia.filter { it.id == films?.id }
                     if(film.isNotEmpty()) {
                         onApiErrorMovie(film)
+                    }else {
+                        binding.tvMessageCast.isVisible = true
+                        binding.tvMessageSimilar.isVisible = true
+                        binding.tvMessageRecomendation.isVisible = true
                     }
+
                     Snackbar.make(binding.ivArrowBackFilmsSeries, R.string.string_you_are_offline, Snackbar.LENGTH_INDEFINITE)
                             .setAction("Entendido") {
                                 it.isVisible = false
@@ -425,6 +430,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         youtubeSeries(it)
                     }
 
+                    binding.tvMessageCast.isVisible = serie?.credits?.cast?.size == 0
                     serie?.credits?.cast.let { castSerie ->
                         binding.rvCardsListActors.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -437,7 +443,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                        binding.tvMessageCast.isVisible = false
                     }
 
                     // ADDED 21/01
@@ -467,6 +472,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
 
+                    binding.tvMessageRecomendation.isVisible = serie.recommendations?.results?.size == 0
                     if (serie.recommendations?.results?.size != 0) {
                         binding.rvCardsListRecomendacoes.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -481,9 +487,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                        binding.tvMessageRecomendation.isVisible = false
                     }
 
+                    binding.tvMessageSimilar.isVisible = serie.similar?.results?.size == 0
                     if (serie.similar?.results?.size != 0) {
                         binding.rvCardsListSimilares.apply {
                             layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -498,7 +504,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                        binding.tvMessageSimilar.isVisible = false
                     }
 
                     if(MenuActivity.USER.favorites.contains(serie.id)) {
@@ -586,8 +591,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     val serie = midia.filter { it.id == series?.id }
                     if(serie.isNotEmpty()) {
                         onApiErrorSerie(serie)
+                    }else {
+                        binding.tvMessageCast.isVisible = true
+                        binding.tvMessageSimilar.isVisible = true
+                        binding.tvMessageRecomendation.isVisible = true
                     }
-
                     Snackbar.make(binding.ivArrowBackFilmsSeries, R.string.string_you_are_offline, Snackbar.LENGTH_INDEFINITE)
                             .setAction("Entendido") {
                                 it.isVisible = false
@@ -889,53 +897,45 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModelSerie.getSeason(it.id)
                 handleListSeason.add(seasons)
             }
-//            if(!MenuActivity.SEASON.contains(season)) {
-//                MenuActivity.SEASON.add(season)
-//                viewModelSerie.setSeasonFireBase(season.id, season)
-//            }
-//            MenuActivity.SEASON.forEach {sea ->
-//                viewModelSerie.setSeasonFireBase(sea.id, sea)
-//            }
-//            viewModelSerie.setSeasonFireBase(season.id, season)
         }
     }
 
     private fun onApiErrorSerie(serie: List<MidiaFirebase>?) {
         serie?.let {
-            serie.forEach {
-                if (it.id == series?.id) {
+            serie.forEach {serie ->
+                if (serie.id == series?.id) {
+                    binding.btStreamingFilmsSeries.isVisible = false
+
                     Glide.with(binding.root.context)
-                            .load(it.posterPath)
+                            .load(serie.posterPath)
                             .placeholder(R.drawable.logo_made_in_brasil)
                             .into(binding.ivBannerFilmsSeries)
-                    it.backdropPath?.let { it1 ->
+                    serie.backdropPath?.let { it1 ->
                         Glide.with(binding.root.context)
-                                .load(it.backdropPath)
+                                .load(serie.backdropPath)
                                 .placeholder(R.drawable.logo_made_in_brasil)
                                 .into(binding.ivBackDropFilmSeries)
                     } ?: Glide.with(this)
                             .load(R.drawable.logo_made_in_brasil)
                             .into(binding.ivBackDropFilmSeries)
 
-                    binding.tvTimeFilmsSeries.text = it.episodeRunTime
-                    binding.tvDescriptionTextFilmsSeries.text = it.overview
-                    binding.tvNameFilmsSeries.text = it.name
-                    binding.tvNoteFilmsSeries.text = "${(it.voteAverage)?.div(2)}"
-                    it.voteAverage?.let {
+                    binding.tvTimeFilmsSeries.text = serie.episodeRunTime
+                    binding.tvDescriptionTextFilmsSeries.text = serie.overview
+                    binding.tvNameFilmsSeries.text = serie.name
+                    binding.tvNoteFilmsSeries.text = "${(serie.voteAverage)?.div(2)}"
+                    serie.voteAverage?.let {
                         binding.ratingBarFilmsSeries.rating = (it / 2.0f).toFloat()
                         binding.ratingBarFilmsSeries.stepSize = .5f
                     }
-                    binding.tvYearFilmsSeries.text = it.firstAirDate
-                    binding.tvGenderFilmsSeries.text = getGendersNames(it.id)
-                    binding.cbFavoriteFilmsSeries.isChecked = confirmFavorite(it.id)
-                    binding.cbWatchedFilmsSeries.isChecked = confirmFavorite(it.id)
-                    binding.btStreamingFilmsSeries.isVisible = false
+                    binding.tvYearFilmsSeries.text = serie.firstAirDate
+                    binding.tvGenderFilmsSeries.text = getGendersNames(serie.id)
+                    binding.cbFavoriteFilmsSeries.isChecked = confirmFavorite(serie.id)
+                    binding.cbWatchedFilmsSeries.isChecked = confirmFavorite(serie.id)
 
                     binding.rvCardsListActors.apply {
-                        CAST
                         val castList = mutableListOf<CastFirebase>()
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        it.cast?.forEach { cast ->
+                        serie.cast?.forEach { cast ->
                             val filter = CAST.filter { it.id == cast }
                             if(filter.isNotEmpty()) {
                                 filter.forEach { fil -> castList.add(fil) }
@@ -943,14 +943,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                         if(castList.size != 0) {
                             adapter = MidiaCastAdapter(castList)
-                            binding.tvMessageCast.isVisible = false
+                        }else {
+                            binding.tvMessageCast.isVisible = true
                         }
                     }
 
                     binding.rvCardsListRecomendacoes.apply {
                         val recList = mutableListOf<MidiaFirebase>()
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        it.recommendations?.forEach {rec ->
+                        serie.recommendations?.forEach {rec ->
                             val filter = MenuActivity.MIDIA.filter { it.id == rec }
                             if(filter.isNotEmpty()) {
                                 filter.forEach {fil ->
@@ -960,15 +961,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                         if(recList.size != 0) {
                             adapter = RecommendationDataBaseAdapter(recList)
-                            binding.tvMessageRecomendation.isVisible = false
+                        }else {
+                            binding.tvMessageRecomendation.isVisible = true
                         }
                     }
 
                     binding.rvCardsListSimilares.apply {
-                        MenuActivity.MIDIA
                         val simiList = mutableListOf<MidiaFirebase>()
                         layoutManager = LinearLayoutManager(this@FilmsAndSeriesActivity, LinearLayoutManager.HORIZONTAL, false)
-                        it.similar?.forEach { simi ->
+                        serie.similar?.forEach { simi ->
                             val filter = MenuActivity.MIDIA.filter { it.id == simi }
                             if(filter.isNotEmpty()){
                                 filter.forEach { fil-> simiList.add(fil) }
@@ -976,8 +977,15 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
                         if(simiList.size != 0) {
                             adapter = SimilarDataBaseAdapter(simiList)
-                            binding.tvMessageSimilar.isVisible = false
+                        }else {
+                            binding.tvMessageSimilar.isVisible = true
                         }
+                    }
+
+                    binding.btSeasonsFilmsSeries.setOnClickListener {
+                        val intent = Intent(this, SeasonsActivity::class.java)
+                        intent.putExtra(SEASON_KEY_OFF, serie.id)
+                        startActivity(intent)
                     }
                 }
             }
@@ -1025,7 +1033,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                     if(castList.size != 0) {
                         adapter = MidiaCastAdapter(castList)
-                        binding.tvMessageCast.isVisible = false
+                    }else {
+                        binding.tvMessageCast.isVisible = true
                     }
                 }
 
@@ -1042,7 +1051,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                     if(recList.size != 0) {
                         adapter = RecommendationDataBaseAdapter(recList)
-                        binding.tvMessageRecomendation.isVisible = false
+                    }else {
+                        binding.tvMessageRecomendation.isVisible = true
                     }
                 }
 
@@ -1058,7 +1068,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                     if(simiList.size != 0) {
                         adapter = SimilarDataBaseAdapter(simiList)
-                        binding.tvMessageSimilar.isVisible = false
+                    }else {
+                        binding.tvMessageSimilar.isVisible = true
                     }
                 }
             }

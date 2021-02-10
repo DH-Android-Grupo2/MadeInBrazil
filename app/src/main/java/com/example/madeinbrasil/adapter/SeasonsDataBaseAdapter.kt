@@ -7,11 +7,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.database.entities.season.SeasonEntity
+import com.example.madeinbrasil.database.entities.season.SeasonFirebase
 import com.example.madeinbrasil.databinding.RecyclerviewSeasonsBinding
 import com.example.madeinbrasil.model.serieDetailed.Season
 
 class SeasonsDataBaseAdapter (
-        val seasonsList: List<SeasonEntity>,
+        val seasonsList: List<SeasonFirebase>,
 ): RecyclerView.Adapter<SeasonsDataBaseAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +33,7 @@ class SeasonsDataBaseAdapter (
             val binding: RecyclerviewSeasonsBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(season: SeasonEntity) = with(binding) {
+        fun bind(season: SeasonFirebase) = with(binding) {
             Glide.with(itemView.context)
                     .load(season.posterPath)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
