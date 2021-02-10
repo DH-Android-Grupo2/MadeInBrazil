@@ -73,6 +73,21 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
+    fun updateList(list: ListWithMedia) {
+        viewModelScope.launch {
+            when(val response = customListBusinnes.updateList(list)) {
+                is FirebaseResponse.OnSucess ->
+                    listSucess.postValue(
+                            response.data as String
+                    )
+                is FirebaseResponse.OnFailure ->
+                    listFailure.postValue(
+                            response.message
+                    )
+            }
+        }
+    }
+
     fun deleteLists(selectedLists: List<String>) {
         viewModelScope.launch {
             when(val response = customListBusinnes.deleteLists(selectedLists)) {

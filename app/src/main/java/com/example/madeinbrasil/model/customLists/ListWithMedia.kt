@@ -8,5 +8,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class ListWithMedia(
     val list: CustomList,
-    val mediaList: List<Media>
+    var mediaList: List<Media>
 ): Parcelable

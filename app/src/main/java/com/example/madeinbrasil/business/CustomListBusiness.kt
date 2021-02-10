@@ -2,10 +2,12 @@ package com.example.madeinbrasil.business
 
 import android.content.Context
 import com.example.madeinbrasil.api.firebase.FirebaseResponse
+import com.example.madeinbrasil.model.customLists.ListWithMedia
 import com.example.madeinbrasil.model.customLists.firebase.CustomList
 import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.repository.CustomListRepository
 import com.example.madeinbrasil.utils.Constants.CustomLists.DELETE_TASK_OK
+import com.example.madeinbrasil.utils.Constants.CustomLists.UPDATE_TASK_OK
 
 class CustomListBusiness(context: Context? = null) {
 
@@ -23,19 +25,22 @@ class CustomListBusiness(context: Context? = null) {
 
     suspend fun resetMediaList(listId: String, moviesId: List<String>, seriesId: List<String>): FirebaseResponse {
         return when (val response = customListRepository.resetListMedia(listId, moviesId, seriesId)) {
-            is FirebaseResponse.OnSucess ->
-                FirebaseResponse.OnSucess(DELETE_TASK_OK)
-            is FirebaseResponse.OnFailure ->
-                response
+            is FirebaseResponse.OnSucess -> FirebaseResponse.OnSucess(DELETE_TASK_OK)
+            is FirebaseResponse.OnFailure -> response
+        }
+    }
+
+    suspend fun updateList(list: ListWithMedia): FirebaseResponse {
+        return when(val response = customListRepository.updateList(list)) {
+            is FirebaseResponse.OnSucess -> FirebaseResponse.OnSucess(UPDATE_TASK_OK)
+            is FirebaseResponse.OnFailure -> response
         }
     }
 
     suspend fun deleteLists(selectedLists: List<String>): FirebaseResponse {
         return when (val response = customListRepository.deleteLists(selectedLists)) {
-            is FirebaseResponse.OnSucess ->
-                FirebaseResponse.OnSucess(DELETE_TASK_OK)
-            is FirebaseResponse.OnFailure ->
-                response
+            is FirebaseResponse.OnSucess -> FirebaseResponse.OnSucess(DELETE_TASK_OK)
+            is FirebaseResponse.OnFailure -> response
         }
     }
 //

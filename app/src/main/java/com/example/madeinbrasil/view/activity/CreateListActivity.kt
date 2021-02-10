@@ -35,6 +35,8 @@ class CreateListActivity : AppCompatActivity() {
     private lateinit var customListViewModel: CustomListViewModel
     private var selectedMovies: MutableList<String> = mutableListOf()
     private var selectedSeries: MutableList<String> = mutableListOf()
+    private var listForUpdate: ListWithMedia? = null
+    private var selectedMediaList: MutableList<Media> = mutableListOf()
 
     private val selectedShowsAdapter by lazy {
         SelectedShowsAdapter() {
@@ -62,6 +64,8 @@ class CreateListActivity : AppCompatActivity() {
 
         intent.getParcelableExtra<ListWithMedia>(LIST)?.let {
             populateListInfo(it)
+            listForUpdate = it
+            selectedMediaList.addAll(it.mediaList)
             binding.btnCreateList.text = getString(R.string.string_update_list_button)
         } ?: run {
             binding.btnCreateList.text = getString(R.string.string_create_list_button)
@@ -98,6 +102,9 @@ class CreateListActivity : AppCompatActivity() {
 
         binding.btnCreateList.setOnClickListener {
 //            saveListDataToDB()
+            if (intent.getParcelableExtra<ListWithMedia>(LIST) != null)
+                updateList(selectedShowsAdapter.list)
+            else
                 saveList()
         }
     }
@@ -152,9 +159,6 @@ class CreateListActivity : AppCompatActivity() {
 
     private fun saveList() = with(binding) {
 
-        val movieList = mutableListOf<Media>()
-        val serieList = mutableListOf<Media>()
-
         val customList = CustomList(teetName.text.toString(), teetDescription.text.toString(), selectedMovies, selectedSeries)
         customListViewModel.createList(customList, selectedShowsAdapter.list)
 
@@ -165,6 +169,49 @@ class CreateListActivity : AppCompatActivity() {
         customListViewModel.listFailure.observe(this@CreateListActivity, {
             Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
         })
+
+    }
+
+    private fun updateList(selectedShows: List<Media>) = with(binding) {
+
+        lateinit var newSelected: List<Media>
+
+
+
+            if (selectedMediaList.isNotEmpty() && selectedShows.isNotEmpty())
+                newSelected = selectedShows.minus(selectedMediaList)
+            else
+                if (selectedShows.isNotEmpty())
+                    newSelected = selectedShows
+                else
+                    newSelected = listOf()
+
+
+        listForUpdate?.let {
+
+             it.apply {
+                list.apply {
+                    name = teetName.text.toString();
+                    description = teetDescription.text.toString();
+                    movies = selectedMovies;
+                    series = selectedSeries
+                }
+
+                 mediaList = newSelected
+            }
+
+            customListViewModel.updateList(it)
+        }
+
+        customListViewModel.listSucess.observe(this@CreateListActivity, {
+            Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
+            finish()
+        })
+
+        customListViewModel.listSucess.observe(this@CreateListActivity, {
+            Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
+        })
+
 
     }
 

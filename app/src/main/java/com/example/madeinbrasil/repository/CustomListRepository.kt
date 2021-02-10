@@ -10,6 +10,7 @@ import com.example.madeinbrasil.utils.Constants.CustomLists.CUSTOM_LIST_MEDIA_IT
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_CREATE_LIST
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_DELETE_ITEMS
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_GET_LISTS
+import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_UPDATE_LIST
 import com.example.madeinbrasil.utils.Constants.CustomLists.LISTS
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
 import com.google.firebase.auth.ktx.auth
@@ -161,6 +162,38 @@ class CustomListRepository(context: Context? = null) {
                     }.await()
         } catch (e: Exception) {
             resp = FirebaseResponse.OnFailure(e.localizedMessage ?: ERROR_DELETE_ITEMS)
+        }
+
+        return resp
+    }
+
+    suspend fun updateList(list: ListWithMedia): FirebaseResponse {
+        lateinit var resp: FirebaseResponse
+
+        try {
+            val listRef = db.collection(LISTS).document(list.list.id)
+            val customListITemsRef = db.collection(CUSTOM_LIST_MEDIA_ITEM)
+            db.runBatch { batch ->
+                batch.update(listRef, hashMapOf<String, Any>(
+                        "name" to list.list.name,
+                        "description" to list.list.description.toString(),
+                        "movies" to list.list.movies,
+                        "series" to list.list.series
+                ))
+
+                if (list.mediaList.isNotEmpty())
+                    list.mediaList.forEach {
+                        batch.set(customListITemsRef.document(it.id), it)
+                    }
+            }.addOnCompleteListener {
+                if (it.isSuccessful)
+                    resp = FirebaseResponse.OnSucess("")
+                else
+                    resp = FirebaseResponse.OnFailure(it.exception?.localizedMessage
+                            ?: ERROR_UPDATE_LIST)
+            }.await()
+        } catch (e: Exception) {
+            resp = FirebaseResponse.OnFailure(e.localizedMessage ?: ERROR_UPDATE_LIST)
         }
 
         return resp
