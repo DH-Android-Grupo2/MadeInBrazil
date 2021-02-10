@@ -4,6 +4,7 @@ import android.app.ActivityOptions
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -38,10 +39,16 @@ import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.view.activity.MenuActivity
 import com.example.madeinbrasil.viewModel.HomeViewModel
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.gms.cast.framework.media.MediaUtils.getImageUri
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 import kotlinx.android.synthetic.main.main_cards_menu.*
 import kotlinx.coroutines.launch
@@ -53,10 +60,12 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     var movieComplete: MovieDetailed? = null
     private  var selected: GenreSelected? = null
+    private var tutorial: Int? = null
     private var discover: DiscoverMovie? = null
     companion object {
          var genre : GenreSelected? = null
     }
+
     private val homeAdapter : HomeAdapter by lazy {
         HomeAdapter ({ it: Result?, imageView: ImageView? ->
             val movieClicked = it
@@ -80,8 +89,8 @@ class HomeFragment : Fragment() {
             movieClicked?.let{ result->
                 val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
                 intent.putExtra(Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY, movieComplete)
-                intent.putExtra(Constants.ConstantsFilms.BASE_FILM_KEY, result)
-                intent.putExtra(Constants.ConstantsFilms.ID_FRAGMENTS, 1)
+                intent.putExtra(BASE_FILM_KEY, result)
+                intent.putExtra(ID_FRAGMENTS, 1)
 
                 val options: ActivityOptions = ActivityOptions.makeSceneTransitionAnimation(activity,imageView,"sharedImgView")
                 startActivity(intent,options.toBundle())
@@ -126,22 +135,29 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       selected = arguments?.getParcelable<GenreSelected>("Selected")
+        selected = arguments?.getParcelable<GenreSelected>("Selected")
         genre = selected
-
-
-
+        tutorial = arguments?.getInt(TUTORIAL)
 
        activity?.let{
             viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
+
+           if(tutorial == 0) {
+               MaterialAlertDialogBuilder(it)
+                       .setTitle("Tutorial")
+                       .setMessage("Gostaria de ver o tutorial?")
+                       .setNegativeButton("Não") { dialog, which ->
+                           dialog.dismiss()
+                       }
+                       .setPositiveButton("Sim") { dialog, which ->
+                           tutorialImplementation()
+                       }
+                       .show()
+           }
         }
-//        tutorialImplementation()
 
         val userDao = context?.let { MadeInBrazilDatabase.getDatabase(it) }?.userDao()
-
-
-
     }
 
     override fun onCreateView(
@@ -150,31 +166,36 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
-//    private fun tutorialImplementation() {
-//        TapTargetSequence(activity).targets(
-//                TapTarget.forView(binding?.logoMadeInBrasil,
-//                        getString(R.string.string_welcome_tutorial_title),
-//                        getString(R.string.string_welcome_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(100),
-//                TapTarget.forView(binding?.rvCardsListLancamentos,
-//                        getString(R.string.string_cards_tutorial_title),
-//                getString(R.string.string_cards_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(220)
-//        ).listener(object: TapTargetSequence.Listener{
-//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-//            override fun onSequenceFinish() {}
-//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-//        }).start()
-//    }
+    private fun tutorialImplementation() {
+        TapTargetSequence(activity).targets(
+                TapTarget.forView(binding.logoMadeInBrasil,
+                        getString(R.string.string_welcome_tutorial_title),
+                        getString(R.string.string_welcome_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.rvCardsListLancamentos,
+                        getString(R.string.string_cards_tutorial_title),
+                getString(R.string.string_cards_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(220)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {
+                val intent = Intent(activity, FilmsAndSeriesActivity::class.java)
+                intent.putExtra(TUTORIAL, 89214)
+                intent.putExtra(ID_FRAGMENTS, 2)
+                startActivity(intent)
+            }
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
+    }
 
     private fun loadContentUpcoming() {
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->

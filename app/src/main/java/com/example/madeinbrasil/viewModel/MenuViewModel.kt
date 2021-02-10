@@ -17,7 +17,6 @@ class MenuViewModel: ViewModel() {
         MenuRepository()
     }
     var user: MutableLiveData<User> = MutableLiveData()
-//    var midia: MutableLiveData<MutableList<MidiaFirebase>> = MutableLiveData()
     var midia: MutableLiveData<MutableList<DocumentSnapshot>> = MutableLiveData()
     var cast: MutableLiveData<MutableList<CastFirebase>> = MutableLiveData()
     var season: MutableLiveData<MutableList<SeasonFirebase>> = MutableLiveData()
@@ -30,12 +29,6 @@ class MenuViewModel: ViewModel() {
         }
     }
 
-//    fun getMidia() {
-//        viewModelScope.launch {
-//            midia.postValue(repository.getMidia().toObjects(MidiaFirebase::class.java))
-//        }
-//    }
-
     fun getMidia(id: Int) {
         viewModelScope.launch {
             repository.getMidia(id)?.let {
@@ -47,16 +40,6 @@ class MenuViewModel: ViewModel() {
         }
     }
 
-    fun getCast() {
-        viewModelScope.launch {
-            cast.postValue(repository.getCast().toObjects(CastFirebase::class.java))
-        }
-    }
-    fun getSeason() {
-        viewModelScope.launch {
-            season.postValue(repository.getSeason().toObjects(SeasonFirebase::class.java))
-        }
-    }
     fun getGenre() {
         viewModelScope.launch {
             genre.postValue(repository.getGenre().toObjects(GenreFirebase::class.java))

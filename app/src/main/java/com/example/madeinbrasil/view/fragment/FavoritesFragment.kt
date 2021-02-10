@@ -66,14 +66,6 @@ class FavoritesFragment() : Fragment() {
                     }
                 }
             }
-
-//            lifecycleScope.launch {
-//                binding.rvCardsListFavorites.apply {
-//                    layoutManager = GridLayoutManager(activity, 2)
-//                    adapter = FavoriteMidiaAdapter(db.getMidiaWithFavorites())
-//                }
-//
-//            }
         }
 
         initSpinner()

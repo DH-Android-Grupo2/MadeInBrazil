@@ -30,21 +30,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 class MovieDetailedRepository(context: Context){
-    private val watchedDao by lazy {
-        MadeInBrazilDatabase.getDatabase(context).watchedDao()
-    }
-    private val favoriteDao by lazy {
-        MadeInBrazilDatabase.getDatabase(context).favoriteDao()
-    }
-    private val genreDB by lazy {
-        MadeInBrazilDatabase.getDatabase(context).genreDao()
-    }
-    private val recommendationDB by lazy {
-        MadeInBrazilDatabase.getDatabase(context).recommendationDao()
-    }
-    private val similarDB by lazy {
-        MadeInBrazilDatabase.getDatabase(context).similarDao()
-    }
     private val midiaFirebase by lazy {
         Firebase.firestore.collection(DATABASE_MIDIA)
     }
@@ -104,33 +89,5 @@ class MovieDetailedRepository(context: Context){
 
     suspend fun setCastFireBase(id: Int, infos: CastFirebase) {
         castFirebase.document("$id").set(infos, SetOptions.merge()).await()
-    }
-
-    suspend fun insertFavorite(fav: Favorites) {
-        favoriteDao.insertFavorite(fav)
-    }
-
-    suspend fun deleteByIdFavorites(id: Int) {
-        favoriteDao.deleteByIdFavorites(id)
-    }
-
-    suspend fun insertWatched(watched: Watched) {
-        watchedDao.insertWatched(watched)
-    }
-
-    suspend fun deleteByIdWatched(id: Int) {
-        watchedDao.deleteByIdWatched(id)
-    }
-
-    suspend fun insertGenre(genre: GenreEntity) {
-        genreDB.insertGenre(genre)
-    }
-
-    suspend fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
-        recommendationDB.insertRecommendation(recommendation)
-    }
-
-    suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
-        similarDB.insertSimilar(similar)
     }
 }

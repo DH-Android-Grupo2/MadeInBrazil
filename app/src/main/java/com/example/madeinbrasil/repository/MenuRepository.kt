@@ -20,12 +20,6 @@ class MenuRepository {
     private val midiaFirebase by lazy {
         Firebase.firestore.collection(DATABASE_MIDIA)
     }
-    private val castFirebase by lazy {
-        Firebase.firestore.collection(DATABASE_CAST)
-    }
-    private val seasonFirebase by lazy {
-        Firebase.firestore.collection(DATABASE_SEASON)
-    }
     private val genreFirebase by lazy {
         Firebase.firestore.collection(DATABASE_GENRE)
     }
@@ -37,19 +31,8 @@ class MenuRepository {
        return userFirebase.get().await()
     }
 
-//    suspend fun getMidia(): QuerySnapshot {
-//        return midiaFirebase.limit(50).get().await()
-//    }
     suspend fun getMidia(id: Int): DocumentSnapshot? {
         return midiaFirebase.document("$id").get().await()
-    }
-
-    suspend fun getCast(): QuerySnapshot {
-        return castFirebase.limit(20).get().await()
-    }
-
-    suspend fun getSeason(): QuerySnapshot {
-        return seasonFirebase.get().await()
     }
 
     suspend fun getGenre(): QuerySnapshot {

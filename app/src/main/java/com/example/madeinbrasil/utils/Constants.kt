@@ -39,6 +39,7 @@ class Constants {
         const val VALUE = "position"
         const val SELECTED_MOVIES = "selected_movies"
         const val SELECTED_SERIES = "selected_series"
+        const val TUTORIAL = "tutorial"
     }
 
     object Paging {

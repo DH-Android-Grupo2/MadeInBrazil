@@ -20,4 +20,7 @@ class FragmentsRepository {
         userFirebase.set(user, SetOptions.merge()).await()
     }
 
+    fun signOut() {
+        auth.signOut()
+    }
 }

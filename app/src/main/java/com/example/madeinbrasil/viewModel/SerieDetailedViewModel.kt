@@ -29,19 +29,13 @@ import kotlinx.coroutines.launch
 
 class SerieDetailedViewModel(application: Application): AndroidViewModel(application) {
     val serieDetailedSucess: MutableLiveData<SerieDetailed> = MutableLiveData()
-//    val serieDetailedError: MutableLiveData<List<MidiaEntity>> = MutableLiveData()
     val serieDetailedError: MutableLiveData<List<MidiaFirebase>> = MutableLiveData()
     val midia: MutableLiveData<MutableList<MidiaFirebase?>> = MutableLiveData()
     val cast: MutableLiveData<MutableList<DocumentSnapshot>?> = MutableLiveData()
-//    val season: MutableLiveData<SeasonFirebase?> = MutableLiveData()
     val season: MutableLiveData<MutableList<DocumentSnapshot>?> = MutableLiveData()
     var listMidia = mutableListOf<MidiaFirebase?>()
     var listCast = mutableListOf<DocumentSnapshot>()
     var listSeason = mutableListOf<DocumentSnapshot>()
-
-    private val midiaDB by lazy {
-        MadeInBrazilDatabase.getDatabase(application).midiaDao()
-    }
 
     private val businessDetailed by lazy {
         SerieDetailedBusiness(application)
@@ -54,7 +48,6 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
                     serieDetailedSucess.postValue(response.data as SerieDetailed)
                 }
                 is ResponseAPI.Error -> {
-//                    serieDetailedError.postValue(midiaDB.getMidia())
                     serieDetailedError.postValue(MenuActivity.MIDIA)
                 }
             }
@@ -130,54 +123,6 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
     fun updateUser(user: User) {
         viewModelScope.launch {
             businessDetailed.updateUser(user)
-        }
-    }
-
-    fun insertFavorite(fav: Favorites) {
-        viewModelScope.launch {
-            businessDetailed.insertFavorite(fav)
-        }
-    }
-
-    fun insertWatched(watched: Watched) {
-        viewModelScope.launch {
-            businessDetailed.insertWatched(watched)
-        }
-    }
-
-    fun deleteByIdFavorites(id: Int) {
-        viewModelScope.launch {
-            businessDetailed.deleteByIdFavorites(id)
-        }
-    }
-
-    fun deleteByIdWatched(id: Int) {
-        viewModelScope.launch {
-            businessDetailed.deleteByIdWatched(id)
-        }
-    }
-
-    fun insertGenre(genre: GenreEntity) {
-        viewModelScope.launch {
-            businessDetailed.insertGenre(genre)
-        }
-    }
-
-    fun insertSeason(season: SeasonEntity) {
-        viewModelScope.launch {
-            businessDetailed.insertSeason(season)
-        }
-    }
-
-    fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
-        viewModelScope.launch {
-            businessDetailed.insertRecommendation(recommendation)
-        }
-    }
-
-    fun insertSimilar(similar: SimilarMidiaCrossRef) {
-        viewModelScope.launch {
-            businessDetailed.insertSimilar(similar)
         }
     }
 }

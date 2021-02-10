@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.MyListsAdapter
@@ -43,7 +44,7 @@ class MyListsFragment : Fragment() {
 
         customListViewMovel.getListsUni()
 
-        customListViewMovel.uniLists.observe(viewLifecycleOwner, {
+        customListViewMovel.uniLists.observe(viewLifecycleOwner) {
 
             binding.rvMyLists.apply {
                 layoutManager = LinearLayoutManager(this@MyListsFragment.context)
@@ -53,7 +54,7 @@ class MyListsFragment : Fragment() {
                     startActivity(intent)
                 }
             }
-        })
+        }
 
     }
 

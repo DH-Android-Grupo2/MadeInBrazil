@@ -52,8 +52,10 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY_OFF
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
+import com.example.madeinbrasil.view.fragment.FilmsFragment
 import com.example.madeinbrasil.viewModel.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -62,6 +64,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrC
 import kotlinx.android.synthetic.main.youtube_popup.*
 import com.example.madeinbrasil.viewModel.GenderMovieViewModel
 import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.launch
@@ -84,6 +88,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private var serieDetailed: SerieDetailed? = null
     private var series: ResultSearch? = null
     private var midiaFirebase: MidiaFirebase? = null
+    private var tutorial = 0
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
     private val handleListCast = mutableListOf<CastFirebase>()
@@ -102,6 +107,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
         films = intent.getParcelableExtra(BASE_FILM_KEY)
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
+        tutorial = intent.getIntExtra(TUTORIAL, 0)
         midiaFirebase = intent.getParcelableExtra(BASE_MIDIA_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
         viewModelObjects = ViewModelProvider(this).get(FilmsAndSerieViewModel::class.java)
@@ -109,9 +115,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         binding.ivArrowBackFilmsSeries.setOnClickListener {
             finish()
         }
-
-//        startObjects(films?.id, series?.id)
-//        tutorialImplementation()
 
         when (positionFragment) {
             1 -> {
@@ -286,7 +289,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             viewModelMovie.updateUser(MenuActivity.USER)
                         }
 
-                        MenuActivity.MIDIA
                         val hasMidia = MenuActivity.MIDIA.filter { it.id == movie.id }
                         if(hasMidia.isNotEmpty()) {
                             hasMidia.forEach {
@@ -364,9 +366,12 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 viewModelSerie = ViewModelProvider(this).get(SerieDetailedViewModel::class.java)
 
                 series?.let {
-                    viewModelSerie.getSerieDetailed(it?.id)
+                    viewModelSerie.getSerieDetailed(it.id)
                 }?: run {
                     viewModelSerie.getSerieDetailed(midiaFirebase?.id)
+                }
+                if(tutorial != 0) {
+                    viewModelSerie.getSerieDetailed(tutorial)
                 }
 
                 viewModel.getGenres()
@@ -529,6 +534,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                             MenuActivity.USER.watched.remove(serie.id)
                         }
                         viewModelSerie.updateUser(MenuActivity.USER)
+                    }
+
+                    if(tutorial != 0) {
+                        tutorialImplementation()
                     }
 
                     val hasMidia = MenuActivity.MIDIA.filter { it.id == serie.id }
@@ -1102,70 +1111,75 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         return MenuActivity.USER.watched.contains(id)
     }
 
-//    private fun tutorialImplementation() {
-//        TapTargetSequence(this).targets(
-//                TapTarget.forView(binding.cbWatchedFilmsSeries,
-//                        getString(R.string.string_watched_tutorial_title),
-//                        getString(R.string.string_watched_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(30),
-//                TapTarget.forView(binding.cbFavoriteFilmsSeries,
-//                        getString(R.string.string_favorite_tutorial_title),
-//                        getString(R.string.string_favorite_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(30),
-//                TapTarget.forView(binding.cbListFilmsSeries,
-//                        getString(R.string.string_list_tutorial_title),
-//                        getString(R.string.string_list_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(30),
-//                TapTarget.forView(binding?.btStreamingFilmsSeries,
-//                        getString(R.string.string_streamming_tutorial_title),
-//                        getString(R.string.string_streamming_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(100),
-//                TapTarget.forView(binding.btSeasonsFilmsSeries,
-//                        getString(R.string.string_seasons_tutorial_title),
-//                        getString(R.string.string_seasons_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(100),
-//                TapTarget.forView(binding.rvStreaming,
-//                        getString(R.string.string_stream_tutorial_title),
-//                        getString(R.string.string_stream_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(100),
-//                TapTarget.forView(binding.rvCardsListActors,
-//                        getString(R.string.string_cast_tutorial_title),
-//                        getString(R.string.string_cast_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(100),
-//                TapTarget.forView(binding.ivArrowBackFilmsSeries,
-//                        getString(R.string.string_back_tutotial_title),
-//                        getString(R.string.string_back_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(20)
-//        ).listener(object: TapTargetSequence.Listener{
-//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-//            override fun onSequenceFinish() {}
-//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-//        }).start()
-//    }
+    private fun tutorialImplementation() {
+        TapTargetSequence(this).targets(
+                TapTarget.forView(binding.cbWatchedFilmsSeries,
+                        getString(R.string.string_watched_tutorial_title),
+                        getString(R.string.string_watched_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(30),
+                TapTarget.forView(binding.cbFavoriteFilmsSeries,
+                        getString(R.string.string_favorite_tutorial_title),
+                        getString(R.string.string_favorite_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(30),
+                TapTarget.forView(binding.cbListFilmsSeries,
+                        getString(R.string.string_list_tutorial_title),
+                        getString(R.string.string_list_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(30),
+                TapTarget.forView(binding?.btStreamingFilmsSeries,
+                        getString(R.string.string_streamming_tutorial_title),
+                        getString(R.string.string_streamming_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.btSeasonsFilmsSeries,
+                        getString(R.string.string_seasons_tutorial_title),
+                        getString(R.string.string_seasons_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.rvStreaming,
+                        getString(R.string.string_stream_tutorial_title),
+                        getString(R.string.string_stream_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.rvCardsListActors,
+                        getString(R.string.string_cast_tutorial_title),
+                        getString(R.string.string_cast_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(100),
+                TapTarget.forView(binding.ivArrowBackFilmsSeries,
+                        getString(R.string.string_back_tutotial_title),
+                        getString(R.string.string_back_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(20)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {
+                val intent = Intent(this@FilmsAndSeriesActivity, MenuActivity::class.java)
+
+                intent.putExtra(TUTORIAL, 0)
+                startActivity(intent)
+            }
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
+    }
 
     private fun setupObservables() {
         var generosText = ""

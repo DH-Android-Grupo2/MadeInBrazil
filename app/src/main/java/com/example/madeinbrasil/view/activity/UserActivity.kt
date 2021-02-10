@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.FavoriteMidiaAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
@@ -18,7 +20,11 @@ import com.example.madeinbrasil.databinding.ActivityUserBinding
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_MIDIA_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
+import com.example.madeinbrasil.viewModel.UserViewModel
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.firebase.auth.ktx.auth
@@ -29,9 +35,11 @@ import java.io.File
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
+    private lateinit var viewModelUser: UserViewModel
     private val ACTIVITY_CALLBACK = 1
     private var reviewInfo: ReviewInfo? = null
     private lateinit var reviewManager: ReviewManager
+    private var tutorial = 1
     private var favList = mutableListOf<MidiaFirebase>()
     private var countMovie = 0
     private var countSerie = 0
@@ -48,10 +56,13 @@ class UserActivity : AppCompatActivity() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModelUser = ViewModelProvider(this).get(UserViewModel::class.java)
+        tutorial = intent.getIntExtra(TUTORIAL, 1)
+
         binding.tvNomeProfile.text = auth.currentUser?.displayName
 
         binding.btLogOut.setOnClickListener {
-            auth.signOut()
+            viewModelUser.signOut()
             signIn()
         }
 
@@ -97,7 +108,9 @@ class UserActivity : AppCompatActivity() {
         binding.tvNumSeries.text = countSerie.toString()
 
         setupUser()
-//        tutorialImplementation()
+        if(tutorial == 0) {
+            tutorialImplementation()
+        }
     }
 
     private fun startListsActivity(context: Context) {
@@ -131,42 +144,47 @@ class UserActivity : AppCompatActivity() {
         }
     }
 
-//    private fun tutorialImplementation() {
-//        TapTargetSequence(this).targets(
-//                TapTarget.forView(binding.ivEditIcon,
-//                        getString(R.string.string_edit_tutorial_title),
-//                        getString(R.string.string_edit_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(20),
-//                TapTarget.forView(binding.tvAmigos,
-//                        getString(R.string.string_friends_tutorial_title),
-//                        getString(R.string.string_friends_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(50),
-//                TapTarget.forView(binding.rvCardsListFavorites,
-//                        getString(R.string.string_my_favorites_tutorial_title),
-//                        getString(R.string.string_my_favorites_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(120),
-//                TapTarget.forView(binding.rvCardsListLists,
-//                        getString(R.string.string_my_lists_tutorial_title),
-//                        getString(R.string.string_my_lists_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(120)
-//        ).listener(object: TapTargetSequence.Listener{
-//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-//            override fun onSequenceFinish() {}
-//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-//        }).start()
-//    }
+    private fun tutorialImplementation() {
+        TapTargetSequence(this).targets(
+                TapTarget.forView(binding.ivEditIcon,
+                        getString(R.string.string_edit_tutorial_title),
+                        getString(R.string.string_edit_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(20),
+                TapTarget.forView(binding.tvAmigos,
+                        getString(R.string.string_friends_tutorial_title),
+                        getString(R.string.string_friends_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(50),
+                TapTarget.forView(binding.rvCardsListFavorites,
+                        getString(R.string.string_my_favorites_tutorial_title),
+                        getString(R.string.string_my_favorites_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(120),
+                TapTarget.forView(binding.rvCardsListLists,
+                        getString(R.string.string_my_lists_tutorial_title),
+                        getString(R.string.string_my_lists_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(120)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {
+                MenuActivity.USER.tutorial = 1
+                viewModelUser.updateUser(MenuActivity.USER)
+                val intent = Intent(this@UserActivity, MenuActivity::class.java)
+                startActivity(intent)
+            }
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
+    }
 
     private fun startFriendsActivity(context: Context) {
         val intent = Intent(context, FriendsActivity::class.java)

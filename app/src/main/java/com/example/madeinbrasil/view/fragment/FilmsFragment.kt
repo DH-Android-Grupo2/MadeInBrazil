@@ -34,6 +34,7 @@ import com.example.madeinbrasil.databinding.FragmentFilmsBinding
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.view.activity.MenuActivity
 import com.example.madeinbrasil.viewModel.FilmsViewModel
@@ -47,11 +48,10 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-class FilmsFragment(
-
-) : Fragment() {
+class FilmsFragment() : Fragment() {
     private var binding: FragmentFilmsBinding? = null
     private lateinit var viewModel: FilmsViewModel
+    private var tutorial: Int? = null
 
     private val filmsAdapter : FilmsAdapter by lazy {
         FilmsAdapter ({
@@ -67,6 +67,9 @@ class FilmsFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view,savedInstanceState)
+        val bundle = arguments
+
+        tutorial = bundle?.getInt(TUTORIAL)
         binding?.ivProfileFilms?.setOnClickListener {
             this.context?.let { it1 -> startUserActivity(it1) }
         }
@@ -77,7 +80,10 @@ class FilmsFragment(
             setupRecyclerView()
             loadContentSearchMovie()
         }
-//        tutorialImplementation()
+
+        if(tutorial == 0) {
+            tutorialImplementation()
+        }
     }
 
     override fun onCreateView(
@@ -89,28 +95,32 @@ class FilmsFragment(
         return binding?.root
     }
 
-//    private fun tutorialImplementation() {
-//        TapTargetSequence(activity).targets(
-//                TapTarget.forView(binding?.tilSearchFilms,
-//                        getString(R.string.string_search_tutorial_title),
-//                        getString(R.string.string_search_tutorial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(40),
-//                TapTarget.forView(binding?.ivProfileFilms,
-//                        getString(R.string.string_profile_tutorial_title),
-//                       getString(R.string.string_profile_tutotial_description))
-//                        .cancelable(false)
-//                        .outerCircleColor(R.color.colorAccentOpaque)
-//                        .targetCircleColor(R.color.colorAccent)
-//                        .transparentTarget(true).targetRadius(40)
-//        ).listener(object: TapTargetSequence.Listener{
-//            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
-//            override fun onSequenceFinish() {}
-//            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
-//        }).start()
-//    }
+    private fun tutorialImplementation() {
+        TapTargetSequence(activity).targets(
+                TapTarget.forView(binding?.tilSearchFilms,
+                        getString(R.string.string_search_tutorial_title),
+                        getString(R.string.string_search_tutorial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(40),
+                TapTarget.forView(binding?.ivProfileFilms,
+                        getString(R.string.string_profile_tutorial_title),
+                       getString(R.string.string_profile_tutotial_description))
+                        .cancelable(false)
+                        .outerCircleColor(R.color.colorAccentOpaque)
+                        .targetCircleColor(R.color.colorAccent)
+                        .transparentTarget(true).targetRadius(40)
+        ).listener(object: TapTargetSequence.Listener{
+            override fun onSequenceCanceled(lastTarget: TapTarget?) {}
+            override fun onSequenceFinish() {
+                val intent = Intent(activity, UserActivity::class.java)
+                intent.putExtra(TUTORIAL, 0)
+                startActivity(intent)
+            }
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {}
+        }).start()
+    }
 
     private fun loadContentSearchMovie() {
         viewModel.searchMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->

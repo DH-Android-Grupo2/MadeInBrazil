@@ -89,32 +89,4 @@ class MovieDetailedBusiness(val context: Context)  {
     suspend fun updateUser(user: User) {
         repository.updateUser(user)
     }
-
-    suspend fun insertFavorite(fav: Favorites) {
-        repository.insertFavorite(fav)
-    }
-
-    suspend fun deleteByIdFavorites(id: Int) {
-        repository.deleteByIdFavorites(id)
-    }
-
-    suspend fun insertWatched(watched: Watched) {
-        repository.insertWatched(watched)
-    }
-
-    suspend fun deleteByIdWatched(id: Int) {
-        repository.deleteByIdWatched(id)
-    }
-
-    suspend fun insertGenre(genre: GenreEntity) {
-        repository.insertGenre(genre)
-    }
-
-    suspend fun insertRecommendation(recommendation: RecommendationMidiaCrossRef) {
-        repository.insertRecommendation(recommendation)
-    }
-
-    suspend fun insertSimilar(similar: SimilarMidiaCrossRef) {
-        repository.insertSimilar(similar)
-    }
 }
