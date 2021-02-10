@@ -1,12 +1,9 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.model.gender.GenderSerie
 import com.example.madeinbrasil.repository.GenderSerieRepository
-import kotlinx.coroutines.launch
 
 class GenderSerieBusiness(val context: Context) {
 
@@ -32,9 +29,5 @@ class GenderSerieBusiness(val context: Context) {
         } else {
             response
         }
-    }
-
-    suspend fun insertGenre(genre: GenreEntity) {
-        repository.insertGenre(genre)
     }
 }

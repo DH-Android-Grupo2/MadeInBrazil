@@ -2,25 +2,18 @@ package com.example.madeinbrasil.view.fragment
 
 import android.app.ActivityOptions
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -29,16 +22,12 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.DiscoverTvAdapter
 import com.example.madeinbrasil.adapter.HomeAdapter
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.databinding.FragmentHomeBinding
 import com.example.madeinbrasil.model.discover.DiscoverMovie
 import com.example.madeinbrasil.model.gender.GenreSelected
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.upcoming.Result
-import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_DETAILED_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
@@ -49,13 +38,8 @@ import com.example.madeinbrasil.view.activity.MenuActivity
 import com.example.madeinbrasil.viewModel.HomeViewModel
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.google.android.gms.cast.framework.media.MediaUtils.getImageUri
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.filmsseries_popup.*
-import kotlinx.android.synthetic.main.main_cards_menu.*
-import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
-import java.io.File
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel

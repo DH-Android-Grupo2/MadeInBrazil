@@ -45,8 +45,6 @@ class FavoritesFragment() : Fragment() {
         }
 
         activity?.let {activity ->
-            val db = MadeInBrazilDatabase.getDatabase(activity).favoriteDao()
-
             binding.rvCardsListFavorites.apply {
                 layoutManager = GridLayoutManager(activity, 2)
                 adapter = FavoriteMidiaAdapter(favList) {midia ->

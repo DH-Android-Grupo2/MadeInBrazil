@@ -5,17 +5,12 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.SeasonsAdapter
 import com.example.madeinbrasil.adapter.SeasonsDataBaseAdapter
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.season.EpisodeEntity
-import com.example.madeinbrasil.database.entities.season.SeasonEntity
 import com.example.madeinbrasil.databinding.ActivitySeasonsBinding
-import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_EPISODE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY
@@ -23,7 +18,6 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY_OFF
 import com.example.madeinbrasil.view.fragment.EpisodesFragment
 import com.example.madeinbrasil.viewModel.SeasonsViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 
 class SeasonsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySeasonsBinding

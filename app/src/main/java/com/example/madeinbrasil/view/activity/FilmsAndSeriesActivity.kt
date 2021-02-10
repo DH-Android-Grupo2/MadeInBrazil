@@ -21,21 +21,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.*
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.cast.CastFirebase
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.favorites.Favorites
 import com.example.madeinbrasil.databinding.ActivityFilmsAndSeriesBinding
 import com.example.madeinbrasil.extensions.getFirst4Chars
-import com.example.madeinbrasil.database.entities.genre.GenreEntity
-import com.example.madeinbrasil.database.entities.cast.MidiaCastCrossRef
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
-import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
-import com.example.madeinbrasil.database.entities.season.SeasonEntity
 import com.example.madeinbrasil.database.entities.season.SeasonFirebase
-import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
-import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.movieCredits.Cast
@@ -55,7 +46,6 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY_OFF
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
-import com.example.madeinbrasil.view.fragment.FilmsFragment
 import com.example.madeinbrasil.viewModel.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -68,10 +58,7 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.DocumentSnapshot
-import kotlinx.coroutines.launch
 import kotlinx.android.synthetic.main.choose_list_popup.*
-import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
 
 class FilmsAndSeriesActivity : AppCompatActivity() {
 
@@ -1197,9 +1184,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
             }
-            films?.id?.let {
-                it1 -> val gender = GenreEntity(listId, listName, it1)
-                viewModel.insertGenre(gender)}
 
             binding.tvGenderFilmsSeries.text = generosText
         }
@@ -1221,10 +1205,6 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
                 }
             }
-            series?.id?.let {
-                it1 -> val gender = GenreEntity(listId, listName, it1)
-                viewModelGenderSeries.insertGenre(gender)}
-
             binding.tvGenderFilmsSeries.text = generosText
         }
     }

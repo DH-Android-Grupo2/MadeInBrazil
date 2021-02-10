@@ -6,30 +6,22 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.icu.text.IDNA
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
-import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.FilmsAdapter
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.databinding.FragmentFilmsBinding
 import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
@@ -42,10 +34,6 @@ import com.example.madeinbrasil.view.activity.UserActivity
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import kotlinx.android.synthetic.main.filmsseries_popup.*
-import kotlinx.android.synthetic.main.fragment_films.*
-import java.lang.Appendable
-import kotlinx.coroutines.launch
-import java.util.*
 
 
 class FilmsFragment() : Fragment() {

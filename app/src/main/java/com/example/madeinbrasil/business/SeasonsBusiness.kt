@@ -1,15 +1,10 @@
 package com.example.madeinbrasil.business
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import com.example.madeinbrasil.api.ResponseAPI
-import com.example.madeinbrasil.database.entities.season.EpisodeEntity
-import com.example.madeinbrasil.database.entities.season.SeasonEntity
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.seasons.Seasons
-import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.repository.SeasonsRepository
-import kotlinx.coroutines.launch
 
 class SeasonsBusiness(val context: Context) {
 
@@ -38,9 +33,5 @@ class SeasonsBusiness(val context: Context) {
         }else {
             response
         }
-    }
-
-    suspend fun insertEpisode(ep: EpisodeEntity) {
-        repository.insertEpisode(ep)
     }
 }

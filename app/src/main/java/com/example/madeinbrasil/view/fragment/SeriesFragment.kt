@@ -7,7 +7,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,20 +14,13 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.SerieAdapter
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.databinding.FragmentSeriesBinding
 import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
@@ -37,9 +29,7 @@ import com.example.madeinbrasil.view.activity.FilmsAndSeriesActivity
 import com.example.madeinbrasil.view.activity.MenuActivity
 import com.example.madeinbrasil.viewModel.SerieViewModel
 import com.example.madeinbrasil.view.activity.UserActivity
-import com.example.madeinbrasil.view.adapter.MainAdapterSeries
 import kotlinx.android.synthetic.main.filmsseries_popup.*
-import kotlinx.coroutines.launch
 
 class SeriesFragment : Fragment() {
     private val seriesAdapter: SerieAdapter by lazy {

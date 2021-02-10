@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.madeinbrasil.database.entities.favorites.MidiaWithFavorites
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
-import com.example.madeinbrasil.database.entities.watched.MidiaWithWatched
 import com.example.madeinbrasil.databinding.MainCardsBinding
 
 class FavoriteMidiaAdapter(

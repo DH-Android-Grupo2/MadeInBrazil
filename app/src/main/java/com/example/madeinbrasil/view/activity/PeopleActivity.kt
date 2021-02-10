@@ -3,26 +3,20 @@ package com.example.madeinbrasil.view.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.madeinbrasil.adapter.CastDetailsAdapter
 import com.example.madeinbrasil.adapter.FilmsSeriesFromUserAdapter
-import com.example.madeinbrasil.database.MadeInBrazilDatabase
-import com.example.madeinbrasil.database.entities.cast.CastEntity
 import com.example.madeinbrasil.databinding.ActivityPeopleBinding
 import com.example.madeinbrasil.model.movieCredits.Cast
-import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
 import com.example.madeinbrasil.viewModel.PersonViewModel
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -169,11 +163,6 @@ class PeopleActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                    }
-
-                    lifecycleScope.launch {
-                        val dbPeople = MadeInBrazilDatabase.getDatabase(this@PeopleActivity).peopleDao()
-
                     }
                 }
             }

@@ -9,15 +9,8 @@ import com.example.madeinbrasil.business.MovieDetailedBusiness
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.database.entities.cast.CastFirebase
-import com.example.madeinbrasil.database.entities.midia.MidiaEntity
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
-import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
-import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
-import com.example.madeinbrasil.database.entities.watched.Watched
-import com.example.madeinbrasil.model.result.Genre
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.view.activity.MenuActivity
 import com.google.firebase.firestore.DocumentSnapshot
@@ -30,10 +23,6 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
     val cast: MutableLiveData<MutableList<DocumentSnapshot>> = MutableLiveData()
     var listMidia = mutableListOf<MidiaFirebase?>()
     var listCast = mutableListOf<DocumentSnapshot>()
-
-    private val midiaDB by lazy {
-        MadeInBrazilDatabase.getDatabase(application).midiaDao()
-    }
     private val detailed by lazy {
         MovieDetailedBusiness(application)
     }

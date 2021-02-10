@@ -7,11 +7,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madeinbrasil.R
 import com.example.madeinbrasil.database.entities.cast.CastFirebase
-import com.example.madeinbrasil.database.entities.cast.MidiaCastCrossRef
 import com.example.madeinbrasil.databinding.MainCastRecyclerviewBinding
 
 class MidiaCastAdapter (
-//        private var castList: List<MidiaCastCrossRef> = listOf()
         private var castList: List<CastFirebase> = listOf()
 ): RecyclerView.Adapter<MidiaCastAdapter.ViewHolder>() {
 

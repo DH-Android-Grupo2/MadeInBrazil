@@ -4,20 +4,12 @@ import android.content.Context
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.database.entities.cast.CastFirebase
-import com.example.madeinbrasil.database.entities.favorites.Favorites
-import com.example.madeinbrasil.database.entities.genre.GenreEntity
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
-import com.example.madeinbrasil.database.entities.recommendations.RecommendationMidiaCrossRef
-import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
-import com.example.madeinbrasil.database.entities.watched.Watched
 import com.example.madeinbrasil.extensions.getFullImagePath
-import com.example.madeinbrasil.model.result.Genre
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.repository.MovieDetailedRepository
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.SetOptions
-import kotlinx.coroutines.tasks.await
 
 class MovieDetailedBusiness(val context: Context)  {
 
