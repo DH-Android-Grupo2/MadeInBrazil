@@ -2,39 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="8dp"
     android:layout_marginLeft="10dp">
 
-    <View
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/thumbnail"
         android:layout_width="150dp"
         android:layout_height="220dp"
-        android:layout_marginRight="16dp"
+        app:cardCornerRadius="20dp"
         android:layout_marginTop="10dp"
-        android:background="@color/shimmer"
-        />
+        android:backgroundTint="@color/shimmer"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        android:layout_below="@id/thumbnail">
-        <View
-            android:layout_width="100dp"
-            android:layout_height="8dp"
-            android:background="@color/shimmer" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:layout_below="@id/thumbnail">
+            <View
+                android:layout_width="100dp"
+                android:layout_height="8dp"
+                android:background="@color/shimmer" />
 
-        <View
-            android:layout_width="100dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/shimmer" />
+            <View
+                android:layout_width="100dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/shimmer" />
 
-        <View
-            android:layout_width="30dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/shimmer" />
-    </LinearLayout>
-</RelativeLayout>
+            <View
+                android:layout_width="30dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/shimmer" />
+        </LinearLayout>
+    </RelativeLayout>
