@@ -23,12 +23,14 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_MIDIA_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
 import com.example.madeinbrasil.viewModel.UserViewModel
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_user.*
@@ -54,6 +56,9 @@ class UserActivity : AppCompatActivity() {
     private val storageRef by lazy {
         Firebase.storage.reference
     }
+    private val db by lazy {
+        Firebase.firestore
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,8 +82,12 @@ class UserActivity : AppCompatActivity() {
 
 
         binding.ivEditIcon.setOnClickListener {
-            val gallery = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, pickImage)
+            /*val gallery = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery, pickImage)*/
+            val intent: Intent = Intent()
+            intent.type = "image/*"
+            intent.action = (Intent.ACTION_GET_CONTENT)
+            startActivityForResult(intent,pickImage)
         }
 
        /* binding.tvNumAmigos.setOnClickListener {
@@ -214,15 +223,22 @@ class UserActivity : AppCompatActivity() {
 
     private fun setupUser(){
         val image = "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
-        Glide.with(this)
-            .load(auth.currentUser?.photoUrl)
-                .placeholder(R.drawable.profile_photo)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(binding.ivProfile)
-        Glide.with(this)
-            .load("https://pareto.io/wp-content/uploads/2019/06/bg-full.png")
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(binding.ivUserBackgroundPhoto)
+        db.collection(DATABASE_USERS)
+            .document(auth.currentUser?.uid ?: "").get().addOnSuccessListener {
+                Glide.with(this)
+                    .load(it["profilePhoto"])
+                    .placeholder(R.drawable.logo_made_in_brasil)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(binding.ivProfile)
+
+                Glide.with(this)
+                    .load(it["profilePhoto"])
+                    .placeholder(R.drawable.logo_made_in_brasil)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(binding.ivUserBackgroundPhoto)
+            }
+
+
 
 
         binding.rvCardsListFavorites.apply {
@@ -256,9 +272,50 @@ class UserActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == RESULT_OK && requestCode == pickImage){
+        /*if(resultCode == RESULT_OK && requestCode == pickImage){
             imageUri = data?.data
             binding.ivProfile.setImageURI(imageUri)
+        }*/
+        if(requestCode==pickImage && resultCode== RESULT_OK && data!=null && data.data!=null){
+            data.data?.let{
+                imageUri = it
+                binding.ivProfile.setImageURI(imageUri)
+                uploadPicture()
+            }
+
         }
+    }
+    private fun uploadPicture() {
+
+        imageUri?.let { imageUri ->
+
+            val savedUri = imageUri
+            val profilePhoto = storageRef.child(
+                "${(auth.currentUser?.uid ?: "")}/profile"
+            )
+
+            profilePhoto.putFile(savedUri)
+                .addOnSuccessListener {
+                    val downloadUri = it.storage.downloadUrl
+
+                    downloadUri.addOnSuccessListener { thisUri ->
+                        val Photodata = hashMapOf<String, Any>(
+                            "profilePhoto" to thisUri.toString()
+                        )
+                        db.collection(DATABASE_USERS)
+                            .document(auth.currentUser?.uid ?: "")
+                            .update(Photodata)
+                    }
+
+                }.addOnFailureListener {
+                    Toast.makeText(
+                        this@UserActivity,
+                        it.localizedMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+        } ?: run {}
+
     }
 }
