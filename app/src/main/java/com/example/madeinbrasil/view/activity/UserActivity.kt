@@ -227,15 +227,18 @@ class UserActivity : AppCompatActivity() {
             .document(auth.currentUser?.uid ?: "").get().addOnSuccessListener {
                 Glide.with(this)
                     .load(it["profilePhoto"])
-                    .placeholder(R.drawable.profile_photo)
+                    .placeholder(R.drawable.logo_made_in_brasil)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(binding.ivProfile)
+
+                Glide.with(this)
+                    .load(it["profilePhoto"])
+                    .placeholder(R.drawable.logo_made_in_brasil)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(binding.ivUserBackgroundPhoto)
             }
 
-        Glide.with(this)
-            .load("https://pareto.io/wp-content/uploads/2019/06/bg-full.png")
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(binding.ivUserBackgroundPhoto)
+
 
 
         binding.rvCardsListFavorites.apply {
