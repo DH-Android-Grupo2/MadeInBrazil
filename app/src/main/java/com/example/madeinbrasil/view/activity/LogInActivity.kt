@@ -26,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_log_in.*
 import kotlinx.coroutines.CoroutineScope
@@ -79,19 +80,28 @@ class LogInActivity : AppCompatActivity() {
 
         binding.btFaceLogin.isEnabled = true
         binding.btFaceLogin.setOnClickListener {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", ""));
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
             LoginManager.getInstance().registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult?) {
                     if (loginResult != null) {
+//                        firebaseAuthWithfacebook(loginResult.accessToken, null)
+//                        viewModelLogin.login.observe(this@LogInActivity) {
+//                            if(it)
+//                        }
                         val request = GraphRequest.newMeRequest(loginResult.accessToken)
                         { jsonResponse, response ->
+                            val url = "https://graph.facebook.com/${loginResult.accessToken.userId}/picture"
+//                            val url = response.jsonObject
+//                                .getJSONObject("picture")
+//                                .getJSONObject("data")
+//                                .getString("url")
                             val user = User(
                                     jsonResponse.getString("email"), jsonResponse.getString("name"),
-                                    mutableListOf(), mutableListOf(), jsonResponse.getString(""))
+                                    mutableListOf(), mutableListOf(), url, 0)
                             firebaseAuthWithfacebook(loginResult.accessToken, user)
                         }
                         val parameters = Bundle()
-                        parameters.putString("fields", "id,name,link,email")
+                        parameters.putString("fields", "id,name,link,email,picture.type(large)")
                         request.parameters = parameters
                         request.executeAsync()
                     } else {
@@ -104,7 +114,6 @@ class LogInActivity : AppCompatActivity() {
                 override fun onError(error: FacebookException?) {
                     updateUI(null)
                 }
-
             })
         }
     }
@@ -113,7 +122,6 @@ class LogInActivity : AppCompatActivity() {
         super.onStart()
         viewModelLogin.login.observe(this) {
             updateUI(it)
-            it
         }
     }
 
@@ -142,7 +150,7 @@ class LogInActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 account?.idToken?.let {
                     val user = User(account.email.toString(), account.displayName.toString(),
-                            mutableListOf(), mutableListOf(), account.photoUrl.toString())
+                            mutableListOf(), mutableListOf(), account.photoUrl.toString(), 0)
 
                     firebaseAuthWithGoogle(it, user)
                 }?: run {
@@ -154,28 +162,45 @@ class LogInActivity : AppCompatActivity() {
         }
     }
 
-    private fun firebaseAuthWithfacebook(idToken: AccessToken?, user: User?) {
+    private fun firebaseAuthWithfacebook(idToken: AccessToken?, user: User) {
         if (idToken != null) {
-            viewModelLogin.logInWithFacebook(idToken, user)
+            viewModelLogin.logInWithFacebook(idToken)
         }
-        viewModelLogin.login.observe(this) {
-            it.let {
-                updateUIFromSocialMidia(it)
-            }?: run {
-                updateUI(it)
+        viewModelLogin.loginSocial.observe(this) {
+            it?.let {
+                if(!it.exists()) {
+                    viewModelLogin.setLogin(user)
+                    updateUIFromSocialMidia(it.id)
+                }else {
+                    updateUI(it.id)
+                }
             }
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String?, user: User?) {
-        viewModelLogin.logInWithGoogle(idToken, user)
-        viewModelLogin.login.observe(this) {
+        idToken?.let {
+            viewModelLogin.logInWithGoogle(it)
+        }
+        viewModelLogin.loginSocial.observe(this) {
             it?.let {
-                updateUIFromSocialMidia(it)
-            }?: run {
-                updateUI(it)
+                if(!it.exists()) {
+                    user?.let {
+                        viewModelLogin.setLogin(user)
+                    }
+                    updateUIFromSocialMidia(it.id)
+                }else {
+                    updateUI(it.id)
+                }
             }
         }
+//        viewModelLogin.login.observe(this) {
+//            it?.let {
+//                updateUIFromSocialMidia(it)
+//            }?: run {
+//                updateUI(it)
+//            }
+//        }
     }
 
     private fun signInAuthentication(email: String, password: String) {
@@ -189,7 +214,16 @@ class LogInActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI(user: FirebaseUser?): Boolean {
+//    private fun updateUI(user: FirebaseUser?): Boolean {
+//        return if(user != null) {
+//            startMenuActivity(this)
+//            true
+//        }else {
+//            false
+//        }
+//    }
+
+    private fun updateUI(user: String?): Boolean {
         return if(user != null) {
             startMenuActivity(this)
             true
@@ -198,7 +232,12 @@ class LogInActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUIFromSocialMidia(user: FirebaseUser?) {
+//    private fun updateUIFromSocialMidia(user: FirebaseUser?) {
+//        if(user != null) {
+//            startSelectActivity(this)
+//        }
+//    }
+    private fun updateUIFromSocialMidia(user: String?) {
         if(user != null) {
             startSelectActivity(this)
         }
