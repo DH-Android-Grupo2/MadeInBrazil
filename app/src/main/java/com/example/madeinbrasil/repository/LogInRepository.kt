@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.repository
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.madeinbrasil.database.entities.User
@@ -28,13 +29,11 @@ class LogInRepository {
                 .signInWithEmailAndPassword(email,password)
                 .await()
             return firebaseAuth.currentUser
-        }catch (e : FirebaseAuthUserCollisionException){
-            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
-            return null
         }catch (e : FirebaseAuthInvalidCredentialsException){
-            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Credenciais Inválidas", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : Exception) {
+            Toast.makeText(context, "Um Erro ocorreu", Toast.LENGTH_SHORT).show()
             return null
         }
 

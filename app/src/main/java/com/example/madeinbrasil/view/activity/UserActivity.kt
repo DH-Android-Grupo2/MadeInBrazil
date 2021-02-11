@@ -65,6 +65,7 @@ class UserActivity : AppCompatActivity() {
 
         binding.tvNomeProfile.text = MenuActivity.USER.name
 
+        binding.tvNumListas.text =
         binding.btLogOut.setOnClickListener {
             viewModelUser.signOut()
             signIn()

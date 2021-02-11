@@ -32,14 +32,17 @@ class RegisterRepository() {
             db.set(user, SetOptions.merge()).await()
             return firebaseAuth.currentUser
         }catch (e : FirebaseAuthUserCollisionException){
-            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "O Email já está em Uso", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : FirebaseAuthInvalidCredentialsException){
-            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Credenciais Inválidas", Toast.LENGTH_SHORT).show()
+            return null
+        }catch (e : FirebaseAuthWeakPasswordException) {
+            Toast.makeText(context, "Senha está Fraca!", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : Exception) {
-            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
-            throw e
+            Toast.makeText(context, "Um Erro ocorreu", Toast.LENGTH_SHORT).show()
+            return null
         }
 
     }
