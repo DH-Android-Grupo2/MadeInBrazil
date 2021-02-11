@@ -1,6 +1,7 @@
 package com.example.madeinbrasil.repository
 
 import android.util.Log
+import android.widget.Toast
 import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.utils.Constants
 import com.facebook.AccessToken
@@ -28,13 +29,12 @@ class LogInRepository {
                 .await()
             return firebaseAuth.currentUser
         }catch (e : FirebaseAuthUserCollisionException){
-            Log.i("alams","${e}")
+            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : FirebaseAuthInvalidCredentialsException){
-            Log.i("alams","${e}")
+            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : Exception) {
-            Log.i("alams", "${e}")
             return null
         }
 
@@ -43,8 +43,12 @@ class LogInRepository {
     suspend fun logInWithGoogle(idToken: String?, user: User?): FirebaseUser? {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential).await()
-        user?.let {
-            db.set(user, SetOptions.merge()).await()
+        db.get().addOnSuccessListener {
+            if (!it.exists()) {
+                user?.let {
+                    db.set(user, SetOptions.merge())
+                }
+            }
         }
         return firebaseAuth.currentUser ?: throw FirebaseAuthException("", "")
     }
@@ -52,8 +56,12 @@ class LogInRepository {
     suspend fun logInWithFacebook(idToken: AccessToken, user: User?): FirebaseUser? {
         val credential = FacebookAuthProvider.getCredential(idToken.token)
         firebaseAuth.signInWithCredential(credential).await()
-        user?.let {
-            db.set(user, SetOptions.merge()).await()
+        db.get().addOnSuccessListener {
+            if (!it.exists()) {
+                user?.let {
+                    db.set(user, SetOptions.merge())
+                }
+            }
         }
         return firebaseAuth.currentUser ?: throw FirebaseAuthException("", "")
     }

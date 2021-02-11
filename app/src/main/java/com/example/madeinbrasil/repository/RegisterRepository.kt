@@ -1,9 +1,11 @@
 package com.example.madeinbrasil.repository
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
+import com.example.madeinbrasil.view.activity.RegisterActivity
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
@@ -12,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 
-class RegisterRepository {
+class RegisterRepository() {
     private val firebaseAuth by lazy {
         Firebase.auth
     }
@@ -30,13 +32,13 @@ class RegisterRepository {
             db.set(user, SetOptions.merge()).await()
             return firebaseAuth.currentUser
         }catch (e : FirebaseAuthUserCollisionException){
-            Log.i("alams","${e}")
+            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : FirebaseAuthInvalidCredentialsException){
-            Log.i("alams","${e}")
+            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : Exception) {
-            Log.i("alams", "${e}")
+            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
             throw e
         }
 
