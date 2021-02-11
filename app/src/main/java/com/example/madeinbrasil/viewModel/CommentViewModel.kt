@@ -27,5 +27,4 @@ class CommentViewModel(application: Application) : AndroidViewModel(application)
             onGetComments.postValue(docs)
         }
     }
-
 }
