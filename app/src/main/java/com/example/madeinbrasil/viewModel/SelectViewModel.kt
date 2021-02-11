@@ -10,7 +10,7 @@ class SelectViewModel: ViewModel() {
         SelectRepository()
     }
 
-    fun setUserGenres(genres: HashMap<String, String?>) {
+    fun setUserGenres(genres: MutableList<String>) {
         viewModelScope.launch {
             repository.setUserGenres(genres)
         }

@@ -50,12 +50,14 @@ class SelectActivity : AppCompatActivity() {
 
         binding.btContinueGender.setOnClickListener {
             val selectedButtons = binding.tags.selectedButtons
+            val listGenres = mutableListOf<String>()
             selectedGenres.clear()
             selectedButtons.forEach {
                 selectedGenres.add("${it.tag} ,")
+                listGenres.add(it.tag.toString())
                 genres+="${it.tag} ,"
             }
-            registerDB(genres)
+            registerDB(listGenres)
             startMenuActivity(this@SelectActivity)
         }
 
@@ -83,17 +85,19 @@ class SelectActivity : AppCompatActivity() {
 
     private fun startMenuActivity(context: Context) {
         val intent = Intent(context, MenuActivity::class.java)
-        intent.putExtra("genreList",GenreSelected(selectedGenres))
+        intent.putExtra("genreList", GenreSelected(selectedGenres))
         startActivity(intent)
 
     }
 
 
-    private fun registerDB(genre: String?) {
-        val genres = hashMapOf<String, String?>(
-            "genresSelected" to genre
-        )
-        viewModelSelect.setUserGenres(genres)
+    private fun registerDB(genre: MutableList<String>?) {
+//        val genres = hashMapOf<String, String?>(
+//            "genresSelected" to genre
+//        )
+        genre?.let {
+            viewModelSelect.setUserGenres(it)
+        }
 //        firebaseAuth.currentUser?.let { user->
 //            val userData = hashMapOf(
 //                    "name" to (user.displayName ?: ""),

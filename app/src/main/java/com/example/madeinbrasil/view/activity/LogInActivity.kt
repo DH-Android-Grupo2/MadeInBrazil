@@ -97,7 +97,7 @@ class LogInActivity : AppCompatActivity() {
 //                                .getString("url")
                             val user = User(
                                     jsonResponse.getString("email"), jsonResponse.getString("name"),
-                                    mutableListOf(), mutableListOf(), url, 0)
+                                    mutableListOf(), mutableListOf(), url, mutableListOf(),0)
                             firebaseAuthWithfacebook(loginResult.accessToken, user)
                         }
                         val parameters = Bundle()
@@ -150,7 +150,7 @@ class LogInActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 account?.idToken?.let {
                     val user = User(account.email.toString(), account.displayName.toString(),
-                            mutableListOf(), mutableListOf(), account.photoUrl.toString(), 0)
+                            mutableListOf(), mutableListOf(), account.photoUrl.toString(), mutableListOf(), 0)
 
                     firebaseAuthWithGoogle(it, user)
                 }?: run {

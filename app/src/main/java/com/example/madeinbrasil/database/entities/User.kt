@@ -6,5 +6,6 @@ data class User (
         val favorites: MutableList<Int> = mutableListOf(),
         val watched: MutableList<Int> = mutableListOf(),
         val profilePhoto: String = "",
+        val genresSelected: MutableList<String> = mutableListOf(),
         var tutorial: Int = 0
 )
