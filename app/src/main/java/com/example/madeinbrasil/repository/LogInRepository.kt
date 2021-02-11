@@ -21,7 +21,7 @@ class LogInRepository {
             .document(firebaseAuth.currentUser?.uid ?: "")
     }
 
-    suspend fun signInAuthentication(email: String, password: String): FirebaseUser? {
+    suspend fun signInAuthentication(email: String, password: String,context: Context): FirebaseUser? {
 
         return try{
             firebaseAuth
@@ -29,10 +29,10 @@ class LogInRepository {
                 .await()
             return firebaseAuth.currentUser
         }catch (e : FirebaseAuthUserCollisionException){
-            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : FirebaseAuthInvalidCredentialsException){
-            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : Exception) {
             return null

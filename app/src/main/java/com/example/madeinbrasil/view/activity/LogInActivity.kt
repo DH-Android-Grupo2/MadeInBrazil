@@ -183,7 +183,7 @@ class LogInActivity : AppCompatActivity() {
             return
         }
 
-        viewModelLogin.signInAuthentication(email, password)
+        viewModelLogin.signInAuthentication(email, password,this)
         viewModelLogin.login.observe(this) {
             updateUI(it)
         }

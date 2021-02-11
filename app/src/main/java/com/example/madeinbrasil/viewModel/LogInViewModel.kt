@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.viewModel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,9 +17,9 @@ class LogInViewModel: ViewModel() {
         LogInRepository()
     }
 
-    fun signInAuthentication(email: String, password: String) {
+    fun signInAuthentication(email: String, password: String,context: Context) {
         viewModelScope.launch {
-            repository.signInAuthentication(email, password)?.let {
+            repository.signInAuthentication(email, password,context)?.let {
                 login.postValue(it)
             }?: run {
                 login.postValue(null)

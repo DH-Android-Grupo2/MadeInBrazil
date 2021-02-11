@@ -23,7 +23,7 @@ class RegisterRepository() {
             .document(firebaseAuth.currentUser?.uid ?: "")
     }
 
-    suspend fun createNewUser(email: String, password: String, user: User): FirebaseUser? {
+    suspend fun createNewUser(email: String, password: String, user: User,context: Context): FirebaseUser? {
 
         return try{
             firebaseAuth
@@ -32,13 +32,13 @@ class RegisterRepository() {
             db.set(user, SetOptions.merge()).await()
             return firebaseAuth.currentUser
         }catch (e : FirebaseAuthUserCollisionException){
-            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : FirebaseAuthInvalidCredentialsException){
-            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
             return null
         }catch (e : Exception) {
-            Toast.makeText(null, "$e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "$e", Toast.LENGTH_SHORT).show()
             throw e
         }
 

@@ -81,9 +81,9 @@ class UserActivity : AppCompatActivity() {
             startActivityForResult(gallery, pickImage)
         }
 
-        binding.tvNumAmigos.setOnClickListener {
+       /* binding.tvNumAmigos.setOnClickListener {
             startFriendsActivity(this@UserActivity)
-        }
+        }*/
 
         binding.btGoToFavorites.setOnClickListener {
             startFavoritesActivity(this@UserActivity)
@@ -164,13 +164,13 @@ class UserActivity : AppCompatActivity() {
                         .outerCircleColor(R.color.colorAccentOpaque)
                         .targetCircleColor(R.color.colorAccent)
                         .transparentTarget(true).targetRadius(20),
-                TapTarget.forView(binding.tvAmigos,
+                /*TapTarget.forView(binding.tvAmigos,
                         getString(R.string.string_friends_tutorial_title),
                         getString(R.string.string_friends_tutorial_description))
                         .cancelable(false)
                         .outerCircleColor(R.color.colorAccentOpaque)
                         .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(50),
+                        .transparentTarget(true).targetRadius(50),*/
                 TapTarget.forView(binding.rvCardsListFavorites,
                         getString(R.string.string_my_favorites_tutorial_title),
                         getString(R.string.string_my_favorites_tutorial_description))

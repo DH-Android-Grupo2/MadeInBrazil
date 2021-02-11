@@ -1,5 +1,6 @@
 package com.example.madeinbrasil.viewModel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,9 +15,9 @@ class RegisterViewModel: ViewModel() {
         RegisterRepository()
     }
 
-    fun createNewUser(email: String, password: String, user: User) {
+    fun createNewUser(email: String, password: String, user: User,context: Context) {
         viewModelScope.launch {
-            repository.createNewUser(email, password, user)?.let {
+            repository.createNewUser(email, password, user, context)?.let {
                 register.postValue(it)
             }?: run {
                 register.postValue(null)

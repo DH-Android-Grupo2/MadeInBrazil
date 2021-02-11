@@ -97,7 +97,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun createNewUser(email: String, password: String) {
         val user = User(binding.tietRegisterEmail.text.toString(), binding.tietRegisterName.text.toString(), mutableListOf(), mutableListOf(), "", 0)
 
-        viewModelRegister.createNewUser(email, password, user)
+        viewModelRegister.createNewUser(email, password, user,this)
         viewModelRegister.register.observe(this) {
             updateUi(it)
         }
