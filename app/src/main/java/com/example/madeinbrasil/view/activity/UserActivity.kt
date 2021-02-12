@@ -46,7 +46,6 @@ class UserActivity : AppCompatActivity() {
     private var reviewInfo: ReviewInfo? = null
     private lateinit var reviewManager: ReviewManager
     private var tutorial = 1
-    private var favList = mutableListOf<MidiaFirebase>()
     private var countMovie = 0
     private var countLists = 0
     private var countSerie = 0
@@ -106,25 +105,6 @@ class UserActivity : AppCompatActivity() {
         }
         filterWatchedAndFavorites()
 
-        binding.rvCardsListFavorites.apply {
-            layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = FavoriteMidiaAdapter(favList) {midia ->
-                when(midia.midiaType) {
-                    1 -> {
-                        val intent = Intent(this@UserActivity, FilmsAndSeriesActivity::class.java)
-                        intent.putExtra(BASE_MIDIA_KEY, midia)
-                        intent.putExtra(ID_FRAGMENTS, 1)
-                        startActivity(intent)
-                    }
-                    2 -> {
-                        val intent = Intent(this@UserActivity, FilmsAndSeriesActivity::class.java)
-                        intent.putExtra(BASE_MIDIA_KEY, midia)
-                        intent.putExtra(ID_FRAGMENTS, 2)
-                        startActivity(intent)
-                    }
-                }
-            }
-        }
         binding.tvNumMovies.text = countMovie.toString()
         binding.tvNumSeries.text = countSerie.toString()
 
@@ -163,13 +143,6 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun filterWatchedAndFavorites() {
-        MenuActivity.USER.favorites.forEach {fav ->
-            val filter = MenuActivity.MIDIA.filter { it.id == fav }
-            filter.forEach {
-                favList.add(it)
-            }
-        }
-
         MenuActivity.USER.watched.forEach {watched ->
             val filter = MenuActivity.MIDIA.filter { it.id == watched }
             filter.forEach {
@@ -190,14 +163,14 @@ class UserActivity : AppCompatActivity() {
                         .outerCircleColor(R.color.colorAccentOpaque)
                         .targetCircleColor(R.color.colorAccent)
                         .transparentTarget(true).targetRadius(20),
-                TapTarget.forView(binding.rvCardsListFavorites,
+                TapTarget.forView(binding.btGoToFavorites,
                         getString(R.string.string_my_favorites_tutorial_title),
                         getString(R.string.string_my_favorites_tutorial_description))
                         .cancelable(false)
                         .outerCircleColor(R.color.colorAccentOpaque)
                         .targetCircleColor(R.color.colorAccent)
                         .transparentTarget(true).targetRadius(120),
-                TapTarget.forView(binding.rvCardsListLists,
+                TapTarget.forView(binding.btGoToLists,
                         getString(R.string.string_my_lists_tutorial_title),
                         getString(R.string.string_my_lists_tutorial_description))
                         .cancelable(false)
