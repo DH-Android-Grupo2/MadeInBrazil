@@ -3,6 +3,7 @@ package com.example.madeinbrasil.view.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 
@@ -159,6 +160,8 @@ class CreateListActivity : AppCompatActivity() {
 
     private fun saveList() = with(binding) {
 
+        toogleActionProgress()
+
         val customList = CustomList(teetName.text.toString(), teetDescription.text.toString(), selectedMovies, selectedSeries)
         customListViewModel.createList(customList, selectedShowsAdapter.list)
 
@@ -168,15 +171,14 @@ class CreateListActivity : AppCompatActivity() {
 
         customListViewModel.listFailure.observe(this@CreateListActivity, {
             Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
+            toogleActionProgress()
         })
 
     }
 
     private fun updateList(selectedShows: List<Media>) = with(binding) {
-
+        toogleActionProgress()
         lateinit var newSelected: List<Media>
-
-
 
             if (selectedMediaList.isNotEmpty() && selectedShows.isNotEmpty())
                 newSelected = selectedShows.minus(selectedMediaList)
@@ -208,11 +210,24 @@ class CreateListActivity : AppCompatActivity() {
             finish()
         })
 
-        customListViewModel.listSucess.observe(this@CreateListActivity, {
+        customListViewModel.listFailure.observe(this@CreateListActivity, {
             Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
+            toogleActionProgress()
         })
 
 
+    }
+
+    private fun toogleActionProgress()  = with(binding) {
+        if(processingBar.visibility == View.GONE)
+            processingBar.visibility = View.VISIBLE
+        else
+            processingBar.visibility = View.GONE
+
+        if(btnCreateList.visibility == View.GONE)
+            btnCreateList.visibility = View.VISIBLE
+        else
+            btnCreateList.visibility = View.GONE
     }
 
 //    private fun saveListDataToDB() {
