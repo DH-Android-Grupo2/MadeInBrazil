@@ -1369,9 +1369,8 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             val commentDoc = firebaseFirestore.collection("commentsByMedia").document(docId.toString()).collection("comments").document()
             val comment = hashMapOf(
                     "userId" to firebaseAuth.currentUser?.uid,
-//                    "userName" to firebaseAuth.currentUser?.displayName,
-                "userName" to MenuActivity.USER.name,
-                    "userImage" to firebaseAuth.currentUser?.photoUrl.toString(),
+                    "userName" to MenuActivity.USER.name,
+                    "userImage" to MenuActivity.USER.profilePhoto,
                     "commentText" to binding.tilCommentFilmsSeries.editText?.text.toString(),
                     "commentId" to commentDoc.id,
                     "midiaId" to docId

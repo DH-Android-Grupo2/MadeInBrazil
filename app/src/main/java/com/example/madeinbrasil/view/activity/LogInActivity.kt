@@ -84,17 +84,12 @@ class LogInActivity : AppCompatActivity() {
             LoginManager.getInstance().registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult?) {
                     if (loginResult != null) {
-//                        firebaseAuthWithfacebook(loginResult.accessToken, null)
-//                        viewModelLogin.login.observe(this@LogInActivity) {
-//                            if(it)
-//                        }
                         val request = GraphRequest.newMeRequest(loginResult.accessToken)
                         { jsonResponse, response ->
-                            val url = "https://graph.facebook.com/${loginResult.accessToken.userId}/picture"
-//                            val url = response.jsonObject
-//                                .getJSONObject("picture")
-//                                .getJSONObject("data")
-//                                .getString("url")
+                            val url = response.jsonObject
+                                .getJSONObject("picture")
+                                .getJSONObject("data")
+                                .getString("url")
                             val user = User(
                                     jsonResponse.getString("email"), jsonResponse.getString("name"),
                                     mutableListOf(), mutableListOf(), url, mutableListOf(),0)

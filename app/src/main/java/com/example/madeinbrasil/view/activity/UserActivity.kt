@@ -173,13 +173,6 @@ class UserActivity : AppCompatActivity() {
                         .outerCircleColor(R.color.colorAccentOpaque)
                         .targetCircleColor(R.color.colorAccent)
                         .transparentTarget(true).targetRadius(20),
-                /*TapTarget.forView(binding.tvAmigos,
-                        getString(R.string.string_friends_tutorial_title),
-                        getString(R.string.string_friends_tutorial_description))
-                        .cancelable(false)
-                        .outerCircleColor(R.color.colorAccentOpaque)
-                        .targetCircleColor(R.color.colorAccent)
-                        .transparentTarget(true).targetRadius(50),*/
                 TapTarget.forView(binding.rvCardsListFavorites,
                         getString(R.string.string_my_favorites_tutorial_title),
                         getString(R.string.string_my_favorites_tutorial_description))
@@ -222,32 +215,17 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun setupUser(){
-        val image = "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
-        db.collection(DATABASE_USERS)
-            .document(auth.currentUser?.uid ?: "").get().addOnSuccessListener {
                 Glide.with(this)
-                    .load(it["profilePhoto"])
+                    .load(MenuActivity.USER.profilePhoto)
                     .placeholder(R.drawable.logo_made_in_brasil)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(binding.ivProfile)
 
                 Glide.with(this)
-                    .load(it["profilePhoto"])
+                    .load(MenuActivity.USER.profilePhoto)
                     .placeholder(R.drawable.logo_made_in_brasil)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(binding.ivUserBackgroundPhoto)
-            }
-
-
-
-
-        binding.rvCardsListFavorites.apply {
-            layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        binding.rvCardsListLists.apply {
-            layoutManager = LinearLayoutManager(this@UserActivity, LinearLayoutManager.HORIZONTAL, false)
-        }
     }
 
 //    private fun setUpAvaliation() {
@@ -280,6 +258,7 @@ class UserActivity : AppCompatActivity() {
             data.data?.let{
                 imageUri = it
                 binding.ivProfile.setImageURI(imageUri)
+                binding.ivUserBackgroundPhoto.setImageURI(imageUri)
                 uploadPicture()
             }
 
@@ -304,7 +283,9 @@ class UserActivity : AppCompatActivity() {
                         )
                         db.collection(DATABASE_USERS)
                             .document(auth.currentUser?.uid ?: "")
-                            .update(Photodata)
+                            .update(Photodata).addOnSuccessListener {
+                                MenuActivity.USER.profilePhoto = thisUri.toString()
+                            }
                     }
 
                 }.addOnFailureListener {
