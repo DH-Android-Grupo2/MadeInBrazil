@@ -18,6 +18,8 @@ import com.example.madeinbrasil.utils.Constants.CustomLists.MOVIE
 import com.example.madeinbrasil.utils.Constants.CustomLists.SERIE
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
@@ -102,12 +104,19 @@ class CustomListRepository(context: Context? = null) {
         return resp
     }
 
-    suspend fun getListWithMedia(): FirebaseResponse {
+    suspend fun getListWithMedia(all: Boolean): FirebaseResponse {
         lateinit var resp: FirebaseResponse
         var customLists: List<CustomList>? = null
         try {
-            auth.currentUser?.let {
-                db.collection(LISTS).whereEqualTo("userId", it.uid).orderBy("name").get()
+            lateinit var listQuery: Query
+            if(all)
+                listQuery = db.collection(LISTS).orderBy("name")
+            else
+                auth.currentUser?.let {
+                    listQuery = db.collection(LISTS).whereEqualTo("userId", it.uid).orderBy("name")
+                }
+
+            listQuery.get()
                     .addOnCompleteListener {
                         if(it.isSuccessful)
                             customLists = it.result.toObjects(CustomList::class.java)
@@ -115,7 +124,7 @@ class CustomListRepository(context: Context? = null) {
                             resp = FirebaseResponse.OnFailure(it.exception?.localizedMessage ?: ERROR_GET_LISTS)
 
                     }.await()
-            }
+
         val listWithMedia = mutableListOf<ListWithMedia>()
         val customListsItemRef =  db.collection(CUSTOM_LIST_MEDIA_ITEM)
         customLists?.forEach { cl ->

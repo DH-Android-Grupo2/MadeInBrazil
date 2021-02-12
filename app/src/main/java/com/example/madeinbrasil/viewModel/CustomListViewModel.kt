@@ -59,9 +59,9 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
-    fun getListWithMedia() {
+    fun getListWithMedia(all: Boolean) {
         viewModelScope.launch {
-            when(val response = customListBusinnes.getListsWithMedia()) {
+            when(val response = customListBusinnes.getListsWithMedia(all)) {
                 is FirebaseResponse.OnSucess ->
                     getListsSuccess.postValue(
                         response.data as? List<ListWithMedia>

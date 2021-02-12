@@ -72,7 +72,7 @@ class MyListsFragment : Fragment() {
         binding.tvEmptyListMessage.visibility = View.GONE
 
 
-        customListViewMovel.getListWithMedia()
+        customListViewMovel.getListWithMedia(false)
 
         customListViewMovel.getListsSuccess.observe(this, { list ->
 
