@@ -29,6 +29,7 @@ import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 class SelectActivity : AppCompatActivity() {
     var selectedGenres = mutableListOf<String>()
     var genres: String? = ""
+    var count = 0
     private lateinit var viewModelSelect: SelectViewModel
 
     private val db by lazy {
@@ -47,6 +48,13 @@ class SelectActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModelSelect = ViewModelProvider(this).get(SelectViewModel::class.java)
+
+        binding.tags.setOnSelectListener {
+            count++
+            if(count >= 2) {
+                binding.btContinueGender.isEnabled = true
+            }
+        }
 
         binding.btContinueGender.setOnClickListener {
             val selectedButtons = binding.tags.selectedButtons
