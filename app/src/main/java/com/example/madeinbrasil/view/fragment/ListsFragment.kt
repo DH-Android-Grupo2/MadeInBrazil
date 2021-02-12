@@ -67,7 +67,7 @@ class ListsFragment : Fragment() {
 
         customListViewMovel.getListWithMedia(true)
 
-        customListViewMovel.getListsSuccess.observe(this, { list ->
+        customListViewMovel.getListsSuccess.observe(this) { list ->
 
             pbGettingLists.visibility = View.GONE
 
@@ -79,15 +79,15 @@ class ListsFragment : Fragment() {
                 setupRecyclerView(list)
             }
 
-        })
+        }
 
-        customListViewMovel.listFailure.observe(this, { message ->
+        customListViewMovel.listFailure.observe(this) { message ->
 
             pbGettingLists.visibility = View.GONE
 
             Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
 
-        })
+        }
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)

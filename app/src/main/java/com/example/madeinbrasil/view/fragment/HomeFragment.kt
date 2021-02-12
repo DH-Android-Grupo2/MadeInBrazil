@@ -200,11 +200,11 @@ class HomeFragment : Fragment() {
     private fun loadContentUpcoming() {
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
 
-                homeAdapter2.currentList?.clear()
-                homeAdapter2.submitList(pagedList, null)
-                homeAdapter2.notifyDataSetChanged()
-                if(pagedList.isEmpty())
-                    binding?.containeFuturosrLancamentos?.visibility = View.GONE
+            homeAdapter2.currentList?.clear()
+            homeAdapter2.submitList(pagedList, null)
+            homeAdapter2.notifyDataSetChanged()
+            if(pagedList.isEmpty())
+                binding?.containeFuturosrLancamentos?.visibility = View.GONE
             else
                 handler.postDelayed({ binding?.shimmerFuturosLancamentos?.visibility = View.GONE },takeShimmerTime)
         }
@@ -226,9 +226,9 @@ class HomeFragment : Fragment() {
     private fun loadContentDiscoverMovie() {
         viewModel.discoverMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
 
-                homeAdapter3.currentList?.clear()
-                homeAdapter3.submitList(pagedList, null)
-                homeAdapter3.notifyDataSetChanged()
+            homeAdapter3.currentList?.clear()
+            homeAdapter3.submitList(pagedList, null)
+            homeAdapter3.notifyDataSetChanged()
             if(pagedList.isNotEmpty())
                 binding?.containerSugestoes?.visibility = View.GONE
             else

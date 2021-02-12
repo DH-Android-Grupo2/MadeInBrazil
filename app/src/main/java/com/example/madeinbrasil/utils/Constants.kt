@@ -30,6 +30,7 @@ class Constants {
         const val BASE_FILM_KEY = "Film"
         const val BASE_FILM_DETAILED_KEY = "MovieDetailed"
         const val BASE_MIDIA_KEY = "midiaFirebase"
+        const val BASE_MEDIA_KEY = "media"
         const val BASE_SERIE_KEY = "Serie"
         const val ID_FRAGMENTS = "idFragment"
         const val BASE_ACTOR_KEY = "Actor"

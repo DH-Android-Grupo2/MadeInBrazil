@@ -9,7 +9,7 @@ import com.example.madeinbrasil.R
 import com.example.madeinbrasil.databinding.MyListCardItemBinding
 import com.example.madeinbrasil.model.customLists.firebase.Media
 
-class PublicListDetailsAdapter(val onItemClick: (String) -> Unit): RecyclerView.Adapter<PublicListDetailsAdapter.ViewHolder>() {
+class PublicListDetailsAdapter(val onItemClick: (Media) -> Unit): RecyclerView.Adapter<PublicListDetailsAdapter.ViewHolder>() {
 
     lateinit var list: MutableList<Media>
 
@@ -20,20 +20,24 @@ class PublicListDetailsAdapter(val onItemClick: (String) -> Unit): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position], onItemClick)
     }
 
     override fun getItemCount(): Int = list.size
 
     inner class ViewHolder(val binding: MyListCardItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(mediaItem: Media) = with(binding) {
+        fun bind(mediaItem: Media, onClick: (Media) -> Unit) = with(binding) {
             Glide.with(binding.root).load(mediaItem.posterPath ?: mediaItem.backdropPath).placeholder(
                 R.drawable.logo_made_in_brasil).into(cvImageCard)
             tvNameMedia.text = mediaItem.title ?: mediaItem.name
 
                 tvSelectionIcon.visibility = View.GONE
                 cardViewStroke.strokeWidth = 0
+
+            itemView.setOnClickListener {
+                onClick(mediaItem)
+            }
         }
     }
 }

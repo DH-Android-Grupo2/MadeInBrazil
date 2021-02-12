@@ -29,7 +29,7 @@
                 app:layout_constraintCircleRadius="10dp"
                 app:startIconDrawable="@drawable/ic_baseline_search_20"
                 app:startIconTint="@color/colorAccent"
-                android:textColorHint="@color/gray"
+                android:textColorHint="@color/colorAccent"
                 android:layout_weight="0.8"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/colorAccent"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>

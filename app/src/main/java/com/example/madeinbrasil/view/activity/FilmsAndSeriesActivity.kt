@@ -46,6 +46,7 @@ import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.utils.Constants
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_ACTOR_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_FILM_KEY
+import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_MEDIA_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_MIDIA_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_SERIE_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
@@ -97,6 +98,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private var serieDetailed: SerieDetailed? = null
     private var series: ResultSearch? = null
     private var midiaFirebase: MidiaFirebase? = null
+    private var mediaList: Media? = null
     private var tutorial = 0
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
@@ -131,6 +133,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         series = intent.getParcelableExtra(BASE_SERIE_KEY)
         tutorial = intent.getIntExtra(TUTORIAL, 0)
         midiaFirebase = intent.getParcelableExtra(BASE_MIDIA_KEY)
+        mediaList = intent.getParcelableExtra(BASE_MEDIA_KEY)
         positionFragment = intent.getIntExtra(ID_FRAGMENTS, 0)
         viewModelObjects = ViewModelProvider(this).get(FilmsAndSerieViewModel::class.java)
 
@@ -147,7 +150,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 films?.let {
                     viewModelMovie.getMovie(it.id)
                 }?: run {
-                    viewModelMovie.getMovie(midiaFirebase?.id)
+                    midiaFirebase?.let {
+                        viewModelMovie.getMovie(it.id)
+                    }?: run {
+                        viewModelMovie.getMovie(mediaList?.id?.toInt())
+                    }
                 }
                 commentViewModel = ViewModelProvider(this).get(CommentViewModel::class.java)
                 viewModelMovie.getMovie(films?.id)
@@ -390,7 +397,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 series?.let {
                     viewModelSerie.getSerieDetailed(it.id)
                 }?: run {
-                    viewModelSerie.getSerieDetailed(midiaFirebase?.id)
+                    midiaFirebase?.let {
+                        viewModelSerie.getSerieDetailed(it.id)
+                    }?: run {
+                        viewModelSerie.getSerieDetailed(mediaList?.id?.toInt())
+                    }
                 }
                 if(tutorial != 0) {
                     viewModelSerie.getSerieDetailed(tutorial)
