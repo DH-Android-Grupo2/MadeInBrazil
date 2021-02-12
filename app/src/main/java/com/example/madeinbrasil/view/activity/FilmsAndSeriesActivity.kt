@@ -1431,16 +1431,14 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private fun addItemToList(showType: String, list: ListWithMedia) {
         customListViewModel.addItemtoList(list, showType)
 
-        customListViewModel.listSucess.observe(this,  {
+        customListViewModel.listSucess.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        })
+        }
 
-        customListViewModel.listFailure.observe(this,  {
+        customListViewModel.listFailure.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        })
+        }
     }
-}
-
 
     fun getComments() {
 
