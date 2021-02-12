@@ -8,7 +8,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
             android:id="@+id/tvEmptyListMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Criar_nova_lista"
+            android:text="@string/Nenhuma_lista_criada_label"
             android:textSize="30sp"
             android:textColor="@color/colorAccent"
             android:gravity="center"
