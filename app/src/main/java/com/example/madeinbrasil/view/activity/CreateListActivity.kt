@@ -2,21 +2,25 @@ package com.example.madeinbrasil.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.madeinbrasil.R
 import com.example.madeinbrasil.adapter.SelectedShowsAdapter
 import com.example.madeinbrasil.databinding.ActivityCreateListBinding
-import com.example.madeinbrasil.model.customLists.CustomList
-import com.example.madeinbrasil.model.customLists.ListMovieItem
-import com.example.madeinbrasil.model.customLists.ListSerieItem
-import com.example.madeinbrasil.model.customLists.relation.ListWithMedia
+import com.example.madeinbrasil.model.customLists.ListWithMedia
+import com.example.madeinbrasil.model.customLists.firebase.CustomList
+import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_MOVIES
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SELECTED_SERIES
+import com.example.madeinbrasil.utils.Constants.CustomLists.LIST
 import com.example.madeinbrasil.view.fragment.SelectMovieFragment
 import com.example.madeinbrasil.view.fragment.SelectSerieFragment
 import com.example.madeinbrasil.viewModel.CustomListViewModel
@@ -30,8 +34,10 @@ class CreateListActivity : AppCompatActivity() {
     private lateinit var selectSerieViewModel: SelectSerieViewModel
     private lateinit var selectMovieViewModel: SelectMovieViewModel
     private lateinit var customListViewModel: CustomListViewModel
-    private var selectedMovies: MutableList<Long> = mutableListOf()
-    private var selectedSeries: MutableList<Long> = mutableListOf()
+    private var selectedMovies: MutableList<String> = mutableListOf()
+    private var selectedSeries: MutableList<String> = mutableListOf()
+    private var listForUpdate: ListWithMedia? = null
+    private var selectedMediaList: MutableList<Media> = mutableListOf()
 
     private val selectedShowsAdapter by lazy {
         SelectedShowsAdapter() {
@@ -56,6 +62,15 @@ class CreateListActivity : AppCompatActivity() {
         setupButtonListeners()
         setupShowClickListeners()
         setupFormFieldsListeners()
+
+        intent.getParcelableExtra<ListWithMedia>(LIST)?.let {
+            populateListInfo(it)
+            listForUpdate = it
+            selectedMediaList.addAll(it.mediaList)
+            binding.btnCreateList.text = getString(R.string.string_update_list_button)
+        } ?: run {
+            binding.btnCreateList.text = getString(R.string.string_create_list_button)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -73,7 +88,7 @@ class CreateListActivity : AppCompatActivity() {
         binding.imAddMovie.setOnClickListener {
             val fragment = SelectMovieFragment()
             fragment.arguments = Bundle().apply {
-                putLongArray(SELECTED_MOVIES, selectedMovies.toLongArray())
+                putStringArray(SELECTED_MOVIES, selectedMovies.toTypedArray())
             }
             fragment.show(supportFragmentManager, null)
         }
@@ -81,18 +96,23 @@ class CreateListActivity : AppCompatActivity() {
         binding.imAddSerie.setOnClickListener {
             val fragment = SelectSerieFragment()
             fragment.arguments = Bundle().apply {
-                putLongArray(SELECTED_SERIES, selectedSeries.toLongArray())
+                putStringArray(SELECTED_SERIES, selectedSeries.toTypedArray())
             }
             fragment.show(supportFragmentManager, null)
         }
 
         binding.btnCreateList.setOnClickListener {
-            saveListDataToDB()
+//            saveListDataToDB()
+            if (intent.getParcelableExtra<ListWithMedia>(LIST) != null)
+                updateList(selectedShowsAdapter.list)
+            else
+                saveList()
         }
     }
 
     private fun setupShowClickListeners() {
-        selectMovieViewModel.clickedMovieItem.observe(this) {
+
+        selectMovieViewModel.clickedMovieItem.observe(this, {
             if (selectedMovies.contains(it.id)) {
                 selectedMovies.remove(it.id)
                 selectedShowsAdapter.deleteItem(it)
@@ -100,7 +120,7 @@ class CreateListActivity : AppCompatActivity() {
                 selectedMovies.add(it.id)
                 selectedShowsAdapter.addItem(it)
             }
-        }
+        })
 
         selectSerieViewModel.clickedSerieItem.observe(this) {
             if (selectedSeries.contains(it.id)) {
@@ -126,26 +146,110 @@ class CreateListActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveListDataToDB() {
+    private fun populateListInfo(list: ListWithMedia) = with(binding) {
+        with(list.list) {
+            teetName.text = Editable.Factory.getInstance().newEditable(name)
+            teetDescription.text = Editable.Factory.getInstance().newEditable(description)
 
-        val movieList = mutableListOf<ListMovieItem>()
-        val serieList = mutableListOf<ListSerieItem>()
-
-        selectedShowsAdapter.list.forEach {
-            if (selectedSeries.contains(it.id))
-                serieList.add(ListSerieItem(it.id, it.title, it.backdropPath, it.originalTitle))
-            else
-                movieList.add(ListMovieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+            selectedMovies = movies as MutableList<String>
+            selectedSeries = series as MutableList<String>
         }
 
-        customListViewModel.createCustomList(ListWithMedia(
-            CustomList(0, binding.teetName.text.toString(), binding.teetDescription.text.toString(), 0),
-                movieList,
-                serieList)
-        )
-
-        setResult(RESULT_OK)
-        finish()
+        selectedShowsAdapter.list = list.mediaList as MutableList<Media>
     }
+
+    private fun saveList() = with(binding) {
+
+        toogleActionProgress()
+
+        val customList = CustomList(teetName.text.toString(), teetDescription.text.toString(), selectedMovies, selectedSeries)
+        customListViewModel.createList(customList, selectedShowsAdapter.list)
+
+        customListViewModel.listSucess.observe(this@CreateListActivity, {
+            finish()
+        })
+
+        customListViewModel.listFailure.observe(this@CreateListActivity, {
+            Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
+            toogleActionProgress()
+        })
+
+    }
+
+    private fun updateList(selectedShows: List<Media>) = with(binding) {
+        toogleActionProgress()
+        lateinit var newSelected: List<Media>
+
+            if (selectedMediaList.isNotEmpty() && selectedShows.isNotEmpty())
+                newSelected = selectedShows.minus(selectedMediaList)
+            else
+                if (selectedShows.isNotEmpty())
+                    newSelected = selectedShows
+                else
+                    newSelected = listOf()
+
+
+        listForUpdate?.let {
+
+             it.apply {
+                list.apply {
+                    name = teetName.text.toString();
+                    description = teetDescription.text.toString();
+                    movies = selectedMovies;
+                    series = selectedSeries
+                }
+
+                 mediaList = newSelected
+            }
+
+            customListViewModel.updateList(it)
+        }
+
+        customListViewModel.listSucess.observe(this@CreateListActivity, {
+            Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
+            finish()
+        })
+
+        customListViewModel.listFailure.observe(this@CreateListActivity, {
+            Toast.makeText(this@CreateListActivity, it, Toast.LENGTH_SHORT).show()
+            toogleActionProgress()
+        })
+
+
+    }
+
+    private fun toogleActionProgress()  = with(binding) {
+        if(processingBar.visibility == View.GONE)
+            processingBar.visibility = View.VISIBLE
+        else
+            processingBar.visibility = View.GONE
+
+        if(btnCreateList.visibility == View.GONE)
+            btnCreateList.visibility = View.VISIBLE
+        else
+            btnCreateList.visibility = View.GONE
+    }
+
+//    private fun saveListDataToDB() {
+//
+//        val movieList = mutableListOf<ListMovieItem>()
+//        val serieList = mutableListOf<ListSerieItem>()
+//
+//        selectedShowsAdapter.list.forEach {
+//            if (selectedSeries.contains(it.id))
+//                serieList.add(ListSerieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+//            else
+//                movieList.add(ListMovieItem(it.id, it.title, it.backdropPath, it.originalTitle))
+//        }
+//
+//        customListViewModel.createCustomList(ListWithMedia(
+//            CustomList(0, binding.teetName.text.toString(), binding.teetDescription.text.toString(), 0),
+//                movieList,
+//                serieList)
+//        )
+//
+//        setResult(RESULT_OK)
+//        finish()
+//    }
 
 }

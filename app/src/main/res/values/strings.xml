@@ -62,6 +62,7 @@
     <string name="string_create_list_page_title">Crie sua lista</string>
     <string name="string_description_hint">Descrição</string>
     <string name="string_create_list_button">Criar lista</string>
+    <string name="string_update_list_button">Atualizar lista</string>
     <string name="string_friends">Amigos</string>
     <string name="string_ask_friend">Pesquisar algum Amigo</string>
     <string name="string_logIn">Entrar</string>
@@ -128,11 +129,18 @@
     <string name="sem_descricao_label">Nenhuma descrição</string>
     <string name="sem_itens_label">Sem itens</string>
     <string name="Nenhuma_lista_criada_label">Nenhuma lista criada ainda.</string>
+    <string name="Criar_nova_lista">Crie uma nova lista para adicionar.</string>
     <string name="string_cast_not_found">Elenco não encontrado</string>
     <string name="string_login_with_google">Entrar com o Google</string>
     <string name="string_login_with_facebook">Entrar com o Facebook</string>
     <string name="string_go_to_favorites">Ir para os Favoritos</string>
     <string name="string_go_to_lists">Ir para as Listas</string>
+    <string name="add_new_list_description">Add new List</string>
+    <string name="futuros_lan_amentos">Futuros Lançamentos</string>
+    <string name="selecione_a_lista_label">Selecione a lista:</string>
+    <string name="cancelar_label">CANCELAR</string>
+    <string name="adicionar_label">Adicionar</string>
+    <string name="sair_label">sair</string>
     <string name="string_gender_not_found">Não encontrado</string>
     <string name="string_you_are_offline">Você está offline</string>
 

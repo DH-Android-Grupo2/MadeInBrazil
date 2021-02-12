@@ -18,4 +18,5 @@
     <color name="light_dark">#232121</color>
     <color name="opac_white">#59FFFFFF</color>
     <color name="gray_disabled_button">#4F5978</color>
+    <color name="shimmer">#dddddd</color>
 </resources>

@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     android:fillViewport="true" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".view.fragment.HomeFragment">
 
@@ -19,52 +20,98 @@
             android:src="@drawable/logo_made_in_brasil_transparent"
             android:scaleType="centerCrop"
             android:contentDescription="@string/desc_logo_madeinbrasil"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerLancamentos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tvLancamentosRecycler"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/lancamentos"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/logoMadeInBrasil"
-            />
+            <TextView
+                android:id="@+id/tvLancamentosRecycler"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/lancamentos"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:layout_marginStart="20dp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCardsListLancamentos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            tools:listitem="@layout/main_cards_menu"
-            tools:itemCount="1"
-            tools:orientation="horizontal"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvLancamentosRecycler"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerLancamentos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLancamentosRecycler">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/data_placeholder"/>
+                    <include layout="@layout/data_placeholder"/>
+                    <include layout="@layout/data_placeholder"/>
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCardsListLancamentos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:listitem="@layout/main_cards_menu"
+                tools:itemCount="1"
+                tools:orientation="horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLancamentosRecycler"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containeFuturosrLancamentos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvFuturosLancamentosRecycler"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Futuros Lançamentos"
+            android:text="@string/futuros_lan_amentos"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
+            android:layout_marginStart="20dp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListLancamentos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerFuturosLancamentos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvFuturosLancamentosRecycler">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/data_placeholder"/>
+                <include layout="@layout/data_placeholder"/>
+                <include layout="@layout/data_placeholder"/>
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListFuturosLancamentos"
@@ -76,9 +123,16 @@
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvFuturosLancamentosRecycler"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFuturosLancamentosRecycler"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerSugestoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvSugestoesRecycler"
@@ -87,11 +141,32 @@
             android:text="@string/filmes_para_voce"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
+            android:layout_marginStart="20dp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListFuturosLancamentos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerFilmesVoce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSugestoesRecycler">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <include layout="@layout/data_placeholder"/>
+            <include layout="@layout/data_placeholder"/>
+            <include layout="@layout/data_placeholder"/>
+
+        </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardsListMovies"
@@ -103,9 +178,15 @@
             tools:itemCount="1"
             tools:orientation="horizontal"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvSugestoesRecycler"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSugestoesRecycler"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerListsSeries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvCardListSeries"
@@ -114,11 +195,32 @@
             android:text="@string/series_para_voce"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
+            android:layout_marginStart="20dp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/rvCardsListMovies"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerSeriesVoce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCardListSeries">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/data_placeholder"/>
+                <include layout="@layout/data_placeholder"/>
+                <include layout="@layout/data_placeholder"/>
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCardListSeries"
@@ -129,8 +231,10 @@
             tools:listitem="@layout/main_cards_menu"
             tools:itemCount="1"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/tvLancamentosRecycler"
-            app:layout_constraintTop_toBottomOf="@id/tvCardListSeries"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCardListSeries"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 </ScrollView>

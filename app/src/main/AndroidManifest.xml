@@ -30,7 +30,8 @@
         <activity android:name=".view.activity.SeasonsActivity" />
         <activity android:name=".view.activity.PeopleActivity" />
         <activity android:name=".view.activity.SelectActivity" />
-        <activity android:name=".view.activity.SplashActivity">
+        <activity android:name=".view.activity.SplashActivity"
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

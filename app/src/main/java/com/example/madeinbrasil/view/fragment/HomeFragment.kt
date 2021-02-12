@@ -7,6 +7,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +44,8 @@ import com.example.madeinbrasil.viewModel.HomeViewModel
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.gms.cast.framework.media.MediaUtils.getImageUri
 import kotlinx.android.synthetic.main.filmsseries_popup.*
 
 class HomeFragment : Fragment() {
@@ -50,6 +55,9 @@ class HomeFragment : Fragment() {
     private  var selected: GenreSelected? = null
     private var tutorial: Int? = null
     private var discover: DiscoverMovie? = null
+    private val takeShimmerTime = 500L
+    private lateinit var handler: Handler
+
     companion object {
          var genre : GenreSelected? = null
     }
@@ -127,6 +135,8 @@ class HomeFragment : Fragment() {
         genre = selected
         tutorial = arguments?.getInt(TUTORIAL)
 
+        handler = Handler(Looper.getMainLooper())
+
        activity?.let{
             viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
             setupRecyclerView()
@@ -189,42 +199,53 @@ class HomeFragment : Fragment() {
 
     private fun loadContentUpcoming() {
         viewModel.upcomingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
-            homeAdapter2.currentList?.clear()
-            homeAdapter2.submitList(pagedList, null)
-            homeAdapter2.notifyDataSetChanged()
 
-
+                homeAdapter2.currentList?.clear()
+                homeAdapter2.submitList(pagedList, null)
+                homeAdapter2.notifyDataSetChanged()
+                if(pagedList.isEmpty())
+                    binding?.containeFuturosrLancamentos?.visibility = View.GONE
+            else
+                handler.postDelayed({ binding?.shimmerFuturosLancamentos?.visibility = View.GONE },takeShimmerTime)
         }
     }
 
     private fun loadContentNowPlaying() {
         viewModel.nowPlayingMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
-            homeAdapter.currentList?.clear()
-            homeAdapter.submitList(pagedList, null)
-            homeAdapter.notifyDataSetChanged()
 
-
+                homeAdapter.currentList?.clear()
+                homeAdapter.submitList(pagedList, null)
+                homeAdapter.notifyDataSetChanged()
+                if(pagedList.isNotEmpty())
+                    binding?.containerLancamentos?.visibility = View.GONE
+                else
+                    handler.postDelayed({ binding?.shimmerLancamentos?.visibility = View.GONE },takeShimmerTime)
         }
-
-
     }
 
     private fun loadContentDiscoverMovie() {
         viewModel.discoverMoviePagedList?.observe(viewLifecycleOwner) { pagedList ->
-            homeAdapter3.currentList?.clear()
-            homeAdapter3.submitList(pagedList, null)
-            homeAdapter3.notifyDataSetChanged()
 
+                homeAdapter3.currentList?.clear()
+                homeAdapter3.submitList(pagedList, null)
+                homeAdapter3.notifyDataSetChanged()
+                if(pagedList.isNotEmpty())
+                    binding?.containerSugestoes?.visibility = View.GONE
+                else
+                handler.postDelayed({binding?.shimmerFilmesVoce?.visibility = View.GONE},takeShimmerTime)
         }
     }
 
     private fun loadContentDiscoverTv() {
         viewModel.discoverTvPagedList?.observe(viewLifecycleOwner) { pagedList ->
+
             homeAdapter4.currentList?.clear()
             homeAdapter4.submitList(pagedList, null)
             homeAdapter4.notifyDataSetChanged()
-
-
+            if(pagedList.isNotEmpty())
+                binding?.containerListsSeries?.visibility = View.GONE
+            else
+                handler.postDelayed({binding?.shimmerSeriesVoce?.visibility = View.GONE},takeShimmerTime)
         }
     }
 

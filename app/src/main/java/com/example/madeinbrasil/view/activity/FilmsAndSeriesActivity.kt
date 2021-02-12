@@ -11,6 +11,7 @@ import android.text.Editable
 import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,9 @@ import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.database.entities.season.SeasonFirebase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.classe.CommentFirebase
+import com.example.madeinbrasil.model.customLists.ListWithMedia
+import com.example.madeinbrasil.model.customLists.firebase.CustomList
+import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.movieCredits.Cast
 import com.example.madeinbrasil.model.result.MovieDetailed
@@ -49,6 +53,8 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY_OFF
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
+import com.example.madeinbrasil.utils.Constants.CustomLists.MOVIE
+import com.example.madeinbrasil.utils.Constants.CustomLists.SERIE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
 import com.example.madeinbrasil.viewModel.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -110,6 +116,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
     private val firebaseFirestore by lazy {
         Firebase.firestore
+    }
+
+    private val auth by lazy {
+        Firebase.auth
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -174,24 +184,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         // ADDED 21/01
-                        binding.cbListFilmsSeries.setOnClickListener {
-                            val dialog = Dialog(this)
-                            dialog.setContentView(R.layout.choose_list_popup)
-                            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                            customListViewModel.getCustomLists()
-
-                            customListViewModel.customLists.observe(this) { list ->
-                                if (list.isEmpty())
-                                    dialog.tvEmptyList.visibility = View.VISIBLE
-                                else
-                                    dialog.rvCustomLists.apply {
-                                        layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
-                                        adapter = ChooseListAdapter(list) {
-
-                                        }
-                                    }
-                            }
-                            dialog.show()
+                        binding.cbListFilmsSeries.setOnClickListener { view ->
+                            films?.let {showDialog(MOVIE, Media(it.id.toString(), it.backdropPath, it.originalLanguage, it.originalTitle, it.overview,
+                                    it.popularity, it.posterPath, it.releaseDate, it.title, it.voteAverage?.toDouble(),
+                                    it.voteCount, it.firstAirDate, it.name))}
                         }
 
                         Glide.with(this)
@@ -477,23 +473,9 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                     // ADDED 21/01
                     binding.cbListFilmsSeries.setOnClickListener {
-                        val dialog = Dialog(this)
-                        dialog.setContentView(R.layout.choose_list_popup)
-                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        customListViewModel.getCustomLists()
-
-                        customListViewModel.customLists.observe(this) { list ->
-                            if (list.isEmpty())
-                                dialog.tvEmptyList.visibility = View.VISIBLE
-                            else
-                                dialog.rvCustomLists.apply {
-                                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
-                                    adapter = ChooseListAdapter(list) {
-
-                                    }
-                                }
-                        }
-                        dialog.show()
+                        series?.let {showDialog(SERIE, Media(it.id.toString(), it.backdropPath, it.originalLanguage, it.originalTitle, it.overview,
+                                it.popularity, it.posterPath, it.releaseDate, it.title, it.voteAverage?.toDouble(),
+                                it.voteCount, it.firstAirDate, it.name))}
                     }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {
@@ -1399,6 +1381,65 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         getComments()
 
     }
+
+    private fun showDialog(showType: String, media: Media) {
+        val dialog = Dialog(this)
+        val chooseAdapter = ChooseListAdapter()
+        lateinit var selectedList: CustomList
+        chooseAdapter.onclick = {
+            selectedList = it
+            dialog.addToList.isEnabled = true
+        }
+        dialog.setContentView(R.layout.choose_list_popup)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        dialog.cancel_dialog.setOnClickListener {
+            dialog.cancel()
+        }
+        dialog.cancel_dialog_empty.setOnClickListener {
+            dialog.cancel()
+        }
+
+        dialog.addToList.setOnClickListener {
+            addItemToList(showType, ListWithMedia(selectedList, listOf(media)))
+            dialog.cancel()
+        }
+
+        customListViewModel.getUserExceptionLists(showType)
+
+        customListViewModel.getUserListsSuccess.observe(this) { list ->
+            dialog.loadingBar.visibility = View.GONE
+            if (list.isEmpty())
+                dialog.emptyInfoContainer.visibility = View.VISIBLE
+            else
+                dialog.infoContainer.visibility = View.VISIBLE
+                dialog.rvCustomLists.apply {
+                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+                    chooseAdapter.list = list
+                    adapter = chooseAdapter
+                }
+        }
+
+        customListViewModel.listFailure.observe(this,  {
+            Toast.makeText(this@FilmsAndSeriesActivity, it, Toast.LENGTH_SHORT).show()
+            dialog.cancel()
+        })
+
+        dialog.show()
+    }
+
+    private fun addItemToList(showType: String, list: ListWithMedia) {
+        customListViewModel.addItemtoList(list, showType)
+
+        customListViewModel.listSucess.observe(this,  {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+
+        customListViewModel.listFailure.observe(this,  {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+    }
+}
 
 
     fun getComments() {
