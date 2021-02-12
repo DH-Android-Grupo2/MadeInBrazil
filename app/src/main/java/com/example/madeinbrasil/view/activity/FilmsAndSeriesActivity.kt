@@ -185,9 +185,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                         // ADDED 21/01
                         binding.cbListFilmsSeries.setOnClickListener { view ->
-                            films?.let {showDialog(MOVIE, Media(it.id.toString(), it.backdropPath, it.originalLanguage, it.originalTitle, it.overview,
-                                    it.popularity, it.posterPath, it.releaseDate, it.title, it.voteAverage?.toDouble(),
-                                    it.voteCount, it.firstAirDate, it.name))}
+                            movie.let { movie ->
+                                showDialog(MOVIE, Media(movie.id.toString(), movie.backdrop_path, movie.original_language, movie.original_title, movie.overview,
+                                    it.popularity, movie.poster_path, movie.release_date, movie.title, movie.vote_average,
+                                    movie.vote_count, movie.release_date, movie.title))}
                         }
 
                         Glide.with(this)
@@ -473,9 +474,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
 
                     // ADDED 21/01
                     binding.cbListFilmsSeries.setOnClickListener {
-                        series?.let {showDialog(SERIE, Media(it.id.toString(), it.backdropPath, it.originalLanguage, it.originalTitle, it.overview,
-                                it.popularity, it.posterPath, it.releaseDate, it.title, it.voteAverage?.toDouble(),
-                                it.voteCount, it.firstAirDate, it.name))}
+                        serie?.let {serie ->
+                            showDialog(SERIE, Media(serie.id.toString(), serie.backdropPath, "pt", serie.name, serie.overview,
+                                0.0, serie.posterPath, serie.firstAirDate, serie.name, serie.voteAverage,
+                                0, serie.firstAirDate, serie.name))}
                     }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {
