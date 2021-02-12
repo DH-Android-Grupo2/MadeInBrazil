@@ -62,7 +62,6 @@ class MenuActivity : AppCompatActivity() {
                     listComplete.add(it)
                 }
             }
-
             listComplete.forEach {
                 viewModel.getMidia(it)
             }

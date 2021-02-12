@@ -1405,7 +1405,7 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
             dialog.cancel()
         }
 
-        customListViewModel.getUserExceptionLists(showType)
+        customListViewModel.getUserExceptionLists()
 
         customListViewModel.getUserListsSuccess.observe(this) { list ->
             dialog.loadingBar.visibility = View.GONE
@@ -1460,6 +1460,5 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                 adapter = MainAdapterComments(listComments)
             }
         }
-
     }
 }

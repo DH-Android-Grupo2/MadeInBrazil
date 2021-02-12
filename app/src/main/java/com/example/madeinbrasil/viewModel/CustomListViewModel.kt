@@ -44,9 +44,9 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
-    fun getUserExceptionLists(showType: String) {
+    fun getUserExceptionLists() {
         viewModelScope.launch {
-            when(val response = customListBusinnes.getUserExceptionLists(showType)) {
+            when(val response = customListBusinnes.getUserExceptionLists()) {
                 is FirebaseResponse.OnSucess ->
                     getUserListsSuccess.postValue(
                             response.data as List<CustomList>

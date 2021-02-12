@@ -83,7 +83,7 @@ class CustomListRepository(context: Context? = null) {
 
     }
 
-    suspend fun getUserExceptionLists(showType: String): FirebaseResponse {
+    suspend fun getUserExceptionLists(): FirebaseResponse {
         lateinit var resp: FirebaseResponse
 
         try {

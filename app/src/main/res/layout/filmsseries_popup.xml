@@ -69,25 +69,17 @@
         android:layout_height="wrap_content"
         android:button="@drawable/popup_favorite_selector"
         app:layout_constraintStart_toEndOf="@+id/cbWatched"
-        app:layout_constraintEnd_toStartOf="@+id/cbAddList"
+        app:layout_constraintEnd_toStartOf="@+id/cbShare"
         app:layout_constraintTop_toTopOf="@id/cbWatched"
         />
 
-    <CheckBox
-        android:id="@+id/cbAddList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@drawable/ic_baseline_playlist_add_50"
-        app:layout_constraintStart_toEndOf="@+id/cbFavorite"
-        app:layout_constraintEnd_toStartOf="@+id/cbShare"
-        app:layout_constraintTop_toTopOf="@id/cbFavorite"/>
 
     <CheckBox
         android:id="@+id/cbShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/ic_baseline_share_50"
-        app:layout_constraintStart_toEndOf="@+id/cbAddList"
+        app:layout_constraintStart_toEndOf="@+id/cbFavorite"
         app:layout_constraintEnd_toEndOf="@+id/ivDialogPoster"
         app:layout_constraintTop_toTopOf="@id/cbFavorite"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
