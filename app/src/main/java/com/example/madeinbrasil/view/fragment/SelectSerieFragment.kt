@@ -2,6 +2,7 @@ package com.example.madeinbrasil.view.fragment
 
 import android.app.Application
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -62,7 +63,11 @@ class SelectSerieFragment : BottomSheetDialogFragment() {
         binding.btnClose.setOnClickListener {
             dismiss()
         }
+    }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        viewModel.setQuerySerie((activity?.applicationContext) as Application,"")
     }
 
     private fun SetupSearchView(

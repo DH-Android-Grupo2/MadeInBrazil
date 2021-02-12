@@ -2,8 +2,10 @@ package com.example.madeinbrasil.view.fragment
 
 import android.app.Application
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +65,11 @@ class SelectMovieFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        viewModel.setQuery((activity?.applicationContext) as Application,"")
     }
 
     private fun SetupSearchView(
