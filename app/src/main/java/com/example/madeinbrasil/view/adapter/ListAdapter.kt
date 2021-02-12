@@ -28,6 +28,11 @@ class ListAdapter(val onClick: (ListWithMedia) -> Unit): RecyclerView.Adapter<Li
 
     override fun getItemCount(): Int = list.size
 
+    fun updateList(l: MutableList<ListWithMedia>) {
+        list = l
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(val binding: RvprojetoListitemBinding) : RecyclerView.ViewHolder(
             binding.root
     ) {

@@ -144,5 +144,6 @@
     <string name="string_gender_not_found">Não encontrado</string>
     <string name="string_you_are_offline">Você está offline</string>
     <string name="nenhuma_lista_criada_no_momento">Nenhuma lista criada no momento.</string>
+    <string name="search_lists_placeholder">Search lists</string>
 
 </resources>
