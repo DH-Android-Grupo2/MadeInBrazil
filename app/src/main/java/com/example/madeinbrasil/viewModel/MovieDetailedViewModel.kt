@@ -13,6 +13,8 @@ import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.model.search.ResultSearch
+import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.view.activity.MenuActivity
 import com.google.firebase.firestore.DocumentSnapshot
 import com.example.madeinbrasil.repository.MovieDetailedRepository
@@ -23,6 +25,7 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
     val movieError: MutableLiveData<List<MidiaFirebase>> = MutableLiveData()
     val midia: MutableLiveData<MutableList<MidiaFirebase?>> = MutableLiveData()
     val cast: MutableLiveData<MutableList<DocumentSnapshot>> = MutableLiveData()
+    val searchDB: MutableLiveData<List<Result>> = MutableLiveData()
     var listMidia = mutableListOf<MidiaFirebase?>()
     var listCast = mutableListOf<DocumentSnapshot>()
     private val detailed by lazy {
@@ -92,6 +95,12 @@ class MovieDetailedViewModel(application: Application): AndroidViewModel(applica
     fun updateUser(user: User) {
         viewModelScope.launch {
             detailed.updateUser(user)
+        }
+    }
+
+    fun getSearchDB() {
+        viewModelScope.launch {
+            searchDB.postValue(detailed.getSearchDB())
         }
     }
 //    fun postComment(comment: CommentFirebase){

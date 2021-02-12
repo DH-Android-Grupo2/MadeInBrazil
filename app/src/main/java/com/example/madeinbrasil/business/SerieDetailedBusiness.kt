@@ -8,6 +8,7 @@ import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.database.entities.season.SeasonFirebase
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.repository.SerieDetailedRepository
 import com.google.firebase.firestore.DocumentSnapshot
@@ -107,4 +108,7 @@ class SerieDetailedBusiness (val context: Context) {
         repository.updateUser(user)
     }
 
+    suspend fun getSearchDB(): List<ResultSearch> {
+        return repository.getSearchDB()
+    }
 }

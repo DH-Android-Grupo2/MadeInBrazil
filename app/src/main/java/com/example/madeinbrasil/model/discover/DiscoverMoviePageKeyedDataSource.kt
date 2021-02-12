@@ -5,6 +5,7 @@ import androidx.paging.PageKeyedDataSource
 import com.example.madeinbrasil.api.ResponseAPI
 import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.extensions.getFullImagePath
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.repository.HomeRepository
 import com.example.madeinbrasil.utils.Constants
 import kotlinx.coroutines.CoroutineScope
@@ -76,7 +77,22 @@ class DiscoverMoviePageKeyedDataSource(
                 }
                 is ResponseAPI.Error -> {
                     val DiscoverMovieDB = MadeInBrazilDatabase.getDatabase(context).upcomingDao()
-                    val movies =  DiscoverMovieDB.getDiscover()
+                    var movies =  DiscoverMovieDB.getDiscover()
+
+                    if(MenuActivity.USER.genresSelected.isNotEmpty()) {
+                        val handleList = mutableListOf<Result>()
+                        MenuActivity.USER.genresSelected.forEach { gender ->
+                            val handler = movies.filter {
+                                it.genreIds.contains(gender.toInt())
+                            }
+                            handler.forEach {
+                                if(!handleList.contains(it)) {
+                                    handleList.add(it)
+                                }
+                            }
+                        }
+                        movies = handleList
+                    }
                     callback.onResult(movies, null, Constants.Paging.FIRST_PAGE + 1)
                 }
             }

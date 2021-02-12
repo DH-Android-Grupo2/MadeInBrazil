@@ -11,6 +11,7 @@ import com.example.madeinbrasil.database.entities.cast.CastFirebase
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.database.entities.season.SeasonFirebase
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.model.serieDetailed.SerieDetailed
 import com.example.madeinbrasil.view.activity.MenuActivity
 import com.google.firebase.firestore.DocumentSnapshot
@@ -22,6 +23,7 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
     val midia: MutableLiveData<MutableList<MidiaFirebase?>> = MutableLiveData()
     val cast: MutableLiveData<MutableList<DocumentSnapshot>?> = MutableLiveData()
     val season: MutableLiveData<MutableList<DocumentSnapshot>?> = MutableLiveData()
+    val searchDB: MutableLiveData<List<ResultSearch>> = MutableLiveData()
     var listMidia = mutableListOf<MidiaFirebase?>()
     var listCast = mutableListOf<DocumentSnapshot>()
     var listSeason = mutableListOf<DocumentSnapshot>()
@@ -112,6 +114,12 @@ class SerieDetailedViewModel(application: Application): AndroidViewModel(applica
     fun updateUser(user: User) {
         viewModelScope.launch {
             businessDetailed.updateUser(user)
+        }
+    }
+
+    fun getSearchDB() {
+        viewModelScope.launch {
+            searchDB.postValue(businessDetailed.getSearchDB())
         }
     }
 }

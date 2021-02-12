@@ -3,11 +3,13 @@ package com.example.madeinbrasil.repository
 import android.content.Context
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.database.entities.cast.CastFirebase
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
 import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.database.entities.season.SeasonFirebase
+import com.example.madeinbrasil.model.search.ResultSearch
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_CAST
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_GENRE
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_MIDIA
@@ -21,6 +23,9 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 class SerieDetailedRepository(val context: Context) {
+    private val searchDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).FilmsFragmentDao()
+    }
     private val auth by lazy {
         Firebase.auth
     }
@@ -92,6 +97,8 @@ class SerieDetailedRepository(val context: Context) {
         seasonFirebase.document("$id").set(infos, SetOptions.merge()).await()
     }
 
-
+    suspend fun getSearchDB(): List<ResultSearch> {
+        return searchDB.getSearchResult()
+    }
 
 }

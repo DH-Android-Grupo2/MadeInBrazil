@@ -74,7 +74,22 @@ class DiscoverTvPageKeyedDataSource(
                 is ResponseAPI.Error -> {
 
                     val discoverTvDb = MadeInBrazilDatabase.getDatabase(context).discoverDao()
-                    val movies = discoverTvDb.getDiscover()
+                    var movies = discoverTvDb.getDiscover()
+
+                    if(MenuActivity.USER.genresSelected.isNotEmpty()) {
+                        val handleList = mutableListOf<ResultSearch>()
+                        MenuActivity.USER.genresSelected.forEach { gender ->
+                            val handler = movies.filter {
+                                it.genreIds.contains(gender.toInt())
+                            }
+                            handler.forEach {
+                                if(!handleList.contains(it)) {
+                                    handleList.add(it)
+                                }
+                            }
+                        }
+                        movies = handleList
+                    }
 
                     callback.onResult(movies, null, Constants.Paging.FIRST_PAGE + 1)
                 }

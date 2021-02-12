@@ -3,6 +3,7 @@ package com.example.madeinbrasil.repository
 import android.content.Context
 import com.example.madeinbrasil.api.APIService
 import com.example.madeinbrasil.api.ResponseAPI
+import com.example.madeinbrasil.database.MadeInBrazilDatabase
 import com.example.madeinbrasil.database.entities.User
 import com.example.madeinbrasil.database.entities.cast.CastFirebase
 import com.example.madeinbrasil.database.entities.genre.GenreFirebase
@@ -22,8 +23,13 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.tasks.await
 import com.example.madeinbrasil.model.classe.CommentFirebase
+import com.example.madeinbrasil.model.search.ResultSearch
+import com.example.madeinbrasil.model.upcoming.Result
 
 class MovieDetailedRepository(context: Context){
+    private val searchDB by lazy {
+        MadeInBrazilDatabase.getDatabase(context).FilmsFragmentDao()
+    }
     private val midiaFirebase by lazy {
         Firebase.firestore.collection(DATABASE_MIDIA)
     }
@@ -87,6 +93,10 @@ class MovieDetailedRepository(context: Context){
 
     suspend fun setCastFireBase(id: Int, infos: CastFirebase) {
         castFirebase.document("$id").set(infos, SetOptions.merge()).await()
+    }
+
+    suspend fun getSearchDB(): List<Result> {
+        return searchDB.getResults()
     }
 
     suspend fun postComment(hashMap: Any,id: Int) {

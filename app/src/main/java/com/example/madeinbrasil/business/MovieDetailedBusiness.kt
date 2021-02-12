@@ -9,6 +9,8 @@ import com.example.madeinbrasil.database.entities.midia.MidiaFirebase
 import com.example.madeinbrasil.extensions.getFullImagePath
 import com.example.madeinbrasil.model.classe.CommentFirebase
 import com.example.madeinbrasil.model.result.MovieDetailed
+import com.example.madeinbrasil.model.search.ResultSearch
+import com.example.madeinbrasil.model.upcoming.Result
 import com.example.madeinbrasil.repository.MovieDetailedRepository
 import com.google.firebase.firestore.DocumentSnapshot
 
@@ -83,6 +85,7 @@ class MovieDetailedBusiness(val context: Context)  {
         repository.updateUser(user)
     }
 
-
-
+    suspend fun getSearchDB(): List<Result> {
+        return repository.getSearchDB()
+    }
 }
