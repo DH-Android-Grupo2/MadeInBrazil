@@ -1,17 +1,21 @@
 package com.example.madeinbrasil.repository
 
 import android.content.Context
-import android.util.Log
 import com.example.madeinbrasil.api.firebase.FirebaseResponse
 import com.example.madeinbrasil.model.customLists.ListWithMedia
 import com.example.madeinbrasil.model.customLists.firebase.CustomList
 import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.utils.Constants.CustomLists.CUSTOM_LIST_MEDIA_ITEM
+import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_ADD_ITEM
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_CREATE_LIST
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_DELETE_ITEMS
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_GET_LISTS
 import com.example.madeinbrasil.utils.Constants.CustomLists.ERROR_UPDATE_LIST
+import com.example.madeinbrasil.utils.Constants.CustomLists.ITEM_ADICIONADO
+import com.example.madeinbrasil.utils.Constants.CustomLists.ITEM_JA_ADICIONADO
 import com.example.madeinbrasil.utils.Constants.CustomLists.LISTS
+import com.example.madeinbrasil.utils.Constants.CustomLists.MOVIE
+import com.example.madeinbrasil.utils.Constants.CustomLists.SERIE
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -79,6 +83,25 @@ class CustomListRepository(context: Context? = null) {
 
     }
 
+    suspend fun getUserExceptionLists(showType: String): FirebaseResponse {
+        lateinit var resp: FirebaseResponse
+
+        try {
+            auth.currentUser?.let {
+                db.collection(LISTS).whereEqualTo("userId", it.uid).orderBy("name").get()
+                        .addOnCompleteListener {
+                            if (it.isSuccessful)
+                                resp = FirebaseResponse.OnSucess(it.result.toObjects(CustomList::class.java))
+                            else
+                                resp = FirebaseResponse.OnFailure(it.exception?.localizedMessage ?: ERROR_GET_LISTS)
+                        }.await()
+            }
+        } catch (e: Exception) {
+            resp = FirebaseResponse.OnFailure(e.localizedMessage ?: ERROR_GET_LISTS)
+        }
+        return resp
+    }
+
     suspend fun getListWithMedia(): FirebaseResponse {
         lateinit var resp: FirebaseResponse
         var customLists: List<CustomList>? = null
@@ -141,6 +164,51 @@ class CustomListRepository(context: Context? = null) {
             resp = FirebaseResponse.OnSucess(listWithMedia)
         } catch (e: Exception) {
             resp = FirebaseResponse.OnFailure(e.localizedMessage ?: ERROR_GET_LISTS)
+        }
+
+        return resp
+    }
+
+    suspend fun addItemtoList(list: ListWithMedia, showType: String): FirebaseResponse {
+        lateinit var resp: FirebaseResponse
+        try {
+            val listRef = db.collection(LISTS).document(list.list.id)
+            val snapshot = listRef.get().await()
+            var items: MutableList<String>
+
+            if(showType.equals(MOVIE)) {
+
+                items = snapshot.get("movies") as MutableList<String>
+                if(items.contains(list.mediaList[0].id))
+                    return FirebaseResponse.OnSucess(ITEM_JA_ADICIONADO)
+                items.add(list.mediaList[0].id)
+
+            } else {
+                items = snapshot.get("series") as MutableList<String>
+                if(items.contains(list.mediaList[0].id))
+                    return FirebaseResponse.OnSucess(ITEM_JA_ADICIONADO)
+                items.add(list.mediaList[0].id)
+            }
+
+            val customListItemRef = db.collection(CUSTOM_LIST_MEDIA_ITEM).document(list.mediaList[0].id)
+
+            db.runBatch {
+                val field = if(showType.equals(MOVIE)) "movies" else "series"
+
+                it.update(listRef, hashMapOf<String, Any>(
+                        field to items
+                ))
+
+                it.set(customListItemRef, list.mediaList[0])
+
+            }.addOnCompleteListener {
+                if(it.isSuccessful)
+                    resp = FirebaseResponse.OnSucess(ITEM_ADICIONADO)
+                else
+                    resp = FirebaseResponse.OnFailure(it.exception?.localizedMessage ?: ERROR_ADD_ITEM)
+            }.await()
+        } catch (e: Exception) {
+            resp = FirebaseResponse.OnFailure(e.localizedMessage ?: ERROR_ADD_ITEM)
         }
 
         return resp

@@ -67,7 +67,7 @@ class ListDetailsAdapter(val onItemClick: (String) -> Unit) : RecyclerView.Adapt
     inner class ViewHolder(val binding: MyListCardItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mediaItem: Media, selectedItems: List<String>) = with(binding) {
-            Glide.with(binding.root).load(mediaItem.backdropPath).placeholder(R.drawable.logo_made_in_brasil).into(cvImageCard)
+            Glide.with(binding.root).load(mediaItem.posterPath ?: mediaItem.backdropPath).placeholder(R.drawable.logo_made_in_brasil).into(cvImageCard)
             tvNameMedia.text = mediaItem.title ?: mediaItem.name
 
             if (selectedItems.contains(mediaItem.id)) {

@@ -19,8 +19,16 @@ class CustomListBusiness(context: Context? = null) {
         return customListRepository.createList(customList, mediaList)
     }
 
+    suspend fun getUserExceptionLists(showType: String): FirebaseResponse {
+        return customListRepository.getUserExceptionLists(showType)
+    }
+
     suspend fun getListsWithMedia(): FirebaseResponse {
         return customListRepository.getListWithMedia()
+    }
+
+    suspend fun addItemtoList(list: ListWithMedia, showType: String): FirebaseResponse {
+        return customListRepository.addItemtoList(list, showType)
     }
 
     suspend fun resetMediaList(listId: String, moviesId: List<String>, seriesId: List<String>): FirebaseResponse {

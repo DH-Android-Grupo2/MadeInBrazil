@@ -97,7 +97,7 @@ class MyListsAdapter(val onClick: (ListWithMedia) -> Unit): RecyclerView.Adapter
                         val lp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT)
                         lp.weight = 1F
                         imageView.layoutParams = lp
-                        Glide.with(containerView).load(list.mediaList[i].backdropPath).into(imageView)
+                        Glide.with(containerView).load(list.mediaList[i].posterPath ?: list.mediaList[i].backdropPath).into(imageView)
                         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                         containerView.addView(imageView)
                         }
@@ -107,7 +107,7 @@ class MyListsAdapter(val onClick: (ListWithMedia) -> Unit): RecyclerView.Adapter
                             val lp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT)
                             lp.weight = 1F
                             imageView.layoutParams = lp
-                            Glide.with(containerView).load(list.mediaList[i].backdropPath).into(imageView)
+                            Glide.with(containerView).load(list.mediaList[i].backdropPath ?: list.mediaList[i].backdropPath).into(imageView)
                             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                             containerView.addView(imageView)
                         }

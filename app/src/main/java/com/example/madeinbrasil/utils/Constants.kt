@@ -53,14 +53,19 @@ class Constants {
 
     object CustomLists {
         const val ERROR_CREATE_LIST = "Erro ao criar a lista."
-        const val ERROR_GET_LISTS = "Erro ao recuperar as listas."
+        const val ERROR_GET_LISTS = "Erro ao recuperar as listas. Tente mais tarde!"
         const val ERROR_UPDATE_LIST = "Erro ao atualizar lista."
         const val ERROR_DELETE_ITEMS = "Erro ao excluir itens."
+        const val ERROR_ADD_ITEM = "Erro ao adicionar o item."
+        const val ITEM_JA_ADICIONADO = "Esse item já está nessa lista!"
+        const val ITEM_ADICIONADO = "Item adicionado!"
         const val DELETE_TASK_OK = "Remoção realizada!"
         const val UPDATE_TASK_OK = "Atualização realizada!"
         const val LISTS = "lists"
         const val LIST = "list"
         const val LIST_ID = "listId"
         const val CUSTOM_LIST_MEDIA_ITEM = "customListMediaItem"
+        const val MOVIE = "movie"
+        const val SERIE = "serie"
     }
 }

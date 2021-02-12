@@ -21,6 +21,7 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
 //
 
     val getListsSuccess: MutableLiveData<List<ListWithMedia>> = MutableLiveData()
+    val getUserListsSuccess: MutableLiveData<List<CustomList>> = MutableLiveData()
     val listSucess: MutableLiveData<String> = MutableLiveData()
     val listFailure: MutableLiveData<String> = MutableLiveData()
 
@@ -43,6 +44,21 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
+    fun getUserExceptionLists(showType: String) {
+        viewModelScope.launch {
+            when(val response = customListBusinnes.getUserExceptionLists(showType)) {
+                is FirebaseResponse.OnSucess ->
+                    getUserListsSuccess.postValue(
+                            response.data as List<CustomList>
+                    )
+                is FirebaseResponse.OnFailure ->
+                    listFailure.postValue(
+                            response.message
+                    )
+            }
+        }
+    }
+
     fun getListWithMedia() {
         viewModelScope.launch {
             when(val response = customListBusinnes.getListsWithMedia()) {
@@ -54,6 +70,19 @@ class CustomListViewModel(application: Application): AndroidViewModel(applicatio
                     listFailure.postValue(
                         response.message
                     )
+            }
+        }
+    }
+
+    fun addItemtoList(list: ListWithMedia, showType: String) {
+        viewModelScope.launch {
+            when(val response = customListBusinnes.addItemtoList(list, showType)) {
+                is FirebaseResponse.OnSucess -> listSucess.postValue(
+                        response.data as String
+                )
+                is FirebaseResponse.OnFailure -> listFailure.postValue(
+                        response.message
+                )
             }
         }
     }

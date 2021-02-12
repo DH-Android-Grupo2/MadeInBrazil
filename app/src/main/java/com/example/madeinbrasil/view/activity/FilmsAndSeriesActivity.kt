@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,9 @@ import com.example.madeinbrasil.database.entities.recommendations.Recommendation
 import com.example.madeinbrasil.database.entities.season.SeasonEntity
 import com.example.madeinbrasil.database.entities.similar.SimilarMidiaCrossRef
 import com.example.madeinbrasil.database.entities.watched.Watched
+import com.example.madeinbrasil.model.customLists.ListWithMedia
+import com.example.madeinbrasil.model.customLists.firebase.CustomList
+import com.example.madeinbrasil.model.customLists.firebase.Media
 import com.example.madeinbrasil.model.home.CommentRepository
 import com.example.madeinbrasil.model.result.MovieDetailed
 import com.example.madeinbrasil.model.search.ResultSearch
@@ -45,6 +49,8 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.SEASON_KEY_OFF
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
+import com.example.madeinbrasil.utils.Constants.CustomLists.MOVIE
+import com.example.madeinbrasil.utils.Constants.CustomLists.SERIE
 import com.example.madeinbrasil.view.adapter.MainAdapterComments
 import com.example.madeinbrasil.viewModel.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -57,6 +63,8 @@ import com.example.madeinbrasil.viewModel.MovieDetailedViewModel
 import kotlinx.coroutines.launch
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_films_and_series.*
 import kotlinx.android.synthetic.main.choose_list_popup.*
@@ -76,6 +84,10 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
     private var series: ResultSearch? = null
     private var comments = CommentRepository().setComments()
     private var positionFragment = 0
+
+    private val auth by lazy {
+        Firebase.auth
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,25 +140,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                         }
 
                         // ADDED 21/01
-//                        binding.cbListFilmsSeries.setOnClickListener {
-//                            val dialog = Dialog(this)
-//                            dialog.setContentView(R.layout.choose_list_popup)
-//                            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//                            customListViewModel.getCustomLists()
-//
-//                            customListViewModel.customLists.observe(this){ list ->
-//                                if(list.isEmpty())
-//                                    dialog.tvEmptyList.visibility = View.VISIBLE
-//                                else
-//                                    dialog.rvCustomLists.apply {
-//                                        layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
-//                                        adapter = ChooseListAdapter(list) {
-//
-//                                        }
-//                                    }
-//                            }
-//                            dialog.show()
-//                        }
+                        binding.cbListFilmsSeries.setOnClickListener { view ->
+                            films?.let {showDialog(MOVIE, Media(it.id.toString(), it.backdropPath, it.originalLanguage, it.originalTitle, it.overview,
+                                    it.popularity, it.posterPath, it.releaseDate, it.title, it.voteAverage?.toDouble(),
+                                    it.voteCount, it.firstAirDate, it.name))}
+                        }
 
                         Glide.with(this)
                                 .load(movie.poster_path)
@@ -473,25 +471,11 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
                     }
 
                     // ADDED 21/01
-//                    binding.cbListFilmsSeries.setOnClickListener {
-//                        val dialog = Dialog(this)
-//                        dialog.setContentView(R.layout.choose_list_popup)
-//                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//                        customListViewModel.getCustomLists()
-//
-//                        customListViewModel.customLists.observe(this){ list ->
-//                            if(list.isEmpty())
-//                                dialog.tvEmptyList.visibility = View.VISIBLE
-//                            else
-//                                dialog.rvCustomLists.apply {
-//                                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
-//                                    adapter = ChooseListAdapter(list) {
-//
-//                                    }
-//                                }
-//                        }
-//                        dialog.show()
-//                    }
+                    binding.cbListFilmsSeries.setOnClickListener {
+                        series?.let {showDialog(SERIE, Media(it.id.toString(), it.backdropPath, it.originalLanguage, it.originalTitle, it.overview,
+                                it.popularity, it.posterPath, it.releaseDate, it.title, it.voteAverage?.toDouble(),
+                                it.voteCount, it.firstAirDate, it.name))}
+                    }
 
                     binding.btSeasonsFilmsSeries.setOnClickListener {
                         serie?.seasons?.forEach {
@@ -978,5 +962,63 @@ class FilmsAndSeriesActivity : AppCompatActivity() {
         }, true, iFramePlayerOptions)
 
         dialog.show()
+    }
+
+    private fun showDialog(showType: String, media: Media) {
+        val dialog = Dialog(this)
+        val chooseAdapter = ChooseListAdapter()
+        lateinit var selectedList: CustomList
+        chooseAdapter.onclick = {
+            selectedList = it
+            dialog.addToList.isEnabled = true
+        }
+        dialog.setContentView(R.layout.choose_list_popup)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        dialog.cancel_dialog.setOnClickListener {
+            dialog.cancel()
+        }
+        dialog.cancel_dialog_empty.setOnClickListener {
+            dialog.cancel()
+        }
+
+        dialog.addToList.setOnClickListener {
+            addItemToList(showType, ListWithMedia(selectedList, listOf(media)))
+            dialog.cancel()
+        }
+
+        customListViewModel.getUserExceptionLists(showType)
+
+        customListViewModel.getUserListsSuccess.observe(this) { list ->
+            dialog.loadingBar.visibility = View.GONE
+            if (list.isEmpty())
+                dialog.emptyInfoContainer.visibility = View.VISIBLE
+            else
+                dialog.infoContainer.visibility = View.VISIBLE
+                dialog.rvCustomLists.apply {
+                    layoutManager = GridLayoutManager(this@FilmsAndSeriesActivity, 1)
+                    chooseAdapter.list = list
+                    adapter = chooseAdapter
+                }
+        }
+
+        customListViewModel.listFailure.observe(this,  {
+            Toast.makeText(this@FilmsAndSeriesActivity, it, Toast.LENGTH_SHORT).show()
+            dialog.cancel()
+        })
+
+        dialog.show()
+    }
+
+    private fun addItemToList(showType: String, list: ListWithMedia) {
+        customListViewModel.addItemtoList(list, showType)
+
+        customListViewModel.listSucess.observe(this,  {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+
+        customListViewModel.listFailure.observe(this,  {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
     }
 }

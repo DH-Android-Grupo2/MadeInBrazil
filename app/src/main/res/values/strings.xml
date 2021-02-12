@@ -129,6 +129,7 @@
     <string name="sem_descricao_label">Nenhuma descrição</string>
     <string name="sem_itens_label">Sem itens</string>
     <string name="Nenhuma_lista_criada_label">Nenhuma lista criada ainda.</string>
+    <string name="Criar_nova_lista">Crie uma nova lista para adicionar.</string>
     <string name="string_cast_not_found">Elenco não encontrado</string>
     <string name="string_login_with_google">Entrar com o Google</string>
     <string name="string_login_with_facebook">Entrar com o Facebook</string>
@@ -136,5 +137,9 @@
     <string name="string_go_to_lists">Ir para as Listas</string>
     <string name="add_new_list_description">Add new List</string>
     <string name="futuros_lan_amentos">Futuros Lançamentos</string>
+    <string name="selecione_a_lista_label">Selecione a lista:</string>
+    <string name="cancelar_label">CANCELAR</string>
+    <string name="adicionar_label">Adicionar</string>
+    <string name="sair_label">sair</string>
 
 </resources>
