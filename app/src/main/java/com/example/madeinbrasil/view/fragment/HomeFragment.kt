@@ -229,9 +229,9 @@ class HomeFragment : Fragment() {
                 homeAdapter3.currentList?.clear()
                 homeAdapter3.submitList(pagedList, null)
                 homeAdapter3.notifyDataSetChanged()
-                if(pagedList.isNotEmpty())
-                    binding?.containerSugestoes?.visibility = View.GONE
-                else
+            if(pagedList.isNotEmpty())
+                binding?.containerSugestoes?.visibility = View.GONE
+            else
                 handler.postDelayed({binding?.shimmerFilmesVoce?.visibility = View.GONE},takeShimmerTime)
         }
     }
