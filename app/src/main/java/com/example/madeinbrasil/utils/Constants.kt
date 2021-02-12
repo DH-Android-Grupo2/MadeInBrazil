@@ -52,8 +52,10 @@ class Constants {
         const val DATABASE_MIDIA = "midia"
         const val DATABASE_GENRE = "genre"
         const val DATABASE_CAST = "cast"
+        const val DATABASE_LISTS = "lists"
         const val FIELD_FAVORITES = "favorites"
         const val FIELD_WATCHED = "watched"
+        const val FIELD_OWNERLIST = "ownerName"
         const val DATABASE_SEASON = "season"
     }
 

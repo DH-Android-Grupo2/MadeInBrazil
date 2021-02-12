@@ -23,7 +23,9 @@ import com.example.madeinbrasil.utils.Constants.ConstantsFilms.BASE_MIDIA_KEY
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.ID_FRAGMENTS
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.TUTORIAL
 import com.example.madeinbrasil.utils.Constants.ConstantsFilms.VALUE
+import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_LISTS
 import com.example.madeinbrasil.utils.Constants.Firebase.DATABASE_USERS
+import com.example.madeinbrasil.utils.Constants.Firebase.FIELD_OWNERLIST
 import com.example.madeinbrasil.viewModel.UserViewModel
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
@@ -46,6 +48,7 @@ class UserActivity : AppCompatActivity() {
     private var tutorial = 1
     private var favList = mutableListOf<MidiaFirebase>()
     private var countMovie = 0
+    private var countLists = 0
     private var countSerie = 0
     private val pickImage = 100
     private var imageUri: Uri? = null
@@ -101,7 +104,6 @@ class UserActivity : AppCompatActivity() {
         binding.btGoToLists.setOnClickListener {
             startListsActivity(this@UserActivity)
         }
-
         filterWatchedAndFavorites()
 
         binding.rvCardsListFavorites.apply {
@@ -123,7 +125,6 @@ class UserActivity : AppCompatActivity() {
                 }
             }
         }
-
         binding.tvNumMovies.text = countMovie.toString()
         binding.tvNumSeries.text = countSerie.toString()
 
@@ -131,6 +132,11 @@ class UserActivity : AppCompatActivity() {
         if(tutorial == 0) {
             tutorialImplementation()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getUserLists()
     }
 
     private fun startListsActivity(context: Context) {
@@ -143,6 +149,17 @@ class UserActivity : AppCompatActivity() {
         val intent = Intent(context, MyProfileOptionsActivity::class.java)
         intent.putExtra(VALUE, 2)
         startActivity(intent)
+    }
+
+    private fun getUserLists(){
+        db.collection(DATABASE_LISTS)
+            .whereEqualTo(FIELD_OWNERLIST, MenuActivity.USER.name)
+            .get()
+            .addOnSuccessListener {
+                countLists = it.size()
+                binding.tvNumListas.text = countLists.toString()
+            }
+
     }
 
     private fun filterWatchedAndFavorites() {
