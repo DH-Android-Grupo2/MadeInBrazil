@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.madeinbrasil">
+    package="com.dh.madeinbrasil">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".MadeInBrasilApplication"
+        android:name="com.dh.madeinbrasil.MadeInBrasilApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activity.PublicCustomListDetailActivity"></activity>
-        <activity android:name=".view.activity.CustomListDetailsActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.PublicCustomListDetailActivity"></activity>
+        <activity android:name="com.dh.madeinbrasil.view.activity.CustomListDetailsActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.madeinbrasil.fileprovider"
+            android:authorities="com.dh.madeinbrasil.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -28,11 +28,11 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".view.activity.SeasonsActivity" />
-        <activity android:name=".view.activity.PeopleActivity" />
-        <activity android:name=".view.activity.SelectActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.SeasonsActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.PeopleActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.SelectActivity" />
         <activity
-            android:name=".view.activity.SplashActivity"
+            android:name="com.dh.madeinbrasil.view.activity.SplashActivity"
             android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,16 +40,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.ListDetailActivity" />
-        <activity android:name=".view.activity.MyProfileOptionsActivity" />
-        <activity android:name=".view.activity.FilmsAndSeriesActivity" />
-        <activity android:name=".view.activity.MenuActivity" />
-        <activity android:name=".view.activity.RegisterActivity" />
-        <activity android:name=".view.activity.LogInActivity" />
-        <activity android:name=".view.activity.InitialActivity" />
-        <activity android:name=".view.activity.CreateListActivity" />
-        <activity android:name=".view.activity.FriendsActivity" />
-        <activity android:name=".view.activity.UserActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.ListDetailActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.MyProfileOptionsActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.FilmsAndSeriesActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.MenuActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.RegisterActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.LogInActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.InitialActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.CreateListActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.FriendsActivity" />
+        <activity android:name="com.dh.madeinbrasil.view.activity.UserActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
