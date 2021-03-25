@@ -16,11 +16,20 @@ android {
         applicationId "com.dh.madeinbrasil"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.01"
         multiDexEnabled true
-
+        resConfig 'pt'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../key_store.jks")
+            storePassword "madeinbrasildh"
+            keyAlias "key0"
+            keyPassword "madeinbrasildh"
+        }
     }
 
     compileOptions {
